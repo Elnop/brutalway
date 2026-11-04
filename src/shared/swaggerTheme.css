@@ -1,0 +1,92 @@
+body {
+  background: #f4e9d8;
+}
+
+.swagger-ui,
+.swagger-ui .info .title,
+.swagger-ui .opblock-tag,
+.swagger-ui .opblock .opblock-summary-description {
+  color: #111111;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.swagger-ui .topbar {
+  border-bottom: 3px solid #111111;
+  background: #ffd23f;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label,
+.swagger-ui .topbar a {
+  color: #111111;
+}
+
+.swagger-ui .info .title {
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.swagger-ui .opblock {
+  border: 3px solid #111111;
+  border-radius: 0;
+  box-shadow: 6px 6px 0 #111111;
+}
+
+.swagger-ui .opblock .opblock-summary-method {
+  border: 3px solid #111111;
+  border-radius: 0;
+  color: #111111;
+  font-weight: 700;
+}
+
+.swagger-ui .opblock.opblock-get {
+  background: #fffdf5;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+  background: #2a5cff;
+  color: #fffdf5;
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+  background: #ffd23f;
+}
+
+.swagger-ui .opblock.opblock-patch .opblock-summary-method {
+  background: #fffdf5;
+}
+
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+  background: #ff6ad5;
+}
+
+.swagger-ui .btn {
+  border: 3px solid #111111;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 #111111;
+  font-weight: 700;
+}
+
+.swagger-ui .opblock.opblock-get,
+.swagger-ui .opblock.opblock-post,
+.swagger-ui .opblock.opblock-patch,
+.swagger-ui .opblock.opblock-put,
+.swagger-ui .opblock.opblock-delete {
+  border-color: #111111;
+  background: #fffdf5;
+}
+
+.swagger-ui .opblock .opblock-summary {
+  border-color: #111111;
+}
+
+.swagger-ui .topbar .download-url-wrapper input[type='text'],
+.swagger-ui .topbar .download-url-wrapper .download-url-button {
+  border: 3px solid #111111;
+  border-radius: 0;
+}
+
+.swagger-ui .topbar .download-url-wrapper .download-url-button {
+  background: #111111;
+  color: #fffdf5;
+}
