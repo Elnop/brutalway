@@ -1,3 +1,6 @@
 [submodule "template-vite"]
 	path = template-vite
 	url = https://github.com/Elnop/template-vite.git
+[submodule "template-fastify"]
+	path = template-fastify
+	url = https://github.com/Elnop/template-fastify.git
