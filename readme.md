@@ -19,7 +19,7 @@ Every template builds the same small floor plan editor with the same blueprint l
 - every dependency is pinned, every path cited in the docs exists, no export goes unused
 - a Claude Code hook lints each file the agent edits and sends the errors back to it
 
-The lint configs and plugins are published as `@elnop/*` from [Elnop/eslint-plugins](https://github.com/Elnop/eslint-plugins). Each template README lists the tools and how they map to these rules.
+The lint configs, plugins and every shared config (TypeScript, Prettier, dependency-cruiser, alint, Playwright fixtures, the agent hook) are published as `@elnop/*` from [Elnop/elnop-tooling](https://github.com/Elnop/elnop-tooling). Each template README lists the tools and how they map to these rules.
 
 ## Using a template
 
