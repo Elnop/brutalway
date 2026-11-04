@@ -1,0 +1,4 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignoreDependencies": ["@swc/core", "@elnop/agent-hook", "@elnop/alint-config", "@elnop/dependency-cruiser-config"]
+}
