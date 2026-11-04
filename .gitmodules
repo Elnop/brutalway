@@ -1,0 +1,3 @@
+[submodule "template-vite"]
+	path = template-vite
+	url = https://github.com/Elnop/template-vite.git
