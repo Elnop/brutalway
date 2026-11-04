@@ -1,37 +1,17 @@
-import { EditorLayout } from '@/features/editor/components/EditorLayout.tsx';
-import { SummaryContainer } from '@/features/summary/components/SummaryContainer.tsx';
+import { TodoListLayout } from '@/features/todo-list/components/TodoListLayout.tsx';
+import { TodoStatsContainer } from '@/features/todo-stats/components/TodoStatsContainer.tsx';
 
 export function App() {
   return (
-    <div className="sheet">
-      <header className="sheet-header">
-        <h1>Floor plan</h1>
-        <p>Add rooms, select one on the list or on the plan, edit its dimensions.</p>
+    <div className="page">
+      <header className="page-header">
+        <h1>Todos</h1>
+        <p>template-vite · elnop-stacks</p>
       </header>
-      <main className="sheet-body">
-        <EditorLayout />
-        <SummaryContainer />
+      <main className="page-body">
+        <TodoListLayout />
+        <TodoStatsContainer />
       </main>
-      <footer className="title-block">
-        <dl>
-          <div>
-            <dt>Project</dt>
-            <dd>template-vite</dd>
-          </div>
-          <div>
-            <dt>Set</dt>
-            <dd>elnop-stacks</dd>
-          </div>
-          <div>
-            <dt>Sheet</dt>
-            <dd>01 / 01</dd>
-          </div>
-          <div>
-            <dt>Units</dt>
-            <dd>metres</dd>
-          </div>
-        </dl>
-      </footer>
     </div>
   );
 }

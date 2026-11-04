@@ -24,7 +24,7 @@
     "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
-    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "zustand": "5.0.16"
@@ -34,12 +34,12 @@
     "@axe-core/playwright": "4.14.0",
     "@elnop/agent-hook": "0.1.0",
     "@elnop/alint-config": "0.1.0",
-    "@elnop/check-tree": "0.2.1",
-    "@elnop/dependency-cruiser-config": "0.1.0",
-    "@elnop/oxlint-config-react-vite": "0.3.1",
+    "@elnop/check-tree": "0.3.0",
+    "@elnop/dependency-cruiser-config": "0.2.0",
+    "@elnop/oxlint-config-react-vite": "0.4.1",
     "@elnop/playwright-fixtures": "0.1.0",
     "@elnop/prettier-config": "0.1.0",
-    "@elnop/tsconfig": "0.1.0",
+    "@elnop/tsconfig": "0.2.0",
     "@playwright/test": "1.64.1",
     "@swc/core": "1.16.21",
     "@types/node": "26.6.6",
