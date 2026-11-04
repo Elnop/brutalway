@@ -1,0 +1,10 @@
+.room-editor {
+  padding: 1rem;
+  border: 1px solid var(--line);
+}
+
+.room-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

@@ -1,0 +1,93 @@
+.plan {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1.5rem;
+  overflow: visible;
+}
+
+.plan text {
+  fill: var(--line);
+  font-family: inherit;
+  font-size: 16px;
+  text-anchor: middle;
+}
+
+.plan-dimension line {
+  stroke: var(--line-soft);
+  stroke-width: 1;
+}
+
+.plan-room rect {
+  fill: transparent;
+  stroke: var(--line);
+  stroke-width: 2;
+}
+
+.plan-room {
+  cursor: pointer;
+}
+
+.plan-room:hover rect,
+.plan-room[aria-pressed='true'] rect {
+  fill: var(--fill-selected);
+}
+
+.plan-room:focus {
+  outline: none;
+}
+
+.plan-room:focus-visible rect {
+  stroke-dasharray: 6 4;
+  stroke-width: 3;
+}
+
+.plan-room .plan-room-size {
+  fill: var(--line-soft);
+  font-size: 13px;
+}
+
+.plan-empty {
+  color: var(--line-soft);
+}
+
+.surface-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.surface-table caption {
+  margin-bottom: 0.5rem;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.surface-table th,
+.surface-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--line-faint);
+  text-align: left;
+}
+
+.surface-table td {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.surface-table tfoot th,
+.surface-table tfoot td {
+  border-top: 2px solid var(--line);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .surface-table {
+    font-size: 0.8rem;
+  }
+
+  .surface-table th,
+  .surface-table td {
+    padding-inline: 0.25rem;
+  }
+}

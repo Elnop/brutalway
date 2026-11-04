@@ -1,0 +1,37 @@
+.room-list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.room-list-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+}
+
+.room-list-item[aria-pressed='true'] {
+  background: var(--line);
+  color: var(--paper);
+}
+
+.editor-empty {
+  color: var(--line-soft);
+}
+
+.add-room {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--line-soft);
+}
+
+.room-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
