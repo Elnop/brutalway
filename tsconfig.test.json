@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["vite/client", "node", "@vitest/browser-playwright"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@e2e/*": ["./e2e/*"]
+    }
+  },
+  "include": ["src", "e2e", ".claude/hooks", "vite.config.ts", "vitest.config.ts", "oxlint.config.ts", "playwright.config.ts"],
+  "exclude": []
+}
