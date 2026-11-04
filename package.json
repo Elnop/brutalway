@@ -5,12 +5,13 @@
   "engines": {
     "node": ">=26"
   },
+  "prettier": "@elnop/prettier-config",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
-    "lint": "oxlint --type-aware src e2e .claude/hooks oxlint.config.ts vite.config.ts vitest.config.ts playwright.config.ts",
+    "lint": "oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts playwright.config.ts",
     "deps": "depcruise src",
     "tree": "check-tree src",
     "format": "prettier --write .",
@@ -31,8 +32,14 @@
   "devDependencies": {
     "@asamarts/alint": "0.21.0",
     "@axe-core/playwright": "4.14.0",
-    "@elnop/check-tree": "0.2.0",
-    "@elnop/oxlint-config-react-vite": "0.3.0",
+    "@elnop/agent-hook": "0.1.0",
+    "@elnop/alint-config": "0.1.0",
+    "@elnop/check-tree": "0.2.1",
+    "@elnop/dependency-cruiser-config": "0.1.0",
+    "@elnop/oxlint-config-react-vite": "0.3.1",
+    "@elnop/playwright-fixtures": "0.1.0",
+    "@elnop/prettier-config": "0.1.0",
+    "@elnop/tsconfig": "0.1.0",
     "@playwright/test": "1.64.1",
     "@swc/core": "1.16.21",
     "@types/node": "26.6.6",

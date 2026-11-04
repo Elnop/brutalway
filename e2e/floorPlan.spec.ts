@@ -1,4 +1,5 @@
-import { axeViolations, expect, openApp, test } from '@e2e/fixtures.ts';
+import { axeViolations, expect, test } from '@elnop/playwright-fixtures';
+import { openApp } from '@e2e/openApp.ts';
 
 test('axe finds no violation, with and without a selected room', async ({ page }) => {
   await openApp(page);

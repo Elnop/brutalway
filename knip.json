@@ -1,5 +1,4 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [".claude/hooks/*.ts"],
-  "ignoreDependencies": ["@swc/core"]
+  "ignoreDependencies": ["@swc/core", "@elnop/agent-hook", "@elnop/alint-config", "@elnop/dependency-cruiser-config"]
 }

@@ -4,7 +4,7 @@ A Vite + React + TypeScript starter where the conventions are checked by tools i
 
 The example app is a small floor plan editor. It is there so every rule has real code to check: delete it and keep the structure.
 
-Part of [elnop-stacks](https://github.com/Elnop/elnop-stacks). The lint rules come from the `@elnop/*` packages published from [Elnop/eslint-plugins](https://github.com/Elnop/eslint-plugins).
+Part of [elnop-stacks](https://github.com/Elnop/elnop-stacks). The rules and configs come from the `@elnop/*` packages published from [Elnop/elnop-tooling](https://github.com/Elnop/elnop-tooling): this repository only holds what is specific to it.
 
 ## Getting started
 
@@ -49,10 +49,10 @@ Components are orchestrators (`XContainer`, `XLayout`, `XPage`), which read stor
 
 ## Working with an agent
 
-`.claude/settings.json` runs `.claude/hooks/lintEditedFile.ts` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on. Every message says what to change, so the agent does not need to know the convention beforehand.
+`.claude/settings.json` runs `@elnop/agent-hook` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on. Every message says what to change, so the agent does not need to know the convention beforehand.
 
 ## Starting your own app
 
-1. Delete `src/features/`, `src/states/floor-plan/`, the files in `src/shared/` and the specs in `e2e/` except `e2e/fixtures.ts`.
+1. Delete `src/features/`, `src/states/floor-plan/`, the files in `src/shared/` and the specs in `e2e/`. Keep `e2e/openApp.ts` and change what it waits for.
 2. Write your first feature in `src/features/<name>/` and render it from `src/app/App.tsx`.
 3. Run `npm run check` often. The structure rules only make sense once there are a few files, so expect it to push you toward folders as the app grows.
