@@ -1,0 +1,6 @@
+**/*.md
+dist
+package-lock.json
+template-vite
+template-fastify
+.matrix

@@ -1,0 +1,32 @@
+{
+  "name": "elnop-stacks",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "workspaces": [
+    "create-elnop-stack"
+  ],
+  "prettier": "@elnop/prettier-config",
+  "scripts": {
+    "build": "npm run build -w create-elnop-stack",
+    "typecheck": "tsc -p create-elnop-stack",
+    "lint": "oxlint --type-aware create-elnop-stack oxlint.config.ts",
+    "format": "prettier --write .",
+    "check": "prettier --check . && npm run typecheck && npm run lint && knip",
+    "test": "npm test -w create-elnop-stack",
+    "matrix": "node create-elnop-stack/scripts/runMatrix.ts"
+  },
+  "devDependencies": {
+    "@elnop/oxlint-config-typescript": "0.4.0",
+    "@elnop/prettier-config": "0.1.0",
+    "@elnop/tsconfig": "0.2.0",
+    "@types/node": "26.6.6",
+    "knip": "6.42.1",
+    "oxlint": "1.91.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "prettier": "3.9.10",
+    "typescript": "7.0.2"
+  }
+}

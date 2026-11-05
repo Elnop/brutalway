@@ -1,0 +1,41 @@
+{
+  "name": "create-elnop-stack",
+  "version": "0.1.0",
+  "description": "Creates a project from one of the elnop-stacks templates, with the options you pick.",
+  "keywords": [
+    "create",
+    "template",
+    "vite",
+    "react",
+    "fastify"
+  ],
+  "homepage": "https://github.com/Elnop/elnop-stacks/tree/main/create-elnop-stack#readme",
+  "bugs": "https://github.com/Elnop/elnop-stacks/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/elnop-stacks.git",
+    "directory": "create-elnop-stack"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "dist",
+    "overlays"
+  ],
+  "bin": {
+    "create-elnop-stack": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/writeStackRefs.ts",
+    "prepack": "npm run build",
+    "test": "node --test 'src/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@clack/prompts": "1.8.1",
+    "giget": "3.3.1"
+  }
+}

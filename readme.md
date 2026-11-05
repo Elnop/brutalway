@@ -25,8 +25,18 @@ The lint configs, plugins and every shared config (TypeScript, Prettier, depende
 
 ## Using a template
 
-Each template is its own GitHub template repository: open it and click "Use this template". To get them all at once:
+```sh
+npm create elnop-stack my-app
+```
+
+The CLI asks for a stack, then for the parts to keep (the example app, e2e tests, the Claude Code hook, CI...). Every combination passes `npm run check`. [create-elnop-stack](create-elnop-stack/README.md) lists the options and the flags to run it without questions.
+
+Each template is also its own GitHub template repository: open it and click "Use this template". To get them all at once:
 
 ```sh
 git clone --recurse-submodules https://github.com/Elnop/elnop-stacks.git
 ```
+
+## Working on this repository
+
+The root `package.json` holds the shared tooling and lists the workspaces one by one, since the template submodules have their own `package.json`. `npm run check` runs Prettier, tsc, Oxlint and knip, `npm test` runs the CLI tests, and `npm run matrix` creates a project for every combination of options and checks it.

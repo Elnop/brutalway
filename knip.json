@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": ["create-elnop-stack/overlays/**", "template-*/**"],
+  "workspaces": {
+    ".": {},
+    "create-elnop-stack": {
+      "entry": ["src/cli.ts", "scripts/*.ts"]
+    }
+  }
+}
