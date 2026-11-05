@@ -53,6 +53,6 @@ Components are orchestrators (`XContainer`, `XLayout`, `XPage`), which read stor
 
 ## Starting your own app
 
-1. Delete `src/features/`, `src/shared-features/todos/`, the files in `src/shared/` and the specs in `e2e/`. Keep `e2e/openApp.ts` and change what it waits for.
+1. Delete `src/features/`, `src/shared-features/todos/`, the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.
 2. Write your first feature in `src/features/<name>/` and render it from `src/app/App.tsx`.
 3. Run `npm run check` often. The structure rules only make sense once there are a few files, so expect it to push you toward folders as the app grows.

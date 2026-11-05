@@ -39,7 +39,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@elnop/
 
 ## Repository
 
-alint checks that every path in backticks, link and anchor in the README and in `docs/` still exists, that `styles/`, `types/` and `configs/` only hold what their name says, and that every dependency in `package.json` is pinned to an exact version. The rules come from `@elnop/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/shared-features/todos/todosStore.ts`.
+alint checks that every path in backticks, link and anchor in the README and in `docs/` still exists, that `styles/`, `types/` and `configs/` only hold what their name says, and that every dependency in `package.json` is pinned to an exact version. The rules come from `@elnop/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
 
 knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name.
 
@@ -49,10 +49,10 @@ knip (`knip.json`) rejects exports nobody imports, unused files, unused dependen
 |---|---|---|---|
 | Unit | a pure function, a selector | `src/shared/lib/normalizeTitle.test.ts` next to its source | `npm run test:unit` |
 | Component | a presenter alone, through its props | `src/features/todo-list/components/presenters/TodoInput.test.tsx` | `npm run test:component` |
-| E2e | a user flow on the built app | `e2e/todos.spec.ts` | `npm run e2e` |
+| E2e | a user flow on the built app | `e2e/app.spec.ts` | `npm run e2e` |
 
 The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. Find elements by role and accessible name, wait with retrying assertions, never with a timeout.
 
-The specs import `test`, `expect` and `axeViolations` from `@elnop/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `e2e/openApp.ts` opens the app and waits for it. The e2e suite checks there is no axe violation, that adding, checking, filtering and clearing tasks keeps the counters right, that renaming a task works, and that a 320 px screen never scrolls sideways, even while a task is being renamed.
+The specs import `test`, `expect` and `axeViolations` from `@elnop/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `e2e/openApp.ts` opens the app and waits for its `h1`. `e2e/app.spec.ts` checks the first screen: no axe violation, no sideways scroll at 320 px. `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, the counters while adding, checking, filtering and clearing tasks, and renaming.
 
 Before keeping a test, break the code it protects and watch it fail.

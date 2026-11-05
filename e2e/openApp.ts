@@ -2,5 +2,5 @@ import type { Page } from '@playwright/test';
 
 export async function openApp(page: Page): Promise<void> {
   await page.goto('./');
-  await page.getByRole('heading', { name: 'Todos' }).waitFor();
+  await page.getByRole('heading', { level: 1 }).waitFor();
 }
