@@ -39,4 +39,4 @@ git clone --recurse-submodules https://github.com/Elnop/elnop-stacks.git
 
 ## Working on this repository
 
-The root `package.json` holds the shared tooling and lists the workspaces one by one, since the template submodules have their own `package.json`. `npm run check` runs Prettier, tsc, Oxlint and knip, `npm test` runs the CLI tests, and `npm run matrix` creates a project for every combination of options and checks it.
+The root `package.json` holds the shared tooling and lists the workspaces one by one, since the template submodules have their own `package.json`. `npm run check` runs Prettier, tsc, Oxlint and knip, `npm test` runs the CLI tests, and `npm run matrix` creates a project for every combination of options and checks it. `npm run release` runs the checks and the tests, then publishes create-elnop-stack to npm. The build records the commit of each submodule, so commit the submodule bumps before releasing.

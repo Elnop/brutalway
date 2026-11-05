@@ -27,7 +27,7 @@
     "overlays"
   ],
   "bin": {
-    "create-elnop-stack": "./dist/cli.js"
+    "create-elnop-stack": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/writeStackRefs.ts",
