@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
+import { errorMessage } from '../src/errorMessage.ts';
 import { matrixCombinations } from '../src/matrixCombinations.ts';
 import { scaffoldProject } from '../src/scaffoldProject.ts';
 import { LOCAL_ROOT } from '../src/ScaffoldConfig.ts';
@@ -34,7 +35,11 @@ async function check({ stack, answers, name }: Run): Promise<string | undefined>
   const dir = join(WORK_DIR, name);
   rmSync(dir, { recursive: true, force: true });
   mkdirSync(dir, { recursive: true });
-  await scaffoldProject({ dir, projectName: name, stack, answers, source: { kind: 'local', root: LOCAL_ROOT }, git: true, install: false }, () => undefined);
+  try {
+    await scaffoldProject({ dir, projectName: name, stack, answers, source: { kind: 'local', root: LOCAL_ROOT }, git: true, install: false }, () => undefined);
+  } catch (error) {
+    return `scaffolding failed: ${errorMessage(error)}`;
+  }
   const commands = [
     ['npm', 'install', '--prefer-offline', '--no-audit', '--no-fund'],
     ['npm', 'run', 'check'],

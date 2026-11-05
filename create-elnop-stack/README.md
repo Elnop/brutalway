@@ -13,8 +13,11 @@ Node 26 is required, like the templates.
 | Stack | Template | Options |
 |---|---|---|
 | `vite` | [template-vite](https://github.com/Elnop/template-vite) | `example`, `zustand`, `component-tests`, `e2e`, `claude-hook`, `ci` |
+| `fastify` | [template-fastify](https://github.com/Elnop/template-fastify) | `example`, `swagger`, `database`, `claude-hook`, `ci` |
 
-`example` keeps the todo list. Without it you get the same structure with empty `src/features/`, `src/shared-features/` and `src/shared/` folders, and an `App.tsx` that only shows the project name. zustand can only be removed together with the example, since the example uses it.
+`example` keeps the todo list. Without it you get the same structure with empty `src/features/` and `src/shared-features/` folders. On vite, `App.tsx` then only shows the project name, and zustand can only be removed together with the example, since the example uses it. On fastify, `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name.
+
+On fastify, `database` keeps `node:sqlite` and the `DATABASE_PATH` variable. Without it, the example keeps its todos in a `Map`: `todosQueries.ts` has the same functions, so the services and the routes do not change. Without `swagger`, `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
 
 The CLI also asks whether to run `git init` and `npm install`. Without git, the `prepare` script that installs the pre-commit hook is removed. The next steps tell you how to set it up later.
 
@@ -40,7 +43,7 @@ npm create elnop-stack my-app -- --preset minimal.json --yes
 
 ## How it works
 
-Each version of the package downloads every template at the commit its submodule points to in elnop-stacks (`dist/stackRefs.json`, written at build time), so a given version always produces the same project. The options are described in `src/stacks/viteStack.ts`: files to remove, text to replace in the docs and configs, scripts and dependencies to drop, and files to copy from `overlays/`. A replacement whose text cannot be found stops the CLI with the file name and the missing text, rather than producing a half-edited project.
+Each version of the package downloads every template at the commit its submodule points to in elnop-stacks (`dist/stackRefs.json`, written at build time), so a given version always produces the same project. The options are described in `src/stacks/viteStack.ts` and `src/stacks/fastifyStack.ts`: files to remove, text to replace in the docs and configs, scripts and dependencies to drop, and files to copy from `overlays/`. A replacement whose text cannot be found stops the CLI with the file name and the missing text, rather than producing a half-edited project.
 
 ## Developing
 

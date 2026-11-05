@@ -8,7 +8,7 @@ export type StackOption = {
   independent?: boolean;
 };
 
-export type FileEdit = { file: string; replace: string; with: string } | { file: string; dropLines: string } | { file: string; dropSection: string };
+export type FileEdit = { file: string; replace: string; with: string; all?: boolean } | { file: string; dropLines: string } | { file: string; dropSection: string };
 
 export type StackChange = {
   when: Answers;

@@ -14,6 +14,11 @@ describe('applyFileEdit', () => {
     assert.throws(() => applyFileEdit('a', { file: 'x', replace: 'b', with: 'B' }), /found it 0 times/u);
   });
 
+  it('replaces every occurrence when asked to', () => {
+    assert.strictEqual(applyFileEdit('a b b', { file: 'x', replace: 'b', with: 'B', all: true }), 'a B B');
+    assert.throws(() => applyFileEdit('a', { file: 'x', replace: 'b', with: 'B', all: true }), /not found/u);
+  });
+
   it('drops matching lines without leaving a double blank line', () => {
     assert.strictEqual(applyFileEdit('a\n\ndrop me\n\nb\n', { file: 'x', dropLines: 'drop' }), 'a\n\nb\n');
   });
