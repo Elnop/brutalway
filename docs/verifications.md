@@ -16,6 +16,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 - an `async` handler returns its value and never calls `reply.send()`
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`, Zod schemas in an `XSchemas.ts` that exports nothing else
 - no `xRoutes.ts` under `shared-features/`
+- `fetch` is called only in an `xClient.ts` file (or a test)
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`
 - in tests, `describe` and `it` from `node:test` (never `test`), and `node:assert/strict`
 
@@ -25,13 +26,15 @@ dependency-cruiser extends `@elnop/dependency-cruiser-config/server`:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
-- a route never imports queries, queries are only imported by a service, other queries, `src/app/` or a test
-- `node:sqlite` is only imported by queries and `src/shared/`
+- a route never imports queries, queries are only imported by a service, a worker, other queries, `src/app/` or a test
+- the database driver (`node:sqlite`, `pg`…) is only imported by queries and `src/shared/`
+- an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server
+- HTTP libraries (`undici`, `node:https`…) are only imported by an `xClient.ts`
 - no cycles, no import of a test file, no devDependency in production code
 
 ## Tree
 
-`check-tree` (`@elnop/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
+`check-tree` (`@elnop/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
 
 ## Repository
 
