@@ -8,7 +8,7 @@ The first four justify the axioms of [intent.md](intent.md). The others justify 
 
 From *Building Evolutionary Architectures* (Neal Ford, Rebecca Parsons, Patrick Kua, O'Reilly, 2017): an architectural property is protected by an automated test that fails when the property breaks. [ArchUnit](https://www.archunit.org/) does it for Java.
 
-We take the whole idea. It is the Deterministic axiom: layers, import directions, file names and folder kinds are all fitness functions, run on every commit.
+We take the whole idea. It is the Reproducible axiom: layers, import directions, file names and folder kinds are all fitness functions, run on every commit.
 
 We leave out the broader practice around them (evolutionary change, metrics over time). Our checks are pass or fail.
 
@@ -18,7 +18,7 @@ Enforced by dependency-cruiser, check-tree, alint and the `@elnop/*` lint plugin
 
 From the Toyota Production System (Shigeo Shingo): design the process so a mistake is either impossible or flagged at once, where it happens.
 
-We take the "at once": the Claude Code hook lints each file right after the agent writes it, and the pre-commit hook runs `npm run check`. This is the Actionable axiom.
+We take the "at once": the Claude Code hook lints each file right after the agent writes it, and the pre-commit hook runs `npm run check`. This is the Teaching axiom.
 
 We leave out nothing in particular, but we rarely make mistakes impossible. Most of the time we flag them.
 
@@ -38,7 +38,7 @@ Enforced by Prettier and `@elnop/oxlint-config-typescript`.
 
 From the [Rails doctrine](https://rubyonrails.org/doctrine): the framework decides where files go and what they are called, so the developer does not have to.
 
-We take the default layout and the naming rules, which make the Predictable axiom work.
+We take the default layout and the naming rules, which make the Legible axiom work.
 
 We leave out the implicit magic. Rails finds a file because of its name at runtime and fails silently when it is misnamed. Here nothing is loaded by convention: imports are explicit, and a misnamed file fails the check.
 
@@ -48,7 +48,7 @@ Enforced by `@elnop/eslint-plugin-file-named-after-export` and check-tree.
 
 [Feature-Sliced Design](https://feature-sliced.design/) splits a front end into layers (`app`, `pages`, `widgets`, `features`, `entities`, `shared`), each importing only the layers below it, and slices of the same layer never import each other.
 
-We take the layers and the import rules, which are the Isolated axiom. Our four layers are `app`, `features`, `shared-features` and `shared`, and they apply to the API as well as to the front end.
+We take the layers and the import rules, which are the Bounded axiom. Our four layers are `app`, `features`, `shared-features` and `shared`, and they apply to the API as well as to the front end.
 
 We leave out three of the layers (`pages`, `widgets`, `entities`), which are hard to tell apart in a small app, and the public API of each slice, an `index.ts` that re-exports what the slice exposes. We forbid barrel files: an import points to the file that defines the export.
 
