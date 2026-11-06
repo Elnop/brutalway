@@ -1,4 +1,4 @@
-import { axeViolations, expect, test } from '@elnop/playwright-fixtures';
+import { axeViolations, expect, test } from '@brutal/playwright-fixtures';
 import { openApp } from '@e2e/openApp.ts';
 
 test('axe finds no violation while a task is being renamed', async ({ page }) => {

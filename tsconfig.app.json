@@ -1,5 +1,5 @@
 {
-  "extends": "@elnop/tsconfig/react-vite.json",
+  "extends": "@brutal/tsconfig/react-vite.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]
