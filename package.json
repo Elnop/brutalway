@@ -35,7 +35,7 @@
     "@elnop/agent-hook": "0.1.0",
     "@elnop/alint-config": "0.1.0",
     "@elnop/check-tree": "0.3.0",
-    "@elnop/dependency-cruiser-config": "0.2.0",
+    "@elnop/dependency-cruiser-config": "0.4.0",
     "@elnop/oxlint-config-react-vite": "0.4.1",
     "@elnop/playwright-fixtures": "0.1.0",
     "@elnop/prettier-config": "0.1.0",
