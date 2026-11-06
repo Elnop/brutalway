@@ -1,6 +1,5 @@
 import { AXIOMS } from '@/features/landing/shared/AxiomsConfig.ts';
-import { CommandLine } from '@/shared/CommandLine.tsx';
-import { INTENT_ROUTE } from '@/shared/LinksConfig.ts';
+import { CommandLine } from '@/shared/presenters/CommandLine.tsx';
 import '@/features/landing/features/hero/hero.css';
 
 export function Hero() {
@@ -26,9 +25,6 @@ export function Hero() {
         </div>
         <div className="hero-actions">
           <CommandLine shadow="yellow" />
-          <a href={INTENT_ROUTE} className="button">
-            Read the intent
-          </a>
         </div>
       </div>
     </section>

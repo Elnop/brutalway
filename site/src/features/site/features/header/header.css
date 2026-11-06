@@ -25,6 +25,20 @@
 .site-header-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem 1.5rem;
   font-weight: 500;
+}
+
+.site-header-sections,
+.site-header-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.site-header-pages {
+  padding-inline-start: 1.5rem;
+  border-inline-start: var(--border);
+  font-weight: 700;
 }

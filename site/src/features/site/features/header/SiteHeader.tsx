@@ -1,5 +1,6 @@
 import { DOCS_ROUTE, REPOSITORY_URL } from '@/shared/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
+import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
 export function SiteHeader() {
   return (
@@ -16,11 +17,15 @@ export function SiteHeader() {
           brutalway
         </a>
         <div className="site-header-links">
-          <a href="#axioms">Axioms</a>
-          <a href="#authors">Authors</a>
-          <a href="#stacks">Stacks</a>
-          <a href={DOCS_ROUTE}>Docs</a>
-          <a href={REPOSITORY_URL}>GitHub</a>
+          <div className="site-header-sections">
+            <a href="#axioms">Axioms</a>
+            <a href="#authors">Authors</a>
+            <a href="#stacks">Stacks</a>
+          </div>
+          <div className="site-header-pages">
+            <a href={DOCS_ROUTE}>Docs</a>
+            <SiteLink href={REPOSITORY_URL}>GitHub</SiteLink>
+          </div>
         </div>
       </nav>
     </header>

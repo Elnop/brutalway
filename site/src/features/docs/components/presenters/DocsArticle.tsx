@@ -1,8 +1,14 @@
 import Markdown, { defaultUrlTransform } from 'react-markdown';
+import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
 import { githubFileUrl } from '@/features/docs/lib/docsUrls.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
+import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
+
+const markdownComponents: Components = {
+  a: ({ node: _node, ...props }) => <SiteLink {...props} />,
+};
 
 type DocsArticleProps = {
   content: LoadState<string>;
@@ -18,18 +24,22 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
       {content.status === 'loading' && <p className="docs-status">Loading {path}…</p>}
       {content.status === 'error' && (
         <p className="docs-status">
-          {content.message} <a href={sourceUrl}>Read it on GitHub</a>.
+          {content.message} <SiteLink href={sourceUrl}>Read it on GitHub</SiteLink>.
         </p>
       )}
       {content.status === 'ready' && (
-        <Markdown remarkPlugins={[remarkGfm]} urlTransform={(url, attribute) => defaultUrlTransform(resolveDocUrl({ url, attribute, source, docPath: path, knownPaths }))}>
+        <Markdown
+          remarkPlugins={[remarkGfm]}
+          components={markdownComponents}
+          urlTransform={(url, attribute) => defaultUrlTransform(resolveDocUrl({ url, attribute, source, docPath: path, knownPaths }))}
+        >
           {content.value}
         </Markdown>
       )}
       <p className="docs-source">
-        <a href={sourceUrl}>
+        <SiteLink href={sourceUrl}>
           {source.repo}/{path} on GitHub
-        </a>
+        </SiteLink>
       </p>
     </article>
   );

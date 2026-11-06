@@ -1,4 +1,4 @@
-import { CommandLine } from '@/shared/CommandLine.tsx';
+import { CommandLine } from '@/shared/presenters/CommandLine.tsx';
 import '@/features/site/features/footer/footer.css';
 
 export function SiteFooter() {

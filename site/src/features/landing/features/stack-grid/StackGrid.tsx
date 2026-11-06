@@ -1,4 +1,5 @@
 import '@/features/landing/features/stack-grid/stack-grid.css';
+import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
 const stacks = [
   { name: 'template-vite', status: 'Ready', tools: 'Vite, React, zustand, Vitest, Playwright', tone: 'yellow', url: 'https://github.com/Elnop/template-vite' },
@@ -16,7 +17,7 @@ export function StackGrid() {
           {stacks.map((stack) => (
             <article key={stack.name} className={`stack-grid-card tone-${stack.tone}`}>
               <p className="stack-grid-status">{stack.status}</p>
-              <h3>{stack.url === undefined ? stack.name : <a href={stack.url}>{stack.name}</a>}</h3>
+              <h3>{stack.url === undefined ? stack.name : <SiteLink href={stack.url}>{stack.name}</SiteLink>}</h3>
               <p>{stack.tools}</p>
             </article>
           ))}
