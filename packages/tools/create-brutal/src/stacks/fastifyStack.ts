@@ -19,6 +19,8 @@ export const fastifyStack: Stack = {
   changes: [
     {
       when: {},
+      remove: ['.changeset', 'CHANGELOG.md', '.github/workflows/release.yml'],
+      dependencies: ['@changesets/cli'],
       edits: [{ file: 'README.md', replace: '# template-fastify\n', with: '# __PROJECT_NAME__\n' }],
     },
     {

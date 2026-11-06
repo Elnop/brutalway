@@ -90,5 +90,6 @@ export function applyStackChanges(dir: string, stack: Stack, answers: Answers, o
   }
   updatePackageJson(dir, (pkg) => {
     pkg['name'] = projectName;
+    delete pkg['version'];
   });
 }
