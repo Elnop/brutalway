@@ -44,6 +44,11 @@ export const fastifyStack: Stack = {
         { file: 'docs/verifications.md', replace: ROW_ID_SENTENCE, with: '' },
         { file: 'docs/verifications.md', dropLines: '| Queries |' },
         { file: 'docs/verifications.md', dropLines: '| Routes |' },
+        {
+          file: 'docs/architecture.md',
+          replace: ' A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared-features/todos/todosQueries.ts`, and only queries run SQL.',
+          with: ' Only queries run SQL.',
+        },
       ],
       keep: ['src/features', 'src/shared-features'],
     },
