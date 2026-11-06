@@ -28,7 +28,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@elnop/
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
-- a sub-feature imports neither its siblings nor its feature root, only its feature `shared/`
+- a sub-feature imports neither its siblings nor its feature root, only its feature `shared/`, at every nesting level, and features nest at most ten levels deep
 - a presenter imports no store and no shared-feature hook
 - a store lives at the root or in the `stores/` folder of its level
 - no cycles, no import of a test file or a devDependency from production code
