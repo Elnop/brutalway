@@ -21,3 +21,11 @@ We take the three roles, each in its own file. `src/shared-features/todos/todosS
 We leave out reducers, action objects and dispatch. With zustand, an action is a plain function that sets the state, and a selector is a plain function that can be tested without React.
 
 Enforced by `@elnop/oxlint-config-zustand` and `@elnop/dependency-cruiser-config` (a store lives at the root or in the `stores/` folder of its level).
+
+## Sub-features
+
+From Feature-Sliced Design, extended. A feature can hold its own features in `features/<x>/features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared/` folder.
+
+Renaming a task is a sub-feature of the list: `src/features/todo-list/features/todo-editor/`.
+
+Enforced by `@elnop/dependency-cruiser-config`.
