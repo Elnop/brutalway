@@ -146,19 +146,37 @@ pre {
   }
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(1.5rem);
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .reveal {
-      animation: rise cubic-bezier(0.2, 0.7, 0.2, 1) both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 70%;
-    }
+  .reveal {
+    opacity: 0;
+    transform: translateY(2.5rem);
+    transition:
+      opacity 900ms ease-out,
+      transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal:nth-child(2) {
+    transition-delay: 150ms;
+  }
+
+  .reveal:nth-child(3) {
+    transition-delay: 300ms;
+  }
+
+  .reveal:nth-child(4) {
+    transition-delay: 450ms;
+  }
+
+  .reveal:nth-child(5) {
+    transition-delay: 600ms;
+  }
+
+  .reveal:nth-child(6) {
+    transition-delay: 750ms;
   }
 }
