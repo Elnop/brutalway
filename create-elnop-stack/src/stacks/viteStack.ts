@@ -27,6 +27,8 @@ const COMPONENT_PROJECT = `        {
         },
 `;
 
+const PRESENTER_TEST_EXAMPLE = { file: 'docs/architecture.md', replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,', with: ',' };
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -67,6 +69,17 @@ export const viteStack: Stack = {
         { file: 'README.md', replace: '3. Run `npm run check` often', with: '2. Run `npm run check` often' },
         { file: 'docs/verifications.md', replace: '`src/shared/lib/normalizeTitle.test.ts` next to its source', with: 'next to its source' },
         { file: 'docs/verifications.md', replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`', with: 'next to the presenter' },
+        {
+          file: 'docs/architecture.md',
+          replace: ' `src/features/todo-list/components/TodoListLayout.tsx` reads the todos and hands them to the presenters in `src/features/todo-list/components/presenters/`.',
+          with: '',
+        },
+        {
+          file: 'docs/architecture.md',
+          replace:
+            '`src/shared-features/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
+          with: 'An `xStore.ts` only exports `xStore` and `xActions`, an `xSelectors.ts` only exports `selectX` functions, and components read the store through a `useX.ts` hook.',
+        },
       ],
       overlay: 'skeleton',
       keep: ['src/features', 'src/shared-features', 'src/shared'],
@@ -83,6 +96,10 @@ export const viteStack: Stack = {
       ],
     },
     {
+      when: { example: false, 'component-tests': true },
+      edits: [PRESENTER_TEST_EXAMPLE],
+    },
+    {
       when: { example: false, zustand: true },
       edits: [{ file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "zustand", ' }],
     },
@@ -92,6 +109,7 @@ export const viteStack: Stack = {
     },
     {
       when: { zustand: false },
+      edits: [{ file: 'docs/architecture.md', dropSection: '## Store, actions and selectors' }],
       dependencies: ['zustand'],
     },
     {
@@ -106,6 +124,7 @@ export const viteStack: Stack = {
         { file: 'tsconfig.test.json', replace: ', "@vitest/browser-playwright"]', with: ']' },
         { file: 'README.md', replace: 'Vitest: unit tests in Node, component tests in headless Chromium', with: 'Vitest unit tests, in Node' },
         { file: 'docs/verifications.md', dropLines: '| Component |' },
+        PRESENTER_TEST_EXAMPLE,
         {
           file: 'docs/verifications.md',
           replace: 'The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. ',
