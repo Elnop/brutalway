@@ -20,6 +20,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height, 0px);
 }
 
 body {
@@ -48,6 +49,10 @@ h2 {
   line-height: 0.95;
   letter-spacing: -0.04em;
   text-transform: uppercase;
+}
+
+main {
+  overflow-x: clip;
 }
 
 a {

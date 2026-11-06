@@ -10,11 +10,11 @@
 
 .docs-nav {
   position: sticky;
-  top: 1.5rem;
+  top: calc(var(--header-height, 0px) + 1.5rem);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-height: calc(100vh - 3rem);
+  max-height: calc(100vh - var(--header-height, 0px) - 3rem);
   padding: 1.25rem;
   overflow-y: auto;
   border: var(--border);

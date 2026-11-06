@@ -1,4 +1,7 @@
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border-bottom: var(--border);
   background: var(--paper);
 }
@@ -41,4 +44,40 @@
   padding-inline-start: 1.5rem;
   border-inline-start: var(--border);
   font-weight: 700;
+}
+
+@media (max-width: 40rem) {
+  .site-header-nav {
+    gap: 0.5rem;
+    padding-block: 0.75rem;
+  }
+
+  .site-header-logo {
+    font-size: 1.375rem;
+  }
+
+  .site-header-links,
+  .site-header-sections,
+  .site-header-pages {
+    flex-wrap: nowrap;
+    gap: 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  .site-header-pages {
+    padding-inline-start: 0.875rem;
+  }
+}
+
+@media (max-width: 24rem) {
+  .site-header-links,
+  .site-header-sections,
+  .site-header-pages {
+    gap: 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  .site-header-pages {
+    padding-inline-start: 0.625rem;
+  }
 }
