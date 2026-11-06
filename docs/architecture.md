@@ -1,6 +1,6 @@
 # Architecture
 
-The intent behind every template of the series and the general principles they borrow from (Feature-Sliced Design, Screaming Architecture, fitness functions...) are in [the BRUTAL way docs](https://github.com/Elnop/brutalway/tree/main/docs). This page covers what is specific to an HTTP API.
+The intent behind every template of the series and the general principles they borrow from (Feature-Sliced Design, Screaming Architecture, fitness functions...) are in [the brutalway docs](https://github.com/Elnop/brutalway/tree/main/docs). This page covers what is specific to an HTTP API.
 
 ## Controller, service, repository
 

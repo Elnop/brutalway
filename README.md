@@ -4,7 +4,7 @@ A Fastify + TypeScript API starter where the conventions are checked by tools in
 
 The example is the todo list API that every template of the series builds. Delete it and keep the structure.
 
-Part of [BRUTAL way](https://github.com/Elnop/brutalway), which also publishes the `@brutalway/*` packages holding the rules and configs: this repository only holds what is specific to it.
+Part of [brutalway](https://github.com/Elnop/brutalway), which also publishes the `@brutalway/*` packages holding the rules and configs: this repository only holds what is specific to it.
 
 ## Getting started
 
