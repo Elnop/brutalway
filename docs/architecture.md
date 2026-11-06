@@ -1,6 +1,6 @@
 # Architecture
 
-The intent behind every template of the series and the general principles they borrow from (Feature-Sliced Design, Screaming Architecture, fitness functions...) are in [the BRUTAL docs](https://github.com/Elnop/brutal/tree/main/docs). This page covers what is specific to an HTTP API.
+The intent behind every template of the series and the general principles they borrow from (Feature-Sliced Design, Screaming Architecture, fitness functions...) are in [the BRUTAL way docs](https://github.com/Elnop/brutalway/tree/main/docs). This page covers what is specific to an HTTP API.
 
 ## Controller, service, repository
 
@@ -10,7 +10,7 @@ We take the three roles under the names `xRoutes.ts`, `xService.ts` and `xQuerie
 
 We leave out classes, base repositories and generic CRUD. Queries are plain functions written in SQL, and the service receives them as an object typed by `TodosQueries`, which is all the abstraction the in-memory version needs.
 
-Enforced by `@brutal/dependency-cruiser-config/server` (a route never imports queries, the database driver is only imported by queries and `src/shared/`) and check-tree (the `routes/`, `services/` and `queries/` kinds).
+Enforced by `@brutalway/dependency-cruiser-config/server` (a route never imports queries, the database driver is only imported by queries and `src/shared/`) and check-tree (the `routes/`, `services/` and `queries/` kinds).
 
 ## Dependencies as parameters
 
@@ -18,7 +18,7 @@ Dependency injection, without the container. A service is built by a factory tha
 
 We leave out Fastify's `decorate`, which hangs dependencies on the app instance and hides where they come from, and DI containers, which resolve them by name at runtime. A test builds the service with whatever it needs and nothing else.
 
-Enforced by `@brutal/oxlint-config-fastify` (no `app.decorate`).
+Enforced by `@brutalway/oxlint-config-fastify` (no `app.decorate`).
 
 ## Parse, don't validate
 
@@ -28,7 +28,7 @@ We take it for every input. Requests and responses are Zod schemas in `XSchemas.
 
 We leave out the stricter version where every domain value gets its own branded type. A `title` is a `string` once the schema has checked it.
 
-Enforced by `@brutal/oxlint-config-fastify` (schemas in an `XSchemas.ts` that exports nothing else).
+Enforced by `@brutalway/oxlint-config-fastify` (schemas in an `XSchemas.ts` that exports nothing else).
 
 ## Config from the environment
 
@@ -38,4 +38,4 @@ We take it, and add one rule: `process.env` is read in a single file, `src/share
 
 We leave out the rest of the twelve factors, which are about deployment and out of scope for a template.
 
-Enforced by `@brutal/oxlint-config-fastify` (`process.env` only in a file whose name ends with `Env.ts`).
+Enforced by `@brutalway/oxlint-config-fastify` (`process.env` only in a file whose name ends with `Env.ts`).

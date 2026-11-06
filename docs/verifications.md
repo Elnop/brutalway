@@ -4,11 +4,11 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 ## TypeScript
 
-`tsconfig.json` extends `@brutal/tsconfig/node.json`: `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`, with ES2024 as target and `erasableSyntaxOnly`, so Node can run every file without a build. That is also why `src/shared-features/todos/todosQueries.ts` reads `row['id']`.
+`tsconfig.json` extends `@brutalway/tsconfig/node.json`: `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`, with ES2024 as target and `erasableSyntaxOnly`, so Node can run every file without a build. That is also why `src/shared-features/todos/todosQueries.ts` reads `row['id']`.
 
 ## Lint
 
-`oxlint.config.ts` extends `@brutal/oxlint-config-fastify` (which brings the TypeScript base) and `@brutal/oxlint-config-node-test`. Each package README details its rules. The main ones:
+`oxlint.config.ts` extends `@brutalway/oxlint-config-fastify` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
 - no comments, no relative imports (use `#src/`), no `index.ts`, no `export *`
 - `process.env` is read only in a file whose name ends with `Env.ts`: here `src/shared/lib/readEnv.ts`
@@ -22,7 +22,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 ## Dependencies
 
-dependency-cruiser extends `@brutal/dependency-cruiser-config/server`:
+dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
@@ -35,11 +35,11 @@ dependency-cruiser extends `@brutal/dependency-cruiser-config/server`:
 
 ## Tree
 
-`check-tree` (`@brutal/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
 
 ## Repository
 
-alint extends `@brutal/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies.
+alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies.
 
 ## Tests
 

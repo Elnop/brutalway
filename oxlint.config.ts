@@ -1,5 +1,5 @@
-import { fastifyConfig } from '@brutal/oxlint-config-fastify';
-import { nodeTestConfig } from '@brutal/oxlint-config-node-test';
+import { fastifyConfig } from '@brutalway/oxlint-config-fastify';
+import { nodeTestConfig } from '@brutalway/oxlint-config-node-test';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
