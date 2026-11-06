@@ -3,7 +3,7 @@ import { DocsPage } from '@/features/docs/components/DocsPage.tsx';
 import { LandingPage } from '@/features/landing/LandingPage.tsx';
 import { SiteLayout } from '@/features/site/SiteLayout.tsx';
 import { PAGE_ROUTES } from '@/shared/LinksConfig.ts';
-import { useHash } from '@/shared/useHash.ts';
+import { useHash } from '@/shared/hooks/useHash.ts';
 
 export function App() {
   const hash = useHash();
