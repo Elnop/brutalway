@@ -53,6 +53,7 @@ export const viteStack: Stack = {
       when: { example: false },
       remove: ['src/features', 'src/shared-features/todos', 'src/shared/lib'],
       edits: [
+        { file: 'index.html', replace: '<title>Todos</title>', with: '<title>__PROJECT_NAME__</title>' },
         {
           file: 'README.md',
           replace: 'The example app is a todo list. It is there so every rule has real code to check: delete it and keep the structure. The look',
