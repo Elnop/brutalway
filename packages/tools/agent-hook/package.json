@@ -1,0 +1,32 @@
+{
+  "name": "@brutal/agent-hook",
+  "version": "0.1.0",
+  "description": "Claude Code PostToolUse hook: lints each file the agent edits with oxlint, runs alint and check-tree when a file is created, and sends the errors back to the agent.",
+  "keywords": [
+    "claude-code",
+    "hook",
+    "oxlint",
+    "alint",
+    "agent"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/tools/agent-hook#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/tools/agent-hook"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "bin": {
+    "brutal-agent-hook": "./dist/agentHook.js"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  }
+}

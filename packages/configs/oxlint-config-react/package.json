@@ -1,0 +1,41 @@
+{
+  "name": "@brutal/oxlint-config-react",
+  "version": "0.3.1",
+  "description": "Oxlint config for React with TypeScript: hooks rules and named XProps types for components.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "react",
+    "typescript",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/oxlint-config-react#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/configs/oxlint-config-react"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/ReactConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@brutal/oxlint-config-typescript": "^0.4.0",
+    "oxlint-plugin-eslint": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutal/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}

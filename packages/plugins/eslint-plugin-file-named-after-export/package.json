@@ -1,0 +1,41 @@
+{
+  "name": "@brutal/eslint-plugin-file-named-after-export",
+  "version": "0.1.2",
+  "description": "Lint rule for oxlint and ESLint: a file with a single export is named after it.",
+  "keywords": [
+    "oxlint",
+    "oxlint-plugin",
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "filename"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/plugins/eslint-plugin-file-named-after-export#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/plugins/eslint-plugin-file-named-after-export"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": "./dist/plugin.js",
+  "scripts": {
+    "build": "tsdown",
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutal/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}

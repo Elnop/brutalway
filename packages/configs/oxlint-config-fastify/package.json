@@ -1,0 +1,41 @@
+{
+  "name": "@brutal/oxlint-config-fastify",
+  "version": "0.2.0",
+  "description": "Oxlint config for Fastify APIs with Zod: env read in one place, dependencies passed to factories, async handlers that return, Zod schemas in XSchemas.ts, no route in shared-features/.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "fastify",
+    "zod",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/oxlint-config-fastify#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/configs/oxlint-config-fastify"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/FastifyConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@brutal/oxlint-config-typescript": "^0.4.0",
+    "oxlint-plugin-eslint": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutal/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}

@@ -1,9 +1,21 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["create-brutal/overlays/**", "template-*/**", "site/**"],
+  "ignore": ["**/fixtures/**", "packages/tools/create-brutal/overlays/**", "templates/**", "site/**"],
   "workspaces": {
     ".": {},
-    "create-brutal": {
+    "packages/configs/oxlint-config-typescript": {
+      "ignoreDependencies": ["@brutal/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments"]
+    },
+    "packages/configs/oxlint-config-zustand": {
+      "ignoreDependencies": ["@brutal/eslint-plugin-store-layout"]
+    },
+    "packages/configs/dependency-cruiser-config": {
+      "ignoreDependencies": ["@swc/core", "dependency-cruiser"]
+    },
+    "packages/configs/alint-config": {
+      "ignoreDependencies": ["@asamarts/alint"]
+    },
+    "packages/tools/create-brutal": {
       "entry": ["src/cli.ts", "scripts/*.ts"]
     }
   }

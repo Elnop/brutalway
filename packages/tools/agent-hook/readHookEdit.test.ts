@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { readHookEdit } from './readHookEdit.ts';
+
+test('a Write call gives the file and marks it created', () => {
+  assert.deepEqual(readHookEdit({ tool_name: 'Write', tool_input: { file_path: '/repo/src/a.ts' } }), { file: '/repo/src/a.ts', created: true });
+});
+
+test('an Edit call gives the file, not created', () => {
+  assert.deepEqual(readHookEdit({ tool_name: 'Edit', tool_input: { file_path: '/repo/src/a.ts' } }), { file: '/repo/src/a.ts', created: false });
+});
+
+test('an unexpected payload gives no file', () => {
+  assert.deepEqual(readHookEdit(null), { file: '', created: false });
+  assert.deepEqual(readHookEdit({ tool_input: { file_path: 3 } }), { file: '', created: false });
+});

@@ -1,4 +1,0 @@
-{
-  "extends": "@elnop/tsconfig/node.json",
-  "include": ["src", "scripts"]
-}

@@ -1,0 +1,37 @@
+{
+  "name": "@brutal/playwright-fixtures",
+  "version": "0.1.0",
+  "description": "Playwright fixtures: fail a test when the page throws, list axe-core violations.",
+  "keywords": [
+    "playwright",
+    "axe-core",
+    "accessibility",
+    "e2e"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/tools/playwright-fixtures#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/tools/playwright-fixtures"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/playwrightFixtures.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "peerDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1"
+  }
+}

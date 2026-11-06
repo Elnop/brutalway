@@ -1,0 +1,47 @@
+# @brutal/oxlint-config-typescript
+
+Oxlint config for TypeScript projects. The other `@brutal/oxlint-config-*` packages extend it.
+
+It turns on the `correctness` and `suspicious` categories, a set of `typescript/` and `import/` rules, and these conventions:
+
+- no comments, except tool directives (`oxlint-`, `eslint-`, `@ts-expect-error`, triple-slash references, shebang)
+- no `index.ts` and no barrel file
+- no `types.ts`: name it `xTypes.ts`
+- nothing under `shared-features/` that belongs to a feature: no orchestrator component (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts`. The whole file-name blocklist lives here, so a preset that extends several configs cannot lose part of it
+- no `xConfig.tsx`: a config is plain data in `xConfig.ts`, and its JSX goes in a component. `xContent.tsx` stays allowed for content written in JSX.
+- file names in camelCase or PascalCase
+- a file with a single export is named after it ([@brutal/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutal/eslint-plugin-file-named-after-export))
+- named functions are declarations (`function area() {}`), arrow functions stay for callbacks. A declared function is hoisted, so TypeScript drops the narrowing of a captured variable inside it: move the null check into a helper that returns the narrowed value
+- an `if` without braces fits on one line (`curly` set to `multi-line`)
+- object shapes use `type`, `interface` is only accepted to augment a global such as `Window` inside `declare global`
+- a `switch` over a union covers every case (`typescript/switch-exhaustiveness-check`, needs `--type-aware`)
+- exported types live in `xTypes.ts` files, exported constants in `xConfig.ts` files. An `xTypes.ts` only exports types, an `xConfig.ts` (or `xContent.ts`) only exports constants. Exported functions, classes, and objects of functions can live anywhere, and so can `export const x = defineX(...)`.
+- one way to write each thing: function members of a type as properties (`area: () => number`), no `public` keyword (write `private` and `protected`, leave public implicit), `for...of` instead of `forEach`, `replaceAll` for a global regex, `Number.parseFloat` and `Number.NaN` instead of the globals, `import type { X }` instead of `import { type X }`
+- regexes carry the `u` flag, ternaries are not nested, `!!x` and `+x` are written as explicit comparisons or calls, parameters are not reassigned
+- `console` only for `console.error`. A CLI turns `no-console` off in an override.
+- class members never reassigned are `readonly`, deprecated APIs are reported, and a `void` expression is only accepted as the body of an arrow (`() => save()`). These three need `--type-aware`.
+
+Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules.
+
+```sh
+npm install --save-dev oxlint @brutal/oxlint-config-typescript
+```
+
+```ts
+import { typescriptConfig } from '@brutal/oxlint-config-typescript';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [typescriptConfig],
+});
+```
+
+The `typescript/no-floating-promises` family of rules needs `oxlint --type-aware` and the `oxlint-tsgolint` package.
+
+Two plugins it loads (`eslint-plugin-check-file`, `eslint-plugin-no-comments`) depend on ESLint 10.14, which pulls `minimatch` 10 (GHSA-g3hv-75wg-m249). npm only reads `overrides` from the root `package.json`, so add this to yours:
+
+```json
+"overrides": {
+  "eslint-plugin-no-comments": { "minimatch": "^11.0.1" }
+}
+```

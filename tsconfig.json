@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["packages", "scripts"],
+  "exclude": ["**/fixtures/**", "**/dist/**", "**/node_modules/**", "packages/tools/create-brutal"]
+}

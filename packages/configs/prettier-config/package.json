@@ -1,0 +1,26 @@
+{
+  "name": "@brutal/prettier-config",
+  "version": "0.1.0",
+  "description": "Prettier config: single quotes, trailing commas, 200 columns.",
+  "keywords": [
+    "prettier",
+    "prettier-config"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/prettier-config#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/configs/prettier-config"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "prettierConfig.json"
+  ],
+  "exports": "./prettierConfig.json",
+  "peerDependencies": {
+    "prettier": "^3.9.10"
+  }
+}

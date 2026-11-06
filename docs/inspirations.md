@@ -12,7 +12,7 @@ We take the whole idea. It is the Reproducible axiom: layers, import directions,
 
 We leave out the broader practice around them (evolutionary change, metrics over time). Our checks are pass or fail.
 
-Enforced by dependency-cruiser, check-tree, alint and the `@elnop/*` lint plugins.
+Enforced by dependency-cruiser, check-tree, alint and the `@brutal/*` lint plugins.
 
 ## Poka-yoke
 
@@ -22,7 +22,7 @@ We take the "at once": the Claude Code hook lints each file right after the agen
 
 We leave out nothing in particular, but we rarely make mistakes impossible. Most of the time we flag them.
 
-Enforced by `@elnop/agent-hook` and the git hook in `.githooks/` of each template.
+Enforced by `@brutal/agent-hook` and the git hook in `.githooks/` of each template.
 
 ## One obvious way to do it
 
@@ -32,7 +32,7 @@ We take it beyond formatting, to code constructs: function declarations, `type` 
 
 We leave out the "obvious" part. A rule here can be arbitrary, as long as it is the only one.
 
-Enforced by Prettier and `@elnop/oxlint-config-typescript`.
+Enforced by Prettier and `@brutal/oxlint-config-typescript`.
 
 ## Convention over configuration
 
@@ -42,7 +42,7 @@ We take the default layout and the naming rules, which make the Legible axiom wo
 
 We leave out the implicit magic. Rails finds a file because of its name at runtime and fails silently when it is misnamed. Here nothing is loaded by convention: imports are explicit, and a misnamed file fails the check.
 
-Enforced by `@elnop/eslint-plugin-file-named-after-export` and check-tree.
+Enforced by `@brutal/eslint-plugin-file-named-after-export` and check-tree.
 
 ## Feature-Sliced Design
 
@@ -52,7 +52,7 @@ We take the layers and the import rules, which are the Bounded axiom. Our four l
 
 We leave out three of the layers (`pages`, `widgets`, `entities`), which are hard to tell apart in a small app, and the public API of each slice, an `index.ts` that re-exports what the slice exposes. We forbid barrel files: an import points to the file that defines the export.
 
-Enforced by `@elnop/dependency-cruiser-config`.
+Enforced by `@brutal/dependency-cruiser-config`.
 
 ## Screaming Architecture
 
@@ -62,7 +62,7 @@ We take the domain names inside the layers: `features/todo-list/`, `shared-featu
 
 We leave out two things. The top level of `src/` shows the layers, not the domain. And the framework stays visible in file names (`todosStore.ts`, `TodosSchemas.ts`), because a predictable name is worth more to us than hiding the framework.
 
-Enforced by `@elnop/dependency-cruiser-config` (no import between features).
+Enforced by `@brutal/dependency-cruiser-config` (no import between features).
 
 ## Vertical Slice Architecture
 
@@ -72,7 +72,7 @@ We take the cohesion of a feature: its routes, service, components and styles si
 
 We leave out one handler per request and the mediator that dispatches them. Shared business code goes to `shared-features/` instead of being duplicated between slices.
 
-Enforced by `@elnop/dependency-cruiser-config`.
+Enforced by `@brutal/dependency-cruiser-config`.
 
 ## Clean Architecture and Hexagonal Architecture
 
@@ -82,7 +82,7 @@ We take the dependency rule in its simplest form: a layer depends only on the la
 
 We leave out ports and adapters as a layer of their own, and entities and use case classes. In a template, they double the number of files before there is anything to abstract. The closest thing to a port is the type of the queries object a service receives in template-fastify.
 
-Enforced by `@elnop/dependency-cruiser-config`.
+Enforced by `@brutal/dependency-cruiser-config`.
 
 ## Domain-Driven Design
 

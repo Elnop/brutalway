@@ -1,6 +1,8 @@
 **/*.md
+**/fixtures/**
 dist
 package-lock.json
-template-vite
-template-fastify
+test-results
+playwright-report
+templates
 site

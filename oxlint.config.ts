@@ -1,9 +1,10 @@
-import { typescriptConfig } from '@elnop/oxlint-config-typescript';
+import { typescriptConfig } from '@brutal/oxlint-config-typescript';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
   extends: [typescriptConfig],
   plugins: ['typescript', 'import', 'oxc', 'unicorn', 'node'],
   env: { node: true, es2024: true },
-  ignorePatterns: ['**/overlays/**', '**/dist/**'],
+  ignorePatterns: ['**/fixtures/**', '**/overlays/**', '**/dist/**', 'templates/**', 'site/**'],
+  overrides: [{ files: ['packages/tools/playwright-fixtures/**'], rules: { 'export-placement/no-restricted-syntax': 'off' } }],
 });

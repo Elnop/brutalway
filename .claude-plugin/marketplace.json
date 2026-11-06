@@ -1,0 +1,16 @@
+{
+  "name": "brutal",
+  "owner": {
+    "name": "elnop"
+  },
+  "metadata": {
+    "description": "Claude Code plugins from brutal: deterministic checks run after each edit."
+  },
+  "plugins": [
+    {
+      "name": "brutal-checks",
+      "source": "./plugins/brutal-checks",
+      "description": "Runs @brutal/agent-hook after each Edit or Write: oxlint on the edited file, alint and check-tree when a file is created. Errors go back to Claude."
+    }
+  ]
+}

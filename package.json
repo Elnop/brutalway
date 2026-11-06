@@ -6,28 +6,39 @@
     "node": ">=26"
   },
   "workspaces": [
-    "create-brutal"
+    "packages/*/*"
   ],
-  "prettier": "@elnop/prettier-config",
+  "prettier": "@brutal/prettier-config",
   "scripts": {
-    "build": "npm run build -w create-brutal",
-    "typecheck": "tsc -p create-brutal",
-    "lint": "oxlint --type-aware create-brutal oxlint.config.ts",
+    "build": "tsc -b tsconfig.build.json && npm run build -w @brutal/eslint-plugin-file-named-after-export -w @brutal/eslint-plugin-store-layout -w create-brutal",
+    "typecheck": "tsc -p . && tsc -p packages/tools/create-brutal",
+    "lint": "oxlint --type-aware --disable-nested-config",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && knip",
-    "test": "npm test -w create-brutal",
-    "matrix": "node create-brutal/scripts/runMatrix.ts",
-    "release": "npm run check && npm test && npm publish -w create-brutal"
+    "check": "prettier --check . && npm run typecheck && npm run lint && knip && npm test",
+    "test": "npm test --workspaces --if-present && node --test 'scripts/**/*.test.ts'",
+    "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
+    "release": "npm run build && npm run check && changeset publish && git push --follow-tags && node scripts/createReleases.ts"
   },
   "devDependencies": {
-    "@elnop/oxlint-config-typescript": "0.4.0",
-    "@elnop/prettier-config": "0.1.0",
-    "@elnop/tsconfig": "0.2.0",
+    "@brutal/oxlint-config-typescript": "0.4.0",
+    "@brutal/prettier-config": "0.1.0",
+    "@brutal/tsconfig": "0.2.0",
+    "@changesets/cli": "3.0.3",
     "@types/node": "26.6.6",
-    "knip": "6.42.1",
+    "knip": "6.44.1",
     "oxlint": "1.91.0",
     "oxlint-tsgolint": "7.0.2005",
     "prettier": "3.9.10",
+    "tsdown": "0.23.5",
     "typescript": "7.0.2"
+  },
+  "overrides": {
+    "eslint-plugin-no-comments": {
+      "minimatch": "^11.0.1"
+    }
+  },
+  "allowScripts": {
+    "@asamarts/alint@0.21.0": true,
+    "@swc/core": false
   }
 }

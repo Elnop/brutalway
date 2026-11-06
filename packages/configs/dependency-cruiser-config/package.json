@@ -1,0 +1,38 @@
+{
+  "name": "@brutal/dependency-cruiser-config",
+  "version": "0.4.0",
+  "description": "dependency-cruiser rules for a layered app: app, features, states and shared, with pure presenters and stores in their folder.",
+  "keywords": [
+    "dependency-cruiser",
+    "architecture",
+    "layers"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/dependency-cruiser-config#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/configs/dependency-cruiser-config"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "layers.cjs",
+    "server.cjs"
+  ],
+  "exports": {
+    "./layers": "./layers.cjs",
+    "./server": "./server.cjs"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "peerDependencies": {
+    "dependency-cruiser": "^18.7.2"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.16.21",
+    "dependency-cruiser": "^18.7.2"
+  }
+}

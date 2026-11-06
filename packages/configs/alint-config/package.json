@@ -1,0 +1,32 @@
+{
+  "name": "@brutal/alint-config",
+  "version": "0.1.0",
+  "description": "alint rules for a repository: category folders hold only their kind, every dependency is pinned, doc links and anchors resolve.",
+  "keywords": [
+    "alint",
+    "repository",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/alint-config#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/configs/alint-config"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "base.yml"
+  ],
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "peerDependencies": {
+    "@asamarts/alint": "0.21.0"
+  },
+  "devDependencies": {
+    "@asamarts/alint": "0.21.0"
+  }
+}

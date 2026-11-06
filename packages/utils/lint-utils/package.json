@@ -1,0 +1,42 @@
+{
+  "name": "@brutal/lint-utils",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Helpers shared by the @brutal lint plugins: export listing, file base name, oxlint rule and fixture testers.",
+  "keywords": [
+    "oxlint",
+    "eslint",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/utils/lint-utils#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/utils/lint-utils"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": {
+    "./baseName": "./dist/baseName.js",
+    "./exportsOf": "./dist/exportsOf.js",
+    "./ExportTypes": "./dist/ExportTypes.js",
+    "./ruleTester": "./dist/ruleTester.js",
+    "./lintFixture": "./dist/lintFixture.js",
+    "./OxlintReportTypes": "./dist/OxlintReportTypes.js"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "oxlint": "^1.91.0"
+  }
+}

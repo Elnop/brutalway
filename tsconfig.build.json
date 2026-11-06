@@ -1,0 +1,38 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/utils/lint-utils"
+    },
+    {
+      "path": "packages/tools/check-tree"
+    },
+    {
+      "path": "packages/configs/oxlint-config-typescript"
+    },
+    {
+      "path": "packages/configs/oxlint-config-react"
+    },
+    {
+      "path": "packages/configs/oxlint-config-zustand"
+    },
+    {
+      "path": "packages/configs/oxlint-config-vitest"
+    },
+    {
+      "path": "packages/configs/oxlint-config-react-vite"
+    },
+    {
+      "path": "packages/tools/playwright-fixtures"
+    },
+    {
+      "path": "packages/tools/agent-hook"
+    },
+    {
+      "path": "packages/configs/oxlint-config-fastify"
+    },
+    {
+      "path": "packages/configs/oxlint-config-node-test"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+version: 1
+rules:
+  - id: doc-links-resolve
+    kind: markdown_links_resolve
+    paths: ['README.md', 'docs/**/*.md']
+    level: error
+  - id: doc-fragments-resolve
+    kind: markdown_fragments_resolve
+    paths: ['README.md', 'docs/**/*.md']
+    level: error
+  - id: styles-only-css
+    kind: dir_only_contains
+    select: '**/styles'
+    allow: ['*.css']
+    message: 'A styles/ folder only holds stylesheets: move this file next to its code.'
+    level: error
+  - id: types-only-types-files
+    kind: dir_only_contains
+    select: '**/types'
+    allow: ['*Types.ts']
+    message: 'A types/ folder only holds XTypes.ts files: move this file or rename it after its domain.'
+    level: error
+  - id: configs-only-config-files
+    kind: dir_only_contains
+    select: '**/configs'
+    allow: ['*Config.ts', '*Config.test.ts']
+    message: 'A configs/ folder only holds XConfig.ts files and their tests: move this file next to its code, and JSX into a component.'
+    level: error
+  - id: exact-dependency-versions
+    kind: json_path_matches
+    paths: ['**/package.json']
+    path: '$["dependencies","devDependencies"].*'
+    matches: '^\d+\.\d+\.\d+$'
+    message: 'Pin each dependency to an exact version (add save-exact=true to .npmrc so npm install writes them exact).'
+    level: error

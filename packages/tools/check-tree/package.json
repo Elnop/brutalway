@@ -1,0 +1,34 @@
+{
+  "name": "@brutal/check-tree",
+  "version": "0.4.0",
+  "description": "Checks a source tree: no empty folder, no category folder holding a single child, stylesheets grouped in styles/.",
+  "keywords": [
+    "lint",
+    "folder-structure",
+    "project-structure",
+    "cli"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/tools/check-tree#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/tools/check-tree"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "bin": {
+    "check-tree": "./dist/checkTree.js"
+  },
+  "exports": {
+    "./treeViolations": "./dist/treeViolations.js"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  }
+}

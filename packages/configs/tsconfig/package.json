@@ -1,0 +1,27 @@
+{
+  "name": "@brutal/tsconfig",
+  "version": "0.2.0",
+  "description": "Strict TypeScript configs: a shared base with every extra strictness flag, plus Node and React + Vite variants.",
+  "keywords": [
+    "typescript",
+    "tsconfig"
+  ],
+  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/tsconfig#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutal.git",
+    "directory": "packages/configs/tsconfig"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "base.json",
+    "node.json",
+    "react-vite.json"
+  ],
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  }
+}
