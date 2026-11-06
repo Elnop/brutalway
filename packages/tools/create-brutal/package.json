@@ -1,7 +1,7 @@
 {
   "name": "create-brutal",
   "version": "0.5.0",
-  "description": "Creates a project from one of the BRUTAL way templates, where every convention is a check.",
+  "description": "Creates a project from one of the brutalway templates, where every convention is a check.",
   "keywords": [
     "create",
     "template",

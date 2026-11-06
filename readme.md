@@ -1,4 +1,4 @@
-# BRUTAL way
+# brutalway
 
 Project templates where the conventions are enforced by deterministic checks. When several people or AI agents write in the same codebase, a convention that is only written down drifts within days. Here each one is a lint rule, an import rule or a tree rule, and `npm run check` fails with a message that says what to change.
 

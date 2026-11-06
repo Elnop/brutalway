@@ -1,6 +1,6 @@
 # create-brutal
 
-Creates a project from one of the [BRUTAL way](https://github.com/Elnop/brutalway) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
+Creates a project from one of the [brutalway](https://github.com/Elnop/brutalway) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
 
 ```sh
 npm create brutal my-app

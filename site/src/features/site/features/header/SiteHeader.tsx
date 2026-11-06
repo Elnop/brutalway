@@ -13,7 +13,7 @@ export function SiteHeader() {
               B
             </text>
           </svg>
-          BRUTAL way
+          brutalway
         </a>
         <div className="site-header-links">
           <a href="#axioms">Axioms</a>
