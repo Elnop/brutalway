@@ -1,0 +1,173 @@
+:root {
+  --ink: #111111;
+  --paper: #fffdf5;
+  --page: #f4e9d8;
+  --yellow: #ffd23f;
+  --pink: #ff6ad5;
+  --blue: #2a5cff;
+  --border: 3px solid var(--ink);
+  --shadow: 6px 6px 0 var(--ink);
+  --shadow-large: 10px 10px 0 var(--ink);
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.45;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul,
+pre,
+figure {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: var(--blue);
+}
+
+code,
+pre {
+  font-family: var(--mono);
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.container {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding-inline: 1.5rem;
+}
+
+.section-title {
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+}
+
+.command {
+  display: inline-block;
+  padding: 0.875rem 1.125rem;
+  border: var(--border);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.125rem;
+  overflow-wrap: anywhere;
+}
+
+.command-yellow {
+  box-shadow: 6px 6px 0 var(--yellow);
+}
+
+.command-paper {
+  box-shadow: 6px 6px 0 var(--paper);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.875rem 1.375rem;
+  border: var(--border);
+  background: var(--pink);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease;
+}
+
+.button:hover {
+  color: var(--ink);
+}
+
+.button:active {
+  transform: translate(6px, 6px);
+  box-shadow: none;
+}
+
+.terminal {
+  padding: 1.5rem;
+  border: var(--border);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.terminal-error {
+  color: var(--pink);
+  font-weight: 700;
+}
+
+.tone-yellow {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.tone-pink {
+  background: var(--pink);
+  color: var(--ink);
+}
+
+.tone-blue {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.tone-paper {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.tone-ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .button {
+    transition: none;
+  }
+}

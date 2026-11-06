@@ -1,0 +1,36 @@
+.stack-grid {
+  border-top: var(--border);
+  background: var(--paper);
+}
+
+.stack-grid-inner {
+  padding-block: 6rem;
+}
+
+.stack-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.stack-grid-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.375rem;
+  border: var(--border);
+  box-shadow: var(--shadow);
+}
+
+.stack-grid-card h3 {
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.stack-grid-status {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}

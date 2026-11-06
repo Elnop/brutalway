@@ -1,0 +1,10 @@
+{
+  "extends": "@elnop/tsconfig/react-vite.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

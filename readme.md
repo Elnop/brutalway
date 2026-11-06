@@ -11,7 +11,7 @@ Every template builds the same todo list, so the stacks can be compared side by 
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 
-[docs/intent.md](docs/intent.md) explains why the conventions are checked by tools and the six axioms behind them. [docs/inspirations.md](docs/inspirations.md) lists the architecture principles the templates borrow from, with what they take and what they leave out.
+[docs/intent.md](docs/intent.md) explains why the conventions are checked by tools and the six axioms behind them, which spell BRUTAL. [docs/inspirations.md](docs/inspirations.md) lists the architecture principles the templates borrow from, with what they take and what they leave out.
 
 ## The common rules
 
@@ -40,5 +40,7 @@ git clone --recurse-submodules https://github.com/Elnop/elnop-stacks.git
 ```
 
 ## Working on this repository
+
+`site/` is the landing page, made from template-vite and deployed to GitHub Pages on each push that changes it. It has its own `package.json` and its own `npm run check`.
 
 The root `package.json` holds the shared tooling and lists the workspaces one by one, since the template submodules have their own `package.json`. `npm run check` runs Prettier, tsc, Oxlint and knip, `npm test` runs the CLI tests, and `npm run matrix` creates a project for every combination of options and checks it. `npm run release` runs the checks and the tests, then publishes create-elnop-stack to npm. The build records the commit of each submodule, so commit the submodule bumps before releasing.

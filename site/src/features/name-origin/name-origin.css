@@ -1,0 +1,10 @@
+.name-origin {
+  border-block: var(--border);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.name-origin p {
+  padding-block: 1.75rem;
+  font-size: 1.25rem;
+}

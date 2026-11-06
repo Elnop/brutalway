@@ -1,0 +1,60 @@
+{
+  "name": "site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "prettier": "@elnop/prettier-config",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
+    "lint": "oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts",
+    "deps": "depcruise src",
+    "tree": "check-tree src",
+    "format": "prettier --write .",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && alint check && knip",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@asamarts/alint": "0.21.0",
+    "@elnop/alint-config": "0.1.0",
+    "@elnop/check-tree": "0.3.0",
+    "@elnop/dependency-cruiser-config": "0.4.0",
+    "@elnop/oxlint-config-react-vite": "0.4.1",
+    "@elnop/prettier-config": "0.1.0",
+    "@elnop/tsconfig": "0.2.0",
+    "@swc/core": "1.16.21",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "dependency-cruiser": "18.7.2",
+    "knip": "6.42.1",
+    "oxlint": "1.91.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "prettier": "3.9.10",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.1.0"
+  },
+  "allowScripts": {
+    "@swc/core": false,
+    "@asamarts/alint@0.21.0": true
+  },
+  "overrides": {
+    "eslint-plugin-no-comments": {
+      "minimatch": "^11.0.1"
+    }
+  }
+}

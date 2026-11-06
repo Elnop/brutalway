@@ -1,0 +1,21 @@
+.error-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
+  padding-block: 3rem 6rem;
+}
+
+.error-showcase-text {
+  display: flex;
+  flex: 1 1 21rem;
+  flex-direction: column;
+  gap: 1.125rem;
+  min-width: 0;
+}
+
+.error-showcase-terminal {
+  flex: 2 1 35rem;
+  min-width: 0;
+  box-shadow: 10px 10px 0 var(--pink);
+}
