@@ -12,21 +12,17 @@ describe('resolveDocUrl', () => {
   });
 
   it('turns a link to a known doc into a docs route, relative to the current file', () => {
-    expect(resolveDocUrl({ url: 'inspirations.md', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/elnop-stacks/docs/inspirations.md');
-    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('#/docs/elnop-stacks/docs/intent.md');
-    expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/elnop-stacks/readme.md');
+    expect(resolveDocUrl({ url: 'inspirations.md', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutal/docs/inspirations.md');
+    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('#/docs/brutal/docs/intent.md');
+    expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutal/readme.md');
   });
 
   it('sends other relative links to GitHub', () => {
-    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
-      'https://github.com/Elnop/elnop-stacks/blob/main/create-brutal/src/cli.ts',
-    );
-    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/elnop-stacks/blob/main/readme.md#the-common-rules');
+    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/brutal/blob/main/create-brutal/src/cli.ts');
+    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/brutal/blob/main/readme.md#the-common-rules');
   });
 
   it('loads relative images from the raw files', () => {
-    expect(resolveDocUrl({ url: 'images/wall.png', attribute: 'src', source, docPath: 'docs/intent.md', knownPaths })).toBe(
-      'https://raw.githubusercontent.com/Elnop/elnop-stacks/main/docs/images/wall.png',
-    );
+    expect(resolveDocUrl({ url: 'images/wall.png', attribute: 'src', source, docPath: 'docs/intent.md', knownPaths })).toBe('https://raw.githubusercontent.com/Elnop/brutal/main/docs/images/wall.png');
   });
 });

@@ -11,7 +11,7 @@ import type { Answers, Stack } from '../src/StackTypes.ts';
 import { stacks } from '../src/stacks/stacksConfig.ts';
 
 const { values } = parseArgs({ options: { stack: { type: 'string' }, e2e: { type: 'boolean' }, jobs: { type: 'string' }, keep: { type: 'boolean' } } });
-const WORK_DIR = join(tmpdir(), 'elnop-stacks-matrix');
+const WORK_DIR = join(tmpdir(), 'brutal-matrix');
 const JOBS = Number(values.jobs ?? '3');
 
 type Run = { stack: Stack; answers: Answers; name: string };

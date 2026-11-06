@@ -1,5 +1,5 @@
-export const REPOSITORY_URL = 'https://github.com/Elnop/elnop-stacks';
+export const REPOSITORY_URL = 'https://github.com/Elnop/brutal';
 
 export const DOCS_ROUTE = '#/docs';
 
-export const INTENT_ROUTE = `${DOCS_ROUTE}/elnop-stacks/docs/intent.md`;
+export const INTENT_ROUTE = `${DOCS_ROUTE}/brutal/docs/intent.md`;

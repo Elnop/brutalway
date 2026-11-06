@@ -1,6 +1,6 @@
 # create-brutal
 
-Creates a project from one of the [BRUTAL](https://github.com/Elnop/elnop-stacks) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
+Creates a project from one of the [BRUTAL](https://github.com/Elnop/brutal) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
 
 ```sh
 npm create brutal my-app
@@ -43,11 +43,11 @@ npm create brutal my-app -- --preset minimal.json --yes
 
 ## How it works
 
-Each version of the package downloads every template at the commit its submodule points to in elnop-stacks (`dist/stackRefs.json`, written at build time), so a given version always produces the same project. The options are described in `src/stacks/viteStack.ts` and `src/stacks/fastifyStack.ts`: files to remove, text to replace in the docs and configs, scripts and dependencies to drop, and files to copy from `overlays/`. A replacement whose text cannot be found stops the CLI with the file name and the missing text, rather than producing a half-edited project.
+Each version of the package downloads every template at the commit its submodule points to in this repository (`dist/stackRefs.json`, written at build time), so a given version always produces the same project. The options are described in `src/stacks/viteStack.ts` and `src/stacks/fastifyStack.ts`: files to remove, text to replace in the docs and configs, scripts and dependencies to drop, and files to copy from `overlays/`. A replacement whose text cannot be found stops the CLI with the file name and the missing text, rather than producing a half-edited project.
 
 ## Developing
 
-From the root of elnop-stacks:
+From the root of the repository:
 
 ```sh
 npm install
@@ -55,4 +55,4 @@ node create-brutal/src/cli.ts ../my-app --local
 npm run matrix
 ```
 
-`--local` copies the templates from the submodules, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `elnop-stacks-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`.
+`--local` copies the templates from the submodules, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `brutal-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`.

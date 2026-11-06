@@ -12,11 +12,11 @@
     "conventions",
     "ai-agents"
   ],
-  "homepage": "https://github.com/Elnop/elnop-stacks/tree/main/create-brutal#readme",
-  "bugs": "https://github.com/Elnop/elnop-stacks/issues",
+  "homepage": "https://github.com/Elnop/brutal/tree/main/create-brutal#readme",
+  "bugs": "https://github.com/Elnop/brutal/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/elnop-stacks.git",
+    "url": "git+https://github.com/Elnop/brutal.git",
     "directory": "create-brutal"
   },
   "license": "MIT",

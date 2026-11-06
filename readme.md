@@ -1,4 +1,4 @@
-# elnop-stacks
+# BRUTAL
 
 Project templates where the conventions are enforced by deterministic checks. When several people or AI agents write in the same codebase, a convention that is only written down drifts within days. Here each one is a lint rule, an import rule or a tree rule, and `npm run check` fails with a message that says what to change.
 
@@ -36,7 +36,7 @@ The CLI asks for a stack, then for the parts to keep (the example app, e2e tests
 Each template is also its own GitHub template repository: open it and click "Use this template". To get them all at once:
 
 ```sh
-git clone --recurse-submodules https://github.com/Elnop/elnop-stacks.git
+git clone --recurse-submodules https://github.com/Elnop/brutal.git
 ```
 
 ## Working on this repository

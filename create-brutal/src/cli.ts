@@ -20,7 +20,7 @@ const USAGE = `Usage: npm create brutal [dir] -- [flags]
   --yes, -y          take the default of every question left
   --no-git           skip git init (the pre-commit hook is dropped)
   --no-install       skip npm install
-  --local            copy the templates from this elnop-stacks checkout
+  --local            copy the templates from this brutal checkout
 
 Each stack option has a flag: --<option> or --no-<option>.
 ${stacks.map((stack) => `  ${stack.id}: ${stack.options.map((option) => option.id).join(', ')}`).join('\n')}`;
