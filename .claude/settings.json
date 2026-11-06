@@ -3,7 +3,7 @@
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
-        "hooks": [{ "type": "command", "command": "npx --no-install elnop-agent-hook --tree src", "timeout": 60, "statusMessage": "checks on the edited file" }]
+        "hooks": [{ "type": "command", "command": "npx --no-install brutal-agent-hook --tree src", "timeout": 60, "statusMessage": "checks on the edited file" }]
       }
     ]
   }

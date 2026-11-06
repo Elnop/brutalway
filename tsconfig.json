@@ -1,4 +1,4 @@
 {
-  "extends": "@elnop/tsconfig/node.json",
+  "extends": "@brutal/tsconfig/node.json",
   "include": ["src", "oxlint.config.ts"]
 }

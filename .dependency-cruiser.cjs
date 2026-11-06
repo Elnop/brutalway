@@ -1,5 +1,5 @@
 module.exports = {
-  extends: '@elnop/dependency-cruiser-config/server',
+  extends: '@brutal/dependency-cruiser-config/server',
   options: {
     doNotFollow: { path: 'node_modules' },
     tsConfig: { fileName: 'tsconfig.json' },

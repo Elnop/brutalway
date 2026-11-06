@@ -4,7 +4,7 @@ A Fastify + TypeScript API starter where the conventions are checked by tools in
 
 The example is the todo list API that every template of the series builds. Delete it and keep the structure.
 
-Part of [BRUTAL](https://github.com/Elnop/brutal). The rules and configs come from the `@elnop/*` packages published from [Elnop/elnop-tooling](https://github.com/Elnop/elnop-tooling): this repository only holds what is specific to it.
+Part of [BRUTAL](https://github.com/Elnop/brutal), which also publishes the `@brutal/*` packages holding the rules and configs: this repository only holds what is specific to it.
 
 ## Getting started
 
@@ -71,7 +71,7 @@ Inside a feature, a request goes `xRoutes.ts` → `xService.ts` → `xQueries.ts
 
 ## Working with an agent
 
-`.claude/settings.json` runs `@elnop/agent-hook` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on.
+`.claude/settings.json` runs `@brutal/agent-hook` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on.
 
 ## Starting your own API
 

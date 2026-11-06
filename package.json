@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=26"
   },
-  "prettier": "@elnop/prettier-config",
+  "prettier": "@brutal/prettier-config",
   "imports": {
     "#src/*": "./src/*"
   },
@@ -40,14 +40,14 @@
   },
   "devDependencies": {
     "@asamarts/alint": "0.21.0",
-    "@elnop/agent-hook": "0.1.0",
-    "@elnop/alint-config": "0.1.0",
-    "@elnop/check-tree": "0.4.0",
-    "@elnop/dependency-cruiser-config": "0.4.0",
-    "@elnop/oxlint-config-fastify": "0.2.0",
-    "@elnop/oxlint-config-node-test": "0.1.0",
-    "@elnop/prettier-config": "0.1.0",
-    "@elnop/tsconfig": "0.2.0",
+    "@brutal/agent-hook": "0.1.0",
+    "@brutal/alint-config": "0.1.0",
+    "@brutal/check-tree": "0.4.0",
+    "@brutal/dependency-cruiser-config": "0.4.0",
+    "@brutal/oxlint-config-fastify": "0.2.0",
+    "@brutal/oxlint-config-node-test": "0.1.0",
+    "@brutal/prettier-config": "0.1.0",
+    "@brutal/tsconfig": "0.2.0",
     "@swc/core": "1.16.21",
     "@types/node": "26.6.6",
     "dependency-cruiser": "18.7.2",
