@@ -74,6 +74,7 @@ export const viteStack: Stack = {
           replace: ' `src/features/todo-list/components/TodoListLayout.tsx` reads the todos and hands them to the presenters in `src/features/todo-list/components/presenters/`.',
           with: '',
         },
+        { file: 'docs/architecture.md', dropLines: 'Renaming a task is a sub-feature of the list' },
         {
           file: 'docs/architecture.md',
           replace:
