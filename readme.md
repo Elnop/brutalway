@@ -11,6 +11,8 @@ Every template builds the same todo list, so the stacks can be compared side by 
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 
+[docs/intent.md](docs/intent.md) explains why the conventions are checked by tools and the six axioms behind them. [docs/inspirations.md](docs/inspirations.md) lists the architecture principles the templates borrow from, with what they take and what they leave out.
+
 ## The common rules
 
 - the code is split into layers (`app`, `features`, `shared-features`, `shared`), each importing only the ones below, and features never import each other
