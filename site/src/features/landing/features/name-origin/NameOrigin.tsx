@@ -1,4 +1,4 @@
-import '@/features/name-origin/name-origin.css';
+import '@/features/landing/features/name-origin/name-origin.css';
 
 export function NameOrigin() {
   return (

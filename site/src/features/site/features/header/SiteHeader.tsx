@@ -1,5 +1,5 @@
-import { DOCS_URL, REPOSITORY_URL } from '@/shared/LinksConfig.ts';
-import '@/features/site-header/site-header.css';
+import { DOCS_ROUTE, REPOSITORY_URL } from '@/shared/LinksConfig.ts';
+import '@/features/site/features/header/header.css';
 
 export function SiteHeader() {
   return (
@@ -19,7 +19,7 @@ export function SiteHeader() {
           <a href="#axioms">Axioms</a>
           <a href="#authors">Authors</a>
           <a href="#stacks">Stacks</a>
-          <a href={DOCS_URL}>Docs</a>
+          <a href={DOCS_ROUTE}>Docs</a>
           <a href={REPOSITORY_URL}>GitHub</a>
         </div>
       </nav>

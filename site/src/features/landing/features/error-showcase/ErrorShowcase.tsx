@@ -1,4 +1,4 @@
-import '@/features/error-showcase/error-showcase.css';
+import '@/features/landing/features/error-showcase/error-showcase.css';
 
 export function ErrorShowcase() {
   return (

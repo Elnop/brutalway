@@ -1,4 +1,4 @@
-import '@/features/stack-grid/stack-grid.css';
+import '@/features/landing/features/stack-grid/stack-grid.css';
 
 const stacks = [
   { name: 'template-vite', status: 'Ready', tools: 'Vite, React, zustand, Vitest, Playwright', tone: 'yellow', url: 'https://github.com/Elnop/template-vite' },

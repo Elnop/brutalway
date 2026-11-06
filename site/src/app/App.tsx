@@ -1,25 +1,19 @@
-import { AuthorsSection } from '@/features/authors/AuthorsSection.tsx';
-import { AxiomGrid } from '@/features/axiom-grid/AxiomGrid.tsx';
-import { ErrorShowcase } from '@/features/error-showcase/ErrorShowcase.tsx';
-import { Hero } from '@/features/hero/Hero.tsx';
-import { NameOrigin } from '@/features/name-origin/NameOrigin.tsx';
-import { SiteFooter } from '@/features/site-footer/SiteFooter.tsx';
-import { SiteHeader } from '@/features/site-header/SiteHeader.tsx';
-import { StackGrid } from '@/features/stack-grid/StackGrid.tsx';
+import { useEffect } from 'react';
+import { DocsPage } from '@/features/docs/components/DocsPage.tsx';
+import { LandingPage } from '@/features/landing/LandingPage.tsx';
+import { SiteLayout } from '@/features/site/SiteLayout.tsx';
+import { DOCS_ROUTE } from '@/shared/LinksConfig.ts';
+import { useHash } from '@/shared/useHash.ts';
 
 export function App() {
-  return (
-    <>
-      <SiteHeader />
-      <main>
-        <Hero />
-        <NameOrigin />
-        <AxiomGrid />
-        <ErrorShowcase />
-        <AuthorsSection />
-        <StackGrid />
-      </main>
-      <SiteFooter />
-    </>
-  );
+  const hash = useHash();
+  const isDocs = hash.startsWith(DOCS_ROUTE);
+  useEffect(() => {
+    if (isDocs || hash.length <= 1) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    document.getElementById(hash.slice(1))?.scrollIntoView();
+  }, [hash, isDocs]);
+  return <SiteLayout>{isDocs ? <DocsPage hash={hash} /> : <LandingPage />}</SiteLayout>;
 }

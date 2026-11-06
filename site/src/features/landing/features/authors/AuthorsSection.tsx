@@ -1,4 +1,4 @@
-import '@/features/authors/authors.css';
+import '@/features/landing/features/authors/authors.css';
 
 const AUTHOR_COUNT = 72;
 const FULLY_VISIBLE = 36;

@@ -1,5 +1,5 @@
 import { CommandLine } from '@/shared/CommandLine.tsx';
-import '@/features/site-footer/site-footer.css';
+import '@/features/site/features/footer/footer.css';
 
 export function SiteFooter() {
   return (

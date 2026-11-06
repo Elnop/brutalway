@@ -1,5 +1,5 @@
-import { AXIOMS } from '@/shared-features/axioms/AxiomsConfig.ts';
-import '@/features/axiom-grid/axiom-grid.css';
+import { AXIOMS } from '@/features/landing/shared/AxiomsConfig.ts';
+import '@/features/landing/features/axiom-grid/axiom-grid.css';
 
 export function AxiomGrid() {
   return (

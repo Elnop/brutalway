@@ -4,7 +4,9 @@ The landing page of the project, published on GitHub Pages by the Pages workflow
 
 It was created with `npm create elnop-stack` from template-vite, without the example, zustand, component tests, e2e, CI or the Claude Code hook. The conventions of the template apply: `npm run check` has to pass before a push, and the Pages workflow runs it again before deploying.
 
-Each section of the page is a feature in `src/features/`. The six axioms are shared by the hero and the axiom grid, so they live in `src/shared-features/axioms/`.
+The landing page is one feature, `src/features/landing/`, and each of its sections is a sub-feature in `src/features/landing/features/`. The six axioms are used by two of them, the hero and the axiom grid, so they live in the feature's `src/features/landing/shared/`. The header and the footer are sub-features of `src/features/site/`, whose `SiteLayout` wraps both the landing page and the docs pages.
+
+The docs pages under `#/docs` are not part of the build. When someone opens them, the site lists the `docs/` folder of each repository with the GitHub API, fetches the Markdown from `raw.githubusercontent.com` and renders it. A push to `main` that adds or changes a doc shows up within a few minutes, without a redeploy. The repositories and the files outside `docs/` are listed in `src/features/docs/DocsConfig.ts`.
 
 ```sh
 nvm use

@@ -1,0 +1,32 @@
+import { describe, expect, it } from 'vitest';
+import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
+import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
+
+const source = DOC_SOURCES[0];
+const knownPaths = ['readme.md', 'docs/intent.md', 'docs/inspirations.md'];
+
+describe('resolveDocUrl', () => {
+  it('keeps absolute urls', () => {
+    expect(resolveDocUrl({ url: 'https://example.com/a', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('https://example.com/a');
+    expect(resolveDocUrl({ url: 'mailto:a@b.c', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('mailto:a@b.c');
+  });
+
+  it('turns a link to a known doc into a docs route, relative to the current file', () => {
+    expect(resolveDocUrl({ url: 'inspirations.md', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/elnop-stacks/docs/inspirations.md');
+    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('#/docs/elnop-stacks/docs/intent.md');
+    expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/elnop-stacks/readme.md');
+  });
+
+  it('sends other relative links to GitHub', () => {
+    expect(resolveDocUrl({ url: 'create-elnop-stack/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
+      'https://github.com/Elnop/elnop-stacks/blob/main/create-elnop-stack/src/cli.ts',
+    );
+    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/elnop-stacks/blob/main/readme.md#the-common-rules');
+  });
+
+  it('loads relative images from the raw files', () => {
+    expect(resolveDocUrl({ url: 'images/wall.png', attribute: 'src', source, docPath: 'docs/intent.md', knownPaths })).toBe(
+      'https://raw.githubusercontent.com/Elnop/elnop-stacks/main/docs/images/wall.png',
+    );
+  });
+});
