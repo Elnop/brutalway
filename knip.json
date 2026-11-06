@@ -1,9 +1,9 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["create-elnop-stack/overlays/**", "template-*/**", "site/**"],
+  "ignore": ["create-brutal/overlays/**", "template-*/**", "site/**"],
   "workspaces": {
     ".": {},
-    "create-elnop-stack": {
+    "create-brutal": {
       "entry": ["src/cli.ts", "scripts/*.ts"]
     }
   }

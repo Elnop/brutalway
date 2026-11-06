@@ -13,7 +13,7 @@ import { stacks } from './stacks/stacksConfig.ts';
 
 const PROJECT_NAME = /^[a-z0-9][a-z0-9._-]*$/u;
 
-const USAGE = `Usage: npm create elnop-stack [dir] -- [flags]
+const USAGE = `Usage: npm create brutal [dir] -- [flags]
 
   --stack <id>       ${stacks.map((stack) => stack.id).join(', ')}
   --preset <file>    JSON file with stack, options, git and install
@@ -84,7 +84,7 @@ async function main(): Promise<void> {
     process.stdout.write(`${USAGE}\n`);
     return;
   }
-  intro('create-elnop-stack');
+  intro('create-brutal');
   const dir = await pickDir(first.dir, first.yes);
   const stack = await pickStack(first.stack, first.yes);
   const args = readArgs(argv, stack);

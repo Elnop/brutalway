@@ -18,8 +18,8 @@ describe('resolveDocUrl', () => {
   });
 
   it('sends other relative links to GitHub', () => {
-    expect(resolveDocUrl({ url: 'create-elnop-stack/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
-      'https://github.com/Elnop/elnop-stacks/blob/main/create-elnop-stack/src/cli.ts',
+    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
+      'https://github.com/Elnop/elnop-stacks/blob/main/create-brutal/src/cli.ts',
     );
     expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/elnop-stacks/blob/main/readme.md#the-common-rules');
   });

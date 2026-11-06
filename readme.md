@@ -28,10 +28,10 @@ The lint configs, plugins and every shared config (TypeScript, Prettier, depende
 ## Using a template
 
 ```sh
-npm create elnop-stack my-app
+npm create brutal my-app
 ```
 
-The CLI asks for a stack, then for the parts to keep (the example app, e2e tests, the Claude Code hook, CI...). Every combination passes `npm run check`. [create-elnop-stack](create-elnop-stack/README.md) lists the options and the flags to run it without questions.
+The CLI asks for a stack, then for the parts to keep (the example app, e2e tests, the Claude Code hook, CI...). Every combination passes `npm run check`. [create-brutal](create-brutal/README.md) lists the options and the flags to run it without questions.
 
 Each template is also its own GitHub template repository: open it and click "Use this template". To get them all at once:
 
@@ -43,4 +43,4 @@ git clone --recurse-submodules https://github.com/Elnop/elnop-stacks.git
 
 `site/` is the landing page, made from template-vite and deployed to GitHub Pages on each push that changes it. It has its own `package.json` and its own `npm run check`.
 
-The root `package.json` holds the shared tooling and lists the workspaces one by one, since the template submodules have their own `package.json`. `npm run check` runs Prettier, tsc, Oxlint and knip, `npm test` runs the CLI tests, and `npm run matrix` creates a project for every combination of options and checks it. `npm run release` runs the checks and the tests, then publishes create-elnop-stack to npm. The build records the commit of each submodule, so commit the submodule bumps before releasing.
+The root `package.json` holds the shared tooling and lists the workspaces one by one, since the template submodules have their own `package.json`. `npm run check` runs Prettier, tsc, Oxlint and knip, `npm test` runs the CLI tests, and `npm run matrix` creates a project for every combination of options and checks it. `npm run release` runs the checks and the tests, then publishes create-brutal to npm. The build records the commit of each submodule, so commit the submodule bumps before releasing.

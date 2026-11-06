@@ -1,20 +1,23 @@
 {
-  "name": "create-elnop-stack",
-  "version": "0.2.1",
-  "description": "Creates a project from one of the elnop-stacks templates, with the options you pick.",
+  "name": "create-brutal",
+  "version": "0.3.0",
+  "description": "Creates a project from one of the BRUTAL templates, where every convention is a check.",
   "keywords": [
     "create",
     "template",
     "vite",
     "react",
-    "fastify"
+    "fastify",
+    "brutal",
+    "conventions",
+    "ai-agents"
   ],
-  "homepage": "https://github.com/Elnop/elnop-stacks/tree/main/create-elnop-stack#readme",
+  "homepage": "https://github.com/Elnop/elnop-stacks/tree/main/create-brutal#readme",
   "bugs": "https://github.com/Elnop/elnop-stacks/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Elnop/elnop-stacks.git",
-    "directory": "create-elnop-stack"
+    "directory": "create-brutal"
   },
   "license": "MIT",
   "author": "elnop",
@@ -27,7 +30,7 @@
     "overlays"
   ],
   "bin": {
-    "create-elnop-stack": "dist/cli.js"
+    "create-brutal": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/writeStackRefs.ts",

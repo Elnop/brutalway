@@ -1,9 +1,9 @@
-# create-elnop-stack
+# create-brutal
 
-Creates a project from one of the [elnop-stacks](https://github.com/Elnop/elnop-stacks) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
+Creates a project from one of the [BRUTAL](https://github.com/Elnop/elnop-stacks) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
 
 ```sh
-npm create elnop-stack my-app
+npm create brutal my-app
 ```
 
 Node 26 is required, like the templates.
@@ -26,7 +26,7 @@ The CLI also asks whether to run `git init` and `npm install`. Without git, the 
 Every option has a flag, `--<option>` or `--no-<option>`. `--yes` takes the default for every question left:
 
 ```sh
-npm create elnop-stack my-app -- --stack vite --no-example --no-e2e --yes
+npm create brutal my-app -- --stack vite --no-example --no-e2e --yes
 ```
 
 A preset file holds the same answers, and flags override it:
@@ -36,10 +36,10 @@ A preset file holds the same answers, and flags override it:
 ```
 
 ```sh
-npm create elnop-stack my-app -- --preset minimal.json --yes
+npm create brutal my-app -- --preset minimal.json --yes
 ```
 
-`npm create elnop-stack -- --help` lists the stacks and their options.
+`npm create brutal -- --help` lists the stacks and their options.
 
 ## How it works
 
@@ -51,7 +51,7 @@ From the root of elnop-stacks:
 
 ```sh
 npm install
-node create-elnop-stack/src/cli.ts ../my-app --local
+node create-brutal/src/cli.ts ../my-app --local
 npm run matrix
 ```
 

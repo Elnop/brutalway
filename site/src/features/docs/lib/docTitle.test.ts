@@ -8,7 +8,7 @@ describe('docTitle', () => {
   });
 
   it('names a readme after its folder', () => {
-    expect(docTitle('create-elnop-stack/README.md')).toBe('Create elnop stack');
+    expect(docTitle('create-brutal/README.md')).toBe('Create brutal');
     expect(docTitle('readme.md')).toBe('Overview');
   });
 });
