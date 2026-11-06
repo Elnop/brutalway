@@ -1,6 +1,6 @@
 {
   "name": "create-elnop-stack",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Creates a project from one of the elnop-stacks templates, with the options you pick.",
   "keywords": [
     "create",
