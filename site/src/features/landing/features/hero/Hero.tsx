@@ -5,10 +5,10 @@ import '@/features/landing/features/hero/hero.css';
 export function Hero() {
   return (
     <section id="top" className="hero container">
-      <p className="hero-eyebrow reveal">Project templates for humans and AI agents</p>
+      <p className="hero-eyebrow reveal reveal-wipe">Project templates for humans and AI agents</p>
       <ol className="hero-letters" aria-label="The six axioms">
         {AXIOMS.map((axiom) => (
-          <li key={axiom.letter} className={`hero-letter reveal tone-${axiom.tone}`}>
+          <li key={axiom.letter} className={`hero-letter reveal reveal-drop tone-${axiom.tone}`}>
             <span className="hero-letter-glyph" aria-hidden="true">
               {axiom.letter}
             </span>

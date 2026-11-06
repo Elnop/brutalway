@@ -27,7 +27,7 @@ export function AuthorsSection() {
             start each session with no memory of the last one, and it does not matter: the error teaches the convention again.
           </p>
         </div>
-        <div className="authors-funnel reveal" aria-hidden="true">
+        <div className="authors-funnel reveal reveal-stamp" aria-hidden="true">
           <div className="authors-crowd">
             {authors.map((author) => (
               <div key={author.id} className={author.isAgent ? 'authors-tile tone-yellow' : 'authors-tile tone-paper'} style={{ opacity: author.opacity }}>
@@ -42,7 +42,7 @@ export function AuthorsSection() {
         </div>
         <ol className="authors-steps">
           {steps.map((step) => (
-            <li key={step.number} className={`authors-step reveal tone-${step.tone}`}>
+            <li key={step.number} className={`authors-step reveal reveal-from-left tone-${step.tone}`}>
               <span className="authors-step-number">{step.number}</span>
               <h3>{step.title}</h3>
               <p>{step.detail}</p>

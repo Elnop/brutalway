@@ -3,11 +3,11 @@ import '@/features/landing/features/error-showcase/error-showcase.css';
 export function ErrorShowcase() {
   return (
     <section className="error-showcase container">
-      <div className="error-showcase-text reveal">
+      <div className="error-showcase-text reveal reveal-from-left">
         <h2 className="section-title">The error is the documentation</h2>
         <p>Nobody learns the conventions first. A message teaches each one at the moment it is broken, with the file, the rule and the fix.</p>
       </div>
-      <pre className="terminal error-showcase-terminal reveal">
+      <pre className="terminal error-showcase-terminal reveal reveal-from-right">
         {'$ npm run check\n\n'}
         <span className="terminal-error">error</span>
         {
