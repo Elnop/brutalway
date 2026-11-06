@@ -6,7 +6,7 @@ export function App() {
     <div className="page">
       <header className="page-header">
         <h1>Todos</h1>
-        <p>template-vite · elnop-stacks</p>
+        <p>template-vite · BRUTAL</p>
       </header>
       <main className="page-body">
         <TodoListLayout />

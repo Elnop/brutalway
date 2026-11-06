@@ -4,7 +4,7 @@ A Vite + React + TypeScript starter where the conventions are checked by tools i
 
 The example app is a todo list. It is there so every rule has real code to check: delete it and keep the structure. The look is neo-brutalist (thick black borders, flat bright colors, hard shadows), shared by every template of the series and easy to swap: the tokens are at the top of `src/app/globals.css`.
 
-Part of [elnop-stacks](https://github.com/Elnop/elnop-stacks). The rules and configs come from the `@elnop/*` packages published from [Elnop/elnop-tooling](https://github.com/Elnop/elnop-tooling): this repository only holds what is specific to it.
+Part of [BRUTAL](https://github.com/Elnop/brutal). The rules and configs come from the `@elnop/*` packages published from [Elnop/elnop-tooling](https://github.com/Elnop/elnop-tooling): this repository only holds what is specific to it.
 
 ## Getting started
 
