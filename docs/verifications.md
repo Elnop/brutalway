@@ -26,6 +26,7 @@ dependency-cruiser extends `@elnop/dependency-cruiser-config/server`:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
+- a sub-feature (`features/<x>/features/<y>/`) imports neither its siblings nor its feature root, only its feature `shared/`, at every nesting level, and features nest at most ten levels deep
 - a route never imports queries, queries are only imported by a service, a worker, other queries, `src/app/` or a test
 - the database driver (`node:sqlite`, `pg`…) is only imported by queries and `src/shared/`
 - an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server

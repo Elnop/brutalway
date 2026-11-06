@@ -67,6 +67,8 @@ Inside a feature, a request goes `xRoutes.ts` → `xService.ts` → `xQueries.ts
 
 [docs/verifications.md](docs/verifications.md) lists every rule and the tool that enforces it.
 
+[docs/architecture.md](docs/architecture.md) lists the architecture patterns this template borrows from, with what it takes and what it leaves out.
+
 ## Working with an agent
 
 `.claude/settings.json` runs `@elnop/agent-hook` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on.
