@@ -84,3 +84,39 @@
   gap: 1rem;
   min-width: 0;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-eyebrow,
+  .hero-letter,
+  .hero-pitch {
+    animation: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .hero-letter:nth-child(1) {
+    animation-delay: 80ms;
+  }
+
+  .hero-letter:nth-child(2) {
+    animation-delay: 140ms;
+  }
+
+  .hero-letter:nth-child(3) {
+    animation-delay: 200ms;
+  }
+
+  .hero-letter:nth-child(4) {
+    animation-delay: 260ms;
+  }
+
+  .hero-letter:nth-child(5) {
+    animation-delay: 320ms;
+  }
+
+  .hero-letter:nth-child(6) {
+    animation-delay: 380ms;
+  }
+
+  .hero-pitch {
+    animation-delay: 460ms;
+  }
+}
