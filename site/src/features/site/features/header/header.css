@@ -7,7 +7,7 @@
   transition: transform 300ms ease;
 }
 
-.site-header.is-hidden:not(:focus-within) {
+.site-header.is-hidden {
   transform: translateY(-100%);
 }
 
