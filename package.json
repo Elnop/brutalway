@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=26"
   },
-  "prettier": "@brutal/prettier-config",
+  "prettier": "@brutalway/prettier-config",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -32,14 +32,14 @@
   "devDependencies": {
     "@asamarts/alint": "0.21.0",
     "@axe-core/playwright": "4.14.0",
-    "@brutal/agent-hook": "0.1.0",
-    "@brutal/alint-config": "0.1.0",
-    "@brutal/check-tree": "0.4.0",
-    "@brutal/dependency-cruiser-config": "0.4.0",
-    "@brutal/oxlint-config-react-vite": "0.4.1",
-    "@brutal/playwright-fixtures": "0.1.0",
-    "@brutal/prettier-config": "0.1.0",
-    "@brutal/tsconfig": "0.2.0",
+    "@brutalway/agent-hook": "0.1.0",
+    "@brutalway/alint-config": "0.1.0",
+    "@brutalway/check-tree": "0.4.0",
+    "@brutalway/dependency-cruiser-config": "0.4.0",
+    "@brutalway/oxlint-config-react-vite": "0.4.1",
+    "@brutalway/playwright-fixtures": "0.1.0",
+    "@brutalway/prettier-config": "0.1.0",
+    "@brutalway/tsconfig": "0.2.0",
     "@playwright/test": "1.64.1",
     "@swc/core": "1.16.21",
     "@types/node": "26.6.6",

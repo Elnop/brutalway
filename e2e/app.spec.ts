@@ -1,4 +1,4 @@
-import { axeViolations, expect, test } from '@brutal/playwright-fixtures';
+import { axeViolations, expect, test } from '@brutalway/playwright-fixtures';
 import { openApp } from '@e2e/openApp.ts';
 
 test('axe finds no violation on the first screen', async ({ page }) => {

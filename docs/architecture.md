@@ -1,6 +1,6 @@
 # Architecture
 
-The intent behind every template of the series and the general principles they borrow from (Feature-Sliced Design, Screaming Architecture, fitness functions...) are in [the BRUTAL docs](https://github.com/Elnop/brutal/tree/main/docs). This page covers what is specific to a React front end.
+The intent behind every template of the series and the general principles they borrow from (Feature-Sliced Design, Screaming Architecture, fitness functions...) are in [the BRUTAL way docs](https://github.com/Elnop/brutalway/tree/main/docs). This page covers what is specific to a React front end.
 
 ## Container and presentational components
 
@@ -10,7 +10,7 @@ We take the split, under other names. Orchestrators (`XContainer`, `XLayout`, `X
 
 We leave out higher-order components, which was how containers were written in 2015. Since 2019, Abramov's post says hooks make the split unnecessary. We keep it anyway: a presenter can be tested alone through its props, as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does, and an agent knows which components may touch state from the file name alone.
 
-Enforced by `@brutal/dependency-cruiser-config` (a presenter imports no store and no shared-feature hook) and `@brutal/oxlint-config-react` (no orchestrator under `shared-features/`).
+Enforced by `@brutalway/dependency-cruiser-config` (a presenter imports no store and no shared-feature hook) and `@brutalway/oxlint-config-react` (no orchestrator under `shared-features/`).
 
 ## Store, actions and selectors
 
@@ -20,7 +20,7 @@ We take the three roles, each in its own file. `src/shared-features/todos/todosS
 
 We leave out reducers, action objects and dispatch. With zustand, an action is a plain function that sets the state, and a selector is a plain function that can be tested without React.
 
-Enforced by `@brutal/oxlint-config-zustand` and `@brutal/dependency-cruiser-config` (a store lives at the root or in the `stores/` folder of its level).
+Enforced by `@brutalway/oxlint-config-zustand` and `@brutalway/dependency-cruiser-config` (a store lives at the root or in the `stores/` folder of its level).
 
 ## Sub-features
 
@@ -28,4 +28,4 @@ From Feature-Sliced Design, extended. A feature can hold its own features in `fe
 
 Renaming a task is a sub-feature of the list: `src/features/todo-list/features/todo-editor/`.
 
-Enforced by `@brutal/dependency-cruiser-config`.
+Enforced by `@brutalway/dependency-cruiser-config`.

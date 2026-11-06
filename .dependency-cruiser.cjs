@@ -1,5 +1,5 @@
 module.exports = {
-  extends: '@brutal/dependency-cruiser-config/layers',
+  extends: '@brutalway/dependency-cruiser-config/layers',
   options: {
     doNotFollow: { path: 'node_modules' },
     tsConfig: { fileName: 'tsconfig.app.json' },
