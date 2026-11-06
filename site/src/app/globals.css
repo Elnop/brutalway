@@ -57,13 +57,20 @@ main {
 
 a {
   color: inherit;
+  background: linear-gradient(var(--link-highlight, var(--yellow)), var(--link-highlight, var(--yellow))) no-repeat left / 0% 100%;
+  transition: background-size 150ms ease;
 }
 
 a:hover {
-  background: var(--blue);
-  color: var(--paper);
+  background-size: 100% 100%;
+  color: var(--ink);
   text-decoration: none;
-  box-shadow: 0 0 0 3px var(--blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a {
+    transition: none;
+  }
 }
 
 code,
@@ -121,6 +128,7 @@ pre {
 }
 
 .tone-yellow {
+  --link-highlight: var(--paper);
   background: var(--yellow);
   color: var(--ink);
 }
