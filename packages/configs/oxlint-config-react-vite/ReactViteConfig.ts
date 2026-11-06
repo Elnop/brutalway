@@ -1,6 +1,6 @@
-import { reactConfig } from '@brutal/oxlint-config-react';
-import { vitestConfig } from '@brutal/oxlint-config-vitest';
-import { zustandConfig } from '@brutal/oxlint-config-zustand';
+import { reactConfig } from '@brutalway/oxlint-config-react';
+import { vitestConfig } from '@brutalway/oxlint-config-vitest';
+import { zustandConfig } from '@brutalway/oxlint-config-zustand';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
 

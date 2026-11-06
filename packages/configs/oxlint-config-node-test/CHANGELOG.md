@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-node-test
+# @brutalkit/oxlint-config-node-test
 
 ## 0.1.0
 

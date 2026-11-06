@@ -4,10 +4,10 @@
   "workspaces": {
     ".": {},
     "packages/configs/oxlint-config-typescript": {
-      "ignoreDependencies": ["@brutal/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments"]
+      "ignoreDependencies": ["@brutalway/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments"]
     },
     "packages/configs/oxlint-config-zustand": {
-      "ignoreDependencies": ["@brutal/eslint-plugin-store-layout"]
+      "ignoreDependencies": ["@brutalway/eslint-plugin-store-layout"]
     },
     "packages/configs/dependency-cruiser-config": {
       "ignoreDependencies": ["@swc/core", "dependency-cruiser"]

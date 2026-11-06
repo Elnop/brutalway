@@ -1,5 +1,5 @@
 {
-  "name": "@brutal/eslint-plugin-file-named-after-export",
+  "name": "@brutalway/eslint-plugin-file-named-after-export",
   "version": "0.1.2",
   "description": "Lint rule for oxlint and ESLint: a file with a single export is named after it.",
   "keywords": [
@@ -10,11 +10,11 @@
     "eslint-plugin",
     "filename"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/plugins/eslint-plugin-file-named-after-export#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/plugins/eslint-plugin-file-named-after-export#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/plugins/eslint-plugin-file-named-after-export"
   },
   "license": "MIT",
@@ -35,7 +35,7 @@
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutal/lint-utils": "^0.1.0",
+    "@brutalway/lint-utils": "^0.1.0",
     "oxlint": "^1.91.0"
   }
 }

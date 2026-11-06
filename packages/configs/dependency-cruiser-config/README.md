@@ -1,4 +1,4 @@
-# @brutal/dependency-cruiser-config
+# @brutalway/dependency-cruiser-config
 
 [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) rules for an app split into layers under `src/`:
 
@@ -31,14 +31,14 @@ Sub-features nest like the features they live in: a sub-feature can hold its own
 Each rule has a `comment` that says what to do instead.
 
 ```sh
-npm install --save-dev @brutal/dependency-cruiser-config dependency-cruiser @swc/core
+npm install --save-dev @brutalway/dependency-cruiser-config dependency-cruiser @swc/core
 ```
 
 `.dependency-cruiser.cjs`:
 
 ```js
 module.exports = {
-  extends: '@brutal/dependency-cruiser-config/layers',
+  extends: '@brutalway/dependency-cruiser-config/layers',
   options: {
     doNotFollow: { path: 'node_modules' },
     tsConfig: { fileName: 'tsconfig.app.json' },
@@ -51,7 +51,7 @@ module.exports = {
 
 ## Server
 
-`@brutal/dependency-cruiser-config/server` extends the layers and adds five rules for an API where each shared feature keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:
+`@brutalway/dependency-cruiser-config/server` extends the layers and adds five rules for an API where each shared feature keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:
 
 | Rule                       | Rejects                                                                                                               |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -61,11 +61,11 @@ module.exports = {
 | `workers-started-from-app` | an `xWorker.ts` imported by anything but `src/app/`, which starts and stops it with the server, or a test             |
 | `http-in-clients`          | `node:http`, `node:https`, `undici`, `axios`, `got` or `node-fetch` imported outside an `xClient.ts` and the tests    |
 
-`fetch` is a global, so dependency-cruiser does not see it: `@brutal/oxlint-config-fastify` keeps it in `xClient.ts` files.
+`fetch` is a global, so dependency-cruiser does not see it: `@brutalway/oxlint-config-fastify` keeps it in `xClient.ts` files.
 
 ```js
 module.exports = {
-  extends: '@brutal/dependency-cruiser-config/server',
+  extends: '@brutalway/dependency-cruiser-config/server',
   options: { parser: 'swc', tsPreCompilationDeps: false },
 };
 ```

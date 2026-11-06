@@ -1,18 +1,18 @@
 {
-  "name": "@brutal/lint-utils",
+  "name": "@brutalway/lint-utils",
   "version": "0.1.0",
   "private": true,
-  "description": "Helpers shared by the @brutal lint plugins: export listing, file base name, oxlint rule and fixture testers.",
+  "description": "Helpers shared by the @brutalway lint plugins: export listing, file base name, oxlint rule and fixture testers.",
   "keywords": [
     "oxlint",
     "eslint",
     "lint"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/utils/lint-utils#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/utils/lint-utils#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/utils/lint-utils"
   },
   "license": "MIT",

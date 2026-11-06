@@ -1,4 +1,4 @@
-# @brutal/playwright-fixtures
+# @brutalkit/playwright-fixtures
 
 ## 0.1.0
 

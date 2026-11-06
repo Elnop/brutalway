@@ -1,5 +1,5 @@
 {
-  "extends": "@brutal/tsconfig/node.json",
+  "extends": "@brutalway/tsconfig/node.json",
   "compilerOptions": {
     "noEmit": false,
     "rewriteRelativeImportExtensions": true,

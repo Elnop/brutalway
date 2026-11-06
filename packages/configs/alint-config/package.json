@@ -1,5 +1,5 @@
 {
-  "name": "@brutal/alint-config",
+  "name": "@brutalway/alint-config",
   "version": "0.1.0",
   "description": "alint rules for a repository: category folders hold only their kind, every dependency is pinned, doc links and anchors resolve.",
   "keywords": [
@@ -7,11 +7,11 @@
     "repository",
     "lint"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/alint-config#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/alint-config#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/configs/alint-config"
   },
   "license": "MIT",

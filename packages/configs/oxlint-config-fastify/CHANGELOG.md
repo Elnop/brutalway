@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-fastify
+# @brutalkit/oxlint-config-fastify
 
 ## 0.2.0
 

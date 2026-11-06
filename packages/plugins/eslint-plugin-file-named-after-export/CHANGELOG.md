@@ -1,4 +1,4 @@
-# @brutal/eslint-plugin-file-named-after-export
+# @brutalkit/eslint-plugin-file-named-after-export
 
 ## 0.1.2
 

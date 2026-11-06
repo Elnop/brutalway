@@ -1,7 +1,7 @@
 {
-  "name": "@brutal/oxlint-config-react-vite",
+  "name": "@brutalway/oxlint-config-react-vite",
   "version": "0.4.1",
-  "description": "Oxlint preset for React + Vite + zustand + Vitest apps, built on @brutal/oxlint-config-react, @brutal/oxlint-config-zustand and @brutal/oxlint-config-vitest.",
+  "description": "Oxlint preset for React + Vite + zustand + Vitest apps, built on @brutalway/oxlint-config-react, @brutalway/oxlint-config-zustand and @brutalway/oxlint-config-vitest.",
   "keywords": [
     "oxlint",
     "oxlint-config",
@@ -10,11 +10,11 @@
     "zustand",
     "lint"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/oxlint-config-react-vite#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-react-vite#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/configs/oxlint-config-react-vite"
   },
   "license": "MIT",
@@ -29,15 +29,15 @@
     "test": "node --test '**/*.test.ts'"
   },
   "dependencies": {
-    "@brutal/oxlint-config-react": "^0.3.1",
-    "@brutal/oxlint-config-vitest": "^0.2.1",
-    "@brutal/oxlint-config-zustand": "^0.2.3"
+    "@brutalway/oxlint-config-react": "^0.3.1",
+    "@brutalway/oxlint-config-vitest": "^0.2.1",
+    "@brutalway/oxlint-config-zustand": "^0.2.3"
   },
   "peerDependencies": {
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutal/lint-utils": "^0.1.0",
+    "@brutalway/lint-utils": "^0.1.0",
     "oxlint": "^1.91.0"
   }
 }

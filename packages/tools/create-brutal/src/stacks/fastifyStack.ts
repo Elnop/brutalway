@@ -119,10 +119,10 @@ export const fastifyStack: Stack = {
       when: { 'claude-hook': false },
       remove: ['.claude'],
       edits: [
-        { file: 'knip.json', replace: '"@brutal/agent-hook", ', with: '' },
+        { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
         { file: 'README.md', dropSection: '## Working with an agent' },
       ],
-      dependencies: ['@brutal/agent-hook'],
+      dependencies: ['@brutalway/agent-hook'],
     },
     {
       when: { ci: false },

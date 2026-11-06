@@ -1,3 +1,3 @@
-import { nodeTestConfig } from '@brutal/oxlint-config-node-test';
+import { nodeTestConfig } from '@brutalway/oxlint-config-node-test';
 
 export default nodeTestConfig;

@@ -1,4 +1,4 @@
-# @brutal/check-tree
+# @brutalkit/check-tree
 
 ## 0.4.0
 

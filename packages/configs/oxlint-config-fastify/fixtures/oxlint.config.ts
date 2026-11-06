@@ -1,3 +1,3 @@
-import { fastifyConfig } from '@brutal/oxlint-config-fastify';
+import { fastifyConfig } from '@brutalway/oxlint-config-fastify';
 
 export default fastifyConfig;

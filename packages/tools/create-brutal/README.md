@@ -1,6 +1,6 @@
 # create-brutal
 
-Creates a project from one of the [BRUTAL](https://github.com/Elnop/brutal) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
+Creates a project from one of the [BRUTAL way](https://github.com/Elnop/brutalway) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
 
 ```sh
 npm create brutal my-app
@@ -55,4 +55,4 @@ node packages/tools/create-brutal/src/cli.ts ../my-app --local
 npm run matrix
 ```
 
-`--local` copies the templates from the submodules in `templates/`, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `brutal-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`. `--local-packages` makes each project install the `@brutal/*` packages packed from this checkout instead of the versions on npm (run `npm run build` first).
+`--local` copies the templates from the submodules in `templates/`, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `brutal-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`. `--local-packages` makes each project install the `@brutalway/*` packages packed from this checkout instead of the versions on npm (run `npm run build` first).

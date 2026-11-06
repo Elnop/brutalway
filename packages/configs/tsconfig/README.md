@@ -1,4 +1,4 @@
-# @brutal/tsconfig
+# @brutalway/tsconfig
 
 Strict TypeScript configs. `base.json` turns on `strict` and the flags it leaves out: `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`. It also sets `noEmit`, `allowImportingTsExtensions`, `erasableSyntaxOnly` and `verbatimModuleSyntax`, for projects where a bundler or Node runs the TypeScript directly.
 
@@ -9,12 +9,12 @@ Strict TypeScript configs. `base.json` turns on `strict` and the flags it leaves
 | `react-vite.json` | DOM libs, `moduleResolution` bundler, `jsx` react-jsx, `vite/client` types                          |
 
 ```sh
-npm install --save-dev @brutal/tsconfig
+npm install --save-dev @brutalway/tsconfig
 ```
 
 ```json
 {
-  "extends": "@brutal/tsconfig/react-vite.json",
+  "extends": "@brutalway/tsconfig/react-vite.json",
   "compilerOptions": {
     "paths": { "@/*": ["./src/*"] }
   },

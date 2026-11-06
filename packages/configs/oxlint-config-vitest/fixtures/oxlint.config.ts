@@ -1,3 +1,3 @@
-import { vitestConfig } from '@brutal/oxlint-config-vitest';
+import { vitestConfig } from '@brutalway/oxlint-config-vitest';
 
 export default vitestConfig;

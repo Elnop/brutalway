@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-vitest
+# @brutalkit/oxlint-config-vitest
 
 ## 0.2.1
 

@@ -1,4 +1,4 @@
-# @brutal/alint-config
+# @brutalkit/alint-config
 
 ## 0.1.0
 

@@ -1,7 +1,7 @@
 import { deepStrictEqual } from 'node:assert';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { lintFixture } from '@brutal/lint-utils/lintFixture';
+import { lintFixture } from '@brutalway/lint-utils/lintFixture';
 
 test('fastifyConfig checks env access, dependencies, async handlers, fetch outside clients, schemas and routes placement', () => {
   deepStrictEqual(lintFixture(fileURLToPath(new URL('fixtures', import.meta.url))), [

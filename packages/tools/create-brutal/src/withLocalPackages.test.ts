@@ -7,18 +7,18 @@ describe('withLocalPackages', () => {
     const manifest = JSON.stringify({
       name: 'app',
       dependencies: { react: '19.3.1' },
-      devDependencies: { '@brutal/check-tree': '0.4.0', knip: '6.42.1' },
+      devDependencies: { '@brutalway/check-tree': '0.4.0', knip: '6.42.1' },
       overrides: { minimatch: '^11.0.1' },
     });
     const tarballs = new Map([
-      ['@brutal/check-tree', '/tmp/brutal-check-tree-0.4.0.tgz'],
-      ['@brutal/lint-utils', '/tmp/brutal-lint-utils-0.1.0.tgz'],
+      ['@brutalway/check-tree', '/tmp/brutal-check-tree-0.4.0.tgz'],
+      ['@brutalway/lint-utils', '/tmp/brutal-lint-utils-0.1.0.tgz'],
     ]);
     assert.deepEqual(JSON.parse(withLocalPackages(manifest, tarballs)), {
       name: 'app',
       dependencies: { react: '19.3.1' },
-      devDependencies: { '@brutal/check-tree': 'file:/tmp/brutal-check-tree-0.4.0.tgz', knip: '6.42.1' },
-      overrides: { minimatch: '^11.0.1', '@brutal/check-tree': 'file:/tmp/brutal-check-tree-0.4.0.tgz', '@brutal/lint-utils': 'file:/tmp/brutal-lint-utils-0.1.0.tgz' },
+      devDependencies: { '@brutalway/check-tree': 'file:/tmp/brutal-check-tree-0.4.0.tgz', knip: '6.42.1' },
+      overrides: { minimatch: '^11.0.1', '@brutalway/check-tree': 'file:/tmp/brutal-check-tree-0.4.0.tgz', '@brutalway/lint-utils': 'file:/tmp/brutal-lint-utils-0.1.0.tgz' },
     });
   });
 

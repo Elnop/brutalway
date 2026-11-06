@@ -1,4 +1,4 @@
-# @brutal/eslint-plugin-store-layout
+# @brutalkit/eslint-plugin-store-layout
 
 ## 0.1.3
 

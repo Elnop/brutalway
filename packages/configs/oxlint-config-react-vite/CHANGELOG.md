@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-react-vite
+# @brutalkit/oxlint-config-react-vite
 
 ## 0.4.1
 

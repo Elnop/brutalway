@@ -1,7 +1,7 @@
 import { basename } from 'node:path';
 import { defineRule } from '@oxlint/plugins';
-import { baseName } from '@brutal/lint-utils/baseName';
-import { exportsOf } from '@brutal/lint-utils/exportsOf';
+import { baseName } from '@brutalway/lint-utils/baseName';
+import { exportsOf } from '@brutalway/lint-utils/exportsOf';
 
 export const storeLayout = defineRule({
   meta: {

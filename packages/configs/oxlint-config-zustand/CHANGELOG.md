@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-zustand
+# @brutalkit/oxlint-config-zustand
 
 ## 0.2.3
 

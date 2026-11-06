@@ -1,10 +1,10 @@
-# @brutal/lint-utils
+# @brutalway/lint-utils
 
-Helpers shared by the `@brutal` lint plugins and configs. You probably want one of those instead:
+Helpers shared by the `@brutalway` lint plugins and configs. You probably want one of those instead:
 
-- [@brutal/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutal/eslint-plugin-file-named-after-export)
-- [@brutal/eslint-plugin-store-layout](https://www.npmjs.com/package/@brutal/eslint-plugin-store-layout)
-- [@brutal/oxlint-config-typescript](https://www.npmjs.com/package/@brutal/oxlint-config-typescript)
+- [@brutalway/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutalway/eslint-plugin-file-named-after-export)
+- [@brutalway/eslint-plugin-store-layout](https://www.npmjs.com/package/@brutalway/eslint-plugin-store-layout)
+- [@brutalway/oxlint-config-typescript](https://www.npmjs.com/package/@brutalway/oxlint-config-typescript)
 
 It exports:
 

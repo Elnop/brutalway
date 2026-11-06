@@ -1,6 +1,6 @@
-# @brutal/oxlint-config-fastify
+# @brutalway/oxlint-config-fastify
 
-Oxlint config for a Fastify API validated with Zod. It extends `@brutal/oxlint-config-typescript` and adds:
+Oxlint config for a Fastify API validated with Zod. It extends `@brutalway/oxlint-config-typescript` and adds:
 
 | Rule                        | Rejects                                                                                                                                                                        |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -15,13 +15,13 @@ Oxlint config for a Fastify API validated with Zod. It extends `@brutal/oxlint-c
 Factories and plugins are named `createX` or `xRoutes` while their file is named after the kind, so `xService.ts`, `xQueries.ts`, `xSchemas.ts`, `xRoutes.ts`, `xClient.ts` and `xWorker.ts` are exempt from the "file named after its single export" rule.
 
 ```sh
-npm install --save-dev @brutal/oxlint-config-fastify oxlint
+npm install --save-dev @brutalway/oxlint-config-fastify oxlint
 ```
 
 `oxlint.config.ts`:
 
 ```ts
-import { fastifyConfig } from '@brutal/oxlint-config-fastify';
+import { fastifyConfig } from '@brutalway/oxlint-config-fastify';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({ extends: [fastifyConfig] });

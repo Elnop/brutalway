@@ -1,3 +1,3 @@
-import { zustandConfig } from '@brutal/oxlint-config-zustand';
+import { zustandConfig } from '@brutalway/oxlint-config-zustand';
 
 export default zustandConfig;

@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-typescript
+# @brutalkit/oxlint-config-typescript
 
 ## 0.4.0
 

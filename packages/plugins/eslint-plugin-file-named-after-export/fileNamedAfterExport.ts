@@ -1,6 +1,6 @@
 import { defineRule } from '@oxlint/plugins';
-import { baseName } from '@brutal/lint-utils/baseName';
-import { exportsOf } from '@brutal/lint-utils/exportsOf';
+import { baseName } from '@brutalway/lint-utils/baseName';
+import { exportsOf } from '@brutalway/lint-utils/exportsOf';
 
 function stringsAt(options: unknown, key: string): string[] {
   if (typeof options !== 'object' || options === null || !(key in options)) return [];

@@ -32,7 +32,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
   jsPlugins: [
     { name: 'export-placement', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
     { name: 'type-definitions', specifier: fileURLToPath(new URL('./typeDefinitionsPlugin.js', import.meta.url)) },
-    { name: 'file-named-after-export', specifier: resolveFromHere('@brutal/eslint-plugin-file-named-after-export') },
+    { name: 'file-named-after-export', specifier: resolveFromHere('@brutalway/eslint-plugin-file-named-after-export') },
     { name: 'no-comments', specifier: resolveFromHere('eslint-plugin-no-comments') },
     { name: 'check-file', specifier: resolveFromHere('eslint-plugin-check-file') },
   ],

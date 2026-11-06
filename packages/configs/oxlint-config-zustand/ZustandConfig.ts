@@ -1,4 +1,4 @@
-import { typescriptConfig } from '@brutal/oxlint-config-typescript';
+import { typescriptConfig } from '@brutalway/oxlint-config-typescript';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
@@ -10,7 +10,7 @@ function resolveFromHere(specifier: string) {
 export const zustandConfig: OxlintConfig = defineConfig({
   extends: [typescriptConfig],
   jsPlugins: [
-    { name: 'store-layout', specifier: resolveFromHere('@brutal/eslint-plugin-store-layout') },
+    { name: 'store-layout', specifier: resolveFromHere('@brutalway/eslint-plugin-store-layout') },
     { name: 'selector-naming', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
   ],
   rules: { 'store-layout/store-layout': 'error' },

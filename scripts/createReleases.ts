@@ -43,7 +43,7 @@ const directories = new Map(
   }),
 );
 const released = new Set(lines(run('gh', ['release', 'list', '--limit', '1000', '--json', 'tagName', '--jq', '.[].tagName'])));
-const tags = lines(run('git', ['tag', '--list', '@brutal/*', 'create-brutal@*', '--sort=creatordate']))
+const tags = lines(run('git', ['tag', '--list', '@brutalway/*', 'create-brutal@*', '--sort=creatordate']))
   .filter((tag) => !released.has(tag))
   .map((tag): Tag => ({ tag, name: tag.slice(0, tag.lastIndexOf('@')), version: tag.slice(tag.lastIndexOf('@') + 1) }));
 

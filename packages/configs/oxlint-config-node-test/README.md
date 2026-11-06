@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-node-test
+# @brutalway/oxlint-config-node-test
 
 Oxlint config for suites written with `node:test`, applied to `*.test.ts` files:
 
@@ -7,14 +7,14 @@ Oxlint config for suites written with `node:test`, applied to `*.test.ts` files:
 - assertions come from `node:assert/strict`, not `node:assert`
 
 ```sh
-npm install --save-dev @brutal/oxlint-config-node-test oxlint
+npm install --save-dev @brutalway/oxlint-config-node-test oxlint
 ```
 
 ```ts
-import { nodeTestConfig } from '@brutal/oxlint-config-node-test';
+import { nodeTestConfig } from '@brutalway/oxlint-config-node-test';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({ extends: [nodeTestConfig] });
 ```
 
-It only adds rules for test files, so it goes next to another config such as `@brutal/oxlint-config-fastify`.
+It only adds rules for test files, so it goes next to another config such as `@brutalway/oxlint-config-fastify`.

@@ -1,8 +1,8 @@
 {
   "name": "brutal-checks",
   "version": "0.1.0",
-  "description": "Runs @brutal/agent-hook after each Edit or Write: oxlint on the edited file, alint and check-tree when a file is created. Errors go back to Claude.",
+  "description": "Runs @brutalway/agent-hook after each Edit or Write: oxlint on the edited file, alint and check-tree when a file is created. Errors go back to Claude.",
   "author": { "name": "elnop" },
-  "homepage": "https://github.com/Elnop/brutal/tree/main/plugins/brutal-checks",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/plugins/brutal-checks",
   "license": "MIT"
 }

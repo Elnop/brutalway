@@ -1,5 +1,5 @@
 {
-  "name": "@brutal/playwright-fixtures",
+  "name": "@brutalway/playwright-fixtures",
   "version": "0.1.0",
   "description": "Playwright fixtures: fail a test when the page throws, list axe-core violations.",
   "keywords": [
@@ -8,11 +8,11 @@
     "accessibility",
     "e2e"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/tools/playwright-fixtures#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/tools/playwright-fixtures#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/tools/playwright-fixtures"
   },
   "license": "MIT",

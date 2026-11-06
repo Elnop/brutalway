@@ -1,4 +1,4 @@
-# @brutal/tsconfig
+# @brutalkit/tsconfig
 
 ## 0.2.0
 

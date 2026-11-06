@@ -1,4 +1,4 @@
-import { typescriptConfig } from '@brutal/oxlint-config-typescript';
+import { typescriptConfig } from '@brutalway/oxlint-config-typescript';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';

@@ -1,4 +1,4 @@
-# @brutal/agent-hook
+# @brutalkit/agent-hook
 
 ## 0.1.0
 

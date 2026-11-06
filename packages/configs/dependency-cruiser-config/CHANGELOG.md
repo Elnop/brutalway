@@ -1,4 +1,4 @@
-# @brutal/dependency-cruiser-config
+# @brutalkit/dependency-cruiser-config
 
 ## 0.4.0
 

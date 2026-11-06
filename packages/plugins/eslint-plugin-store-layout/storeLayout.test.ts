@@ -1,4 +1,4 @@
-import { ruleTester } from '@brutal/lint-utils/ruleTester';
+import { ruleTester } from '@brutalway/lint-utils/ruleTester';
 import { storeLayout } from './storeLayout.ts';
 
 ruleTester.run('store-layout', storeLayout, {

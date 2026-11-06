@@ -1,4 +1,4 @@
-# @brutal/playwright-fixtures
+# @brutalway/playwright-fixtures
 
 Two things every e2e suite of ours needs:
 
@@ -6,11 +6,11 @@ Two things every e2e suite of ours needs:
 - `axeViolations(page)`: runs axe-core on the page and returns one line per violated rule, with the selectors of the nodes, so a failing assertion says what to fix
 
 ```sh
-npm install --save-dev @brutal/playwright-fixtures @playwright/test @axe-core/playwright
+npm install --save-dev @brutalway/playwright-fixtures @playwright/test @axe-core/playwright
 ```
 
 ```ts
-import { axeViolations, expect, test } from '@brutal/playwright-fixtures';
+import { axeViolations, expect, test } from '@brutalway/playwright-fixtures';
 
 test('the home page has no axe violation', async ({ page }) => {
   await page.goto('/');

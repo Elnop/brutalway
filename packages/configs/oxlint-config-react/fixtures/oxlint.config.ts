@@ -1,3 +1,3 @@
-import { reactConfig } from '@brutal/oxlint-config-react';
+import { reactConfig } from '@brutalway/oxlint-config-react';
 
 export default reactConfig;

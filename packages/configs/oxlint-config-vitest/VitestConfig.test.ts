@@ -1,7 +1,7 @@
 import { deepStrictEqual } from 'node:assert';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { lintFixture } from '@brutal/lint-utils/lintFixture';
+import { lintFixture } from '@brutalway/lint-utils/lintFixture';
 
 test('vitestConfig checks test style and expectations', () => {
   deepStrictEqual(lintFixture(fileURLToPath(new URL('fixtures', import.meta.url))), [

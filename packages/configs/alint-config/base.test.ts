@@ -10,9 +10,9 @@ const ALINT = join(import.meta.dirname, '..', '..', '..', 'node_modules', '@asam
 function repository(files: Record<string, string>): string {
   const root = mkdtempSync(join(tmpdir(), 'alint-'));
   spawnSync('git', ['init', '-q'], { cwd: root });
-  mkdirSync(join(root, 'node_modules', '@brutal', 'alint-config'), { recursive: true });
-  copyFileSync(join(import.meta.dirname, 'base.yml'), join(root, 'node_modules', '@brutal', 'alint-config', 'base.yml'));
-  const all: Record<string, string> = { '.alint.yml': 'version: 1\nextends:\n  - ./node_modules/@brutal/alint-config/base.yml\n', ...files };
+  mkdirSync(join(root, 'node_modules', '@brutalway', 'alint-config'), { recursive: true });
+  copyFileSync(join(import.meta.dirname, 'base.yml'), join(root, 'node_modules', '@brutalway', 'alint-config', 'base.yml'));
+  const all: Record<string, string> = { '.alint.yml': 'version: 1\nextends:\n  - ./node_modules/@brutalway/alint-config/base.yml\n', ...files };
   for (const [path, content] of Object.entries(all)) {
     mkdirSync(dirname(join(root, path)), { recursive: true });
     writeFileSync(join(root, path), content);

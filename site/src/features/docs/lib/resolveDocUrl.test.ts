@@ -12,17 +12,21 @@ describe('resolveDocUrl', () => {
   });
 
   it('turns a link to a known doc into a docs route, relative to the current file', () => {
-    expect(resolveDocUrl({ url: 'inspirations.md', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutal/docs/inspirations.md');
-    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('#/docs/brutal/docs/intent.md');
-    expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutal/readme.md');
+    expect(resolveDocUrl({ url: 'inspirations.md', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutalway/docs/inspirations.md');
+    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('#/docs/brutalway/docs/intent.md');
+    expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutalway/readme.md');
   });
 
   it('sends other relative links to GitHub', () => {
-    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/brutal/blob/main/create-brutal/src/cli.ts');
-    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/brutal/blob/main/readme.md#the-common-rules');
+    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
+      'https://github.com/Elnop/brutalway/blob/main/create-brutal/src/cli.ts',
+    );
+    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/brutalway/blob/main/readme.md#the-common-rules');
   });
 
   it('loads relative images from the raw files', () => {
-    expect(resolveDocUrl({ url: 'images/wall.png', attribute: 'src', source, docPath: 'docs/intent.md', knownPaths })).toBe('https://raw.githubusercontent.com/Elnop/brutal/main/docs/images/wall.png');
+    expect(resolveDocUrl({ url: 'images/wall.png', attribute: 'src', source, docPath: 'docs/intent.md', knownPaths })).toBe(
+      'https://raw.githubusercontent.com/Elnop/brutalway/main/docs/images/wall.png',
+    );
   });
 });

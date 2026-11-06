@@ -1,4 +1,4 @@
-# @brutal/alint-config
+# @brutalway/alint-config
 
 [alint](https://github.com/asamarts/alint) rules for a repository:
 
@@ -12,7 +12,7 @@
 | `exact-dependency-versions` | every `dependencies` and `devDependencies` entry of every `package.json` is an exact version |
 
 ```sh
-npm install --save-dev @brutal/alint-config @asamarts/alint
+npm install --save-dev @brutalway/alint-config @asamarts/alint
 ```
 
 `.alint.yml`:
@@ -20,7 +20,7 @@ npm install --save-dev @brutal/alint-config @asamarts/alint
 ```yaml
 version: 1
 extends:
-  - ./node_modules/@brutal/alint-config/base.yml
+  - ./node_modules/@brutalway/alint-config/base.yml
 rules:
   - id: doc-paths-resolve
     kind: markdown_paths_resolve

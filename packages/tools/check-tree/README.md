@@ -1,4 +1,4 @@
-# @brutal/check-tree
+# @brutalway/check-tree
 
 Checks the folders of a source tree, which a linter does not see:
 
@@ -29,7 +29,7 @@ So a feature with two components puts them in `components/`, and a `components/`
 Test files (`*.test.ts`, `*.test.tsx`) are not counted.
 
 ```sh
-npm install --save-dev @brutal/check-tree
+npm install --save-dev @brutalway/check-tree
 npx check-tree src
 ```
 
@@ -46,7 +46,7 @@ The grouping rule only applies to the kinds listed in the table that are also in
 The check is also exported as a function:
 
 ```ts
-import { treeViolations } from '@brutal/check-tree/treeViolations';
+import { treeViolations } from '@brutalway/check-tree/treeViolations';
 
 const violations = treeViolations('src');
 ```

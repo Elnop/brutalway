@@ -1,6 +1,6 @@
-# @brutal/oxlint-config-react
+# @brutalway/oxlint-config-react
 
-Oxlint config for React with TypeScript. It extends [@brutal/oxlint-config-typescript](https://www.npmjs.com/package/@brutal/oxlint-config-typescript) and adds:
+Oxlint config for React with TypeScript. It extends [@brutalway/oxlint-config-typescript](https://www.npmjs.com/package/@brutalway/oxlint-config-typescript) and adds:
 
 - the `react` plugin and the `browser` env
 - `react/rules-of-hooks`, `react/exhaustive-deps` and `react/only-export-components`
@@ -11,11 +11,11 @@ Oxlint config for React with TypeScript. It extends [@brutal/oxlint-config-types
 - no orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) under `shared-features/`: that layer holds business code shared by several features, and the components that read it belong to a feature
 
 ```sh
-npm install --save-dev oxlint @brutal/oxlint-config-react
+npm install --save-dev oxlint @brutalway/oxlint-config-react
 ```
 
 ```ts
-import { reactConfig } from '@brutal/oxlint-config-react';
+import { reactConfig } from '@brutalway/oxlint-config-react';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
@@ -23,4 +23,4 @@ export default defineConfig({
 });
 ```
 
-For a Vite app, [@brutal/oxlint-config-react-vite](https://www.npmjs.com/package/@brutal/oxlint-config-react-vite) adds the Vite specific settings on top.
+For a Vite app, [@brutalway/oxlint-config-react-vite](https://www.npmjs.com/package/@brutalway/oxlint-config-react-vite) adds the Vite specific settings on top.

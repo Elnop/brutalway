@@ -1,6 +1,6 @@
-# @brutal/oxlint-config-typescript
+# @brutalway/oxlint-config-typescript
 
-Oxlint config for TypeScript projects. The other `@brutal/oxlint-config-*` packages extend it.
+Oxlint config for TypeScript projects. The other `@brutalway/oxlint-config-*` packages extend it.
 
 It turns on the `correctness` and `suspicious` categories, a set of `typescript/` and `import/` rules, and these conventions:
 
@@ -10,7 +10,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - nothing under `shared-features/` that belongs to a feature: no orchestrator component (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts`. The whole file-name blocklist lives here, so a preset that extends several configs cannot lose part of it
 - no `xConfig.tsx`: a config is plain data in `xConfig.ts`, and its JSX goes in a component. `xContent.tsx` stays allowed for content written in JSX.
 - file names in camelCase or PascalCase
-- a file with a single export is named after it ([@brutal/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutal/eslint-plugin-file-named-after-export))
+- a file with a single export is named after it ([@brutalway/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutalway/eslint-plugin-file-named-after-export))
 - named functions are declarations (`function area() {}`), arrow functions stay for callbacks. A declared function is hoisted, so TypeScript drops the narrowing of a captured variable inside it: move the null check into a helper that returns the narrowed value
 - an `if` without braces fits on one line (`curly` set to `multi-line`)
 - object shapes use `type`, `interface` is only accepted to augment a global such as `Window` inside `declare global`
@@ -24,11 +24,11 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules.
 
 ```sh
-npm install --save-dev oxlint @brutal/oxlint-config-typescript
+npm install --save-dev oxlint @brutalway/oxlint-config-typescript
 ```
 
 ```ts
-import { typescriptConfig } from '@brutal/oxlint-config-typescript';
+import { typescriptConfig } from '@brutalway/oxlint-config-typescript';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({

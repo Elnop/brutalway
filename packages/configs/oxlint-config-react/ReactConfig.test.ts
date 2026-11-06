@@ -1,7 +1,7 @@
 import { deepStrictEqual } from 'node:assert';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { lintFixture } from '@brutal/lint-utils/lintFixture';
+import { lintFixture } from '@brutalway/lint-utils/lintFixture';
 
 test('reactConfig checks component props, callback props and hooks next to the TypeScript conventions', () => {
   deepStrictEqual(lintFixture(fileURLToPath(new URL('fixtures', import.meta.url))), [

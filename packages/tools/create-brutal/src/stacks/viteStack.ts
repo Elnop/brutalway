@@ -161,7 +161,7 @@ export const viteStack: Stack = {
         { file: 'docs/verifications.md', dropLines: 'The specs import `test`' },
       ],
       scripts: ['e2e'],
-      dependencies: ['@playwright/test', '@axe-core/playwright', '@brutal/playwright-fixtures'],
+      dependencies: ['@playwright/test', '@axe-core/playwright', '@brutalway/playwright-fixtures'],
     },
     {
       when: { e2e: false, example: true },
@@ -203,10 +203,10 @@ export const viteStack: Stack = {
       when: { 'claude-hook': false },
       remove: ['.claude'],
       edits: [
-        { file: 'knip.json', replace: '"@brutal/agent-hook", ', with: '' },
+        { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
         { file: 'README.md', dropSection: '## Working with an agent' },
       ],
-      dependencies: ['@brutal/agent-hook'],
+      dependencies: ['@brutalway/agent-hook'],
     },
     {
       when: { ci: false },

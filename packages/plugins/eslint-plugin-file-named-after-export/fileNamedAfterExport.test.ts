@@ -1,5 +1,5 @@
 import { fileNamedAfterExport } from './fileNamedAfterExport.ts';
-import { ruleTester } from '@brutal/lint-utils/ruleTester';
+import { ruleTester } from '@brutalway/lint-utils/ruleTester';
 
 ruleTester.run('file-named-after-export', fileNamedAfterExport, {
   valid: [

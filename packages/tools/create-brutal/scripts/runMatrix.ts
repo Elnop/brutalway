@@ -40,7 +40,7 @@ async function packLocalPackages(): Promise<Map<string, string>> {
   mkdirSync(destination, { recursive: true });
   const names = globSync('packages/*/*/package.json', { cwd: LOCAL_ROOT })
     .map((path): unknown => JSON.parse(readFileSync(join(LOCAL_ROOT, path), 'utf8')))
-    .flatMap((manifest) => (isRecord(manifest) && typeof manifest['name'] === 'string' && manifest['name'].startsWith('@brutal/') ? [manifest['name']] : []));
+    .flatMap((manifest) => (isRecord(manifest) && typeof manifest['name'] === 'string' && manifest['name'].startsWith('@brutalway/') ? [manifest['name']] : []));
   const result = await run('npm', ['pack', '--ignore-scripts', '--json', '--pack-destination', destination, ...names.map((name) => `--workspace=${name}`)], LOCAL_ROOT);
   if (!result.ok) throw new Error(`npm pack failed\n${result.output.slice(-4000)}`);
   const packed: unknown = JSON.parse(result.stdout);

@@ -1,4 +1,4 @@
-# @brutal/oxlint-config-react
+# @brutalkit/oxlint-config-react
 
 ## 0.3.1
 

@@ -1,4 +1,4 @@
-# @brutal/agent-hook
+# @brutalway/agent-hook
 
 A Claude Code `PostToolUse` hook. After each `Edit` or `Write` by the agent:
 
@@ -9,7 +9,7 @@ A Claude Code `PostToolUse` hook. After each `Edit` or `Write` by the agent:
 If one of them fails, the hook prints their output and exits with code 2: Claude Code sends it back to the agent, which fixes the problem before going on. The tools are run with `npx --no-install`, so they must be dependencies of the project.
 
 ```sh
-npm install --save-dev @brutal/agent-hook
+npm install --save-dev @brutalway/agent-hook
 ```
 
 `.claude/settings.json`:

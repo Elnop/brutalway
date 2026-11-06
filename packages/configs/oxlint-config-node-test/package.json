@@ -1,5 +1,5 @@
 {
-  "name": "@brutal/oxlint-config-node-test",
+  "name": "@brutalway/oxlint-config-node-test",
   "version": "0.1.0",
   "description": "Oxlint config for node:test suites: it() inside describe(), both from node:test, and node:assert/strict.",
   "keywords": [
@@ -9,11 +9,11 @@
     "test",
     "lint"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/oxlint-config-node-test#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-node-test#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/configs/oxlint-config-node-test"
   },
   "license": "MIT",
@@ -34,7 +34,7 @@
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutal/lint-utils": "^0.1.0",
+    "@brutalway/lint-utils": "^0.1.0",
     "oxlint": "^1.91.0"
   }
 }

@@ -1,3 +1,3 @@
-import { reactViteConfig } from '@brutal/oxlint-config-react-vite';
+import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';
 
 export default reactViteConfig;

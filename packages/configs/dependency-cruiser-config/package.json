@@ -1,5 +1,5 @@
 {
-  "name": "@brutal/dependency-cruiser-config",
+  "name": "@brutalway/dependency-cruiser-config",
   "version": "0.4.0",
   "description": "dependency-cruiser rules for a layered app: app, features, states and shared, with pure presenters and stores in their folder.",
   "keywords": [
@@ -7,11 +7,11 @@
     "architecture",
     "layers"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/configs/dependency-cruiser-config#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/dependency-cruiser-config#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/configs/dependency-cruiser-config"
   },
   "license": "MIT",

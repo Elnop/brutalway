@@ -1,5 +1,5 @@
 {
-  "name": "@brutal/check-tree",
+  "name": "@brutalway/check-tree",
   "version": "0.4.0",
   "description": "Checks a source tree: no empty folder, no category folder holding a single child, stylesheets grouped in styles/.",
   "keywords": [
@@ -8,11 +8,11 @@
     "project-structure",
     "cli"
   ],
-  "homepage": "https://github.com/Elnop/brutal/tree/main/packages/tools/check-tree#readme",
-  "bugs": "https://github.com/Elnop/brutal/issues",
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/tools/check-tree#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elnop/brutal.git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
     "directory": "packages/tools/check-tree"
   },
   "license": "MIT",
