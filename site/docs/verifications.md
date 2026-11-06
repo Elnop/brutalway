@@ -4,11 +4,11 @@ Everything below runs locally and in the pre-commit hook.
 
 ## TypeScript
 
-`tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@elnop/tsconfig/react-vite.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`.
+`tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/react-vite.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`.
 
 ## Lint
 
-`oxlint.config.ts` extends `@elnop/oxlint-config-react-vite`, which brings the TypeScript base, the React, zustand and Vitest configs. Each package README details its rules. The main ones:
+`oxlint.config.ts` extends `@brutalway/oxlint-config-react-vite`, which brings the TypeScript base, the React, zustand and Vitest configs. Each package README details its rules. The main ones:
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
 - no relative imports: `@/` in `src/`. Root config files are the only exception
@@ -24,7 +24,7 @@ Everything below runs locally and in the pre-commit hook.
 
 ## Dependencies
 
-dependency-cruiser checks the direction of imports. The rules come from `@elnop/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:
+dependency-cruiser checks the direction of imports. The rules come from `@brutalway/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
@@ -35,11 +35,11 @@ dependency-cruiser checks the direction of imports. The rules come from `@elnop/
 
 ## Tree
 
-`check-tree` (`@elnop/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. It also rejects two CSS files outside a `styles/` folder.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. It also rejects two CSS files outside a `styles/` folder.
 
 ## Repository
 
-alint checks that every path in backticks, link and anchor in the README and in `docs/` still exists, that `styles/`, `types/` and `configs/` only hold what their name says, and that every dependency in `package.json` is pinned to an exact version. The rules come from `@elnop/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
+alint checks that every path in backticks, link and anchor in the README and in `docs/` still exists, that `styles/`, `types/` and `configs/` only hold what their name says, and that every dependency in `package.json` is pinned to an exact version. The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
 
 knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name.
 

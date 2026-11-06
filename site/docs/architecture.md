@@ -10,10 +10,10 @@ We take the split, under other names. Orchestrators (`XContainer`, `XLayout`, `X
 
 We leave out higher-order components, which was how containers were written in 2015. Since 2019, Abramov's post says hooks make the split unnecessary. We keep it anyway: a presenter can be tested alone through its props, and an agent knows which components may touch state from the file name alone.
 
-Enforced by `@elnop/dependency-cruiser-config` (a presenter imports no store and no shared-feature hook) and `@elnop/oxlint-config-react` (no orchestrator under `shared-features/`).
+Enforced by `@brutalway/dependency-cruiser-config` (a presenter imports no store and no shared-feature hook) and `@brutalway/oxlint-config-react` (no orchestrator under `shared-features/`).
 
 ## Sub-features
 
 From Feature-Sliced Design, extended. A feature can hold its own features in `features/<x>/features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared/` folder.
 
-Enforced by `@elnop/dependency-cruiser-config`.
+Enforced by `@brutalway/dependency-cruiser-config`.
