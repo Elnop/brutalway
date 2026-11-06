@@ -4,7 +4,7 @@ import type { DocEntry, DocSource, LoadState } from '@/features/docs/DocsTypes.t
 import { docTitle } from '@/features/docs/lib/docTitle.ts';
 import { folderListUrl, rawFileUrl } from '@/features/docs/lib/docsUrls.ts';
 
-const LIST_CACHE_KEY = 'brutal-docs-list';
+const LIST_CACHE_KEY = 'brutal-docs-list-v2';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -22,8 +22,13 @@ function toEntry(sourceKey: string, path: string): DocEntry {
   return { sourceKey, path, title: docTitle(path) };
 }
 
+function sourceEntries(source: DocSource, folderPaths: string[]): DocEntry[] {
+  const paths = [...source.files, ...folderPaths, ...(source.changelog === undefined ? [] : [source.changelog])];
+  return paths.map((path) => toEntry(source.key, path));
+}
+
 function fixedEntries(): DocEntry[] {
-  return DOC_SOURCES.flatMap((source) => source.files.map((path) => toEntry(source.key, path)));
+  return DOC_SOURCES.flatMap((source) => sourceEntries(source, []));
 }
 
 function readCachedList(): DocEntry[] | undefined {
@@ -45,12 +50,12 @@ function writeCachedList(entries: DocEntry[]): void {
   }
 }
 
-async function listFolder(source: DocSource, signal: AbortSignal): Promise<DocEntry[] | undefined> {
+async function listFolder(source: DocSource, signal: AbortSignal): Promise<string[] | undefined> {
   try {
     const response = await fetch(folderListUrl(source.repo, source.folder), { signal });
     if (!response.ok) return undefined;
     const items: unknown = await response.json();
-    return Array.isArray(items) ? items.filter(isMarkdownFile).map((item) => toEntry(source.key, item.path)) : undefined;
+    return Array.isArray(items) ? items.filter(isMarkdownFile).map((item) => item.path) : undefined;
   } catch {
     return undefined;
   }
@@ -58,7 +63,7 @@ async function listFolder(source: DocSource, signal: AbortSignal): Promise<DocEn
 
 async function listAll(signal: AbortSignal): Promise<{ entries: DocEntry[]; complete: boolean }> {
   const folders = await Promise.all(DOC_SOURCES.map((source) => listFolder(source, signal)));
-  const entries = DOC_SOURCES.flatMap((source, index) => [...source.files.map((path) => toEntry(source.key, path)), ...(folders[index] ?? [])]);
+  const entries = DOC_SOURCES.flatMap((source, index) => sourceEntries(source, folders[index] ?? []));
   return { entries, complete: folders.every((folder) => folder !== undefined) };
 }
 

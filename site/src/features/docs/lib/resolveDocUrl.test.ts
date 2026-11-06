@@ -17,6 +17,11 @@ describe('resolveDocUrl', () => {
     expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutalway/readme.md');
   });
 
+  it('links a template doc to its page', () => {
+    const template = DOC_SOURCES[1];
+    expect(resolveDocUrl({ url: 'CHANGELOG.md', attribute: 'href', source: template, docPath: 'README.md', knownPaths: ['README.md', 'CHANGELOG.md'] })).toBe('#/templates/vite/CHANGELOG.md');
+  });
+
   it('sends other relative links to GitHub', () => {
     expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
       'https://github.com/Elnop/brutalway/blob/main/create-brutal/src/cli.ts',

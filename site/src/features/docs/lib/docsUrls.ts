@@ -1,8 +1,8 @@
 import { DOCS_BRANCH } from '@/features/docs/DocsConfig.ts';
-import { DOCS_ROUTE } from '@/shared/LinksConfig.ts';
+import type { DocSource } from '@/features/docs/DocsTypes.ts';
 
-export function docHref(sourceKey: string, path: string): string {
-  return `${DOCS_ROUTE}/${sourceKey}/${path}`;
+export function docHref(source: DocSource, path: string): string {
+  return `${source.route}/${source.key}/${path}`;
 }
 
 export function rawFileUrl(repo: string, path: string): string {

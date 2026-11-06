@@ -11,4 +11,8 @@ describe('docTitle', () => {
     expect(docTitle('create-brutal/README.md')).toBe('Create brutal');
     expect(docTitle('readme.md')).toBe('Overview');
   });
+
+  it('writes an upper case file name in sentence case', () => {
+    expect(docTitle('CHANGELOG.md')).toBe('Changelog');
+  });
 });

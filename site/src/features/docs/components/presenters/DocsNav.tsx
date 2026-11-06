@@ -10,11 +10,11 @@ export function DocsNav({ groups, currentHref }: DocsNavProps) {
   return (
     <nav aria-label="Documentation" className="docs-nav">
       {groups.map((group) => (
-        <div key={group.key} className="docs-nav-group">
-          <p className="docs-nav-label">{group.label}</p>
+        <div key={group.source.key} className="docs-nav-group">
+          <p className="docs-nav-label">{group.source.label}</p>
           <ul>
             {group.entries.map((entry) => {
-              const href = docHref(entry.sourceKey, entry.path);
+              const href = docHref(group.source, entry.path);
               return (
                 <li key={href}>
                   <a href={href} aria-current={href === currentHref ? 'page' : undefined}>

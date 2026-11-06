@@ -1,9 +1,10 @@
 import '@/features/landing/features/stack-grid/stack-grid.css';
+import { TEMPLATES_ROUTE } from '@/shared/LinksConfig.ts';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
 const stacks = [
-  { name: 'template-vite', status: 'Ready', tools: 'Vite, React, zustand, Vitest, Playwright', tone: 'yellow', url: 'https://github.com/Elnop/template-vite' },
-  { name: 'template-fastify', status: 'Ready', tools: 'Fastify, Zod, node:sqlite, node:test, Swagger UI', tone: 'pink', url: 'https://github.com/Elnop/template-fastify' },
+  { name: 'template-vite', status: 'Ready', tools: 'Vite, React, zustand, Vitest, Playwright', tone: 'yellow', url: `${TEMPLATES_ROUTE}/vite` },
+  { name: 'template-fastify', status: 'Ready', tools: 'Fastify, Zod, node:sqlite, node:test, Swagger UI', tone: 'pink', url: `${TEMPLATES_ROUTE}/fastify` },
   { name: 'template-next', status: 'Planned', tools: 'Next.js', tone: 'paper', url: undefined },
   { name: 'template-react-native', status: 'Planned', tools: 'React Native', tone: 'paper', url: undefined },
 ];

@@ -9,7 +9,17 @@ describe('parseDocsRoute', () => {
 
   it('reads the source and the path', () => {
     expect(parseDocsRoute('#/docs/brutalway/docs/intent.md')).toMatchObject({ source: { key: 'brutalway' }, path: 'docs/intent.md' });
-    expect(parseDocsRoute('#/docs/template-vite')).toMatchObject({ source: { key: 'template-vite' }, path: 'README.md' });
+  });
+
+  it('opens a template page, its docs and its changelog', () => {
+    expect(parseDocsRoute('#/templates')).toMatchObject({ source: { key: 'vite' }, path: 'README.md' });
+    expect(parseDocsRoute('#/templates/fastify')).toMatchObject({ source: { key: 'fastify' }, path: 'README.md' });
+    expect(parseDocsRoute('#/templates/vite/CHANGELOG.md')).toMatchObject({ source: { key: 'vite' }, path: 'CHANGELOG.md' });
+  });
+
+  it('keeps each source in its own section', () => {
+    expect(parseDocsRoute('#/docs/vite')).toBeUndefined();
+    expect(parseDocsRoute('#/templates/brutalway')).toBeUndefined();
   });
 
   it('rejects an unknown source', () => {

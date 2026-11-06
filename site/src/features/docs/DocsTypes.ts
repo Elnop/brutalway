@@ -1,9 +1,11 @@
 export type DocSource = {
   key: string;
   label: string;
+  route: string;
   repo: string;
   files: string[];
   folder: string;
+  changelog?: string;
 };
 
 export type DocEntry = {
@@ -13,8 +15,7 @@ export type DocEntry = {
 };
 
 export type DocGroup = {
-  key: string;
-  label: string;
+  source: DocSource;
   entries: DocEntry[];
 };
 

@@ -17,6 +17,6 @@ export function resolveDocUrl({ url, attribute, source, docPath, knownPaths }: D
   const resolved = new URL(url, `https://repository.invalid/${docPath}`);
   const path = decodeURIComponent(resolved.pathname.slice(1));
   if (attribute === 'src') return rawFileUrl(source.repo, path);
-  if (knownPaths.includes(path)) return docHref(source.key, path);
+  if (knownPaths.includes(path)) return docHref(source, path);
   return `${githubFileUrl(source.repo, path)}${resolved.hash}`;
 }
