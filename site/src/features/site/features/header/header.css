@@ -4,6 +4,17 @@
   z-index: 10;
   border-bottom: var(--border);
   background: var(--paper);
+  transition: transform 300ms ease;
+}
+
+.site-header.is-hidden:not(:focus-within) {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
 }
 
 .site-header-nav {

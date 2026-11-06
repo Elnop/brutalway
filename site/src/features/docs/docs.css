@@ -10,16 +10,17 @@
 
 .docs-nav {
   position: sticky;
-  top: calc(var(--header-height, 0px) + 1.5rem);
+  top: calc(var(--header-offset, 0px) + 1.5rem);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-height: calc(100vh - var(--header-height, 0px) - 3rem);
+  max-height: calc(100vh - var(--header-offset, 0px) - 3rem);
   padding: 1.25rem;
   overflow-y: auto;
   border: var(--border);
   background: var(--paper);
   box-shadow: var(--shadow);
+  transition: top 300ms ease;
 }
 
 .docs-nav-label {

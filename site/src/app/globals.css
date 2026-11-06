@@ -20,7 +20,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: var(--header-height, 0px);
+  scroll-padding-top: var(--header-offset, 0px);
 }
 
 body {

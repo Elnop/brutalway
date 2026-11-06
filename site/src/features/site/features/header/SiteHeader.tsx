@@ -1,14 +1,14 @@
 import { useRef } from 'react';
-import { useHeaderHeight } from '@/features/site/features/header/useHeaderHeight.ts';
+import { useHideOnScrollDown } from '@/features/site/features/header/useHideOnScrollDown.ts';
 import { DOCS_ROUTE, REPOSITORY_URL } from '@/shared/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
 export function SiteHeader() {
   const headerRef = useRef<HTMLElement>(null);
-  useHeaderHeight(headerRef);
+  const isHidden = useHideOnScrollDown(headerRef);
   return (
-    <header ref={headerRef} className="site-header">
+    <header ref={headerRef} className={isHidden ? 'site-header is-hidden' : 'site-header'}>
       <nav aria-label="Main" className="site-header-nav container">
         <a href="#top" className="site-header-logo">
           <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
