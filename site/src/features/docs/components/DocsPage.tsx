@@ -21,7 +21,7 @@ function DocsView({ route }: DocsViewProps) {
   const groups: DocGroup[] = DOC_SOURCES.map((source) => ({ key: source.key, label: source.label, entries: entries.filter((entry) => entry.sourceKey === source.key) }));
   const knownPaths = entries.filter((entry) => entry.sourceKey === route.source.key).map((entry) => entry.path);
   return (
-    <div className="docs container">
+    <div className="docs">
       <DocsNav groups={groups} currentHref={docHref(route.source.key, route.path)} />
       <DocsArticle content={content} source={route.source} path={route.path} knownPaths={knownPaths} />
     </div>
@@ -32,7 +32,7 @@ export function DocsPage({ hash }: DocsPageProps) {
   const route = parseDocsRoute(hash);
   if (route === undefined) {
     return (
-      <div className="docs container">
+      <div className="docs">
         <p className="docs-status">
           This page does not exist. <a href="#/docs">Back to the docs</a>.
         </p>
