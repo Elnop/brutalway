@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { errorMessage } from '../src/errorMessage.ts';
@@ -10,7 +11,7 @@ import type { Answers, Stack } from '../src/StackTypes.ts';
 import { stacks } from '../src/stacks/stacksConfig.ts';
 
 const { values } = parseArgs({ options: { stack: { type: 'string' }, e2e: { type: 'boolean' }, jobs: { type: 'string' }, keep: { type: 'boolean' } } });
-const WORK_DIR = join(LOCAL_ROOT, '.matrix');
+const WORK_DIR = join(tmpdir(), 'elnop-stacks-matrix');
 const JOBS = Number(values.jobs ?? '3');
 
 type Run = { stack: Stack; answers: Answers; name: string };
@@ -70,4 +71,5 @@ async function worker(): Promise<void> {
 
 await Promise.all(Array.from({ length: JOBS }, worker));
 for (const failure of failures) process.stderr.write(`\n${failure}\n`);
+if (values.keep === true) process.stdout.write(`\nProjects kept in ${WORK_DIR}\n`);
 process.exitCode = failures.length > 0 ? 1 : 0;

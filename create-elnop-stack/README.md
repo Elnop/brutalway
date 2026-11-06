@@ -55,4 +55,4 @@ node create-elnop-stack/src/cli.ts ../my-app --local
 npm run matrix
 ```
 
-`--local` copies the templates from the submodules, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `.matrix/`.
+`--local` copies the templates from the submodules, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `elnop-stacks-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`.
