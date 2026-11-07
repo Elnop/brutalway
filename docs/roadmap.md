@@ -18,6 +18,7 @@ Both are Next.js projects. What is specific to Next (server components, `next/li
 | 2 | E3, E4 | server state and forms change the example the most |
 | 3 | E5, E6 | shadcn/ui needs Tailwind and a TypeScript project of its own, i18n touches every string of the example |
 | 4 | E7, E8 | smaller options, each independent from the rest |
+| any | E9 | tools for the docs, independent from the options |
 
 ## E0. Options that add things and options with several values
 
@@ -242,3 +243,11 @@ These are rules, not options: they go into `@brutalway/oxlint-config-react` and 
 **E8-S4. Instructions for agents.** Source: bedrock (`AGENTS.md`, `.agents/rules/*.md`, each lint message ending with `See .agents/rules/x.md#anchor`), Wizcard (`CLAUDE.md`, `.clinerules`, `.windsurfrules`). As someone working with an agent other than Claude Code, I want an `AGENTS.md` that matches the options I picked, so that the agent knows which tool to use for what before it writes code.
 - `AGENTS.md` is assembled by the CLI from one section per option.
 - Lint messages of `@brutalway/*` packages end with a link to the rule's README section.
+
+## E9. Docs that stay readable
+
+A Markdown file grows one section at a time until nobody reads it to the end. `mdsplit` splits a file along its headings but checks nothing and leaves internal links broken. markdownlint and remark-lint only limit line length, not file length.
+
+**E9-S1. tldr.** As someone maintaining the docs of a project, I want a warning when a Markdown file gets too long, and a command that splits it into folders along its headings, so that a long doc gets split before it becomes a wall of text. Tracked in [#49](https://github.com/Elnop/brutalway/issues/49), the implementation is still to be brainstormed.
+- `@brutalway/tldr` in `packages/tools/tldr`. `check` mode lists the files above a threshold and exits non-zero, `split` mode prints the proposed tree and writes it with `--write`.
+- Threshold, heading depths, globs and file naming read from a config file, each folder gets an `index.md`, links to a moved section are rewritten.
