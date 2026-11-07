@@ -96,14 +96,13 @@ Requests live in `xClient.ts` files, the convention template-fastify already use
 
 The `/stats` query lives in `src/shared-features/todos/` next to the list, under the same factory (`todosKeys.all`, `todosKeys.list(filter)`, `todosKeys.stats()`): a mutation on the list has to refresh the counters, and a shared feature cannot import `src/features/todo-stats/`. Invalidating `todosKeys.all` refreshes both.
 
-Without `VITE_API_URL`, MSW answers with an in-memory list, in `npm run dev` and in the build the e2e tests run against (`VITE_API_MOCK=true vite build`). With `VITE_API_URL`, the Vite dev server proxies `/api` to template-fastify, which has no CORS. The production build never contains MSW.
+Without `API_URL`, a Vite plugin answers `/api` with an in-memory list, in `npm run dev` and in the `vite preview` the e2e tests run against. Each browser gets its own list through a cookie, so the e2e tests stay isolated without a reset step. With `API_URL`, the same place in `vite.config.ts` proxies `/api` to template-fastify instead, which has no CORS. The mock only lives in the config: the app has no idea it can be mocked, and the e2e tests run the production build. MSW was the first idea, but its service worker file in `public/`, its start-up code in `main.tsx` and the special build it needs for e2e buy nothing here: presenters get everything through props, so no component test makes a request.
 
 **E3-S1. TanStack Query as an option.** As someone creating a project, I want `--server-state`, so that the app reads and writes its data through an API.
 - The example reads and writes todos through `@tanstack/react-query` against the routes of template-fastify: the list is filtered by the API (`?filter=`), the counters come from `GET /stats`, and each mutation invalidates `todosKeys.all`.
 - `src/shared-features/todos/todosClient.ts` holds the requests and parses each response with the Zod schemas of `TodosSchemas.ts`. Types come from `z.infer`, ids are numbers.
-- MSW answers in `npm run dev` when `VITE_API_URL` is not set, and in the e2e build (`VITE_API_MOCK=true vite build`). With `VITE_API_URL`, the Vite dev server proxies `/api` to the API. The production build contains no MSW.
+- Without `API_URL`, a Vite plugin in `apiMock.ts` answers `/api` in `npm run dev` and `vite preview`, with one in-memory list per browser (cookie). With `API_URL`, `vite.config.ts` proxies `/api` to the API instead. Nothing in `src/` knows about the mock.
 - zustand keeps the filter only. With the option off, the example stays as it is today. Without the example, the option only brings the `QueryClientProvider`, `QueryConfig.ts` and the rules.
-- To check: whether `mockServiceWorker.js` in `public/` needs an exception in Prettier, oxlint and knip.
 
 **E3-S2. Query keys from a factory.** As someone working on the project, I want an error when I write a query key inline, so that an invalidation never misses its query.
 - Keys live in `xKeys.ts`, which only exports `xKeys`. check-tree learns `xKeys.ts` as a named file with a `keys/` category.
