@@ -54,8 +54,8 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'type-definitions/no-restricted-syntax': [
       'error',
       {
-        selector: 'TSInterfaceDeclaration:not(TSModuleDeclaration[global=true] TSInterfaceDeclaration)',
-        message: 'Declare object shapes with type, not interface: interface is only for augmenting a global such as Window.',
+        selector: "TSInterfaceDeclaration:not(TSModuleDeclaration[global=true] TSInterfaceDeclaration, TSModuleDeclaration[id.type='Literal'] TSInterfaceDeclaration)",
+        message: 'Declare object shapes with type, not interface: interface is only for augmenting a global such as Window or a module such as fastify.',
       },
     ],
     'no-shadow': 'off',

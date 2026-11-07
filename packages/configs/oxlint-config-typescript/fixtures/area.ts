@@ -13,3 +13,9 @@ export function area(edge: Edge, corner: Corner) {
 export function perimeter(edge: Edge) {
   return edge.length * 4;
 }
+declare module 'shapes' {
+  interface Shape { sides: number }
+}
+declare namespace Shapes {
+  interface Polygon { sides: number }
+}

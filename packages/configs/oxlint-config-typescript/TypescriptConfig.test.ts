@@ -8,6 +8,7 @@ test('typescriptConfig reports each convention once', () => {
     'area.ts:2 type-definitions(no-restricted-syntax)',
     'area.ts:6 eslint(func-style)',
     'area.ts:9 eslint(curly)',
+    'area.ts:20 type-definitions(no-restricted-syntax)',
     'clamp.ts:1 typescript(method-signature-style)',
     'clamp.ts:4 eslint(no-param-reassign)',
     'clamp.ts:5 unicorn(no-array-for-each)',

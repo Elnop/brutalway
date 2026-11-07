@@ -13,7 +13,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - a file with a single export is named after it ([@brutalway/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutalway/eslint-plugin-file-named-after-export))
 - named functions are declarations (`function area() {}`), arrow functions stay for callbacks. A declared function is hoisted, so TypeScript drops the narrowing of a captured variable inside it: move the null check into a helper that returns the narrowed value
 - an `if` without braces fits on one line (`curly` set to `multi-line`)
-- object shapes use `type`, `interface` is only accepted to augment a global such as `Window` inside `declare global`
+- object shapes use `type`, `interface` is only accepted to augment a global such as `Window` inside `declare global`, or a package such as `fastify` inside `declare module 'fastify'`
 - a `switch` over a union covers every case (`typescript/switch-exhaustiveness-check`, needs `--type-aware`)
 - exported types live in `xTypes.ts` files, exported constants in `xConfig.ts` files. An `xTypes.ts` only exports types, an `xConfig.ts` (or `xContent.ts`) only exports constants. Exported functions, classes, and objects of functions can live anywhere, and so can `export const x = defineX(...)`.
 - one way to write each thing: function members of a type as properties (`area: () => number`), no `public` keyword (write `private` and `protected`, leave public implicit), `for...of` instead of `forEach`, `replaceAll` for a global regex, `Number.parseFloat` and `Number.NaN` instead of the globals, `import type { X }` instead of `import { type X }`
