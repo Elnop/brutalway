@@ -68,14 +68,24 @@ bedrock defines every color, font and radius as a token in one CSS file with Tai
 
 Source: Wizcard (`docs/feature-modules.md`, `src/components/*/`).
 
-Wizcard gives each component a `.module.css` next to it. A component with a stylesheet gets its own folder, one without stays a flat file. That is close to brutalway's "one file stays at the root, two or more move into a folder" rule, so it fits without new concepts.
+Wizcard gives each component a `.module.css`. Here the stylesheet sits in the same folder as its component and takes its name: `TodoItem.module.css` next to `TodoItem.tsx`. check-tree moves the `.css` files of a folder into `styles/` as soon as there are two of them, so `.module.css` files leave that group: they follow their component, not their kind.
+
+The checks come from [css-modules-kit](https://github.com/mizdra/css-modules-kit). Its `cmk` command writes one `.d.ts` per stylesheet outside `src/`, and `rootDirs` in the tsconfig lets tsc read them, so an unknown class is a tsc error. Its stylelint plugin has the two rules E2-S2 needs. That brings stylelint into the series, and with it a check E1 could not give to plain CSS: colors written in a stylesheet (E2-S3).
 
 **E2-S1. CSS Modules as a styling value.** As someone creating a project, I want `--styling css-modules`, so that styles are scoped to their component without a utility framework.
-- The example uses `TodoItem.module.css` and friends, `globals.css` only keeps the tokens and the reset.
-- Typed class names (`vite-css-modules` or a generated `.d.ts`), an unknown class is a tsc error.
+- The example uses `TodoItem.module.css` and friends, each next to its component. `globals.css` only keeps the tokens and the reset.
+- Class names are camelCase (`localsConvention: 'camelCaseOnly'`) and read as `styles.todoItem`.
+- `cmk` runs before tsc in `typecheck` and writes under `node_modules/.cache`, nothing new to gitignore. To check: how the editor sees the types (`cmk --watch` or `@css-modules-kit/ts-plugin`), and how a fresh clone gets them before the first `tsc`.
+- check-tree no longer counts `.module.css` files in the `styles/` group.
 
-**E2-S2. A stylesheet sits next to its component.** As someone working on the project, I want check-tree to tell me when `X.module.css` has no `X.tsx` beside it, so that no stylesheet is left behind after a rename.
-- New check-tree rule, plus knip catching a class that no component uses.
+**E2-S2. A stylesheet sits next to its component.** As someone working on the project, I want an error when `X.module.css` has no `X.tsx` beside it or holds a class no component uses, so that no stylesheet is left behind after a rename.
+- New package `@brutalway/stylelint-config` with `@css-modules-kit/stylelint-plugin`: `no-missing-component-file` and `no-unused-class-names`.
+- `stylelint` runs in `npm run check`, and the agent hook runs it on an edited `.css` file.
+
+**E2-S3. Only tokens in stylesheets.** As someone working on the project, I want an error when a stylesheet writes a color that is not a token, so that the palette stays in one file whatever the styling value.
+- Hex, `rgb()`, `hsl()` and named colors are only allowed in `src/app/globals.css`. Anywhere else a color is a `var(--color-*)`.
+- Applies to `--styling css` and `--styling css-modules`. The message names the closest tokens, as `@brutalway/oxlint-config-tailwind` does.
+- To check with `--styling tailwind`: stylelint on `globals.css` has to accept `@theme`, or skips Tailwind projects.
 
 ## E3. Server state with TanStack Query
 
