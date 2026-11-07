@@ -1,8 +1,9 @@
+import { i18nextConfig } from '@brutalway/oxlint-config-i18next';
 import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
-  extends: [reactViteConfig],
+  extends: [reactViteConfig, i18nextConfig],
   ignorePatterns: ['dist'],
   overrides: [{ files: ['*.config.ts'], rules: { 'no-restricted-imports': 'off' } }],
   rules: {

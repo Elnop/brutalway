@@ -35,6 +35,9 @@
       "path": "packages/configs/oxlint-config-shadcn"
     },
     {
+      "path": "packages/configs/oxlint-config-i18next"
+    },
+    {
       "path": "packages/configs/stylelint-config"
     },
     {

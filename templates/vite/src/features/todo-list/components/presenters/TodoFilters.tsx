@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { TODO_FILTERS } from '@/shared-features/todos/TodosConfig.ts';
 import type { TodoFilter } from '@/shared-features/todos/TodosTypes.ts';
 
@@ -7,11 +8,12 @@ type TodoFiltersProps = {
 };
 
 export function TodoFilters({ filter, onChange }: TodoFiltersProps) {
+  const { t } = useTranslation('todoList');
   return (
-    <div className="todo-filters" role="group" aria-label="Show">
-      {TODO_FILTERS.map(({ value, label }) => (
+    <div className="todo-filters" role="group" aria-label={t('show')}>
+      {TODO_FILTERS.map((value) => (
         <button key={value} type="button" className="button button-small" aria-pressed={filter === value} onClick={() => onChange(value)}>
-          {label}
+          {t(`filters.${value}`)}
         </button>
       ))}
     </div>

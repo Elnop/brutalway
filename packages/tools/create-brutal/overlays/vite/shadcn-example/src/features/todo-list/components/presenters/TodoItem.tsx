@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@third-party/shadcn/button';
 import { Checkbox } from '@third-party/shadcn/checkbox';
 import { TodoEditor } from '@/features/todo-list/features/todo-editor/TodoEditor.tsx';
@@ -12,6 +13,7 @@ type TodoItemProps = {
 };
 
 export function TodoItem({ todo, onToggle, onRename, onRemove }: TodoItemProps) {
+  const { t } = useTranslation('todoList');
   const [editing, setEditing] = useState(false);
 
   if (editing) {
@@ -35,11 +37,11 @@ export function TodoItem({ todo, onToggle, onRename, onRemove }: TodoItemProps) 
         <Checkbox className="size-6 rounded-none" checked={todo.completed} onCheckedChange={() => onToggle(todo.id)} />
         <span className={todo.completed ? 'line-through decoration-3' : undefined}>{todo.title}</span>
       </label>
-      <Button type="button" variant="secondary" size="sm" aria-label={`Edit ${todo.title}`} onClick={() => setEditing(true)}>
-        Edit
+      <Button type="button" variant="secondary" size="sm" aria-label={t('editTask', { title: todo.title })} onClick={() => setEditing(true)}>
+        {t('edit')}
       </Button>
-      <Button type="button" variant="destructive" size="sm" aria-label={`Delete ${todo.title}`} onClick={() => onRemove(todo.id)}>
-        Delete
+      <Button type="button" variant="destructive" size="sm" aria-label={t('deleteTask', { title: todo.title })} onClick={() => onRemove(todo.id)}>
+        {t('delete')}
       </Button>
     </li>
   );

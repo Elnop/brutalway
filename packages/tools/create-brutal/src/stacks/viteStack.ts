@@ -208,7 +208,14 @@ export const viteStack: Stack = {
     },
     {
       when: { example: false },
-      remove: ['src/features', 'src/shared-features/todos', 'src/shared/lib'],
+      remove: [
+        'src/features',
+        'src/shared-features/todos',
+        'src/shared/normalizeTitle.ts',
+        'src/shared/normalizeTitle.test.ts',
+        'src/app/locales/en/todoList.json',
+        'src/app/locales/en/todoStats.json',
+      ],
       edits: [
         { file: 'index.html', replace: '<title>Todos</title>', with: '<title>__PROJECT_NAME__</title>' },
         {
@@ -223,9 +230,10 @@ export const viteStack: Stack = {
           with: '',
         },
         { file: 'README.md', dropLines: '1. Delete `src/features/`' },
+        { file: 'README.md', replace: 'each slice has its own namespace (`app`, `todoList`, `todoStats`)', with: 'each slice gets its own namespace, `app` for now' },
         { file: 'README.md', replace: '2. Write your first feature', with: '1. Write your first feature' },
         { file: 'README.md', replace: '3. Run `npm run check` often', with: '2. Run `npm run check` often' },
-        { file: 'docs/verifications.md', replace: '`src/shared/lib/normalizeTitle.test.ts` next to its source', with: 'next to its source' },
+        { file: 'docs/verifications.md', replace: '`src/shared/normalizeTitle.test.ts` next to its source', with: 'next to its source' },
         { file: 'docs/verifications.md', replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`', with: 'next to the presenter' },
         {
           file: 'docs/architecture.md',
@@ -255,7 +263,7 @@ export const viteStack: Stack = {
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
           insert: "import { tailwindConfig } from '@brutalway/oxlint-config-tailwind';\n",
         },
-        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig]', with: 'extends: [reactViteConfig, tailwindConfig]' },
+        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, tailwindConfig' },
         { file: 'package.json', replace: '"prettier": "@brutalway/prettier-config"', with: '"prettier": "@brutalway/prettier-config/tailwind"' },
         {
           file: 'README.md',
@@ -305,10 +313,10 @@ export const viteStack: Stack = {
         },
         { file: 'tsconfig.app.json', before: '  "include": [', insert: THIRD_PARTY_REFERENCES },
         { file: 'tsconfig.test.json', before: '  "include": [', insert: THIRD_PARTY_REFERENCES },
-        { file: 'package.json', replace: '"typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.test.json"', with: '"typecheck": "tsc -b tsconfig.app.json tsconfig.test.json"' },
+        { file: 'package.json', replace: 'tsc -p tsconfig.app.json && tsc -p tsconfig.test.json"', with: 'tsc -b tsconfig.app.json tsconfig.test.json"' },
         { file: '.prettierignore', before: 'dist\n', insert: 'components.json\n' },
         { file: '.prettierignore', after: 'test-results\n', insert: 'third-party\n' },
-        { file: 'knip.json', after: '"$schema": "https://unpkg.com/knip@6/schema.json",\n', insert: '  "entry": ["third-party/**/*.{ts,tsx}"],\n' },
+        { file: 'knip.json', replace: '"entry": ["i18next.config.ts"]', with: '"entry": ["i18next.config.ts", "third-party/**/*.{ts,tsx}"]' },
         { file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "shadcn", ' },
         { file: 'oxlint.config.ts', replace: "ignorePatterns: ['dist']", with: "ignorePatterns: ['dist', 'third-party']" },
         { file: '.alint.yml', replace: "prefixes: ['src/',", with: "prefixes: ['src/', 'third-party/'," },
@@ -356,9 +364,17 @@ export const viteStack: Stack = {
       when: { styling: 'css-modules' },
       overlay: 'css-modules',
       edits: [
-        { file: 'package.json', replace: '"typecheck": "tsc -p', with: '"typecheck": "npm run css-types && tsc -p' },
-        { file: 'package.json', after: '"typecheck": "npm run css-types && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",\n', insert: `    "css-types": "${CSS_MODULES_TYPES}",\n` },
-        { file: 'package.json', replace: '"prepare": "git config core.hooksPath .githooks"', with: '"prepare": "git config core.hooksPath .githooks && npm run css-types"' },
+        { file: 'package.json', replace: '"typecheck": "i18next-cli types --quiet && tsc -p', with: '"typecheck": "i18next-cli types --quiet && npm run css-types && tsc -p' },
+        {
+          file: 'package.json',
+          after: '"typecheck": "i18next-cli types --quiet && npm run css-types && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",\n',
+          insert: `    "css-types": "${CSS_MODULES_TYPES}",\n`,
+        },
+        {
+          file: 'package.json',
+          replace: '"prepare": "git config core.hooksPath .githooks && i18next-cli types --quiet"',
+          with: '"prepare": "git config core.hooksPath .githooks && i18next-cli types --quiet && npm run css-types"',
+        },
         {
           file: 'README.md',
           replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
@@ -449,6 +465,18 @@ export const viteStack: Stack = {
     {
       when: { forms: true, example: true },
       overlay: 'forms-example',
+      edits: [
+        {
+          file: 'src/shared-features/todos/TodosConfig.ts',
+          after: "export const TODO_FILTERS = ['all', 'active', 'completed'] as const;\n",
+          insert: "\nexport const TITLE_ERRORS = ['blankTitle', 'longTitle'] as const;\n",
+        },
+        {
+          file: 'src/app/locales/en/todoList.json',
+          replace: '"blankTitle": "The title is blank"',
+          with: '"blankTitle": "The title is blank",\n    "longTitle": "The title is 200 characters at most"',
+        },
+      ],
     },
     {
       when: { forms: true, example: true, 'server-state': false },
@@ -457,12 +485,15 @@ export const viteStack: Stack = {
     {
       when: { forms: true, example: true, 'server-state': true },
       edits: [
-        { file: 'src/shared-features/todos/TodosSchemas.ts', after: "import { z } from 'zod';\n", insert: "import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';\n" },
+        {
+          file: 'src/shared-features/todos/TodosSchemas.ts',
+          after: "import { z } from 'zod';\n",
+          insert: "import { normalizeTitle } from '@/shared/normalizeTitle.ts';\nimport { TITLE_ERRORS } from '@/shared-features/todos/TodosConfig.ts';\n",
+        },
         {
           file: 'src/shared-features/todos/TodosSchemas.ts',
           after: 'export const ClearedSchema = z.object({ deleted: z.number().int().min(0) });\n',
-          insert:
-            "\nexport const TodoDraftSchema = z.object({\n  title: z.string().transform(normalizeTitle).pipe(z.string().min(1, 'The title is blank').max(200, 'The title is 200 characters at most')),\n});\n",
+          insert: '\nexport const TodoDraftSchema = z.object({\n  title: z.string().transform(normalizeTitle).pipe(z.string().min(1, TITLE_ERRORS[0]).max(200, TITLE_ERRORS[1])),\n});\n',
         },
         { file: 'src/shared-features/todos/TodosTypes.ts', replace: 'import type { TodoFilterSchema, TodoSchema } from', with: 'import type { TodoDraftSchema, TodoFilterSchema, TodoSchema } from' },
         {
@@ -540,11 +571,11 @@ export const viteStack: Stack = {
       edits: [
         {
           file: 'package.json',
-          replace: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts playwright.config.ts',
-          with: 'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts',
+          replace: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
+          with: 'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
         },
-        { file: 'tsconfig.test.json', replace: '"include": ["src", "e2e",', with: '"include": ["src",' },
-        { file: 'tsconfig.test.json', replace: ', "playwright.config.ts"]', with: ']' },
+        { file: 'tsconfig.test.json', replace: '"node_modules/.cache/i18next", "e2e",', with: '"node_modules/.cache/i18next",' },
+        { file: 'tsconfig.test.json', replace: ' "playwright.config.ts",', with: '' },
         { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"],\n      "@e2e/*": ["./e2e/*"]', with: '"@/*": ["./src/*"]' },
         { file: 'oxlint.config.ts', replace: 'import through an alias (@/ in src/, @e2e/ in e2e/).', with: 'import through the @/ alias.' },
         { file: 'README.md', dropLines: '| `npm run e2e` |' },

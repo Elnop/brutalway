@@ -1,4 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["i18next.config.ts"],
   "ignoreDependencies": ["@swc/core", "@brutalway/agent-hook", "@brutalway/alint-config", "@brutalway/dependency-cruiser-config"]
 }

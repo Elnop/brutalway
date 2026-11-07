@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';
+import { normalizeTitle } from '@/shared/normalizeTitle.ts';
 
 describe('normalizeTitle', () => {
   it('trims and collapses inner spaces', () => {

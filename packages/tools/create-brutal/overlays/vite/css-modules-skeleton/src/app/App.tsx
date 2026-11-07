@@ -1,13 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import styles from '@/app/App.module.css';
 
 export function App() {
+  const { t } = useTranslation('app');
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>__PROJECT_NAME__</h1>
+        <h1>{t('title')}</h1>
       </header>
       <main className={styles.body}>
-        <p>Write your first feature in src/features/ and render it here.</p>
+        <p>{t('start')}</p>
       </main>
     </div>
   );

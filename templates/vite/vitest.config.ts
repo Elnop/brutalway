@@ -7,6 +7,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       passWithNoTests: true,
+      setupFiles: ['vitest.setup.ts'],
       projects: [
         { extends: true, test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] } },
         {

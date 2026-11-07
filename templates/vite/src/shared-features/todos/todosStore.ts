@@ -1,5 +1,5 @@
 import { createStore } from 'zustand/vanilla';
-import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';
+import { normalizeTitle } from '@/shared/normalizeTitle.ts';
 import { STARTER_TODOS } from '@/shared-features/todos/TodosConfig.ts';
 import type { TodosActions, TodosState } from '@/shared-features/todos/TodosTypes.ts';
 

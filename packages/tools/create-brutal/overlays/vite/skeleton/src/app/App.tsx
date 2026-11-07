@@ -1,11 +1,13 @@
+import { useTranslation } from 'react-i18next';
 export function App() {
+  const { t } = useTranslation('app');
   return (
     <div className="page">
       <header className="page-header">
-        <h1>__PROJECT_NAME__</h1>
+        <h1>{t('title')}</h1>
       </header>
       <main className="page-body">
-        <p>Write your first feature in src/features/ and render it here.</p>
+        <p>{t('start')}</p>
       </main>
     </div>
   );

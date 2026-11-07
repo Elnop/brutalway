@@ -1,4 +1,4 @@
-import type { Todo, TodoFilter } from '@/shared-features/todos/TodosTypes.ts';
+import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
 
 export const STARTER_TODOS: Todo[] = [
   { id: 'read-the-readme', title: 'Read the README', completed: true },
@@ -6,8 +6,4 @@ export const STARTER_TODOS: Todo[] = [
   { id: 'write-a-feature', title: 'Write your first feature', completed: false },
 ];
 
-export const TODO_FILTERS: { value: TodoFilter; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'active', label: 'Active' },
-  { value: 'completed', label: 'Done' },
-];
+export const TODO_FILTERS = ['all', 'active', 'completed'] as const;

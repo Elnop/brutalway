@@ -24,12 +24,16 @@ npm run dev
 | Command | What it does |
 |---|---|
 | `npm run dev` | Vite dev server |
-| `npm run check` | Prettier, both `tsc` projects, Oxlint, stylelint, dependency-cruiser, check-tree, alint, knip |
+| `npm run check` | Prettier, both `tsc` projects, Oxlint, stylelint, dependency-cruiser, check-tree, i18next-cli, alint, knip |
 | `npm test` | Vitest: unit tests in Node, component tests in headless Chromium |
 | `npm run e2e` | builds, then runs Playwright against `vite preview` |
 | `npm run format` | Prettier in write mode |
 
 CI (`.github/workflows/ci.yml`) runs `check`, `test` and `build` in one job and `e2e` in another.
+
+## Translations
+
+Every string the user reads goes through [i18next](https://www.i18next.com), even with a single language: `t('add')`, not `Add`. The messages are JSON, one file per language and namespace in `src/app/locales/en/`, and each slice has its own namespace (`app`, `todoList`, `todoStats`). `src/app/createI18n.ts` imports them and `src/main.tsx` hands the instance to the app. To add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.
 
 ## Layout
 
@@ -55,6 +59,6 @@ Components are orchestrators (`XContainer`, `XLayout`, `XPage`), which read stor
 
 ## Starting your own app
 
-1. Delete `src/features/`, `src/shared-features/todos/`, the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.
+1. Delete `src/features/`, `src/shared-features/todos/`, the `todoList` and `todoStats` namespaces (their JSON in `src/app/locales/en/` and their lines in `src/app/createI18n.ts`), the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.
 2. Write your first feature in `src/features/<name>/` and render it from `src/app/App.tsx`.
 3. Run `npm run check` often. The structure rules only make sense once there are a few files, so expect it to push you toward folders as the app grows.

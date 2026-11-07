@@ -1,0 +1,41 @@
+{
+  "name": "@brutalway/oxlint-config-i18next",
+  "version": "0.1.0",
+  "description": "Oxlint config for a React app translated with i18next: no visible text in JSX, in aria-label, placeholder, title or alt, nor in a template literal.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "i18next",
+    "i18n",
+    "react",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-i18next#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/oxlint-config-i18next"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/I18nextConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "eslint-plugin-i18next": "^6.1.5"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutalway/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}

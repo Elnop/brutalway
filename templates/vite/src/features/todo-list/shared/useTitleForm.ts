@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ChangeEvent, SubmitEvent } from 'react';
-import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';
+import { useTranslation } from 'react-i18next';
+import { normalizeTitle } from '@/shared/normalizeTitle.ts';
 
 type TitleFormOptions = {
   initialTitle: string;
@@ -8,27 +9,26 @@ type TitleFormOptions = {
   onSubmit: (title: string) => void;
 };
 
-const BLANK_TITLE = 'The title is blank';
-
 export function useTitleForm({ initialTitle, clearOnSubmit, onSubmit }: TitleFormOptions) {
+  const { t } = useTranslation('todoList');
   const [title, setTitle] = useState(initialTitle);
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [blank, setBlank] = useState(false);
 
   function change(event: ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
-    setError(undefined);
+    setBlank(false);
   }
 
   function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const normalized = normalizeTitle(title);
     if (normalized === '') {
-      setError(BLANK_TITLE);
+      setBlank(true);
       return;
     }
     onSubmit(normalized);
     if (clearOnSubmit) setTitle('');
   }
 
-  return { field: { value: title, onChange: change }, error, submit };
+  return { field: { value: title, onChange: change }, error: blank ? t('errors.blankTitle') : undefined, submit };
 }

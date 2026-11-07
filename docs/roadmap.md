@@ -284,6 +284,9 @@ The titles of `STARTER_TODOS` are data (with `--server-state` they come from the
 
 Order: S0, then S4 with S2 and S3 (the presenters change once, with the checks that keep them that way), then S1.
 
+As built (S2 to S4): the presenters of the four styling values and the three skeletons went through the same replacements, since their text is the same and only the markup differs. The skeleton overlay brings its own `createI18n.ts` and an `app.json` whose title is the project name. `eslint-plugin-i18next` gets its exclusions as strings, since a `RegExp` does not survive the Oxlint config: a string without any letter of the Latin, Greek, Cyrillic, Hebrew, Arabic, Japanese, Chinese or Korean scripts is left alone, so `·`, `%` and `×` pass. With `forms`, `TITLE_ERRORS` is added to `TodosConfig.ts` and `longTitle` to `todoList.json`, since the default project never shows that error and `status --unused` would report it.
+
+
 ## E7. More checks on React code
 
 Source: bedrock's ESLint plugin and `.jscpd.json`, Wizcard's `sonarjs` setup.

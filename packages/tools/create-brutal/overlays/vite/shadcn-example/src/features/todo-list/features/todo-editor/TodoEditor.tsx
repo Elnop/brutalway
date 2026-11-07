@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import type { KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@third-party/shadcn/button';
 import { Input } from '@third-party/shadcn/input';
 import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
@@ -11,6 +12,7 @@ type TodoEditorProps = {
 };
 
 export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
+  const { t } = useTranslation('todoList');
   const id = useId();
   const errorId = `${id}-error`;
   const { field, error, submit } = useTitleForm({ initialTitle: title, clearOnSubmit: false, onSubmit: onSave });
@@ -22,7 +24,7 @@ export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
   return (
     <form className="flex min-w-0 flex-[1_1_100%] flex-wrap gap-2" onSubmit={submit}>
       <label htmlFor={id} className="sr-only">
-        {`Rename ${title}`}
+        {t('rename', { title })}
       </label>
       <Input
         id={id}
@@ -34,10 +36,10 @@ export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
         onKeyDown={cancelOnEscape}
       />
       <Button type="submit" size="sm">
-        Save
+        {t('save')}
       </Button>
       <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
-        Cancel
+        {t('cancel')}
       </Button>
       {error === undefined ? null : (
         <p id={errorId} role="alert" className="basis-full border-3 border-ink bg-pink px-[0.6rem] py-[0.2rem] font-bold">
