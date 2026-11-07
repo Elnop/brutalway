@@ -895,6 +895,72 @@ export const viteStack: Stack = {
       ],
     },
     {
+      when: { styling: 'tailwind' },
+      edits: [
+        {
+          file: 'AGENTS.md',
+          replace: '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
+          with: '- Styles are Tailwind classes built on the tokens declared under `@theme` in `src/app/globals.css`: no palette class, no arbitrary color.',
+        },
+        { file: 'AGENTS.md', replace: 'Oxlint, stylelint, dependency-cruiser', with: 'Oxlint, dependency-cruiser' },
+      ],
+    },
+    {
+      when: { styling: 'css-modules' },
+      edits: [
+        {
+          file: 'AGENTS.md',
+          replace: '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
+          with: '- A component with styles has its `X.module.css` next to it, and a color is a `var()` of a token of `src/app/globals.css`.',
+        },
+      ],
+    },
+    {
+      when: { ui: 'shadcn' },
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert:
+            '- Controls come from the shadcn/ui primitives in `third-party/shadcn/`, imported through `@third-party/shadcn/`. Never edit that folder: run `npx shadcn add <name>`, restyle through `src/app/globals.css`, or wrap the primitive in `src/`.\n',
+        },
+      ],
+    },
+    {
+      when: { 'server-state': true },
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert: '- Data from the API goes through the query hooks of TanStack Query, each request lives in an `xClient.ts` that parses the response with Zod, and a store only holds UI state.\n',
+        },
+      ],
+    },
+    {
+      when: { forms: true },
+      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- A form validates through its Zod schema and `zodResolver`, nowhere else.\n' }],
+    },
+    {
+      when: { i18n: true },
+      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Every key exists in English and in French, `npm run messages` fails otherwise.\n' }],
+    },
+    {
+      when: { 'react-compiler': true },
+      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- The React Compiler memoizes components and hooks: no `useMemo`, `useCallback` or `memo`.\n' }],
+    },
+    {
+      when: { analytics: 'module' },
+      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n' }],
+    },
+    {
+      when: { analytics: 'posthog' },
+      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n' }],
+    },
+    {
+      when: { e2e: false },
+      edits: [{ file: 'AGENTS.md', replace: 'Then run `npm test`, and `npm run e2e` when the change shows on screen.', with: 'Then run `npm test`.' }],
+    },
+    {
       when: { ui: 'shadcn' },
       edits: [
         { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]' },

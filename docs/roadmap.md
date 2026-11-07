@@ -346,6 +346,7 @@ The order follows how much each story touches: S3 goes into every project, S1 an
 **E8-S4. Instructions for agents.** Source: bedrock (`AGENTS.md`, `.agents/rules/*.md`), Wizcard (`CLAUDE.md`, `.clinerules`, `.windsurfrules`). As someone working with an agent other than Claude Code, I want an `AGENTS.md` that matches the options I picked, so that the agent knows which tool to use for what before it writes code.
 - `AGENTS.md` in both templates, short: the commands, what `npm run check` runs, and pointers to `docs/verifications.md` and `docs/architecture.md`. Each option adds or removes its own lines, like it does in the README. `CLAUDE.md` imports it with `@AGENTS.md`.
 - The lint messages stay as they are: they already say what to change.
+- As built: `AGENTS.md` lists five conventions in the default vite project and up to six more with options, and alint checks its paths, so a renamed file cannot leave it pointing nowhere.
 
 ## E9. Docs that stay readable
 

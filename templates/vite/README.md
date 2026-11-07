@@ -53,6 +53,8 @@ Components are orchestrators (`XContainer`, `XLayout`, `XPage`), which read stor
 
 [docs/architecture.md](docs/architecture.md) lists the architecture patterns this template borrows from, with what it takes and what it leaves out.
 
+[AGENTS.md](AGENTS.md) sums up the commands and the conventions for a coding agent, and `CLAUDE.md` imports it for Claude Code.
+
 ## Working with an agent
 
 `.claude/settings.json` runs `@brutalway/agent-hook` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on. Every message says what to change, so the agent does not need to know the convention beforehand.
