@@ -12,10 +12,12 @@ Node 26 is required, like the templates.
 
 | Stack | Template | Options |
 |---|---|---|
-| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `component-tests`, `e2e`, `claude-hook`, `ci` |
+| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `component-tests`, `e2e`, `claude-hook`, `ci` |
 | `fastify` | [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) | `example`, `swagger`, `database`, `claude-hook`, `ci` |
 
 `example` keeps the todo list. Without it you get the same structure with empty `src/features/` and `src/shared-features/` folders. On vite, `App.tsx` then only shows the project name, and zustand can only be removed together with the example, since the example uses it. On fastify, `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name.
+
+On vite, `styling` takes `css` (the default: one stylesheet per feature next to `src/app/globals.css`) or `tailwind`. With `tailwind`, the feature stylesheets are gone, the components carry Tailwind v4 classes, and `src/app/globals.css` declares the colors, fonts and shadows under `@theme`, with Tailwind's own palette removed. The todo list looks the same. `@brutalway/oxlint-config-tailwind` reports any color that is not one of those tokens, a heading without `font-display` and any `dark:` class, and Prettier sorts the classes through `@brutalway/prettier-config/tailwind`.
 
 On fastify, `database` keeps `node:sqlite` and the `DATABASE_PATH` variable. Without it, the example keeps its todos in a `Map`: `todosQueries.ts` has the same functions, so the services and the routes do not change. Without `swagger`, `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
 
@@ -26,13 +28,13 @@ The CLI also asks whether to run `git init` and `npm install`. Without git, the 
 A yes/no option has the flags `--<option>` and `--no-<option>`, an option with several values takes `--<option> <value>`. `--yes` takes the default for every question left:
 
 ```sh
-npm create brutal my-app -- --stack vite --no-example --no-e2e --yes
+npm create brutal my-app -- --stack vite --styling tailwind --no-e2e --yes
 ```
 
 A preset file holds the same answers, and flags override it:
 
 ```json
-{ "stack": "vite", "git": true, "install": true, "options": { "example": false, "e2e": false } }
+{ "stack": "vite", "git": true, "install": true, "options": { "styling": "tailwind", "e2e": false } }
 ```
 
 ```sh

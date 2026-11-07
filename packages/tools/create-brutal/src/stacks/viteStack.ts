@@ -29,6 +29,10 @@ const COMPONENT_PROJECT = `        {
 
 const PRESENTER_TEST_EXAMPLE = { file: 'docs/architecture.md', replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,', with: ',' };
 
+const TAILWIND_DOC = `\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tailwind\`. A color is a token declared under \`@theme\` in \`src/app/globals.css\`: no \`bg-white\`, no \`bg-[#0f0f0f]\`, no hex in \`style\`, and the message names the closest tokens. \`h1\` to \`h3\` take \`font-display\`, \`code\` and \`pre\` take \`font-mono\`, and \`dark:\` is reported, since the project is light only. Prettier sorts the classes with \`prettier-plugin-tailwindcss\`, through \`@brutalway/prettier-config/tailwind\`.
+
+`;
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -38,6 +42,15 @@ export const viteStack: Stack = {
   options: [
     { id: 'example', message: 'Keep the todo list example?', default: true, requires: { zustand: true } },
     { id: 'zustand', message: 'Add zustand for state?', default: true },
+    {
+      id: 'styling',
+      message: 'How do you want to write styles?',
+      default: 'css',
+      values: [
+        { id: 'css', label: 'Plain CSS files' },
+        { id: 'tailwind', label: 'Tailwind CSS, colors and fonts as tokens under @theme' },
+      ],
+    },
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
     { id: 'e2e', message: 'Add e2e tests (Playwright)?', default: true },
     { id: 'claude-hook', message: 'Add the Claude Code hook that lints each edited file?', default: true, independent: true },
@@ -85,6 +98,43 @@ export const viteStack: Stack = {
       ],
       overlay: 'skeleton',
       keep: ['src/features', 'src/shared-features', 'src/shared'],
+    },
+    {
+      when: { styling: 'tailwind' },
+      overlay: 'tailwind',
+      edits: [
+        { file: 'vite.config.ts', after: "import react from '@vitejs/plugin-react';\n", insert: "import tailwindcss from '@tailwindcss/vite';\n" },
+        { file: 'vite.config.ts', replace: 'plugins: [react()]', with: 'plugins: [react(), tailwindcss()]' },
+        {
+          file: 'oxlint.config.ts',
+          after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
+          insert: "import { tailwindConfig } from '@brutalway/oxlint-config-tailwind';\n",
+        },
+        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig]', with: 'extends: [reactViteConfig, tailwindConfig]' },
+        { file: 'package.json', replace: '"prettier": "@brutalway/prettier-config"', with: '"prettier": "@brutalway/prettier-config/tailwind"' },
+        {
+          file: 'README.md',
+          replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
+          with: 'easy to swap: the colors, fonts and shadows are tokens declared under `@theme` in `src/app/globals.css`, and the components style themselves with Tailwind classes built on them.',
+        },
+        { file: 'docs/verifications.md', before: '## Dependencies', insert: TAILWIND_DOC },
+      ],
+      addDevDependencies: {
+        '@brutalway/oxlint-config-tailwind': '0.1.0',
+        '@brutalway/prettier-config': '0.2.0',
+        '@tailwindcss/vite': '4.3.3',
+        'prettier-plugin-tailwindcss': '0.8.1',
+        tailwindcss: '4.3.3',
+      },
+    },
+    {
+      when: { styling: 'tailwind', example: true },
+      remove: ['src/features/todo-list/todo-list.css', 'src/features/todo-stats/todo-stats.css'],
+      overlay: 'tailwind-example',
+    },
+    {
+      when: { styling: 'tailwind', example: false },
+      overlay: 'tailwind-skeleton',
     },
     {
       when: { example: false, e2e: true },

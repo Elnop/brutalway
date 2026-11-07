@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --color-ink: #111111;
+  --color-paper: #fffdf5;
+  --color-page: #f4e9d8;
+  --color-yellow: #ffd23f;
+  --color-pink: #ff6ad5;
+  --color-blue: #2a5cff;
+
+  --font-*: initial;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --shadow-*: initial;
+  --shadow-hard: 6px 6px 0 var(--color-ink);
+  --shadow-hard-sm: 4px 4px 0 var(--color-ink);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+}
+
+@utility button {
+  border: 3px solid var(--color-ink);
+  font-weight: 700;
+  box-shadow: var(--shadow-hard-sm);
+  cursor: pointer;
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease;
+
+  &:active:not(:disabled) {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}

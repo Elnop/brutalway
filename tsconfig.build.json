@@ -23,6 +23,9 @@
       "path": "packages/configs/oxlint-config-react-vite"
     },
     {
+      "path": "packages/configs/oxlint-config-tailwind"
+    },
+    {
       "path": "packages/tools/playwright-fixtures"
     },
     {

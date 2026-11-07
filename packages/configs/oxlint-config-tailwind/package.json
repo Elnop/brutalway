@@ -1,0 +1,42 @@
+{
+  "name": "@brutalway/oxlint-config-tailwind",
+  "version": "0.0.0",
+  "description": "Oxlint config for Tailwind CSS v4: colors only from the @theme tokens, font roles on headings and code, no dark: variant.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "oxlint-plugin",
+    "tailwindcss",
+    "design-tokens",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-tailwind#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/oxlint-config-tailwind"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/TailwindConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutalway/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0",
+    "tailwindcss": "4.3.3"
+  }
+}

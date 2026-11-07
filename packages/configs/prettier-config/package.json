@@ -1,10 +1,11 @@
 {
   "name": "@brutalway/prettier-config",
   "version": "0.1.0",
-  "description": "Prettier config: single quotes, trailing commas, 200 columns.",
+  "description": "Prettier config: single quotes, trailing commas, 200 columns, and a variant that sorts Tailwind classes.",
   "keywords": [
     "prettier",
-    "prettier-config"
+    "prettier-config",
+    "tailwindcss"
   ],
   "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/prettier-config#readme",
   "bugs": "https://github.com/Elnop/brutalway/issues",
@@ -17,10 +18,20 @@
   "author": "elnop",
   "type": "module",
   "files": [
-    "prettierConfig.json"
+    "prettierConfig.json",
+    "prettierConfigTailwind.json"
   ],
-  "exports": "./prettierConfig.json",
+  "exports": {
+    ".": "./prettierConfig.json",
+    "./tailwind": "./prettierConfigTailwind.json"
+  },
   "peerDependencies": {
-    "prettier": "^3.9.10"
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  },
+  "peerDependenciesMeta": {
+    "prettier-plugin-tailwindcss": {
+      "optional": true
+    }
   }
 }
