@@ -2,7 +2,7 @@ import Markdown, { defaultUrlTransform } from 'react-markdown';
 import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
-import { githubFileUrl } from '@/features/docs/lib/docsUrls.ts';
+import { githubFileUrl, repositoryPath } from '@/features/docs/lib/docsUrls.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
@@ -18,7 +18,7 @@ type DocsArticleProps = {
 };
 
 export function DocsArticle({ content, source, path, knownPaths }: DocsArticleProps) {
-  const sourceUrl = githubFileUrl(source.repo, path);
+  const sourceUrl = githubFileUrl(source, path);
   return (
     <article className="docs-article">
       {content.status === 'loading' && <p className="docs-status">Loading {path}…</p>}
@@ -38,7 +38,7 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
       )}
       <p className="docs-source">
         <SiteLink href={sourceUrl}>
-          {source.repo}/{path} on GitHub
+          {source.repo}/{repositoryPath(source, path)} on GitHub
         </SiteLink>
       </p>
     </article>

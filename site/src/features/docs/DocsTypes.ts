@@ -3,6 +3,7 @@ export type DocSource = {
   label: string;
   route: string;
   repo: string;
+  directory: string;
   files: string[];
   folder: string;
   changelog?: string;

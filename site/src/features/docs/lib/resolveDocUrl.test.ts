@@ -22,6 +22,16 @@ describe('resolveDocUrl', () => {
     expect(resolveDocUrl({ url: 'CHANGELOG.md', attribute: 'href', source: template, docPath: 'README.md', knownPaths: ['README.md', 'CHANGELOG.md'] })).toBe('#/templates/vite/CHANGELOG.md');
   });
 
+  it('sends a template link to its folder in the repository', () => {
+    const template = DOC_SOURCES[1];
+    expect(resolveDocUrl({ url: 'src/main.tsx', attribute: 'href', source: template, docPath: 'docs/architecture.md', knownPaths: [] })).toBe(
+      'https://github.com/Elnop/brutalway/blob/main/templates/vite/docs/src/main.tsx',
+    );
+    expect(resolveDocUrl({ url: 'shot.png', attribute: 'src', source: template, docPath: 'README.md', knownPaths: [] })).toBe(
+      'https://raw.githubusercontent.com/Elnop/brutalway/main/templates/vite/shot.png',
+    );
+  });
+
   it('sends other relative links to GitHub', () => {
     expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
       'https://github.com/Elnop/brutalway/blob/main/create-brutal/src/cli.ts',

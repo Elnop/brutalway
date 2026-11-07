@@ -5,14 +5,23 @@ export function docHref(source: DocSource, path: string): string {
   return `${source.route}/${source.key}/${path}`;
 }
 
-export function rawFileUrl(repo: string, path: string): string {
-  return `https://raw.githubusercontent.com/${repo}/${DOCS_BRANCH}/${path}`;
+export function repositoryPath(source: DocSource, path: string): string {
+  return source.directory === '' ? path : `${source.directory}/${path}`;
 }
 
-export function githubFileUrl(repo: string, path: string): string {
-  return `https://github.com/${repo}/blob/${DOCS_BRANCH}/${path}`;
+export function sourcePath(source: DocSource, path: string): string {
+  const prefix = source.directory === '' ? '' : `${source.directory}/`;
+  return path.startsWith(prefix) ? path.slice(prefix.length) : path;
 }
 
-export function folderListUrl(repo: string, folder: string): string {
-  return `https://api.github.com/repos/${repo}/contents/${folder}?ref=${DOCS_BRANCH}`;
+export function rawFileUrl(source: DocSource, path: string): string {
+  return `https://raw.githubusercontent.com/${source.repo}/${DOCS_BRANCH}/${repositoryPath(source, path)}`;
+}
+
+export function githubFileUrl(source: DocSource, path: string): string {
+  return `https://github.com/${source.repo}/blob/${DOCS_BRANCH}/${repositoryPath(source, path)}`;
+}
+
+export function folderListUrl(source: DocSource): string {
+  return `https://api.github.com/repos/${source.repo}/contents/${repositoryPath(source, source.folder)}?ref=${DOCS_BRANCH}`;
 }

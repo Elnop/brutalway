@@ -17,7 +17,7 @@ type DocsViewProps = {
 
 function DocsView({ route }: DocsViewProps) {
   const entries = useDocList();
-  const content = useDocContent(route.source.repo, route.path);
+  const content = useDocContent(route.source, route.path);
   const groups: DocGroup[] = DOC_SOURCES.filter((source) => source.route === route.source.route).map((source) => ({ source, entries: entries.filter((entry) => entry.sourceKey === source.key) }));
   const knownPaths = entries.filter((entry) => entry.sourceKey === route.source.key).map((entry) => entry.path);
   return (

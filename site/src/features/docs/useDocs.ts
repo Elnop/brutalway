@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
 import type { DocEntry, DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
 import { docTitle } from '@/features/docs/lib/docTitle.ts';
-import { folderListUrl, rawFileUrl } from '@/features/docs/lib/docsUrls.ts';
+import { folderListUrl, rawFileUrl, sourcePath } from '@/features/docs/lib/docsUrls.ts';
 
 const LIST_CACHE_KEY = 'brutal-docs-list-v2';
 
@@ -52,10 +52,10 @@ function writeCachedList(entries: DocEntry[]): void {
 
 async function listFolder(source: DocSource, signal: AbortSignal): Promise<string[] | undefined> {
   try {
-    const response = await fetch(folderListUrl(source.repo, source.folder), { signal });
+    const response = await fetch(folderListUrl(source), { signal });
     if (!response.ok) return undefined;
     const items: unknown = await response.json();
-    return Array.isArray(items) ? items.filter(isMarkdownFile).map((item) => item.path) : undefined;
+    return Array.isArray(items) ? items.filter(isMarkdownFile).map((item) => sourcePath(source, item.path)) : undefined;
   } catch {
     return undefined;
   }
@@ -84,8 +84,8 @@ export function useDocList(): DocEntry[] {
   return entries;
 }
 
-export function useDocContent(repo: string, path: string): LoadState<string> {
-  const url = rawFileUrl(repo, path);
+export function useDocContent(source: DocSource, path: string): LoadState<string> {
+  const url = rawFileUrl(source, path);
   const [loaded, setLoaded] = useState<{ url: string; state: LoadState<string> } | undefined>(undefined);
   useEffect(() => {
     const controller = new AbortController();
