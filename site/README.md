@@ -1,6 +1,6 @@
 # site
 
-The landing page of the project, published on GitHub Pages by the Pages workflow at the root of the repository.
+The landing page of the project, published on GitHub Pages at [brutalway.elnop.dev](https://brutalway.elnop.dev/) by the Pages workflow at the root of the repository.
 
 It was created with `npm create brutal` from template-vite, without the example, zustand, component tests, e2e, CI or the Claude Code hook. The conventions of the template apply: `npm run check` has to pass before a push, and the Pages workflow runs it again before deploying.
 
