@@ -14,7 +14,15 @@ import { stacks } from '../src/stacks/stacksConfig.ts';
 import { withLocalPackages, withoutLocalPackages } from '../src/withLocalPackages.ts';
 
 const { values } = parseArgs({
-  options: { stack: { type: 'string' }, all: { type: 'boolean' }, e2e: { type: 'boolean' }, jobs: { type: 'string' }, keep: { type: 'boolean' }, 'local-packages': { type: 'boolean' } },
+  options: {
+    stack: { type: 'string' },
+    all: { type: 'boolean' },
+    only: { type: 'string' },
+    e2e: { type: 'boolean' },
+    jobs: { type: 'string' },
+    keep: { type: 'boolean' },
+    'local-packages': { type: 'boolean' },
+  },
 });
 const WORK_DIR = join(tmpdir(), 'brutal-matrix');
 const JOBS = Number(values.jobs ?? '3');
@@ -97,9 +105,20 @@ async function check({ stack, answers, name }: Run): Promise<string | undefined>
   return undefined;
 }
 
+function onlyAnswers(only: string | undefined): Answers {
+  if (only === undefined) return {};
+  return Object.fromEntries(
+    only.split(',').map((pair) => {
+      const [id = '', value = ''] = pair.split('=');
+      if (value === 'true' || value === 'false') return [id, value === 'true'];
+      return [id, value];
+    }),
+  );
+}
+
 const runs: Run[] = stacks
   .filter((stack) => values.stack === undefined || stack.id === values.stack)
-  .flatMap((stack) => matrixCombinations(stack.options, values.all === true).map((answers, index) => ({ stack, answers, name: `${stack.id}-${index}` })));
+  .flatMap((stack) => matrixCombinations(stack.options, values.all === true, onlyAnswers(values.only)).map((answers, index) => ({ stack, answers, name: `${stack.id}-${index}` })));
 const failures: string[] = [];
 let next = 0;
 

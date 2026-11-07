@@ -26,11 +26,15 @@ function defaults(options: StackOption[]): Answers {
   return Object.fromEntries(options.map((option) => [option.id, option.default]));
 }
 
-function coveringRows(options: StackOption[], valid: Answers[]): Answers[] {
+function matchesFixed(answers: Answers, fixed: Answers): boolean {
+  return Object.entries(fixed).every(([id, value]) => answers[id] === value);
+}
+
+function coveringRows(options: StackOption[], valid: Answers[], fixed: Answers): Answers[] {
   const groups = targetGroups(options);
   const uncovered = new Set(valid.flatMap((answers) => targetsOf(answers, groups)));
-  const start = defaults(options);
-  const rows = satisfiesRules(options, start) ? [start] : [];
+  const start = { ...defaults(options), ...fixed };
+  const rows = satisfiesRules(options, start) && valid.length > 0 ? [start] : [];
   for (const target of rows.flatMap((answers) => targetsOf(answers, groups))) uncovered.delete(target);
   while (uncovered.size > 0) {
     const gains = valid.map((answers) => targetsOf(answers, groups).filter((target) => uncovered.has(target)).length);
@@ -41,11 +45,11 @@ function coveringRows(options: StackOption[], valid: Answers[]): Answers[] {
   return rows;
 }
 
-export function matrixCombinations(options: StackOption[], everyCombination = false): Answers[] {
+export function matrixCombinations(options: StackOption[], everyCombination = false, fixed: Answers = {}): Answers[] {
   const crossed = options.filter((option) => option.independent !== true);
   const independent = options.filter((option) => option.independent === true);
-  const valid = crossAll(crossed).filter((answers) => satisfiesRules(options, answers));
-  const rows = everyCombination ? valid : coveringRows(crossed, valid);
+  const valid = crossAll(crossed).filter((answers) => satisfiesRules(options, answers) && matchesFixed(answers, fixed));
+  const rows = everyCombination ? valid : coveringRows(crossed, valid, fixed);
   return rows.map((answers, index) => ({
     ...answers,
     ...Object.fromEntries(

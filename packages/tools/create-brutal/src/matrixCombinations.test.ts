@@ -57,4 +57,11 @@ describe('matrixCombinations', () => {
     assert.ok(rows.every((answers) => answers['ui'] !== 'shadcn' || answers['styling'] === 'tailwind'));
     assert.deepStrictEqual(new Set(rows.map((answers) => answers['icons'])), new Set(['lucide', 'none']));
   });
+
+  it('keeps the fixed values in every row and still covers the pairs of the other options', () => {
+    const options: StackOption[] = ['a', 'b', 'c', 'd'].map((id) => ({ id, message: '', default: true }));
+    const rows = matrixCombinations(options, false, { a: false, b: true });
+    assert.ok(rows.every((answers) => answers['a'] === false && answers['b'] === true));
+    assert.deepStrictEqual(pairsOf(rows, 'c', 'd'), new Set(['true true', 'true false', 'false true', 'false false']));
+  });
 });

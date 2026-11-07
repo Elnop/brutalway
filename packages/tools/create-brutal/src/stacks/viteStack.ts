@@ -807,6 +807,17 @@ export const viteStack: Stack = {
       addDevDependencies: { '@babel/core': '7.29.13', '@rolldown/plugin-babel': '0.3.0', 'babel-plugin-react-compiler': '1.0.0' },
     },
     {
+      when: { 'react-compiler': true, example: true, 'server-state': false },
+      edits: [
+        { file: 'src/features/todo-list/useTodoList.ts', replace: "import { useMemo } from 'react';\n", with: '' },
+        {
+          file: 'src/features/todo-list/useTodoList.ts',
+          replace: 'const todos = useMemo(() => selectVisibleTodos({ todos: allTodos, filter }), [allTodos, filter]);',
+          with: 'const todos = selectVisibleTodos({ todos: allTodos, filter });',
+        },
+      ],
+    },
+    {
       when: { ui: 'shadcn' },
       edits: [
         { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]' },
