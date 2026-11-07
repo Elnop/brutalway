@@ -5,7 +5,7 @@ export type DocSource = {
   repo: string;
   directory: string;
   files: string[];
-  folder: string;
+  folder?: string;
   changelog?: string;
 };
 

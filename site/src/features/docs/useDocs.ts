@@ -4,7 +4,7 @@ import type { DocEntry, DocSource, LoadState } from '@/features/docs/DocsTypes.t
 import { docTitle } from '@/features/docs/lib/docTitle.ts';
 import { folderListUrl, rawFileUrl, sourcePath } from '@/features/docs/lib/docsUrls.ts';
 
-const LIST_CACHE_KEY = 'brutal-docs-list-v2';
+const LIST_CACHE_KEY = 'brutal-docs-list-v3';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -51,8 +51,9 @@ function writeCachedList(entries: DocEntry[]): void {
 }
 
 async function listFolder(source: DocSource, signal: AbortSignal): Promise<string[] | undefined> {
+  if (source.folder === undefined) return [];
   try {
-    const response = await fetch(folderListUrl(source), { signal });
+    const response = await fetch(folderListUrl(source, source.folder), { signal });
     if (!response.ok) return undefined;
     const items: unknown = await response.json();
     return Array.isArray(items) ? items.filter(isMarkdownFile).map((item) => sourcePath(source, item.path)) : undefined;

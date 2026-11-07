@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 
-const source = DOC_SOURCES[0];
+const [source, templates, template] = DOC_SOURCES;
 const knownPaths = ['README.md', 'docs/intent.md', 'docs/inspirations.md'];
 
 describe('resolveDocUrl', () => {
@@ -18,12 +18,17 @@ describe('resolveDocUrl', () => {
   });
 
   it('links a template doc to its page', () => {
-    const template = DOC_SOURCES[1];
     expect(resolveDocUrl({ url: 'CHANGELOG.md', attribute: 'href', source: template, docPath: 'README.md', knownPaths: ['README.md', 'CHANGELOG.md'] })).toBe('#/templates/vite/CHANGELOG.md');
   });
 
+  it('links a page of another source to its page on the site', () => {
+    expect(resolveDocUrl({ url: 'vite', attribute: 'href', source: templates, docPath: 'README.md', knownPaths: ['README.md'] })).toBe('#/templates/vite/README.md');
+    expect(resolveDocUrl({ url: 'fastify/CHANGELOG.md', attribute: 'href', source: templates, docPath: 'README.md', knownPaths: ['README.md'] })).toBe('#/templates/fastify/CHANGELOG.md');
+    expect(resolveDocUrl({ url: 'templates/vite/', attribute: 'href', source, docPath: 'README.md', knownPaths })).toBe('#/templates/vite/README.md');
+    expect(resolveDocUrl({ url: '../README.md', attribute: 'href', source: templates, docPath: 'README.md', knownPaths: ['README.md'] })).toBe('#/docs/brutalway/README.md');
+  });
+
   it('sends a template link to its folder in the repository', () => {
-    const template = DOC_SOURCES[1];
     expect(resolveDocUrl({ url: 'src/main.tsx', attribute: 'href', source: template, docPath: 'docs/architecture.md', knownPaths: [] })).toBe(
       'https://github.com/Elnop/brutalway/blob/main/templates/vite/docs/src/main.tsx',
     );

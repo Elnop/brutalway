@@ -11,8 +11,11 @@ describe('parseDocsRoute', () => {
     expect(parseDocsRoute('#/docs/brutalway/docs/intent.md')).toMatchObject({ source: { key: 'brutalway' }, path: 'docs/intent.md' });
   });
 
+  it('opens the template index by default', () => {
+    expect(parseDocsRoute('#/templates')).toMatchObject({ source: { key: 'all' }, path: 'README.md' });
+  });
+
   it('opens a template page, its docs and its changelog', () => {
-    expect(parseDocsRoute('#/templates')).toMatchObject({ source: { key: 'vite' }, path: 'README.md' });
     expect(parseDocsRoute('#/templates/fastify')).toMatchObject({ source: { key: 'fastify' }, path: 'README.md' });
     expect(parseDocsRoute('#/templates/vite/CHANGELOG.md')).toMatchObject({ source: { key: 'vite' }, path: 'CHANGELOG.md' });
   });
