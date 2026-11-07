@@ -12,7 +12,7 @@ Node 26 is required, like the templates.
 
 | Stack | Template | Options |
 |---|---|---|
-| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `ui`, `server-state`, `forms`, `component-tests`, `e2e`, `claude-hook`, `ci` |
+| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `ui`, `server-state`, `forms`, `i18n`, `component-tests`, `e2e`, `claude-hook`, `ci` |
 | `fastify` | [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) | `example`, `swagger`, `database`, `claude-hook`, `ci` |
 
 `example` keeps the todo list. Without it you get the same structure with empty `src/features/` and `src/shared-features/` folders. On vite, `App.tsx` then only shows the project name, and zustand can only be removed together with the example, since the example uses it. On fastify, `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name.
@@ -26,6 +26,8 @@ On vite, `ui` takes `none` (the default) or `shadcn`, which needs `--styling tai
 On vite, `server-state` is off by default. With it, the example reads and writes its todos through TanStack Query against the routes of template-fastify: `todosClient.ts` parses each response with Zod, the list is filtered by the API and the counters come from `GET /stats`, and the zustand store only keeps the filter. Without `API_URL`, `devApi.ts` answers `/api` from an in-memory list in `npm run dev` and `vite preview`, one list per browser. With `API_URL=http://localhost:3000`, it proxies `/api` to the API. Without the example, the option brings the `QueryClientProvider`, the cache profiles of `src/shared/QueryConfig.ts` and `@brutalway/oxlint-config-tanstack-query`.
 
 On vite, `forms` is off by default. With it, the title fields of the example go through `react-hook-form` with `zodResolver(TodoDraftSchema)`, and `@brutalway/oxlint-config-react-hook-form` reports a `useForm` without that resolver and any validation passed to `register` or a `Controller`. The components are the same with or without it: both read their field through `useTitleForm.ts`, and every project shows "The title is blank" under the field instead of disabling the button. With `server-state`, `TodoDraftSchema` joins the API schemas and `todosClient.create` takes its inferred type.
+
+On vite, `i18n` is off by default. With it, the project comes in English and French: the messages of `src/app/locales/fr/` sit next to the English ones, English and Français buttons in the header switch between them, the choice is saved in `localStorage`, and `<html lang>` and the title of the page follow it. `i18next-cli status` then fails when French misses a key, and with e2e, `e2e/language.spec.ts` switches to French and runs axe.
 
 On fastify, `database` keeps `node:sqlite` and the `DATABASE_PATH` variable. Without it, the example keeps its todos in a `Map`: `todosQueries.ts` has the same functions, so the services and the routes do not change. Without `swagger`, `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
 

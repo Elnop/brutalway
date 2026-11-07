@@ -165,6 +165,8 @@ const THIRD_PARTY_ALINT = `  - id: third-party-only-registries
 
 const THIRD_PARTY_REFERENCES = '  "references": [{ "path": "./tsconfig.third-party.json" }],\n';
 
+const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitch.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languagePreference.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it. To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -195,6 +197,7 @@ export const viteStack: Stack = {
     },
     { id: 'server-state', message: 'Read and write the data through an API with TanStack Query?', default: false },
     { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
+    { id: 'i18n', message: 'Add French and a language switch?', default: false },
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
     { id: 'e2e', message: 'Add e2e tests (Playwright)?', default: true },
     { id: 'claude-hook', message: 'Add the Claude Code hook that lints each edited file?', default: true, independent: true },
@@ -508,6 +511,76 @@ export const viteStack: Stack = {
           with: "create: async (draft: TodoDraft) => request(TodoSchema, 'POST', '/todos', draft),",
         },
         { file: 'src/features/todo-list/useTodoList.ts', replace: 'return { todos, filter, add, setFilter', with: 'return { todos, filter, add: (title: string) => add({ title }), setFilter' },
+      ],
+    },
+    {
+      when: { i18n: true },
+      overlay: 'i18n',
+      edits: [
+        { file: 'src/app/locales/en/app.json', after: '{\n', insert: '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n' },
+        { file: 'src/app/createI18n.ts', replace: '      en: {', with: '      fr: FRENCH,\n      en: {' },
+        { file: 'i18next.config.ts', replace: "locales: ['en'],", with: "locales: ['en', 'fr']," },
+        { file: 'src/main.tsx', after: "import { createI18n } from '@/app/createI18n.ts';\n", insert: "import { followLanguage, preferredLanguage } from '@/features/language-switch/languagePreference.ts';\n" },
+        { file: 'src/main.tsx', replace: 'const i18n = createI18n();', with: 'const i18n = createI18n(preferredLanguage());\nfollowLanguage(i18n);' },
+        { file: 'src/app/App.tsx', after: "import { useTranslation } from 'react-i18next';\n", insert: "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n" },
+        { file: 'src/app/App.tsx', before: '      </header>', insert: '        <LanguageSwitch />\n' },
+        {
+          file: 'README.md',
+          replace: 'To add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+          with: I18N_README,
+        },
+      ],
+    },
+    {
+      when: { i18n: true, example: true },
+      overlay: 'i18n-example',
+      edits: [
+        {
+          file: 'src/app/createI18n.ts',
+          after: "import todoStats from '@/app/locales/en/todoStats.json';\n",
+          insert: "import frApp from '@/app/locales/fr/app.json';\nimport frTodoList from '@/app/locales/fr/todoList.json';\nimport frTodoStats from '@/app/locales/fr/todoStats.json';\n",
+        },
+        { file: 'src/app/createI18n.ts', replace: 'fr: FRENCH,', with: 'fr: { app: frApp, todoList: frTodoList, todoStats: frTodoStats },' },
+      ],
+    },
+    {
+      when: { i18n: true, example: false },
+      overlay: 'i18n-skeleton',
+      remove: ['src/features/.gitkeep'],
+      edits: [
+        { file: 'src/app/createI18n.ts', after: "import app from '@/app/locales/en/app.json';\n", insert: "import frApp from '@/app/locales/fr/app.json';\n" },
+        { file: 'src/app/createI18n.ts', replace: 'fr: FRENCH,', with: 'fr: { app: frApp },' },
+      ],
+    },
+    {
+      when: { i18n: true, styling: 'css-modules' },
+      remove: ['src/features/language-switch/language-switch.css'],
+      overlay: 'i18n-css-modules',
+    },
+    {
+      when: { i18n: true, styling: 'tailwind' },
+      remove: ['src/features/language-switch/language-switch.css'],
+      overlay: 'i18n-tailwind',
+    },
+    {
+      when: { i18n: true, ui: 'shadcn' },
+      overlay: 'i18n-shadcn',
+    },
+    {
+      when: { i18n: true, example: true, forms: true },
+      edits: [
+        { file: 'src/app/locales/fr/todoList.json', replace: '"blankTitle": "Le titre est vide"', with: '"blankTitle": "Le titre est vide",\n    "longTitle": "Le titre fait au plus 200 caractères"' },
+      ],
+    },
+    {
+      when: { i18n: true, example: true, e2e: true },
+      overlay: 'i18n-e2e',
+      edits: [
+        {
+          file: 'docs/verifications.md',
+          replace: 'and renaming.',
+          with: 'and renaming. `e2e/language.spec.ts` switches to French, checks the heading, a counter, `<html lang>` and the title of the page, runs axe, and reloads to check that the choice stays.',
+        },
       ],
     },
     {
