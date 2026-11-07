@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import type { SubmitEvent } from 'react';
-import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';
+import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
 import styles from '@/features/todo-list/components/presenters/TodoInput.module.css';
 
 type TodoInputProps = {
@@ -8,25 +6,22 @@ type TodoInputProps = {
 };
 
 export function TodoInput({ onAdd }: TodoInputProps) {
-  const [title, setTitle] = useState('');
-  const blank = normalizeTitle(title) === '';
-
-  function submit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (blank) return;
-    onAdd(title);
-    setTitle('');
-  }
+  const { field, error, submit } = useTitleForm({ initialTitle: '', clearOnSubmit: true, onSubmit: onAdd });
 
   return (
     <form className={styles.form} onSubmit={submit}>
       <label htmlFor="new-todo" className="visually-hidden">
         New task
       </label>
-      <input id="new-todo" placeholder="What needs doing?" autoComplete="off" value={title} onChange={(event) => setTitle(event.target.value)} />
-      <button type="submit" className="button button-yellow" disabled={blank}>
+      <input id="new-todo" placeholder="What needs doing?" autoComplete="off" aria-invalid={error !== undefined} aria-describedby={error === undefined ? undefined : 'new-todo-error'} {...field} />
+      <button type="submit" className="button button-yellow">
         Add
       </button>
+      {error === undefined ? null : (
+        <p id="new-todo-error" role="alert" className="field-error">
+          {error}
+        </p>
+      )}
     </form>
   );
 }

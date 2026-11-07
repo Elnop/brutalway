@@ -57,6 +57,6 @@ knip (`knip.json`) rejects exports nobody imports, unused files, unused dependen
 
 The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. Find elements by role and accessible name, wait with retrying assertions, never with a timeout.
 
-The specs import `test`, `expect` and `axeViolations` from `@brutalway/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `e2e/openApp.ts` opens the app and waits for its `h1`. `e2e/app.spec.ts` checks the first screen: no axe violation, no sideways scroll at 320 px. `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, the counters while adding, checking, filtering and clearing tasks, and renaming.
+The specs import `test`, `expect` and `axeViolations` from `@brutalway/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `e2e/openApp.ts` opens the app and waits for its `h1`. `e2e/app.spec.ts` checks the first screen: no axe violation, no sideways scroll at 320 px. `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.
 
 Before keeping a test, break the code it protects and watch it fail.

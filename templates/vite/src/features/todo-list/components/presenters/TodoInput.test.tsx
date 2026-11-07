@@ -8,13 +8,17 @@ describe('TodoInput', () => {
     const screen = await render(<TodoInput onAdd={onAdd} />);
     await screen.getByLabelText('New task').fill('Buy oat milk');
     await screen.getByRole('button', { name: 'Add' }).click();
-    expect(onAdd).toHaveBeenCalledWith('Buy oat milk');
     await expect.element(screen.getByLabelText('New task')).toHaveValue('');
+    expect(onAdd).toHaveBeenCalledWith('Buy oat milk');
   });
 
-  it('keeps the button disabled while the title is blank', async () => {
-    const screen = await render(<TodoInput onAdd={vi.fn<(title: string) => void>()} />);
+  it('says why a blank title is refused, on the field and to screen readers', async () => {
+    const onAdd = vi.fn<(title: string) => void>();
+    const screen = await render(<TodoInput onAdd={onAdd} />);
     await screen.getByLabelText('New task').fill('   ');
-    await expect.element(screen.getByRole('button', { name: 'Add' })).toBeDisabled();
+    await screen.getByRole('button', { name: 'Add' }).click();
+    await expect.element(screen.getByRole('alert')).toHaveTextContent('The title is blank');
+    await expect.element(screen.getByLabelText('New task')).toHaveAttribute('aria-invalid', 'true');
+    expect(onAdd).not.toHaveBeenCalled();
   });
 });

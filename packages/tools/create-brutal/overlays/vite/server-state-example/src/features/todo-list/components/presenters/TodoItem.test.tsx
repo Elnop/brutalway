@@ -24,9 +24,9 @@ describe('TodoItem', () => {
     await screen.getByRole('button', { name: 'Edit Buy milk' }).click();
     await screen.getByLabelText('Rename Buy milk').fill('Buy oat milk');
     await screen.getByRole('button', { name: 'Save' }).click();
+    await screen.getByRole('button', { name: 'Edit Buy milk' }).click();
     expect(props.onRename).toHaveBeenCalledWith(7, 'Buy oat milk');
 
-    await screen.getByRole('button', { name: 'Edit Buy milk' }).click();
     await screen.getByLabelText('Rename Buy milk').fill('Something else');
     screen
       .getByLabelText('Rename Buy milk')

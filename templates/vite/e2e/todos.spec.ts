@@ -13,7 +13,8 @@ test('adding, checking and filtering tasks updates the counters', async ({ page 
   await page.getByRole('button', { name: 'Add' }).click();
   await expect(page.getByText('3 tasks left')).toBeVisible();
 
-  await page.getByRole('checkbox', { name: 'Ship the template' }).check();
+  await page.getByRole('checkbox', { name: 'Ship the template' }).click();
+  await expect(page.getByRole('checkbox', { name: 'Ship the template' })).toBeChecked();
   await expect(page.getByText('2 tasks left')).toBeVisible();
   await expect(page.getByText('2 done')).toBeVisible();
 
@@ -22,6 +23,15 @@ test('adding, checking and filtering tasks updates the counters', async ({ page 
   await page.getByRole('button', { name: 'Clear done' }).click();
   await expect(page.getByText('Nothing here.')).toBeVisible();
   await expect(page.getByText('0 done')).toBeVisible();
+});
+
+test('a blank title is refused with an error axe finds nothing wrong with', async ({ page }) => {
+  await openApp(page);
+  await page.getByLabel('New task').fill('   ');
+  await page.getByRole('button', { name: 'Add' }).click();
+  await expect(page.getByRole('alert')).toHaveText('The title is blank');
+  await expect(page.getByLabel('New task')).toHaveAttribute('aria-invalid', 'true');
+  expect(await axeViolations(page)).toStrictEqual([]);
 });
 
 test('renaming a task keeps it in the list', async ({ page }) => {

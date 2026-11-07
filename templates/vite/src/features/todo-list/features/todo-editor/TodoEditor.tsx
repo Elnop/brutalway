@@ -1,6 +1,6 @@
-import { useId, useState } from 'react';
-import type { KeyboardEvent, SubmitEvent } from 'react';
-import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';
+import { useId } from 'react';
+import type { KeyboardEvent } from 'react';
+import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
 
 type TodoEditorProps = {
   title: string;
@@ -10,13 +10,8 @@ type TodoEditorProps = {
 
 export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
   const id = useId();
-  const [draft, setDraft] = useState(title);
-  const blank = normalizeTitle(draft) === '';
-
-  function submit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!blank) onSave(draft);
-  }
+  const errorId = `${id}-error`;
+  const { field, error, submit } = useTitleForm({ initialTitle: title, clearOnSubmit: false, onSubmit: onSave });
 
   function cancelOnEscape(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Escape') onCancel();
@@ -27,13 +22,18 @@ export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
       <label htmlFor={id} className="visually-hidden">
         {`Rename ${title}`}
       </label>
-      <input id={id} autoFocus value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={cancelOnEscape} />
-      <button type="submit" className="button button-small button-blue" disabled={blank}>
+      <input id={id} autoFocus aria-invalid={error !== undefined} aria-describedby={error === undefined ? undefined : errorId} {...field} onKeyDown={cancelOnEscape} />
+      <button type="submit" className="button button-small button-blue">
         Save
       </button>
       <button type="button" className="button button-small" onClick={onCancel}>
         Cancel
       </button>
+      {error === undefined ? null : (
+        <p id={errorId} role="alert" className="field-error">
+          {error}
+        </p>
+      )}
     </form>
   );
 }

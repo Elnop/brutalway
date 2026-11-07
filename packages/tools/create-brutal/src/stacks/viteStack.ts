@@ -63,6 +63,10 @@ Without \`API_URL\`, \`devApi.ts\` answers these routes from an in-memory list, 
 
 `;
 
+const FORMS_LINT_DOC = `
+\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-react-hook-form\`: \`useForm\` takes \`resolver: zodResolver(XSchema)\`, and no validation goes to \`register\`, \`useController\` or a \`Controller\`. What a field accepts, and the message shown when it does not, is written once, in the schema.
+`;
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -83,6 +87,7 @@ export const viteStack: Stack = {
       ],
     },
     { id: 'server-state', message: 'Read and write the data through an API with TanStack Query?', default: false },
+    { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
     { id: 'e2e', message: 'Add e2e tests (Playwright)?', default: true },
     { id: 'claude-hook', message: 'Add the Claude Code hook that lints each edited file?', default: true, independent: true },
@@ -252,12 +257,64 @@ export const viteStack: Stack = {
       addDependencies: { zod: '4.6.7' },
     },
     {
+      when: { forms: true },
+      edits: [
+        {
+          file: 'oxlint.config.ts',
+          after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
+          insert: "import { reactHookFormConfig } from '@brutalway/oxlint-config-react-hook-form';\n",
+        },
+        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, reactHookFormConfig' },
+        { file: 'docs/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: FORMS_LINT_DOC },
+      ],
+      addDependencies: { '@hookform/resolvers': '5.9.2', 'react-hook-form': '7.91.0', zod: '4.6.7' },
+      addDevDependencies: { '@brutalway/oxlint-config-react-hook-form': '0.1.0' },
+    },
+    {
+      when: { forms: true, example: false },
+      edits: [{ file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "@hookform/resolvers", "react-hook-form", "zod", ' }],
+    },
+    {
+      when: { forms: true, example: true },
+      overlay: 'forms-example',
+    },
+    {
+      when: { forms: true, example: true, 'server-state': false },
+      overlay: 'forms-schemas',
+    },
+    {
+      when: { forms: true, example: true, 'server-state': true },
+      edits: [
+        { file: 'src/shared-features/todos/TodosSchemas.ts', after: "import { z } from 'zod';\n", insert: "import { normalizeTitle } from '@/shared/lib/normalizeTitle.ts';\n" },
+        {
+          file: 'src/shared-features/todos/TodosSchemas.ts',
+          after: 'export const ClearedSchema = z.object({ deleted: z.number().int().min(0) });\n',
+          insert:
+            "\nexport const TodoDraftSchema = z.object({\n  title: z.string().transform(normalizeTitle).pipe(z.string().min(1, 'The title is blank').max(200, 'The title is 200 characters at most')),\n});\n",
+        },
+        { file: 'src/shared-features/todos/TodosTypes.ts', replace: 'import type { TodoFilterSchema, TodoSchema } from', with: 'import type { TodoDraftSchema, TodoFilterSchema, TodoSchema } from' },
+        {
+          file: 'src/shared-features/todos/TodosTypes.ts',
+          after: 'export type TodoFilter = z.infer<typeof TodoFilterSchema>;\n',
+          insert: '\nexport type TodoDraft = z.output<typeof TodoDraftSchema>;\n',
+        },
+        { file: 'src/shared-features/todos/todosClient.ts', replace: 'import type { Todo, TodoFilter, TodoUpdate }', with: 'import type { Todo, TodoDraft, TodoFilter, TodoUpdate }' },
+        {
+          file: 'src/shared-features/todos/todosClient.ts',
+          replace: "create: async (title: string) => request(TodoSchema, 'POST', '/todos', { title }),",
+          with: "create: async (draft: TodoDraft) => request(TodoSchema, 'POST', '/todos', draft),",
+        },
+        { file: 'src/features/todo-list/useTodoList.ts', replace: 'return { todos, filter, add, setFilter', with: 'return { todos, filter, add: (title: string) => add({ title }), setFilter' },
+      ],
+    },
+    {
       when: { example: false, e2e: true },
       remove: ['e2e/todos.spec.ts'],
       edits: [
         {
           file: 'docs/verifications.md',
-          replace: ' `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, the counters while adding, checking, filtering and clearing tasks, and renaming.',
+          replace:
+            ' `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.',
           with: '',
         },
       ],

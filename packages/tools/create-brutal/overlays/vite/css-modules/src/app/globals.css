@@ -108,6 +108,15 @@ input:not([type='checkbox']) {
   color: var(--paper);
 }
 
+.field-error {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 0.2rem 0.6rem;
+  border: var(--border);
+  background: var(--pink);
+  font-weight: 700;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

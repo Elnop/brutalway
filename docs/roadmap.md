@@ -127,6 +127,8 @@ Source: bedrock (rule `forms-must-use-zod`, `.agents/rules/state.md`).
 
 The schema is `TodoDraftSchema` in `src/shared-features/todos/TodosSchemas.ts`, written like the one of template-fastify: trimmed, inner spaces merged, 1 to 200 characters. With `--server-state` it joins the schemas of the API in the same file, and `todosClient.create` takes the type inferred from it, so the form and the request describe the same thing once.
 
+As built: the schema reuses `normalizeTitle` in its `transform`, so trimming and merging spaces is written once for the store, the default form and the schema. Toggling a task with `--server-state` patches the cache a few microtasks after the click, so the e2e test clicks the checkbox and waits for `toBeChecked()` instead of calling `check()`, which reads the state at once. After the edits, the CLI rewrites `knip.json` the way Prettier would, since several options add names to `ignoreDependencies` and the line can pass 200 columns.
+
 **E4-S1. Forms as an option.** As someone creating a project, I want `--forms`, so that forms come with validation and typed values.
 - `src/features/todo-list/shared/useTitleForm.ts` uses `react-hook-form` with `zodResolver(TodoDraftSchema)`. `TodoInput.tsx` and `TodoEditor.tsx` do not change between the default project and `--forms`, in any styling value.
 - `TodoDraftSchema` sits in `src/shared-features/todos/TodosSchemas.ts`. With `--server-state`, it joins the API schemas there and `todosClient.create` takes its inferred type.

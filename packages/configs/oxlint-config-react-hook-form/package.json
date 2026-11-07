@@ -1,0 +1,41 @@
+{
+  "name": "@brutalway/oxlint-config-react-hook-form",
+  "version": "0.1.0",
+  "description": "Oxlint config for react-hook-form: every useForm validates through zodResolver, and no validation is passed to register or a Controller.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "oxlint-plugin",
+    "react-hook-form",
+    "zod",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-react-hook-form#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/oxlint-config-react-hook-form"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/ReactHookFormConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutalway/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}

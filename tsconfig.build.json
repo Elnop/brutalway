@@ -29,6 +29,9 @@
       "path": "packages/configs/oxlint-config-tanstack-query"
     },
     {
+      "path": "packages/configs/oxlint-config-react-hook-form"
+    },
+    {
       "path": "packages/configs/stylelint-config"
     },
     {
