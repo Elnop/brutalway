@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@brutalway/oxlint-config-typescript": "0.4.0",
-    "@brutalway/prettier-config": "0.1.0",
+    "@brutalway/prettier-config": "0.2.0",
     "@brutalway/tsconfig": "0.2.0",
     "@changesets/cli": "3.0.3",
     "@types/node": "26.6.6",

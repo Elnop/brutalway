@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-tailwind",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Oxlint config for Tailwind CSS v4: colors only from the @theme tokens, font roles on headings and code, no dark: variant.",
   "keywords": [
     "oxlint",
