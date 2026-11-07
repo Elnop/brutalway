@@ -1,0 +1,25 @@
+.page {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header p {
+  display: inline-block;
+  margin: 0.75rem 0 0;
+  padding: 0.2rem 0.6rem;
+  border: var(--border);
+  background: var(--pink);
+  font-weight: 700;
+  transform: rotate(-2deg);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+}

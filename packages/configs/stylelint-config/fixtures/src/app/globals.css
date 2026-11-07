@@ -1,0 +1,11 @@
+:root {
+  --ink: #111111;
+  --paper: #fffdf5;
+  --yellow: #ffd23f;
+  --blue: #2a5cff;
+}
+
+body {
+  background: white;
+  color: #111111;
+}

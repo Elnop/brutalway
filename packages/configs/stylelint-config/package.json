@@ -1,0 +1,41 @@
+{
+  "name": "@brutalway/stylelint-config",
+  "version": "0.1.0",
+  "description": "Stylelint config: colors only from the tokens of one stylesheet, CSS Modules named after their component, with every class used and written in camelCase.",
+  "keywords": [
+    "stylelint",
+    "stylelint-config",
+    "stylelint-plugin",
+    "css-modules",
+    "design-tokens",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/stylelint-config#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/stylelint-config"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo",
+    "stylelintConfig.json"
+  ],
+  "exports": {
+    ".": "./stylelintConfig.json",
+    "./plugin": "./dist/plugin.js"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "peerDependencies": {
+    "stylelint": "^17.16.0"
+  },
+  "devDependencies": {
+    "stylelint": "17.16.0"
+  }
+}

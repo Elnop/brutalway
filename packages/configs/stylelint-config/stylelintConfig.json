@@ -1,0 +1,16 @@
+{
+  "plugins": ["@brutalway/stylelint-config/plugin"],
+  "rules": {
+    "brutalway/color-tokens": [true, { "stylesheet": "src/app/globals.css" }],
+    "brutalway/module-next-to-component": true,
+    "brutalway/no-unused-class": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.module.css"],
+      "rules": {
+        "selector-class-pattern": ["^[a-z][a-zA-Z0-9]*$", { "message": "Write the classes of a CSS Module in camelCase, so the component reads them as styles.name (selector-class-pattern)" }]
+      }
+    }
+  ]
+}

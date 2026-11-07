@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.form input {
+  flex: 1;
+  min-width: 0;
+}

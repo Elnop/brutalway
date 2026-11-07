@@ -26,6 +26,9 @@
       "path": "packages/configs/oxlint-config-tailwind"
     },
     {
+      "path": "packages/configs/stylelint-config"
+    },
+    {
       "path": "packages/tools/playwright-fixtures"
     },
     {

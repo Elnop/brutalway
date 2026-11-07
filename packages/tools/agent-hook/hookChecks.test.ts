@@ -50,6 +50,16 @@ test('an edited Markdown file runs alint only, and only when the project has a c
   assert.deepEqual(hookChecks(withoutAlint, { file: join(withoutAlint, 'docs/a.md'), created: false }, ['src']), []);
 });
 
+test('an edited stylesheet runs stylelint when the project configures it', () => {
+  const withConfig = project(['package.json', 'src/a.module.css']);
+  writeFileSync(join(withConfig, 'package.json'), '{ "stylelint": { "extends": "@brutalway/stylelint-config" } }');
+  assert.deepEqual(hookChecks(withConfig, { file: join(withConfig, 'src/a.module.css'), created: false }, ['src']), [
+    { label: 'stylelint found problems in src/a.module.css', command: 'stylelint', args: ['src/a.module.css'], cwd: withConfig },
+  ]);
+  const withoutConfig = project(['package.json', 'src/a.css']);
+  assert.deepEqual(hookChecks(withoutConfig, { file: join(withoutConfig, 'src/a.css'), created: false }, ['src']), []);
+});
+
 test('files outside the project or in node_modules are ignored', () => {
   const root = project(['oxlint.config.ts']);
   assert.deepEqual(hookChecks(root, { file: '/elsewhere/a.ts', created: true }, ['src']), []);

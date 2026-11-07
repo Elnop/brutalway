@@ -1,8 +1,25 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import type { HookCheck, HookEdit } from './AgentHookTypes.ts';
 
 const OXLINT_CONFIGS = ['oxlint.config.ts', '.oxlintrc.json'];
+const STYLELINT_CONFIGS = [
+  '.stylelintrc',
+  '.stylelintrc.json',
+  '.stylelintrc.yml',
+  '.stylelintrc.yaml',
+  '.stylelintrc.js',
+  '.stylelintrc.mjs',
+  'stylelint.config.js',
+  'stylelint.config.mjs',
+  'stylelint.config.cjs',
+];
+
+function hasStylelintConfig(root: string) {
+  if (STYLELINT_CONFIGS.some((config) => existsSync(join(root, config)))) return true;
+  const manifest = join(root, 'package.json');
+  return existsSync(manifest) && /"stylelint"\s*:\s*\{/u.test(readFileSync(manifest, 'utf8'));
+}
 
 function inside(root: string, path: string) {
   const fromRoot = relative(root, path);
@@ -24,6 +41,9 @@ export function hookChecks(root: string, { file, created }: HookEdit, trees: str
   if (/\.tsx?$/u.test(file)) {
     const cwd = oxlintFolder(root, file);
     checks.push({ label: `oxlint found problems in ${fromRoot}`, command: 'oxlint', args: ['--type-aware', relative(cwd, file)], cwd });
+  }
+  if (file.endsWith('.css') && hasStylelintConfig(root)) {
+    checks.push({ label: `stylelint found problems in ${fromRoot}`, command: 'stylelint', args: [fromRoot], cwd: root });
   }
   if ((created || file.endsWith('.md')) && existsSync(join(root, '.alint.yml'))) {
     checks.push({ label: 'alint found problems in the repository layout or the docs', command: 'alint', args: ['check'], cwd: root });

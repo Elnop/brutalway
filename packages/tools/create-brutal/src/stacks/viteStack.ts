@@ -33,6 +33,14 @@ const TAILWIND_DOC = `\`oxlint.config.ts\` also extends \`@brutalway/oxlint-conf
 
 `;
 
+const CSS_MODULES_DOC = `A component with styles has its own \`X.module.css\` next to it and reads it with \`import styles from '@/features/x/X.module.css'\`. On these files the config also reports a stylesheet without its \`X.tsx\` beside it, a class the component never uses, and a class not written in camelCase. \`npm run typecheck\` first runs \`happy-css-modules\`, which writes one \`.d.ts\` per stylesheet into \`node_modules/.cache/css-modules\`, so \`styles.typo\` is a tsc error. After adding a class, run \`npm run css-types\` (or \`npm run css-types -- --watch\`) so the editor sees it.
+
+`;
+
+const CSS_MODULES_TYPES = "hcm 'src/**/*.module.css' --outDir node_modules/.cache/css-modules --no-declarationMap --no-cache --logLevel silent";
+
+const STYLELINT_SETTINGS = '  "stylelint": {\n    "extends": "@brutalway/stylelint-config"\n  },\n';
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -48,6 +56,7 @@ export const viteStack: Stack = {
       default: 'css',
       values: [
         { id: 'css', label: 'Plain CSS files' },
+        { id: 'css-modules', label: 'CSS Modules, a stylesheet next to each component' },
         { id: 'tailwind', label: 'Tailwind CSS, colors and fonts as tokens under @theme' },
       ],
     },
@@ -118,7 +127,13 @@ export const viteStack: Stack = {
           with: 'easy to swap: the colors, fonts and shadows are tokens declared under `@theme` in `src/app/globals.css`, and the components style themselves with Tailwind classes built on them.',
         },
         { file: 'docs/verifications.md', before: '## Dependencies', insert: TAILWIND_DOC },
+        { file: 'docs/verifications.md', dropSection: '## Styles' },
+        { file: 'package.json', replace: STYLELINT_SETTINGS, with: '' },
+        { file: 'package.json', replace: 'npm run lint && npm run styles && ', with: 'npm run lint && ' },
+        { file: 'README.md', replace: 'Oxlint, stylelint, dependency-cruiser', with: 'Oxlint, dependency-cruiser' },
       ],
+      removeScripts: ['styles'],
+      removeDependencies: ['stylelint', '@brutalway/stylelint-config'],
       addDevDependencies: {
         '@brutalway/oxlint-config-tailwind': '0.1.0',
         '@brutalway/prettier-config': '0.2.0',
@@ -135,6 +150,36 @@ export const viteStack: Stack = {
     {
       when: { styling: 'tailwind', example: false },
       overlay: 'tailwind-skeleton',
+    },
+    {
+      when: { styling: 'css-modules' },
+      overlay: 'css-modules',
+      edits: [
+        { file: 'package.json', replace: '"typecheck": "tsc -p', with: '"typecheck": "npm run css-types && tsc -p' },
+        { file: 'package.json', after: '"typecheck": "npm run css-types && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",\n', insert: `    "css-types": "${CSS_MODULES_TYPES}",\n` },
+        { file: 'package.json', replace: '"prepare": "git config core.hooksPath .githooks"', with: '"prepare": "git config core.hooksPath .githooks && npm run css-types"' },
+        {
+          file: 'README.md',
+          replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
+          with: 'easy to swap: the tokens are at the top of `src/app/globals.css`, and each component styles itself in the `X.module.css` next to it.',
+        },
+        { file: 'docs/verifications.md', before: '## Dependencies', insert: CSS_MODULES_DOC },
+        {
+          file: 'docs/verifications.md',
+          replace: 'It also rejects two CSS files outside a `styles/` folder.',
+          with: 'It also rejects two CSS files outside a `styles/` folder. A `X.module.css` does not count: it stays next to its `X.tsx`.',
+        },
+      ],
+      addDevDependencies: { 'happy-css-modules': '5.0.2' },
+    },
+    {
+      when: { styling: 'css-modules', example: true },
+      remove: ['src/features/todo-list/todo-list.css', 'src/features/todo-stats/todo-stats.css'],
+      overlay: 'css-modules-example',
+    },
+    {
+      when: { styling: 'css-modules', example: false },
+      overlay: 'css-modules-skeleton',
     },
     {
       when: { example: false, e2e: true },
@@ -264,6 +309,13 @@ export const viteStack: Stack = {
       edits: [
         { file: 'README.md', dropLines: 'CI (`.github/workflows/ci.yml`)' },
         { file: 'docs/verifications.md', replace: 'runs locally, in the pre-commit hook and in CI.', with: 'runs locally and in the pre-commit hook.' },
+      ],
+    },
+    {
+      when: { styling: 'css-modules' },
+      edits: [
+        { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
+        { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
       ],
     },
   ],

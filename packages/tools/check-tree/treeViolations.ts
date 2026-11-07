@@ -39,7 +39,7 @@ const FILE_GROUPS: FileGroup[] = [
   { folder: 'orchestrators', belongs: (fileName) => isComponent(fileName) && ORCHESTRATOR_FILE.test(fileName), appliesIn: (folderName) => folderName === 'components' },
   { folder: 'presenters', belongs: (fileName) => isComponent(fileName) && !ORCHESTRATOR_FILE.test(fileName), appliesIn: (folderName) => folderName === 'components' },
   { folder: 'hooks', belongs: (fileName) => /^use[A-Z]\w*\.tsx?$/u.test(fileName), appliesIn: outsideOwnFolder('hooks') },
-  { folder: 'styles', belongs: (fileName) => fileName.endsWith('.css'), appliesIn: outsideOwnFolder('styles') },
+  { folder: 'styles', belongs: (fileName) => fileName.endsWith('.css') && !fileName.endsWith('.module.css'), appliesIn: outsideOwnFolder('styles') },
   { folder: 'types', belongs: (fileName) => fileName.endsWith('Types.ts'), appliesIn: outsideOwnFolder('types') },
   { folder: 'configs', belongs: (fileName) => fileName.endsWith('Config.ts'), appliesIn: outsideOwnFolder('configs') },
   { folder: 'stores', belongs: (fileName) => fileName.endsWith('Store.ts'), appliesIn: outsideOwnFolder('stores') },

@@ -33,6 +33,25 @@ test('two loose stylesheets, or one beside a styles/ folder, are reported', () =
   assert.deepEqual(treeViolations(tree(['a.css', 'styles/b.css', 'styles/c.css'])), ['src has a styles/ folder: move a.css into it']);
 });
 
+test('a CSS Module stays next to its component, outside of styles/', () => {
+  assert.deepEqual(
+    treeViolations(
+      tree([
+        'app/globals.css',
+        'app/App.tsx',
+        'app/App.module.css',
+        'list/components/ListLayout.tsx',
+        'list/components/ListLayout.module.css',
+        'list/components/presenters/Item.tsx',
+        'list/components/presenters/Item.module.css',
+        'list/components/presenters/Input.tsx',
+        'list/components/presenters/Input.module.css',
+      ]),
+    ),
+    [],
+  );
+});
+
 test('hooks, types, configs, stores and lib files follow the same rule as stylesheets', () => {
   assert.deepEqual(treeViolations(tree(['feature/useA.ts', 'feature/useB.tsx', 'feature/useA.test.ts'])), ['src/feature holds 2 hooks files (useA.ts, useB.tsx): move them into hooks/']);
   assert.deepEqual(treeViolations(tree(['feature/useA.ts', 'feature/hooks/useB.ts', 'feature/hooks/useC.ts'])), ['src/feature has a hooks/ folder: move useA.ts into it']);

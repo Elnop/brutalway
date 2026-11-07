@@ -12,7 +12,7 @@ Checks the folders of a source tree, which a linter does not see:
 | `orchestrators/`, inside `components/` | components named `XContainer`, `XLayout` or `XPage`               |
 | `presenters/`, inside `components/`    | the other components                                              |
 | `hooks/`                               | `useX.ts`, `useX.tsx`                                             |
-| `styles/`                              | `.css`                                                            |
+| `styles/`                              | `.css`, except `X.module.css`, which stays next to `X.tsx`        |
 | `types/`                               | `xTypes.ts`                                                       |
 | `configs/`                             | `xConfig.ts`                                                      |
 | `routes/`                              | `xRoutes.ts`                                                      |

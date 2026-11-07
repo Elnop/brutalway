@@ -22,6 +22,10 @@ Everything below runs locally, in the pre-commit hook and in CI. Component tests
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`, `curly` only for multi-line blocks
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)
 
+## Styles
+
+stylelint checks the stylesheets with `@brutalway/stylelint-config`, declared under `stylelint` in `package.json`. Outside of `src/app/globals.css`, a color is a `var()` of a custom property declared there: no `#fff`, no `rgb()`, no `white`. The message names the three closest tokens.
+
 ## Dependencies
 
 dependency-cruiser checks the direction of imports. The rules come from `@brutalway/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:

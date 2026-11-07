@@ -1,0 +1,19 @@
+.list {
+  padding: 1.5rem;
+  border: var(--border);
+  background: var(--yellow);
+  box-shadow: var(--shadow);
+}
+
+.items {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.empty {
+  margin: 0;
+  font-weight: 700;
+}
