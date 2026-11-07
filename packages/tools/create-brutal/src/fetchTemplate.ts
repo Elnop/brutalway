@@ -2,6 +2,7 @@ import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { downloadTemplate } from 'giget';
 import { runCommand } from './runCommand.ts';
+import { TEMPLATES_REPOSITORY } from './ScaffoldConfig.ts';
 import type { Stack, TemplateSource } from './StackTypes.ts';
 
 function copyWorkingTree(from: string, to: string): void {
@@ -16,8 +17,8 @@ function copyWorkingTree(from: string, to: string): void {
 
 export async function fetchTemplate(stack: Stack, dir: string, source: TemplateSource): Promise<void> {
   if (source.kind === 'local') {
-    copyWorkingTree(join(source.root, stack.submodule), dir);
+    copyWorkingTree(join(source.root, stack.directory), dir);
     return;
   }
-  await downloadTemplate(`github:${stack.repository}#${source.ref}`, { dir, silent: true });
+  await downloadTemplate(`github:${TEMPLATES_REPOSITORY}/${stack.directory}#${source.ref}`, { dir, silent: true });
 }

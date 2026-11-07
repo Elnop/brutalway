@@ -6,8 +6,8 @@ import { stacks } from '../src/stacks/stacksConfig.ts';
 const root = fileURLToPath(new URL('../../../..', import.meta.url));
 const refs = Object.fromEntries(
   stacks.map((stack) => {
-    const [, , sha] = runCommand('git', ['ls-tree', 'HEAD', stack.submodule], root, true).trim().split(/\s+/u);
-    if (sha === undefined) throw new Error(`${stack.submodule} is not a submodule of HEAD`);
+    const sha = runCommand('git', ['log', '-1', '--format=%H', 'HEAD', '--', stack.directory], root, true).trim();
+    if (sha === '') throw new Error(`${stack.directory} has no commit in HEAD`);
     return [stack.id, sha];
   }),
 );

@@ -24,8 +24,7 @@ export type StackChange = {
 export type Stack = {
   id: string;
   label: string;
-  repository: string;
-  submodule: string;
+  directory: string;
   options: StackOption[];
   changes: StackChange[];
   nextSteps: (answers: Answers) => string[];

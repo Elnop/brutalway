@@ -7,8 +7,7 @@ const TEST_FILES_OPENING_A_DATABASE = ['src/shared-features/todos/todosQueries.t
 export const fastifyStack: Stack = {
   id: 'fastify',
   label: 'Fastify API',
-  repository: 'Elnop/template-fastify',
-  submodule: 'templates/fastify',
+  directory: 'templates/fastify',
   options: [
     { id: 'example', message: 'Keep the todo list API example?', default: true },
     { id: 'swagger', message: 'Serve a Swagger UI on /docs?', default: true },
@@ -19,8 +18,7 @@ export const fastifyStack: Stack = {
   changes: [
     {
       when: {},
-      remove: ['.changeset', 'CHANGELOG.md', '.github/workflows/release.yml'],
-      dependencies: ['@changesets/cli'],
+      remove: ['CHANGELOG.md'],
       edits: [{ file: 'README.md', replace: '# template-fastify\n', with: '# __PROJECT_NAME__\n' }],
     },
     {

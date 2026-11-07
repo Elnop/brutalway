@@ -6,8 +6,8 @@ Every template builds the same todo list, so the stacks can be compared side by 
 
 | Template | Stack | Status |
 |---|---|---|
-| [template-vite](https://github.com/Elnop/template-vite) | Vite, React, zustand, Vitest, Playwright | ready |
-| [template-fastify](https://github.com/Elnop/template-fastify) | Fastify, Zod, node:sqlite, node:test, Swagger UI | ready |
+| [template-vite](templates/vite) | Vite, React, zustand, Vitest, Playwright | ready |
+| [template-fastify](templates/fastify) | Fastify, Zod, node:sqlite, node:test, Swagger UI | ready |
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 
@@ -64,22 +64,18 @@ npm create brutal my-app
 
 The CLI asks for a stack, then for the parts to keep (the example app, e2e tests, the Claude Code hook, CI...). Every combination passes `npm run check`. [create-brutal](packages/tools/create-brutal/README.md) lists the options and the flags to run it without questions.
 
-Each template is also its own GitHub template repository: open it and click "Use this template". This repository holds them as submodules in `templates/`. To get everything at once:
-
-```sh
-git clone --recurse-submodules https://github.com/Elnop/brutalway.git
-```
+The templates live in `templates/`, and the CLI downloads them from there.
 
 ## Working on this repository
 
 | Folder | |
 |---|---|
 | `packages/` | the published packages, one npm workspace each |
-| `templates/` | template-vite and template-fastify, as git submodules |
+| `templates/` | template-vite and template-fastify, each with its own `package.json`, lockfile, version and changelog |
 | `site/` | the landing page and the docs, made from template-vite and deployed to GitHub Pages |
 | `docs/` | the intent and the inspirations |
 | `plugins/`, `.claude-plugin/` | the Claude Code plugin and its marketplace |
-| `scripts/` | the script that creates a GitHub release for each published version |
+| `scripts/` | the script that creates a GitHub release for each published version and each template version |
 
 ```sh
 nvm use
@@ -92,6 +88,8 @@ The root lints itself with the packages of the workspace, and the tests load the
 
 `npm run matrix` creates a project for every combination of CLI options and runs its `npm run check` and `npm test`. With `--local-packages`, the projects install the `@brutalway/*` packages packed from this checkout instead of the versions on npm, so a rule can be tried on both templates before it is published. CI runs it that way, with `--e2e`.
 
-Versions are managed with [changesets](https://github.com/changesets/changesets): add one with `npx changeset` for each change to a published package, `create-brutal` included. `npx changeset version` bumps the versions and writes the changelogs, then `npm run release` builds, checks, publishes what changed and creates the GitHub releases. The CLI records the commit of each template submodule when it is built, so commit the submodule bumps before releasing.
+Versions are managed with [changesets](https://github.com/changesets/changesets): add one with `npx changeset` for each change to a published package, `create-brutal` included. `npx changeset version` bumps the versions and writes the changelogs, then `npm run release` builds, checks, publishes what changed and creates the GitHub releases. The CLI records the last commit that changed each template when it is built, so commit the template changes before releasing.
+
+The templates are versioned on their own, with a second changesets setup in `templates/`: `npm run templates:changeset` adds a changeset for a change that matters to someone starting a project, and `npm run templates:version` bumps the template versions and writes their `CHANGELOG.md`. `npm run release` then tags them as `template-vite@x.y.z` and `template-fastify@x.y.z` and creates their GitHub releases. The site shows each changelog on the template's page.
 
 `site/` has its own `package.json` and its own `npm run check`. The Pages workflow deploys it on each push that changes it.

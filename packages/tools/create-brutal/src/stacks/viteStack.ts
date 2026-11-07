@@ -34,8 +34,7 @@ const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playw
 export const viteStack: Stack = {
   id: 'vite',
   label: 'Vite + React',
-  repository: 'Elnop/template-vite',
-  submodule: 'templates/vite',
+  directory: 'templates/vite',
   options: [
     { id: 'example', message: 'Keep the todo list example?', default: true, requires: { zustand: true } },
     { id: 'zustand', message: 'Add zustand for state?', default: true },
@@ -47,8 +46,7 @@ export const viteStack: Stack = {
   changes: [
     {
       when: {},
-      remove: ['.changeset', 'CHANGELOG.md', '.github/workflows/release.yml'],
-      dependencies: ['@changesets/cli'],
+      remove: ['CHANGELOG.md'],
       edits: [{ file: 'README.md', replace: '# template-vite\n', with: '# __PROJECT_NAME__\n' }],
     },
     {
