@@ -520,7 +520,11 @@ export const viteStack: Stack = {
         { file: 'src/app/locales/en/app.json', after: '{\n', insert: '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n' },
         { file: 'src/app/createI18n.ts', replace: '      en: {', with: '      fr: FRENCH,\n      en: {' },
         { file: 'i18next.config.ts', replace: "locales: ['en'],", with: "locales: ['en', 'fr']," },
-        { file: 'src/main.tsx', after: "import { createI18n } from '@/app/createI18n.ts';\n", insert: "import { followLanguage, preferredLanguage } from '@/features/language-switch/languagePreference.ts';\n" },
+        {
+          file: 'src/main.tsx',
+          after: "import { createI18n } from '@/app/createI18n.ts';\n",
+          insert: "import { followLanguage, preferredLanguage } from '@/features/language-switch/languagePreference.ts';\n",
+        },
         { file: 'src/main.tsx', replace: 'const i18n = createI18n();', with: 'const i18n = createI18n(preferredLanguage());\nfollowLanguage(i18n);' },
         { file: 'src/app/App.tsx', after: "import { useTranslation } from 'react-i18next';\n", insert: "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n" },
         { file: 'src/app/App.tsx', before: '      </header>', insert: '        <LanguageSwitch />\n' },
