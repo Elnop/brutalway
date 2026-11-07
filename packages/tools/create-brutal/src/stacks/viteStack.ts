@@ -180,6 +180,22 @@ const COVERAGE_DOC = `\`npm test\` also measures coverage with \`@vitest/coverag
 
 `;
 
+const REACT_COMPILER_LINT = `'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'react',
+            importNames: ['useMemo', 'useCallback', 'memo'],
+            message: 'The React Compiler memoizes components and hooks: drop useMemo, useCallback and memo, and write the plain value or function.',
+          },
+        ],
+        patterns: [{ regex:`;
+
+const REACT_COMPILER_DOC = `\`vite.config.ts\` runs the [React Compiler](https://react.dev/learn/react-compiler) through Babel (\`babel-plugin-react-compiler\`, \`reactCompilerPreset()\` of \`@vitejs/plugin-react\`), so components and hooks are memoized at build time. Vitest runs without it, since its memo caches add branches the tests would have to reach: unit and component tests check the code as written, and the e2e tests run the compiled build. \`oxlint.config.ts\` reports \`useMemo\`, \`useCallback\` and \`memo\` imported from \`react\`.
+
+`;
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -211,6 +227,7 @@ export const viteStack: Stack = {
     { id: 'server-state', message: 'Read and write the data through an API with TanStack Query?', default: false },
     { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
     { id: 'i18n', message: 'Add French and a language switch?', default: false },
+    { id: 'react-compiler', message: 'Memoize with the React Compiler instead of useMemo and useCallback?', default: false },
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
     {
       id: 'coverage',
@@ -772,6 +789,22 @@ export const viteStack: Stack = {
         { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
         { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
       ],
+    },
+    {
+      when: { 'react-compiler': true },
+      edits: [
+        {
+          file: 'vite.config.ts',
+          replace: "import react from '@vitejs/plugin-react';\n",
+          with: "import babel from '@rolldown/plugin-babel';\nimport react, { reactCompilerPreset } from '@vitejs/plugin-react';\n",
+        },
+        { file: 'vite.config.ts', replace: 'plugins: [react()', with: "plugins: [react(), ...(process.env['VITEST'] === undefined ? [babel({ presets: [reactCompilerPreset()] })] : [])" },
+        { file: 'oxlint.config.ts', replace: "'no-restricted-imports': ['error', { patterns: [{ regex:", with: REACT_COMPILER_LINT },
+        { file: 'oxlint.config.ts', replace: "' }] }],\n  },\n});", with: "' }],\n      },\n    ],\n  },\n});" },
+        { file: 'docs/verifications.md', before: '## Dependencies', insert: REACT_COMPILER_DOC },
+        { file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "@babel/core", "babel-plugin-react-compiler", ' },
+      ],
+      addDevDependencies: { '@babel/core': '7.29.13', '@rolldown/plugin-babel': '0.3.0', 'babel-plugin-react-compiler': '1.0.0' },
     },
     {
       when: { ui: 'shadcn' },
