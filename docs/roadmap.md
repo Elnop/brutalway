@@ -114,11 +114,11 @@ Source: bedrock (`components.json`, `components/ui/`, `.agents/rules/ui-componen
 
 bedrock vendors the whole shadcn library, then forbids raw `<button>`, `<input>`, `<select>` and hand-made cards in its own code. A script fails when the list of components in the docs drifts from the files.
 
-shadcn files are vendored code: they come from a registry, and `npx shadcn add <name> --overwrite` must be able to replace them at any time. They follow shadcn's conventions, which break most brutalway rules, so they get a folder of their own that the rules skip. That folder stays untouched by hand, so skipping the rules there costs nothing.
+shadcn files are vendored code: they come from a registry, and `npx shadcn add <name> --overwrite` must be able to replace them at any time. They follow shadcn's conventions, which break most brutalway rules. bedrock puts them in `components/ui/` and lists that folder as an exception in each tool. That does not work here: `src/shared/ui/` also holds components written for the app, which must keep every rule. So the vendored files leave `src/` altogether, and `src/` gets no exception at all.
 
 ### What breaks, measured
 
-Tried on a project made with `npm create brutal` (vite, every option on), Tailwind v4 added, then `button input checkbox card dialog select sonner tabs dropdown-menu form calendar sidebar` added with the shadcn CLI into `src/shared/ui/`:
+Tried on a project made with `npm create brutal` (vite, every option on), Tailwind v4 added, then `button input checkbox card dialog select sonner tabs dropdown-menu form calendar sidebar` added with the shadcn CLI:
 
 | Tool | What fails on the vendored files |
 |---|---|
@@ -126,55 +126,62 @@ Tried on a project made with `npm create brutal` (vite, every option on), Tailwi
 | tsc | `calendar.tsx` (`noPropertyAccessFromIndexSignature`, 9 errors), `sonner.tsx` (`exactOptionalPropertyTypes`) |
 | oxlint | 48 errors: `file-named-after-export`, `consistent-type-specifier-style`, `func-style`, `only-export-components`, `no-unsafe-type-assertion`, `filename-case`... |
 | knip | components not used yet reported as unused files, `buttonVariants` as an unused export, plus `zod`, `@hookform/resolvers` and `date-fns`, which the CLI installs but no file imports |
-| check-tree | `src/shared/ui/hooks/` holds only `use-mobile.ts` |
+| check-tree | `hooks/` holds only `use-mobile.ts` |
 | dependency-cruiser | nothing once the dependencies are installed (the CLI installed `cn` but forgot `class-variance-authority` and `lucide-react`) |
 | alint | nothing |
 
-`exclude` is not enough for tsc: a file imported by the app is checked with the app's flags even when excluded. With the setup below, `npm run check`, `vite build` and the unit tests pass on that project.
+`exclude` is not enough for tsc: a file imported by the app is checked with the app's flags even when excluded.
 
 ### The method
 
-All shadcn aliases in `components.json` point to `@/shared/ui` (components, hooks and utils), so the vendored code lives in one flat folder and nowhere else. `src/shared/ui/` is in the `shared` layer: it imports npm packages and itself, nothing above.
+The vendored files go to `vendor/shadcn/`, at the root of the project next to `src/` and `e2e/`, imported through a `@vendor/*` alias. Every alias of `components.json` (components, ui, utils, lib, hooks) points to `@vendor/shadcn`, and the shadcn CLI writes there without complaint, imports between its files included (`@vendor/shadcn/button`). `vendor/` only ever holds code copied from a registry, so a later registry (another shadcn namespace, for instance) gets its own `vendor/<name>/`.
+
+`src/` stays fully governed, `src/shared/ui/` included. The scripts already target `src` (`oxlint src e2e`, `depcruise src`, `check-tree src`), so they never see `vendor/`. What remains to set up:
 
 | Tool | Setup |
 |---|---|
-| tsc | `tsconfig.ui.json` is a composite project for `src/shared/ui` with `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature` off, emitting declarations only into `node_modules/.cache/tsc-ui`. `tsconfig.app.json` and `tsconfig.test.json` exclude the folder and reference that project, so the app sees the vendored files through their `.d.ts`. `typecheck` becomes `tsc -b tsconfig.app.json tsconfig.test.json`. The app keeps every strict flag. |
-| oxlint | `src/shared/ui` in `ignorePatterns` |
-| Prettier | `src/shared/ui` and `components.json` in `.prettierignore`, so an `--overwrite` produces no formatting diff |
-| knip | `src/shared/ui/**` as an entry: a component not used yet is not reported, and the packages the folder imports still count as used. A package the shadcn CLI installs without any file importing it is still reported. |
-| check-tree | nothing to set up once the aliases point to one flat folder |
-| dependency-cruiser | stays on: the layer rules apply, plus the two rules of E5-S4 |
+| tsc | `tsconfig.vendor.json` is a composite project for `vendor/` with `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature` off, emitting declarations only into `node_modules/.cache/tsc-vendor`. `tsconfig.app.json` and `tsconfig.test.json` reference it, so the app sees the vendored files through their `.d.ts` and keeps every strict flag. `typecheck` becomes `tsc -b tsconfig.app.json tsconfig.test.json`. |
+| Vite | the `@vendor/` alias next to `@/` |
+| Prettier | `vendor` and `components.json` in `.prettierignore`, so an `--overwrite` produces no formatting diff |
+| knip | `vendor/**/*.{ts,tsx}` as an entry: a component not used yet is not reported, and the packages it imports still count as used. A package the shadcn CLI installs without any file importing it is still reported. |
+| oxlint | `vendor` in `ignorePatterns`, only for the agent hook, which passes the edited file by path |
+| dependency-cruiser | `depcruise src vendor`, with the two rules of E5-S4 |
+| check-tree, alint | nothing |
 
-Styling goes through tokens: shadcn's variables (`--primary`, `--border`, `--radius`...) are defined in `src/app/globals.css` from the neo-brutalist tokens, and what tokens cannot do (thick borders, hard shadows) is written once per primitive with its `data-slot` attribute (`[data-slot='button'] { ... }`). Every shadcn primitive sets one, so the look changes without editing a vendored file. A variant the app needs and shadcn does not have is a component in `src/shared/` that wraps the primitive.
+Tailwind v4 finds the classes in `vendor/` by itself. On the test project, with a `Panel.tsx` in `src/shared/ui/` that wraps the shadcn `Card` and a hand-written `Badge.tsx` next to it, `npm run check` and `vite build` pass, and check-tree still applies to `src/shared/ui/`: with two components there, it asked to move them into `components/`.
+
+Styling goes through tokens: shadcn's variables (`--primary`, `--border`, `--radius`...) are defined in `src/app/globals.css` from the neo-brutalist tokens, and what tokens cannot do (thick borders, hard shadows) is written once per primitive with its `data-slot` attribute (`[data-slot='button'] { ... }`). Every shadcn primitive sets one, so the look changes without editing a vendored file. A variant the app needs and shadcn does not have is a component in `src/shared/ui/` that wraps the primitive, written under the usual rules.
 
 ### Stories
 
 **E5-S1. shadcn/ui as an option.** As someone creating a project, I want `--ui shadcn`, so that I start with accessible primitives styled like the rest of the series.
 - Requires `--styling tailwind` (E0-S3). Only the primitives the example uses are vendored (Button, Input, Checkbox, Card), and the example uses them.
-- The CLI writes `components.json` with every alias on `@/shared/ui` and pins the packages the vendored files import, since the shadcn CLI misses some.
+- The CLI writes `components.json` with every alias on `@vendor/shadcn`, adds the `@vendor/*` alias to the tsconfigs and to Vite, and pins the packages the vendored files import, since the shadcn CLI misses some.
 - The README explains how to add one with `npx shadcn add <name>` and what to do after (E5-S7).
 
 **E5-S2. A TypeScript project for vendored code.** As someone working on the project, I want vendored files checked with shadcn's flags and my code with all of brutalway's, so that adding a component never makes `npm run check` fail on code I did not write.
-- `tsconfig.ui.json`, the references and the `tsc -b` script as above. An error in the app is still reported, an error in `src/shared/ui/` is reported only if it fails with the relaxed flags.
+- `tsconfig.vendor.json`, the references and the `tsc -b` script as above. An error in `src/` is still reported, an error in `vendor/` only if it fails with the relaxed flags.
 - The `.tsbuildinfo` and declarations stay under `node_modules/.cache`, nothing new to gitignore.
 - Check whether `@brutalway/tsconfig` should ship a `react-vite-vendor.json` with the two flags off, so the relaxed set is defined once.
 
-**E5-S3. The other tools skip the folder.** As someone working on the project, I want oxlint, Prettier, knip and check-tree to leave `src/shared/ui/` alone, so that `--overwrite` gives the registry's file byte for byte.
-- The settings of the table above. The matrix (E0-S4) runs with a component added after the scaffold, to catch a tool that stops skipping the folder.
+**E5-S3. The other tools leave `vendor/` alone.** As someone working on the project, I want Prettier and knip set up as above, so that `--overwrite` gives the registry's file byte for byte and `npm run check` stays green.
+- The matrix (E0-S4) runs with a component added after the scaffold, to catch a tool that starts reading `vendor/`.
+- alint: a rule that `vendor/` only holds folders listed in a config file (`components.json` for shadcn), so nobody drops hand-written code there to escape the rules.
 
-**E5-S4. Boundaries of the vendored folder.** As someone working on the project, I want Radix to be imported only from `src/shared/ui/`, and that folder to import nothing from the app, so that swapping a primitive happens in one place.
-- dependency-cruiser rules in `@brutalway/dependency-cruiser-config`: `radix-ui`, `class-variance-authority` and `cn` only from `src/shared/ui/`, and `src/shared/ui/` only to `node_modules` and itself.
+**E5-S4. Boundaries of the vendored folder.** As someone working on the project, I want `vendor/` to import nothing from `src/`, and the packages behind shadcn to be imported only from `vendor/`, so that swapping a primitive happens in one place.
+- Rules in `@brutalway/dependency-cruiser-config`: `vendor-not-to-src`, and `vendor-packages-only-from-vendor` for `radix-ui`, `class-variance-authority` and `cn`. Both tried on the test project: an import of `radix-ui` from `src/shared/lib/` and an import of `src/` from `vendor/shadcn/` are both reported.
+- Code in `src/` may import `@vendor/shadcn/` from any layer, since `vendor/` imports nothing from the app.
 
 **E5-S5. No hand edits.** As someone working on the project, I want an edit to a vendored file to be refused with what to do instead, so that the folder always matches the registry.
-- `@brutalway/agent-hook` stops on a file under a folder that `components.json` points to, with the message: run `npx shadcn add <name> --overwrite`, restyle in `src/app/globals.css` through tokens or `data-slot`, or wrap the primitive in `src/shared/`.
-- Today the hook would fail on these files for a different reason: `oxlint <ignored file>` exits with 1 and "No files found to lint". The hook passes `--no-error-on-unmatched-pattern` or skips ignored files.
-- Look into a CI check that compares the folder with the registry at the pinned shadcn version.
+- `@brutalway/agent-hook` stops on a file under `vendor/`, with the message: run `npx shadcn add <name> --overwrite`, restyle in `src/app/globals.css` through tokens or `data-slot`, or wrap the primitive in `src/shared/ui/`.
+- Without that, the hook would fail on these files for a different reason: `oxlint <ignored file>` exits with 1 and "No files found to lint". The hook passes `--no-error-on-unmatched-pattern` or skips ignored files.
+- Look into a CI check that compares `vendor/shadcn/` with the registry at the pinned shadcn version.
 
-**E5-S6. Primitives first.** As someone working on the project, I want an error when I write a raw `<button>` or `<input>` outside `src/shared/ui/`, so that every control behaves the same way.
+**E5-S6. Primitives first.** As someone working on the project, I want an error when I write a raw `<button>` or `<input>` in `src/`, so that every control behaves the same way.
 - Lint rule with the list of tags and the primitive to use for each, active only when `components.json` exists.
 
 **E5-S7. The docs list what is vendored.** As someone (or an agent) arriving on the project, I want a table of the available primitives, so that I use one instead of writing it again.
-- `docs/ui.md` lists each file of `src/shared/ui/`. A check fails when a file is missing from the table or a row has no file.
+- `docs/ui.md` lists each file of `vendor/shadcn/` and each component of `src/shared/ui/`. A check fails when a file is missing from the table or a row has no file.
 
 **E5-S8. One icon library.** As someone working on the project, I want a single icon set, so that icons look alike.
 - The one set in `components.json` (`lucide` by default), imports of the others reported.
