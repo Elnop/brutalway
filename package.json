@@ -19,7 +19,7 @@
     "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
     "templates:changeset": "cd templates && changeset",
     "templates:version": "cd templates && changeset version",
-    "release": "npm run build && npm run check && changeset publish && (cd templates && changeset tag) && git push --follow-tags && node scripts/createReleases.ts"
+    "release": "npm run build && npm run check && changeset publish && (cd templates && changeset git-tag) && git push --follow-tags && node scripts/createReleases.ts"
   },
   "devDependencies": {
     "@brutalway/oxlint-config-typescript": "0.4.0",
