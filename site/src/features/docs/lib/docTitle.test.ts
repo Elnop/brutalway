@@ -9,7 +9,7 @@ describe('docTitle', () => {
 
   it('names a readme after its folder', () => {
     expect(docTitle('create-brutal/README.md')).toBe('Create brutal');
-    expect(docTitle('readme.md')).toBe('Overview');
+    expect(docTitle('README.md')).toBe('Overview');
   });
 
   it('writes an upper case file name in sentence case', () => {

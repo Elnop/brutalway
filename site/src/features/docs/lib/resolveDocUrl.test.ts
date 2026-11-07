@@ -3,7 +3,7 @@ import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 
 const source = DOC_SOURCES[0];
-const knownPaths = ['readme.md', 'docs/intent.md', 'docs/inspirations.md'];
+const knownPaths = ['README.md', 'docs/intent.md', 'docs/inspirations.md'];
 
 describe('resolveDocUrl', () => {
   it('keeps absolute urls', () => {
@@ -13,8 +13,8 @@ describe('resolveDocUrl', () => {
 
   it('turns a link to a known doc into a docs route, relative to the current file', () => {
     expect(resolveDocUrl({ url: 'inspirations.md', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutalway/docs/inspirations.md');
-    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('#/docs/brutalway/docs/intent.md');
-    expect(resolveDocUrl({ url: '../readme.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutalway/readme.md');
+    expect(resolveDocUrl({ url: 'docs/intent.md', attribute: 'href', source, docPath: 'README.md', knownPaths })).toBe('#/docs/brutalway/docs/intent.md');
+    expect(resolveDocUrl({ url: '../README.md#anchor', attribute: 'href', source, docPath: 'docs/intent.md', knownPaths })).toBe('#/docs/brutalway/README.md');
   });
 
   it('links a template doc to its page', () => {
@@ -33,10 +33,10 @@ describe('resolveDocUrl', () => {
   });
 
   it('sends other relative links to GitHub', () => {
-    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe(
+    expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'README.md', knownPaths })).toBe(
       'https://github.com/Elnop/brutalway/blob/main/create-brutal/src/cli.ts',
     );
-    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'readme.md', knownPaths })).toBe('https://github.com/Elnop/brutalway/blob/main/readme.md#the-common-rules');
+    expect(resolveDocUrl({ url: '#the-common-rules', attribute: 'href', source, docPath: 'README.md', knownPaths })).toBe('https://github.com/Elnop/brutalway/blob/main/README.md#the-common-rules');
   });
 
   it('loads relative images from the raw files', () => {

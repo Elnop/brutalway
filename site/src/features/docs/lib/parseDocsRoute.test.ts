@@ -3,8 +3,8 @@ import { parseDocsRoute } from '@/features/docs/lib/parseDocsRoute.ts';
 
 describe('parseDocsRoute', () => {
   it('opens the first file of the first source by default', () => {
-    expect(parseDocsRoute('#/docs')).toMatchObject({ source: { key: 'brutalway' }, path: 'readme.md' });
-    expect(parseDocsRoute('#/docs/')).toMatchObject({ source: { key: 'brutalway' }, path: 'readme.md' });
+    expect(parseDocsRoute('#/docs')).toMatchObject({ source: { key: 'brutalway' }, path: 'README.md' });
+    expect(parseDocsRoute('#/docs/')).toMatchObject({ source: { key: 'brutalway' }, path: 'README.md' });
   });
 
   it('reads the source and the path', () => {
