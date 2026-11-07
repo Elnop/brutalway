@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { globSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { appendFileSync, globSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -13,10 +13,11 @@ import { stacks } from '../src/stacks/stacksConfig.ts';
 import { withLocalPackages } from '../src/withLocalPackages.ts';
 
 const { values } = parseArgs({
-  options: { stack: { type: 'string' }, e2e: { type: 'boolean' }, jobs: { type: 'string' }, keep: { type: 'boolean' }, 'local-packages': { type: 'boolean' } },
+  options: { stack: { type: 'string' }, all: { type: 'boolean' }, e2e: { type: 'boolean' }, jobs: { type: 'string' }, keep: { type: 'boolean' }, 'local-packages': { type: 'boolean' } },
 });
 const WORK_DIR = join(tmpdir(), 'brutal-matrix');
 const JOBS = Number(values.jobs ?? '3');
+const STARTED_AT = performance.now();
 
 type Run = { stack: Stack; answers: Answers; name: string };
 
@@ -65,7 +66,10 @@ async function install(dir: string): Promise<{ ok: boolean; output: string }> {
 
 function label(answers: Answers): string {
   return Object.entries(answers)
-    .map(([id, value]) => (value ? id : `no-${id}`))
+    .map(([id, value]) => {
+      if (typeof value === 'string') return `${id}=${value}`;
+      return value ? id : `no-${id}`;
+    })
     .join(' ');
 }
 
@@ -91,7 +95,7 @@ async function check({ stack, answers, name }: Run): Promise<string | undefined>
 
 const runs: Run[] = stacks
   .filter((stack) => values.stack === undefined || stack.id === values.stack)
-  .flatMap((stack) => matrixCombinations(stack.options).map((answers, index) => ({ stack, answers, name: `${stack.id}-${index}` })));
+  .flatMap((stack) => matrixCombinations(stack.options, values.all === true).map((answers, index) => ({ stack, answers, name: `${stack.id}-${index}` })));
 const failures: string[] = [];
 let next = 0;
 
@@ -103,7 +107,16 @@ async function worker(): Promise<void> {
   }
 }
 
+function duration(milliseconds: number): string {
+  const seconds = Math.round(milliseconds / 1000);
+  return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
+}
+
 await Promise.all(Array.from({ length: JOBS }, worker));
 for (const failure of failures) process.stderr.write(`\n${failure}\n`);
+const summary = `${runs.length} projects built in ${duration(performance.now() - STARTED_AT)}, ${failures.length} failed`;
+process.stdout.write(`\n${summary}\n`);
+const stepSummary = process.env['GITHUB_STEP_SUMMARY'];
+if (stepSummary !== undefined) appendFileSync(stepSummary, `### Matrix\n\n${summary}\n`);
 if (values.keep === true) process.stdout.write(`\nProjects kept in ${WORK_DIR}\n`);
 process.exitCode = failures.length > 0 ? 1 : 0;

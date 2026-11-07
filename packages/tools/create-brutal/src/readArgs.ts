@@ -3,7 +3,8 @@ import { parseArgs } from 'node:util';
 import type { ParseArgsOptionsConfig } from 'node:util';
 import type { CliArgs, Preset } from './CliTypes.ts';
 import { isRecord } from './isRecord.ts';
-import type { Answers, Stack } from './StackTypes.ts';
+import { isChoice } from './optionRules.ts';
+import type { AnswerValue, Answers, Stack } from './StackTypes.ts';
 
 const BASE_OPTIONS: ParseArgsOptionsConfig = {
   stack: { type: 'string' },
@@ -15,9 +16,9 @@ const BASE_OPTIONS: ParseArgsOptionsConfig = {
   install: { type: 'boolean' },
 };
 
-function booleanEntries(value: unknown): Answers {
+function answerEntries(value: unknown): Answers {
   if (!isRecord(value)) return {};
-  return Object.fromEntries(Object.entries(value).filter((entry): entry is [string, boolean] => typeof entry[1] === 'boolean'));
+  return Object.fromEntries(Object.entries(value).filter((entry): entry is [string, AnswerValue] => typeof entry[1] === 'boolean' || typeof entry[1] === 'string'));
 }
 
 function readPreset(path: unknown): Preset {
@@ -29,7 +30,7 @@ function readPreset(path: unknown): Preset {
     ...(typeof stack === 'string' ? { stack } : {}),
     ...(typeof git === 'boolean' ? { git } : {}),
     ...(typeof install === 'boolean' ? { install } : {}),
-    options: booleanEntries(parsed['options']),
+    options: answerEntries(parsed['options']),
   };
 }
 
@@ -38,13 +39,13 @@ function optionalBoolean(value: unknown, fallback: boolean | undefined): boolean
 }
 
 export function readArgs(argv: string[], stack: Stack | undefined): CliArgs {
-  const stackOptions: ParseArgsOptionsConfig = Object.fromEntries((stack?.options ?? []).map((option) => [option.id, { type: 'boolean' }]));
+  const stackOptions: ParseArgsOptionsConfig = Object.fromEntries((stack?.options ?? []).map((option) => [option.id, { type: isChoice(option) ? 'string' : 'boolean' }]));
   const { values, positionals } = parseArgs({ args: argv, options: { ...BASE_OPTIONS, ...stackOptions }, allowPositionals: true, allowNegative: true, strict: stack !== undefined });
   const preset = readPreset(values['preset']);
   const options: Answers = { ...preset.options };
   for (const option of stack?.options ?? []) {
     const value = values[option.id];
-    if (typeof value === 'boolean') options[option.id] = value;
+    if (typeof value === 'boolean' || typeof value === 'string') options[option.id] = value;
   }
   const stackId = values['stack'];
   return {

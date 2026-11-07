@@ -30,4 +30,14 @@ describe('applyFileEdit', () => {
   it('drops the last section up to the end of the file', () => {
     assert.strictEqual(applyFileEdit(README, { file: 'x', dropSection: '## Next' }), '# app\n\nintro\n\n## Agent\n\nhook text\n\n### Detail\n\nmore\n');
   });
+
+  it('inserts text next to an anchor found exactly once', () => {
+    assert.strictEqual(applyFileEdit('| a |\n| c |\n', { file: 'x', after: '| a |\n', insert: '| b |\n' }), '| a |\n| b |\n| c |\n');
+    assert.strictEqual(applyFileEdit('a c', { file: 'x', before: 'c', insert: 'b ' }), 'a b c');
+  });
+
+  it('rejects an anchor found zero or several times', () => {
+    assert.throws(() => applyFileEdit('a', { file: 'x', after: 'b', insert: 'c' }), /expected the anchor "b" once, found it 0 times/u);
+    assert.throws(() => applyFileEdit('b b', { file: 'x', before: 'b', insert: 'c' }), /found it 2 times/u);
+  });
 });

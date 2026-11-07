@@ -112,7 +112,7 @@ export const viteStack: Stack = {
     {
       when: { zustand: false },
       edits: [{ file: 'docs/architecture.md', dropSection: '## Store, actions and selectors' }],
-      dependencies: ['zustand'],
+      removeDependencies: ['zustand'],
     },
     {
       when: { 'component-tests': false, example: true },
@@ -133,8 +133,8 @@ export const viteStack: Stack = {
           with: '',
         },
       ],
-      scripts: ['test:component'],
-      dependencies: ['@vitest/browser-playwright', 'vitest-browser-react'],
+      removeScripts: ['test:component'],
+      removeDependencies: ['@vitest/browser-playwright', 'vitest-browser-react'],
     },
     {
       when: { 'component-tests': false, ci: true },
@@ -160,8 +160,8 @@ export const viteStack: Stack = {
         { file: 'docs/verifications.md', dropLines: '| E2e |' },
         { file: 'docs/verifications.md', dropLines: 'The specs import `test`' },
       ],
-      scripts: ['e2e'],
-      dependencies: ['@playwright/test', '@axe-core/playwright', '@brutalway/playwright-fixtures'],
+      removeScripts: ['e2e'],
+      removeDependencies: ['@playwright/test', '@axe-core/playwright', '@brutalway/playwright-fixtures'],
     },
     {
       when: { e2e: false, example: true },
@@ -182,7 +182,7 @@ export const viteStack: Stack = {
     },
     {
       when: { e2e: false, 'component-tests': true },
-      devDependencies: { playwright: '1.64.1' },
+      addDevDependencies: { playwright: '1.64.1' },
       edits: [
         { file: 'docs/verifications.md', replace: CHROMIUM_DOC, with: 'Component tests need headless Chromium: `npx playwright install --only-shell chromium`.' },
         { file: 'docs/verifications.md', replace: ', since orchestrators read stores and e2e covers them.', with: ', since orchestrators read stores.' },
@@ -206,7 +206,7 @@ export const viteStack: Stack = {
         { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
         { file: 'README.md', dropSection: '## Working with an agent' },
       ],
-      dependencies: ['@brutalway/agent-hook'],
+      removeDependencies: ['@brutalway/agent-hook'],
     },
     {
       when: { ci: false },

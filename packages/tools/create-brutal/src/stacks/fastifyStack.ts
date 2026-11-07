@@ -77,7 +77,7 @@ export const fastifyStack: Stack = {
         { file: 'README.md', replace: ', routes, Swagger', with: ', routes' },
         { file: 'docs/verifications.md', replace: 'the full wiring and the OpenAPI document', with: 'the full wiring' },
       ],
-      dependencies: ['@fastify/swagger-ui'],
+      removeDependencies: ['@fastify/swagger-ui'],
     },
     {
       when: { example: true, database: false },
@@ -122,7 +122,7 @@ export const fastifyStack: Stack = {
         { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
         { file: 'README.md', dropSection: '## Working with an agent' },
       ],
-      dependencies: ['@brutalway/agent-hook'],
+      removeDependencies: ['@brutalway/agent-hook'],
     },
     {
       when: { ci: false },

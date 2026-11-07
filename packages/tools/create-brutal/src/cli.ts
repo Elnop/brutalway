@@ -3,15 +3,26 @@ import { existsSync, readdirSync, rmSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 import { cancel, confirm, intro, isCancel, log, note, outro, select, spinner, text } from '@clack/prompts';
 import { errorMessage } from './errorMessage.ts';
+import { isChoice } from './optionRules.ts';
 import { readArgs } from './readArgs.ts';
 import { readStackRefs } from './readStackRefs.ts';
 import { resolveAnswers } from './resolveAnswers.ts';
 import { scaffoldProject } from './scaffoldProject.ts';
 import { LOCAL_ROOT } from './ScaffoldConfig.ts';
-import type { Stack, StackOption, TemplateSource } from './StackTypes.ts';
+import type { AnswerValue, Stack, StackOption, TemplateSource } from './StackTypes.ts';
 import { stacks } from './stacks/stacksConfig.ts';
 
 const PROJECT_NAME = /^[a-z0-9][a-z0-9._-]*$/u;
+
+function defaultLabel(option: StackOption): string {
+  if (isChoice(option)) return option.default;
+  return option.default ? 'yes' : 'no';
+}
+
+function optionUsage(option: StackOption): string {
+  const form = isChoice(option) ? `--${option.id} ${option.values.map((value) => value.id).join('|')}` : `--[no-]${option.id}`;
+  return `  ${form.padEnd(30)} default: ${defaultLabel(option)}`;
+}
 
 const USAGE = `Usage: npm create brutal [dir] -- [flags]
 
@@ -22,8 +33,9 @@ const USAGE = `Usage: npm create brutal [dir] -- [flags]
   --no-install       skip npm install
   --local            copy the templates from this brutal checkout
 
-Each stack option has a flag: --<option> or --no-<option>.
-${stacks.map((stack) => `  ${stack.id}: ${stack.options.map((option) => option.id).join(', ')}`).join('\n')}`;
+Each stack option has a flag. A yes/no option takes --<option> or --no-<option>,
+an option with several values takes --<option> <value>.
+${stacks.map((stack) => `\n${stack.id}\n${stack.options.map(optionUsage).join('\n')}`).join('\n')}`;
 
 function stopCancelled(): never {
   cancel('Cancelled.');
@@ -58,8 +70,13 @@ async function pickStack(id: string | undefined, yes: boolean): Promise<Stack> {
   return isCancel(value) ? stopCancelled() : value;
 }
 
-async function askOption(option: StackOption): Promise<boolean> {
-  const value = await confirm({ message: option.message, initialValue: option.default });
+async function askOption(option: StackOption, allowed: AnswerValue[]): Promise<AnswerValue> {
+  if (!isChoice(option)) {
+    const value = await confirm({ message: option.message, initialValue: option.default });
+    return isCancel(value) ? stopCancelled() : value;
+  }
+  const values = option.values.filter((value) => allowed.includes(value.id));
+  const value = await select({ message: option.message, initialValue: option.default, options: values.map((candidate) => ({ value: candidate.id, label: candidate.label })) });
   return isCancel(value) ? stopCancelled() : value;
 }
 

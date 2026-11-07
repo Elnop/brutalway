@@ -23,7 +23,7 @@ The CLI also asks whether to run `git init` and `npm install`. Without git, the 
 
 ## Without questions
 
-Every option has a flag, `--<option>` or `--no-<option>`. `--yes` takes the default for every question left:
+A yes/no option has the flags `--<option>` and `--no-<option>`, an option with several values takes `--<option> <value>`. `--yes` takes the default for every question left:
 
 ```sh
 npm create brutal my-app -- --stack vite --no-example --no-e2e --yes
@@ -39,11 +39,13 @@ A preset file holds the same answers, and flags override it:
 npm create brutal my-app -- --preset minimal.json --yes
 ```
 
-`npm create brutal -- --help` lists the stacks and their options.
+`npm create brutal -- --help` lists the stacks, their options, the values of each option and its default. A combination that cannot work stops the CLI before anything is written, with a message naming both options: `--no-zustand cannot be used with --example`.
 
 ## How it works
 
-Each version of the package downloads every template from `templates/` in this repository, at the last commit that changed it when the package was built (`dist/stackRefs.json`), so a given version always produces the same project. The options are described in `src/stacks/viteStack.ts` and `src/stacks/fastifyStack.ts`: files to remove, text to replace in the docs and configs, scripts and dependencies to drop, and files to copy from `overlays/`. A replacement whose text cannot be found stops the CLI with the file name and the missing text, rather than producing a half-edited project.
+Each version of the package downloads every template from `templates/` in this repository, at the last commit that changed it when the package was built (`dist/stackRefs.json`), so a given version always produces the same project. The options are described in `src/stacks/viteStack.ts` and `src/stacks/fastifyStack.ts`: files to remove, text to replace or insert in the docs and configs, scripts and dependencies to drop or add, and files to copy from `overlays/`. A replacement whose text cannot be found, or an insertion whose anchor cannot be found, stops the CLI with the file name and the missing text, rather than producing a half-edited project.
+
+An option is either yes/no, with a `default` of `true` or `false`, or a choice between `values`, with one of them as `default`. An option that defaults to `false` adds things when switched on: its change brings an overlay, `addDependencies`, `addDevDependencies` and doc lines inserted `after` or `before` an anchor that already exists. A yes/no option, or one value of a choice, can declare `requires` (the other options are forced to these values) and `conflicts` (the other options cannot take these values). The CLI skips a question whose answer is already decided, and only offers the values that still work.
 
 ## Developing
 
@@ -55,4 +57,4 @@ node packages/tools/create-brutal/src/cli.ts ../my-app --local
 npm run matrix
 ```
 
-`--local` copies the templates from `templates/` in this checkout, local changes included. `npm run matrix` creates a project for every combination of options (options marked `independent` are switched on and off without being crossed with the others), installs it, then runs `npm run check` and `npm test`. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `brutal-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`. `--local-packages` makes each project install the `@brutalway/*` packages packed from this checkout instead of the versions on npm (run `npm run build` first).
+`--local` copies the templates from `templates/` in this checkout, local changes included. `npm run matrix` creates a set of projects that covers every pair of option values that can happen together, starting from the defaults, with every combination of the choice options when a stack has more than two of them. Options marked `independent` are switched on and off without being crossed with the others. Each project is installed, then runs `npm run check` and `npm test`, and the run ends with the number of projects and the time it took, also written to the GitHub job summary. `--all` builds every valid combination instead. `--e2e` adds `npm run e2e` (use `--jobs 1`, Playwright needs port 4173), `--keep` keeps the projects in `brutal-matrix/` under the system temp folder, outside the repository so that no project picks up its `node_modules`. `--local-packages` makes each project install the `@brutalway/*` packages packed from this checkout instead of the versions on npm (run `npm run build` first).

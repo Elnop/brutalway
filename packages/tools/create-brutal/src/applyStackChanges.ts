@@ -18,11 +18,17 @@ function removePaths(dir: string, patterns: string[]): void {
   }
 }
 
+function withProjectName(edit: FileEdit, projectName: string): FileEdit {
+  if ('with' in edit) return { ...edit, with: edit.with.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+  if ('insert' in edit) return { ...edit, insert: edit.insert.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+  return edit;
+}
+
 function editFiles(dir: string, edits: FileEdit[], projectName: string): void {
   for (const edit of edits) {
     const path = join(dir, edit.file);
     if (!existsSync(path)) throw new Error(`${edit.file} does not exist`);
-    const named = 'with' in edit ? { ...edit, with: edit.with.replaceAll(PROJECT_NAME_TOKEN, projectName) } : edit;
+    const named = withProjectName(edit, projectName);
     try {
       writeFileSync(path, applyFileEdit(readFileSync(path, 'utf8'), named));
     } catch (error) {
@@ -43,18 +49,23 @@ export function updatePackageJson(dir: string, update: (pkg: PackageJson) => voi
   writeFileSync(path, `${JSON.stringify(pkg, null, 2)}\n`);
 }
 
+function changesPackage(change: StackChange): boolean {
+  return [change.removeScripts, change.removeDependencies, change.addDependencies, change.addDevDependencies].some((field) => field !== undefined);
+}
+
 function updatePackage(dir: string, change: StackChange): void {
   updatePackageJson(dir, (pkg) => {
-    for (const script of change.scripts ?? []) {
+    for (const script of change.removeScripts ?? []) {
       if (pkg.scripts?.[script] === undefined) throw new Error(`package.json has no script ${script}`);
       delete pkg.scripts[script];
     }
-    for (const name of change.dependencies ?? []) {
+    for (const name of change.removeDependencies ?? []) {
       const field = pkg.dependencies?.[name] === undefined ? pkg.devDependencies : pkg.dependencies;
       if (field?.[name] === undefined) throw new Error(`package.json has no dependency ${name}`);
       delete field[name];
     }
-    if (change.devDependencies !== undefined) pkg.devDependencies = sortedRecord({ ...pkg.devDependencies, ...change.devDependencies });
+    if (change.addDependencies !== undefined) pkg.dependencies = sortedRecord({ ...pkg.dependencies, ...change.addDependencies });
+    if (change.addDevDependencies !== undefined) pkg.devDependencies = sortedRecord({ ...pkg.devDependencies, ...change.addDevDependencies });
   });
 }
 
@@ -84,7 +95,7 @@ export function applyStackChanges(dir: string, stack: Stack, answers: Answers, o
   for (const change of stack.changes.filter((candidate) => matches(candidate, answers))) {
     removePaths(dir, change.remove ?? []);
     editFiles(dir, change.edits ?? [], projectName);
-    if (change.scripts !== undefined || change.dependencies !== undefined || change.devDependencies !== undefined) updatePackage(dir, change);
+    if (changesPackage(change)) updatePackage(dir, change);
     if (change.overlay !== undefined) copyOverlay(join(overlaysRoot, stack.id, change.overlay), dir, projectName);
     keepFolders(dir, change.keep ?? []);
   }
