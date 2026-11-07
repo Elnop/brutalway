@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Why a rule exists
+    url: https://github.com/Elnop/brutalway/blob/main/docs/intent.md
+    about: The six axioms behind the checks, read this before asking to drop one

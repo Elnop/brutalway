@@ -1,0 +1,18 @@
+name: Template
+description: Ask for a new template or a change to the stack of an existing one
+labels: [enhancement]
+body:
+  - type: input
+    id: template
+    attributes:
+      label: Template
+      placeholder: template-next, or template-vite if it already exists
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What to add or change
+      description: The libraries and tools, and how the common rules would map onto them.
+    validations:
+      required: true

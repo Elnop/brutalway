@@ -1,0 +1,54 @@
+name: Bug
+description: A check fails on valid code, misses invalid code, or a tool crashes
+labels: [bug]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - template-vite
+        - template-fastify
+        - create-brutal
+        - a config package (oxlint, dependency-cruiser, alint, tsconfig, prettier)
+        - an ESLint plugin
+        - check-tree
+        - agent-hook or the brutal-checks Claude Code plugin
+        - playwright-fixtures
+        - the site
+        - something else
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package or template version
+      placeholder: '@brutalway/oxlint-config-typescript@0.4.0'
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: The command you ran and the smallest file or tree that triggers the problem.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Paste the full output, with the rule name if a check reported something.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Node version and OS
+      placeholder: Node 26.1.0, Ubuntu 24.04

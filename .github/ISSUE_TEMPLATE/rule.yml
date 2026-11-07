@@ -1,0 +1,36 @@
+name: Rule or convention
+description: Propose a new check, or a change to one that exists
+labels: [enhancement]
+body:
+  - type: textarea
+    id: convention
+    attributes:
+      label: The convention
+      description: What the code should look like, with a short example of code that passes and code that fails.
+    validations:
+      required: true
+  - type: textarea
+    id: drift
+    attributes:
+      label: Why it needs a check
+      description: How the code drifts without it. A real case from a project is worth more than a hypothetical one.
+    validations:
+      required: true
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Which tool should enforce it
+      options:
+        - oxlint or ESLint rule
+        - dependency-cruiser
+        - alint
+        - check-tree
+        - TypeScript compiler option
+        - not sure
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Which templates it applies to
+      placeholder: all of them, only the front ends, only template-fastify
