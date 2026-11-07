@@ -1,0 +1,43 @@
+{
+  "name": "@brutalway/oxlint-config-tanstack-query",
+  "version": "0.1.0",
+  "description": "Oxlint config for TanStack Query: query keys from an xKeys factory, cache windows from named profiles, plus exhaustive-deps and stable-query-client from @tanstack/eslint-plugin-query.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "oxlint-plugin",
+    "tanstack-query",
+    "react-query",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-tanstack-query#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/oxlint-config-tanstack-query"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/TanstackQueryConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "^1.91.0",
+    "@tanstack/eslint-plugin-query": "^5.107.1",
+    "eslint": "^10.14.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutalway/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}

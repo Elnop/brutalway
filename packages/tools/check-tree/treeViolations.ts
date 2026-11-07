@@ -13,13 +13,14 @@ const DEFAULT_CATEGORY_FOLDERS = [
   'routes',
   'services',
   'queries',
+  'keys',
   'schemas',
   'clients',
   'workers',
   'lib',
 ];
 const TEST_FILE = /\.test\.tsx?$/u;
-const NAMED_FILE = /^use[A-Z]|(?:Types|Config|Store|Routes|Service|Queries|Schemas|Client|Worker|Env)\.ts$|Content\.tsx?$|\.d\.ts$/u;
+const NAMED_FILE = /^use[A-Z]|(?:Types|Config|Store|Routes|Service|Queries|Keys|Schemas|Client|Worker|Env)\.ts$|Content\.tsx?$|\.d\.ts$/u;
 const COMPONENT_FILE = /^[A-Z]\w*\.tsx$/u;
 const ORCHESTRATOR_FILE = /(?:Container|Layout|Page)\.tsx$/u;
 const COMPONENT_FOLDERS = new Set(['components', 'orchestrators', 'presenters']);
@@ -46,6 +47,7 @@ const FILE_GROUPS: FileGroup[] = [
   { folder: 'routes', belongs: (fileName) => fileName.endsWith('Routes.ts'), appliesIn: outsideOwnFolder('routes') },
   { folder: 'services', belongs: (fileName) => fileName.endsWith('Service.ts'), appliesIn: outsideOwnFolder('services') },
   { folder: 'queries', belongs: (fileName) => fileName.endsWith('Queries.ts'), appliesIn: outsideOwnFolder('queries') },
+  { folder: 'keys', belongs: (fileName) => fileName.endsWith('Keys.ts'), appliesIn: outsideOwnFolder('keys') },
   { folder: 'schemas', belongs: (fileName) => fileName.endsWith('Schemas.ts'), appliesIn: outsideOwnFolder('schemas') },
   { folder: 'clients', belongs: (fileName) => fileName.endsWith('Client.ts'), appliesIn: outsideOwnFolder('clients') },
   { folder: 'workers', belongs: (fileName) => fileName.endsWith('Worker.ts'), appliesIn: outsideOwnFolder('workers') },

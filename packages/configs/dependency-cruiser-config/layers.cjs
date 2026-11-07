@@ -157,14 +157,21 @@ module.exports = {
     {
       name: 'presenters-are-pure',
       severity: 'error',
-      comment: 'A presenter reads no store: its orchestrator passes everything through props. Any component whose name does not end with Container, Layout or Page is a presenter.',
+      comment: 'A presenter reads no store and no server data: its orchestrator passes everything through props. Any component whose name does not end with Container, Layout or Page is a presenter.',
       from: {
         path: '^src/(features|shared)/.+\\.tsx$',
         pathNot: ['(Container|Layout|Page|Content|Config)\\.tsx$', '\\.test\\.tsx$'],
       },
       to: {
-        path: '(Store\\.ts$|node_modules/zustand/|^src/shared-features/[^/]+/(hooks/)?use[^/]+\\.ts$)',
+        path: '(Store\\.ts$|Client\\.ts$|node_modules/zustand/|node_modules/@tanstack/react-query/|^src/shared-features/[^/]+/(hooks/)?use[^/]+\\.ts$)',
       },
+    },
+    {
+      name: 'stores-hold-no-server-data',
+      severity: 'error',
+      comment: 'A store holds UI state only: data from an API goes through a query hook that calls the xClient.ts, never into a store.',
+      from: { path: 'Store\\.ts$' },
+      to: { path: '(Client\\.ts$|Keys\\.ts$|node_modules/@tanstack/react-query/|/use[^/]+\\.tsx?$)' },
     },
     {
       name: 'stores-in-their-folder',

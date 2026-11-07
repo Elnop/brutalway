@@ -82,6 +82,22 @@ test('each rule reports its violation', () => {
   );
 });
 
+test('server data stays out of presenters and stores', () => {
+  const root = project({
+    'package.json': JSON.stringify({ name: 'fixture', dependencies: { '@tanstack/react-query': '1.0.0' } }),
+    ...fakePackage('@tanstack/react-query'),
+    'src/shared-features/todos/todosClient.ts': 'export const todosClient = 1;\n',
+    'src/shared-features/todos/todosKeys.ts': 'export const todosKeys = 1;\n',
+    'src/shared-features/todos/hooks/useTodosQuery.ts':
+      "import { useQuery } from '@tanstack/react-query';\nimport { todosClient } from '../todosClient.ts';\nimport { todosKeys } from '../todosKeys.ts';\nexport const useTodosQuery = [useQuery, todosClient, todosKeys];\n",
+    'src/features/list/components/ListLayout.tsx': "import { useTodosQuery } from '../../../shared-features/todos/hooks/useTodosQuery.ts';\nexport const ListLayout = useTodosQuery;\n",
+  });
+  assert.deepEqual(violatedRules(root), []);
+  writeFileSync(join(root, 'src/features/list/components/Item.tsx'), "import { todosClient } from '../../../shared-features/todos/todosClient.ts';\nexport const Item = todosClient;\n");
+  writeFileSync(join(root, 'src/shared-features/todos/todosStore.ts'), "import { todosClient } from './todosClient.ts';\nexport const todosStore = todosClient;\n");
+  assert.deepEqual(violatedRules(root), ['presenters-are-pure', 'stores-hold-no-server-data']);
+});
+
 test('the server rules keep queries behind services and SQLite inside queries', () => {
   const root = project(
     {

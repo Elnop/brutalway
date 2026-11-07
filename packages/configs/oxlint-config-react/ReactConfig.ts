@@ -34,6 +34,7 @@ export const reactConfig: OxlintConfig = defineConfig({
   jsPlugins: [
     { name: 'component-props', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
     { name: 'hook-naming', specifier: fileURLToPath(new URL('./hookNamingPlugin.js', import.meta.url)) },
+    { name: 'fetch-placement', specifier: fileURLToPath(new URL('./fetchPlugin.js', import.meta.url)) },
   ],
   env: { browser: true, es2024: true },
   rules: {
@@ -63,6 +64,23 @@ export const reactConfig: OxlintConfig = defineConfig({
         ],
       },
     },
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {
+        'fetch-placement/no-restricted-syntax': [
+          'error',
+          {
+            selector: 'CallExpression[callee.name=/^use(Layout)?Effect$/] CallExpression[callee.name="fetch"]',
+            message: 'No fetch in an effect: server data goes through a query hook, and the request lives in an xClient.ts.',
+          },
+          {
+            selector: 'CallExpression[callee.name="fetch"]:not(CallExpression[callee.name=/^use(Layout)?Effect$/] CallExpression)',
+            message: 'Only an xClient.ts file calls fetch: move this request into the client of that API.',
+          },
+        ],
+      },
+    },
+    { files: ['**/*Client.ts'], rules: { 'fetch-placement/no-restricted-syntax': 'off' } },
     { files: ['**/*.test.tsx', 'e2e/**'], rules: { 'component-props/no-restricted-syntax': 'off' } },
   ],
 });

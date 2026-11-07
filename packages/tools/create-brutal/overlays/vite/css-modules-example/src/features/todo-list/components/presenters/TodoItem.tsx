@@ -5,9 +5,9 @@ import styles from '@/features/todo-list/components/presenters/TodoItem.module.c
 
 type TodoItemProps = {
   todo: Todo;
-  onToggle: (id: string) => void;
-  onRename: (id: string, title: string) => void;
-  onRemove: (id: string) => void;
+  onToggle: (id: Todo['id']) => void;
+  onRename: (id: Todo['id'], title: string) => void;
+  onRemove: (id: Todo['id']) => void;
 };
 
 export function TodoItem({ todo, onToggle, onRename, onRemove }: TodoItemProps) {

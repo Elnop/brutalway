@@ -7,6 +7,7 @@ Oxlint config for React with TypeScript. It extends [@brutalway/oxlint-config-ty
 - a component types its props with a named type called after it: `function Card({ title }: CardProps)`. Untyped props, inline object types and other type names are reported.
 - a callback prop of an `xProps` type is named `onX` (`onSelect`, `onChange`), in `.tsx` files and in `xTypes.ts` files
 - a hook lives in a `useX.ts` file, and a `useX.ts` file only exports hooks
+- `fetch` is only called from an `xClient.ts` file, and never inside `useEffect` or `useLayoutEffect`: server data goes through a query hook that calls the client
 - no braces around a plain string in JSX: `className="card"`, not `className={'card'}`
 - no orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) under `shared-features/`: that layer holds business code shared by several features, and the components that read it belong to a feature
 

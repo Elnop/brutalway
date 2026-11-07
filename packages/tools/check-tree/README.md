@@ -18,6 +18,7 @@ Checks the folders of a source tree, which a linter does not see:
 | `routes/`                              | `xRoutes.ts`                                                      |
 | `services/`                            | `xService.ts`                                                     |
 | `queries/`                             | `xQueries.ts`                                                     |
+| `keys/`                                | `xKeys.ts`, query key factories                                   |
 | `schemas/`                             | `xSchemas.ts`                                                     |
 | `clients/`                             | `xClient.ts`                                                      |
 | `workers/`                             | `xWorker.ts`                                                      |
@@ -35,7 +36,7 @@ npx check-tree src
 
 It prints one line per problem and exits with code 1 if it found any.
 
-The default category folders are `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `schemas`, `clients`, `workers` and `lib`. Pass your own list with `--categories`:
+The default category folders are `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers` and `lib`. Pass your own list with `--categories`:
 
 ```sh
 npx check-tree src --categories components,hooks,utils

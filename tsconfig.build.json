@@ -26,6 +26,9 @@
       "path": "packages/configs/oxlint-config-tailwind"
     },
     {
+      "path": "packages/configs/oxlint-config-tanstack-query"
+    },
+    {
       "path": "packages/configs/stylelint-config"
     },
     {

@@ -32,18 +32,6 @@ export const fastifyConfig: OxlintConfig = defineConfig({
   overrides: [
     { files: ['**/*.ts'], rules: { 'fastify-conventions/no-restricted-syntax': ['error', PROCESS_ENV, ...SERVER_CONVENTIONS] } },
     { files: ['**/*Env.ts'], rules: { 'fastify-conventions/no-restricted-syntax': ['error', ...SERVER_CONVENTIONS] } },
-    {
-      files: ['**/*Schemas.ts'],
-      rules: {
-        'export-placement/no-restricted-syntax': [
-          'error',
-          {
-            selector: 'ExportNamedDeclaration > :matches(FunctionDeclaration, ClassDeclaration, TSTypeAliasDeclaration, TSInterfaceDeclaration, TSEnumDeclaration)',
-            message: 'An XSchemas.ts file only exports Zod schemas: move this export out of it, and infer types in an XTypes.ts file.',
-          },
-        ],
-      },
-    },
     { files: ['**/*Service.ts', '**/*Queries.ts', '**/*Schemas.ts', '**/*Routes.ts', '**/*Client.ts', '**/*Worker.ts'], rules: { 'file-named-after-export/file-named-after-export': 'off' } },
     { files: ['**/*Client.ts', '**/*.test.ts'], rules: { 'no-restricted-globals': 'off' } },
     { files: ['*.config.ts'], rules: { 'fastify-conventions/no-restricted-syntax': 'off' } },

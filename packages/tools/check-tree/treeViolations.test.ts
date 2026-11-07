@@ -104,6 +104,11 @@ test('server files: routes, services, queries and schemas follow the same rule',
   ]);
 });
 
+test('query key factories follow the same rule and are not lib', () => {
+  assert.deepEqual(treeViolations(tree(['todos/todosKeys.ts', 'todos/todosClient.ts', 'todos/todosSelectors.ts'])), []);
+  assert.deepEqual(treeViolations(tree(['a/todosKeys.ts', 'a/notesKeys.ts'])), ['src/a holds 2 keys files (notesKeys.ts, todosKeys.ts): move them into keys/']);
+});
+
 test('clients and workers follow the same rule, and env files are not lib', () => {
   assert.deepEqual(treeViolations(tree(['features/sync/syncService.ts', 'features/sync/todoSyncClient.ts', 'features/sync/todoReminderWorker.ts', 'shared/appEnv.ts', 'shared/openDatabase.ts'])), []);
   assert.deepEqual(treeViolations(tree(['a/githubClient.ts', 'a/stripeClient.ts', 'a/sweepWorker.ts', 'a/queueWorker.ts'])), [

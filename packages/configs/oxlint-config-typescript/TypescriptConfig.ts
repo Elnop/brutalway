@@ -119,6 +119,19 @@ export const typescriptConfig: OxlintConfig = defineConfig({
         ],
       },
     },
+    {
+      files: ['**/*Schemas.ts'],
+      rules: {
+        'file-named-after-export/file-named-after-export': 'off',
+        'export-placement/no-restricted-syntax': [
+          'error',
+          {
+            selector: 'ExportNamedDeclaration > :matches(FunctionDeclaration, ClassDeclaration, TSTypeAliasDeclaration, TSInterfaceDeclaration, TSEnumDeclaration)',
+            message: 'An XSchemas.ts file only exports Zod schemas: move this export out of it, and infer types in an XTypes.ts file.',
+          },
+        ],
+      },
+    },
     { files: ['**/*.test.ts', '**/*.test.tsx'], rules: { 'typescript/no-floating-promises': 'off' } },
     {
       files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', 'e2e/**'],
