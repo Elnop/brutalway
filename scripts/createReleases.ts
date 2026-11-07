@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process';
-import { globSync, readFileSync } from 'node:fs';
+import { existsSync, globSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { setTimeout } from 'node:timers/promises';
 import { releaseNotes } from './releaseNotes.ts';
@@ -56,7 +56,8 @@ const releasable = known.filter(({ tag, name }) => manifests.get(name)?.publishe
 
 for (const [index, { tag, name, version }] of releasable.entries()) {
   const manifest = manifests.get(name);
-  const changelog = readFileSync(join(manifest?.directory ?? '', 'CHANGELOG.md'), 'utf8');
+  const changelogPath = join(manifest?.directory ?? '', 'CHANGELOG.md');
+  const changelog = existsSync(changelogPath) ? readFileSync(changelogPath, 'utf8') : '';
   const notes = releaseNotes(changelog, version) ?? 'First release.';
   const footer = manifest?.published === true ? `\n\nnpm: https://www.npmjs.com/package/${name}/v/${version}` : '';
   const isLatest = index === releasable.length - 1;
