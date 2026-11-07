@@ -23,8 +23,8 @@ function project(files: Record<string, string>, config = 'layers.cjs'): string {
   return root;
 }
 
-function violatedRules(root: string): string[] {
-  const result = spawnSync(DEPCRUISE, ['src', '--output-type', 'json'], { cwd: root, encoding: 'utf8' });
+function violatedRules(root: string, folders = ['src']): string[] {
+  const result = spawnSync(DEPCRUISE, [...folders, '--output-type', 'json'], { cwd: root, encoding: 'utf8' });
   const report: { summary: { violations: { rule: { name: string } }[] } } = JSON.parse(result.stdout);
   return [...new Set(report.summary.violations.map((violation) => violation.rule.name))].toSorted();
 }
@@ -144,4 +144,21 @@ test('the server config keeps the layer rules', () => {
     'server.cjs',
   );
   assert.deepEqual(violatedRules(root), ['shared-not-to-features']);
+});
+
+test('the shadcn rules keep third-party/ apart from the app and its packages inside it', () => {
+  const root = project(
+    {
+      'package.json': JSON.stringify({ name: 'fixture', dependencies: { 'radix-ui': '1.0.0', 'class-variance-authority': '1.0.0' } }),
+      ...fakePackage('radix-ui'),
+      ...fakePackage('class-variance-authority'),
+      'third-party/shadcn/button.tsx': "import { Slot } from 'radix-ui';\nimport { cva } from 'class-variance-authority';\nexport const Button = [Slot, cva];\n",
+      'src/shared/ui/Panel.tsx': "import { Button } from '../../../third-party/shadcn/button.tsx';\nexport const Panel = Button;\n",
+    },
+    'shadcn.cjs',
+  );
+  assert.deepEqual(violatedRules(root, ['src', 'third-party']), []);
+  writeFileSync(join(root, 'src/shared/lib.ts'), "import { Slot } from 'radix-ui';\nexport const lib = Slot;\n");
+  writeFileSync(join(root, 'third-party/shadcn/card.tsx'), "import { Panel } from '../../src/shared/ui/Panel.tsx';\nexport const Card = Panel;\n");
+  assert.deepEqual(violatedRules(root, ['src', 'third-party']), ['third-party-not-to-src', 'third-party-packages-only-from-third-party']);
 });

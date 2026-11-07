@@ -35,6 +35,7 @@ The rules and every shared config are published from `packages/` as `@brutalway/
 | [`@brutalway/oxlint-config-react`](packages/configs/oxlint-config-react) | extends the TypeScript base: React hooks rules, a component types its props with a named `XProps` type, `fetch` only in an `xClient.ts` and never in an effect |
 | [`@brutalway/oxlint-config-tailwind`](packages/configs/oxlint-config-tailwind) | Tailwind CSS v4: colors only from the `@theme` tokens, with the closest tokens in the message, `font-display` on headings and `font-mono` on code, no `dark:` |
 | [`@brutalway/oxlint-config-react-hook-form`](packages/configs/oxlint-config-react-hook-form) | react-hook-form: every `useForm` validates through `zodResolver`, no validation passed to `register` or a `Controller` |
+| [`@brutalway/oxlint-config-shadcn`](packages/configs/oxlint-config-shadcn) | shadcn/ui: no raw `<button>`, `<input>`, `<select>` or `<textarea>` when a primitive does the job, icons only from `lucide-react` |
 | [`@brutalway/oxlint-config-tanstack-query`](packages/configs/oxlint-config-tanstack-query) | TanStack Query: query keys from an `xKeys` factory, `staleTime` and `gcTime` from named profiles, plus `exhaustive-deps` and `stable-query-client` from `@tanstack/eslint-plugin-query` |
 | [`@brutalway/oxlint-config-zustand`](packages/configs/oxlint-config-zustand) | `xStore.ts` only exports `xStore` and `xActions`, `xSelectors.ts` only exports `selectX` functions |
 | [`@brutalway/oxlint-config-vitest`](packages/configs/oxlint-config-vitest) | `it()` inside `describe`, `test()` outside, typed mocks, `toThrow` with the expected message |
@@ -44,7 +45,7 @@ The rules and every shared config are published from `packages/` as `@brutalway/
 | [`@brutalway/stylelint-config`](packages/configs/stylelint-config) | stylesheets: colors only from the custom properties of `src/app/globals.css`, with the closest tokens in the message, each `X.module.css` next to its `X.tsx` with every class used and written in camelCase |
 | [`@brutalway/dependency-cruiser-config`](packages/configs/dependency-cruiser-config) | the four layers, route, service and query rules for servers, no import between features, pure presenters, stores in their folder and holding no server data |
 | [`@brutalway/alint-config`](packages/configs/alint-config) | category folders hold only their kind, pinned dependencies, doc links and anchors resolve |
-| [`@brutalway/tsconfig`](packages/configs/tsconfig) | strict TypeScript base with every extra strictness flag, Node and React + Vite variants |
+| [`@brutalway/tsconfig`](packages/configs/tsconfig) | strict TypeScript base with every extra strictness flag, Node and React + Vite variants, and a React + Vite variant for vendored code that lifts the two flags shadcn/ui breaks |
 | [`@brutalway/prettier-config`](packages/configs/prettier-config) | single quotes, trailing commas, 200 columns, and a `tailwind` variant that sorts the classes |
 | [`@brutalway/eslint-plugin-file-named-after-export`](packages/plugins/eslint-plugin-file-named-after-export) | a file with a single export is named after it |
 | [`@brutalway/eslint-plugin-store-layout`](packages/plugins/eslint-plugin-store-layout) | `xStore.ts` only exports `xStore` and `xActions` |

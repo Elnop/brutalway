@@ -50,6 +50,17 @@ module.exports = {
 };
 ```
 
+## shadcn/ui
+
+`@brutalway/dependency-cruiser-config/shadcn` extends the layers for a project that keeps the shadcn/ui primitives in `third-party/shadcn/`, outside `src/`, as the registry wrote them:
+
+| Rule                                         | Rejects                                                                                         |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `third-party-not-to-src`                     | a file under `third-party/` importing `src/`                                                    |
+| `third-party-packages-only-from-third-party` | `radix-ui`, `@radix-ui/*` or `class-variance-authority` imported from anywhere but `third-party/` |
+
+Code in `src/` imports the primitives from any layer, since they import nothing from the app. `cn` stays allowed in `src/`: it merges Tailwind classes, which the app needs for its own components. Run it on both folders, `depcruise src third-party`.
+
 ## Server
 
 `@brutalway/dependency-cruiser-config/server` extends the layers and adds five rules for an API where each shared feature keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:

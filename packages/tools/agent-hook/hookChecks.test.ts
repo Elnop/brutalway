@@ -66,3 +66,8 @@ test('files outside the project or in node_modules are ignored', () => {
   assert.deepEqual(hookChecks(root, { file: join(root, 'node_modules/x/a.ts'), created: true }, ['src']), []);
   assert.deepEqual(hookChecks(root, { file: '', created: true }, ['src']), []);
 });
+
+test('a file under a vendored folder gets no check', () => {
+  const root = project(['oxlint.config.ts', '.alint.yml', 'third-party/shadcn/button.tsx']);
+  assert.deepEqual(hookChecks(root, { file: join(root, 'third-party/shadcn/button.tsx'), created: true }, ['src'], ['third-party']), []);
+});

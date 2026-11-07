@@ -1,4 +1,5 @@
 import type { Stack } from '../StackTypes.ts';
+import { SHADCN_DEPENDENCIES, SHADCN_VERSION } from './shadcnConfig.ts';
 
 const CHROMIUM_LINE = '      - run: npx playwright install --with-deps --only-shell chromium\n';
 
@@ -67,6 +68,103 @@ const FORMS_LINT_DOC = `
 \`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-react-hook-form\`: \`useForm\` takes \`resolver: zodResolver(XSchema)\`, and no validation goes to \`register\`, \`useController\` or a \`Controller\`. What a field accepts, and the message shown when it does not, is written once, in the schema.
 `;
 
+const SHADCN_THEME = `  --shadow-hard-sm: 4px 4px 0 var(--color-ink);
+  --shadow-xs: var(--shadow-hard-sm);
+  --shadow-sm: var(--shadow-hard);
+
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+  --radius-*: initial;
+  --default-border-width: 3px;
+}
+
+@theme inline {
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-primary: var(--color-yellow);
+  --color-primary-foreground: var(--color-ink);
+  --color-secondary: var(--color-paper);
+  --color-secondary-foreground: var(--color-ink);
+  --color-destructive: var(--color-pink);
+  --color-accent: var(--color-yellow);
+  --color-accent-foreground: var(--color-ink);
+  --color-card: var(--color-paper);
+  --color-card-foreground: var(--color-ink);
+  --color-muted-foreground: var(--color-ink);
+  --color-border: var(--color-ink);
+  --color-input: var(--color-ink);
+  --color-ring: var(--color-blue);
+}`;
+
+const SHADCN_SLOTS = `  [data-slot='button'] {
+    border: var(--default-border-width) solid var(--color-ink);
+    font-weight: 700;
+    box-shadow: var(--shadow-hard-sm);
+    cursor: pointer;
+
+    &:active:not(:disabled) {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+  }
+
+`;
+
+const SHADCN_README = `## UI primitives
+
+The buttons, fields, checkboxes and cards come from [shadcn/ui](https://ui.shadcn.com). The shadcn CLI copied their files into \`third-party/shadcn/\`, and they stay as the registry wrote them, so \`npx shadcn add <name> --overwrite\` can replace them at any time. The code in \`src/\` imports them through \`@third-party/shadcn/\`.
+
+To add one, run \`npx shadcn add <name>\` (\`dialog\`, \`select\`, \`tabs\`...), then check \`package.json\`: the CLI sometimes misses a package the file imports, and sometimes installs one no file imports (\`date-fns\` with \`calendar\`). knip reports both. A primitive with an animation (\`dialog\`, \`dropdown-menu\`, \`sheet\`...) also needs \`npm install -E tw-animate-css\` and \`@import 'tw-animate-css';\` in \`src/app/globals.css\`, which the CLI does not write since the project owns that file.
+
+To change how a primitive looks, leave its file alone. shadcn's colors are mapped onto the project's under \`@theme inline\` in \`src/app/globals.css\`, where the tokens also make every border thick, every corner square and every shadow hard. Beyond that, add a rule on the primitive's \`data-slot\` in the same file, pass a class from the component that uses it, or write a component in \`src/shared/\` that wraps it.
+
+`;
+
+const SHADCN_TYPESCRIPT_DOC = `\`tsconfig.third-party.json\` is a third project, for \`third-party/\`. It extends \`@brutalway/tsconfig/react-vite-third-party.json\`, which turns off \`exactOptionalPropertyTypes\` and \`noPropertyAccessFromIndexSignature\`: shadcn's code is not written for them. The two other projects reference it, and \`npm run typecheck\` runs \`tsc -b\`, so \`src/\` reads the vendored files through the declarations written into \`node_modules/.cache/tsc-third-party\` and keeps every flag.
+
+`;
+
+const VENDORED_PRE_TOOL_USE = `    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx --no-install brutal-agent-hook --vendored third-party",
+            "timeout": 10,
+            "statusMessage": "refuses edits to vendored code"
+          }
+        ]
+      }
+    ],
+`;
+
+const SHADCN_LINT_DOC = `
+\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-shadcn\`: no raw \`<button>\`, \`<input>\`, \`<select>\` or \`<textarea>\` in \`src/\`, the message names the primitive to import from \`@third-party/shadcn/\` and the \`npx shadcn add\` command when it is not vendored yet. Icons only come from \`lucide-react\`, the library of \`components.json\`.
+`;
+
+const SHADCN_VERIFICATIONS_DOC = `## Vendored code
+
+\`third-party/shadcn/\` holds the files the shadcn CLI copied. Oxlint and check-tree only look at \`src/\`, dependency-cruiser runs on both folders, Prettier skips \`third-party/\` and \`components.json\` (\`.prettierignore\`) so \`--overwrite\` gives no formatting diff, and knip takes every file there as an entry, so a primitive not used yet is not reported. alint checks that \`third-party/\` only holds the folders listed in \`.alint.yml\`, one per registry: hand-written code goes in \`src/\`.
+
+`;
+
+const THIRD_PARTY_ALINT = `  - id: third-party-only-registries
+    kind: dir_absent
+    paths: ['third-party/*', '!third-party/shadcn']
+    message: 'third-party/ only holds code copied from a registry, one folder per registry listed in .alint.yml. Write your own code in src/.'
+    level: error
+  - id: third-party-no-loose-files
+    kind: file_absent
+    paths: ['third-party/*']
+    message: 'third-party/ only holds code copied from a registry, one folder per registry listed in .alint.yml. Write your own code in src/.'
+    level: error
+`;
+
+const THIRD_PARTY_REFERENCES = '  "references": [{ "path": "./tsconfig.third-party.json" }],\n';
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -84,6 +182,15 @@ export const viteStack: Stack = {
         { id: 'css', label: 'Plain CSS files' },
         { id: 'css-modules', label: 'CSS Modules, a stylesheet next to each component' },
         { id: 'tailwind', label: 'Tailwind CSS, colors and fonts as tokens under @theme' },
+      ],
+    },
+    {
+      id: 'ui',
+      message: 'Which UI primitives?',
+      default: 'none',
+      values: [
+        { id: 'none', label: 'None, the components style plain elements' },
+        { id: 'shadcn', label: 'shadcn/ui, vendored in third-party/shadcn/ (needs Tailwind)', requires: { styling: 'tailwind' } },
       ],
     },
     { id: 'server-state', message: 'Read and write the data through an API with TanStack Query?', default: false },
@@ -179,6 +286,71 @@ export const viteStack: Stack = {
     {
       when: { styling: 'tailwind', example: false },
       overlay: 'tailwind-skeleton',
+    },
+    {
+      when: { ui: 'shadcn' },
+      overlay: 'shadcn',
+      edits: [
+        { file: 'src/app/globals.css', replace: '  --shadow-hard-sm: 4px 4px 0 var(--color-ink);\n}', with: SHADCN_THEME },
+        { file: 'src/app/globals.css', before: '  :focus-visible {', insert: SHADCN_SLOTS },
+        {
+          file: 'vite.config.ts',
+          replace: "alias: [{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],",
+          with: "alias: [\n      { find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) },\n      { find: /^@third-party\\//u, replacement: fileURLToPath(new URL('./third-party/', import.meta.url)) },\n    ],",
+        },
+        {
+          file: 'tsconfig.json',
+          replace: '{\n  "files": [],\n  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.test.json" }]',
+          with: '{\n  "compilerOptions": {\n    "paths": { "@third-party/*": ["./third-party/*"] }\n  },\n  "files": [],\n  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.test.json" }, { "path": "./tsconfig.third-party.json" }]',
+        },
+        { file: 'tsconfig.app.json', before: '  "include": [', insert: THIRD_PARTY_REFERENCES },
+        { file: 'tsconfig.test.json', before: '  "include": [', insert: THIRD_PARTY_REFERENCES },
+        { file: 'package.json', replace: '"typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.test.json"', with: '"typecheck": "tsc -b tsconfig.app.json tsconfig.test.json"' },
+        { file: '.prettierignore', before: 'dist\n', insert: 'components.json\n' },
+        { file: '.prettierignore', after: 'test-results\n', insert: 'third-party\n' },
+        { file: 'knip.json', after: '"$schema": "https://unpkg.com/knip@6/schema.json",\n', insert: '  "entry": ["third-party/**/*.{ts,tsx}"],\n' },
+        { file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "shadcn", ' },
+        { file: 'oxlint.config.ts', replace: "ignorePatterns: ['dist']", with: "ignorePatterns: ['dist', 'third-party']" },
+        { file: '.alint.yml', replace: "prefixes: ['src/',", with: "prefixes: ['src/', 'third-party/'," },
+        { file: '.alint.yml', after: '    level: error\n', insert: THIRD_PARTY_ALINT },
+        { file: 'README.md', before: '## Commands', insert: SHADCN_README },
+        { file: 'README.md', replace: '| `npm run check` | Prettier, both `tsc` projects,', with: '| `npm run check` | Prettier, the three `tsc` projects,' },
+        { file: 'docs/verifications.md', before: '## Lint', insert: SHADCN_TYPESCRIPT_DOC },
+        { file: 'docs/verifications.md', before: '## Tests', insert: SHADCN_VERIFICATIONS_DOC },
+        { file: '.dependency-cruiser.cjs', replace: "extends: '@brutalway/dependency-cruiser-config/layers'", with: "extends: '@brutalway/dependency-cruiser-config/shadcn'" },
+        { file: 'package.json', replace: '"deps": "depcruise src"', with: '"deps": "depcruise src third-party"' },
+        {
+          file: 'oxlint.config.ts',
+          after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
+          insert: "import { shadcnConfig } from '@brutalway/oxlint-config-shadcn';\n",
+        },
+        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, shadcnConfig' },
+        { file: 'docs/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: SHADCN_LINT_DOC },
+        {
+          file: 'docs/verifications.md',
+          after: '- a store lives at the root or in the `stores/` folder of its level\n',
+          insert: '- `third-party/` imports nothing from `src/`, and `radix-ui` and `class-variance-authority` are only imported from `third-party/`: `src/` uses the primitives\n',
+        },
+      ],
+      addDependencies: SHADCN_DEPENDENCIES,
+      addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0', '@brutalway/oxlint-config-shadcn': '0.1.0', '@brutalway/tsconfig': '0.3.0', shadcn: SHADCN_VERSION },
+    },
+    {
+      when: { ui: 'shadcn', example: true },
+      overlay: 'shadcn-example',
+    },
+    {
+      when: { ui: 'shadcn', 'claude-hook': true },
+      edits: [
+        { file: '.claude/settings.json', replace: '"hooks": {\n    "PostToolUse": [', with: `"hooks": {\n${VENDORED_PRE_TOOL_USE}    "PostToolUse": [` },
+        { file: '.claude/settings.json', replace: 'brutal-agent-hook --tree src"', with: 'brutal-agent-hook --tree src --vendored third-party"' },
+        {
+          file: 'README.md',
+          replace: 'Every message says what to change, so the agent does not need to know the convention beforehand.',
+          with: 'Every message says what to change, so the agent does not need to know the convention beforehand. Before an edit, the same hook refuses any change to a file in `third-party/` and tells the agent to run `npx shadcn add <name> --overwrite`, restyle through `src/app/globals.css` or wrap the primitive in `src/`.',
+        },
+      ],
+      addDevDependencies: { '@brutalway/agent-hook': '0.2.0' },
     },
     {
       when: { styling: 'css-modules' },
@@ -450,6 +622,13 @@ export const viteStack: Stack = {
       edits: [
         { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
         { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
+      ],
+    },
+    {
+      when: { ui: 'shadcn' },
+      edits: [
+        { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]' },
+        { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]' },
       ],
     },
   ],

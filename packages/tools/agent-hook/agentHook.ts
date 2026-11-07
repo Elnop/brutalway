@@ -5,20 +5,26 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { hookChecks } from './hookChecks.ts';
 import { readHookEdit } from './readHookEdit.ts';
+import { vendoredEditMessage } from './vendoredEdit.ts';
 
-const { values } = parseArgs({ options: { tree: { type: 'string', multiple: true, default: ['src'] }, root: { type: 'string' } } });
+const { values } = parseArgs({
+  options: { tree: { type: 'string', multiple: true, default: ['src'] }, vendored: { type: 'string', multiple: true, default: [] }, root: { type: 'string' } },
+});
 const root = resolve(values.root ?? process.env['CLAUDE_PROJECT_DIR'] ?? process.cwd());
 const edit = readHookEdit(JSON.parse(readFileSync(0, 'utf8')));
 const problems: string[] = [];
 
 const file = edit.file === '' ? '' : resolve(root, edit.file);
 
-for (const check of hookChecks(root, { ...edit, file }, values.tree)) {
+const refusal = edit.before && file !== '' ? vendoredEditMessage(root, file, values.vendored) : undefined;
+if (refusal !== undefined) problems.push(refusal);
+
+for (const check of edit.before ? [] : hookChecks(root, { ...edit, file }, values.tree, values.vendored)) {
   const result = spawnSync('npx', ['--no-install', check.command, ...check.args], { cwd: check.cwd, encoding: 'utf8' });
   if (result.status !== 0) problems.push(`${check.label}:\n${result.stdout}${result.stderr}`);
 }
 
 if (problems.length > 0) {
-  process.stderr.write(`${problems.join('\n')}\nFix them before going on.\n`);
+  process.stderr.write(refusal === undefined ? `${problems.join('\n')}\nFix them before going on.\n` : `${refusal}\n`);
   process.exitCode = 2;
 }

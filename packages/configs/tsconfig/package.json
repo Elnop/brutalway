@@ -19,7 +19,8 @@
   "files": [
     "base.json",
     "node.json",
-    "react-vite.json"
+    "react-vite.json",
+    "react-vite-third-party.json"
   ],
   "scripts": {
     "test": "node --test '**/*.test.ts'"

@@ -33,3 +33,9 @@ test('the Node and React + Vite variants extend the base', () => {
     assert.match(compile(config, 'type Point = { x?: number };\nexport const point: Point = { x: undefined };\n').output, /TS2375/u, config);
   }
 });
+
+test('the third-party variant only lifts the two flags vendored code breaks', () => {
+  assert.equal(compile('react-vite-third-party.json', 'type Point = { x?: number };\nexport const point: Point = { x: undefined };\n').status, 0);
+  assert.equal(compile('react-vite-third-party.json', 'export function read(record: Record<string, number>) {\n  return record.total;\n}\n').status, 0);
+  assert.match(compile('react-vite-third-party.json', 'export function f(unused: number) {\n  return 1;\n}\n').output, /TS6133/u);
+});

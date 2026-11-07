@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { withLocalPackages } from './withLocalPackages.ts';
+import { withLocalPackages, withoutLocalPackages } from './withLocalPackages.ts';
 
 describe('withLocalPackages', () => {
   it('points the local packages to their tarballs, directly and through overrides', () => {
@@ -24,5 +24,17 @@ describe('withLocalPackages', () => {
 
   it('rejects a manifest that is not an object', () => {
     assert.throws(() => withLocalPackages('[]', new Map()), { message: 'package.json is not an object' });
+  });
+
+  it('puts the published versions back and keeps what a command added meanwhile', () => {
+    const original = JSON.stringify({ name: 'app', dependencies: { react: '19.3.1' }, devDependencies: { '@brutalway/tsconfig': '0.3.0' }, overrides: { minimatch: '^11.0.1' } });
+    const tarballs = new Map([['@brutalway/tsconfig', '/tmp/brutal-tsconfig-0.3.0.tgz']]);
+    const afterCommand = withLocalPackages(original, tarballs).replace('"react": "19.3.1"', '"react": "19.3.1",\n    "sonner": "2.0.8"');
+    assert.deepEqual(JSON.parse(withoutLocalPackages(afterCommand, original)), {
+      name: 'app',
+      dependencies: { react: '19.3.1', sonner: '2.0.8' },
+      devDependencies: { '@brutalway/tsconfig': '0.3.0' },
+      overrides: { minimatch: '^11.0.1' },
+    });
   });
 });

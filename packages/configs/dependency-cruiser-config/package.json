@@ -19,11 +19,13 @@
   "type": "module",
   "files": [
     "layers.cjs",
-    "server.cjs"
+    "server.cjs",
+    "shadcn.cjs"
   ],
   "exports": {
     "./layers": "./layers.cjs",
-    "./server": "./server.cjs"
+    "./server": "./server.cjs",
+    "./shadcn": "./shadcn.cjs"
   },
   "scripts": {
     "test": "node --test '**/*.test.ts'"

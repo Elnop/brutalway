@@ -1,0 +1,14 @@
+{
+  "extends": "@brutalway/tsconfig/react-vite-third-party.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "outDir": "node_modules/.cache/tsc-third-party",
+    "tsBuildInfoFile": "node_modules/.cache/tsc-third-party/tsconfig.third-party.tsbuildinfo",
+    "paths": {
+      "@third-party/*": ["./third-party/*"]
+    }
+  },
+  "include": ["third-party"]
+}

@@ -8,9 +8,10 @@ import { isRecord } from '../src/isRecord.ts';
 import { matrixCombinations } from '../src/matrixCombinations.ts';
 import { scaffoldProject } from '../src/scaffoldProject.ts';
 import { LOCAL_ROOT } from '../src/ScaffoldConfig.ts';
+import { SHADCN_ADDED_AFTER_SCAFFOLD } from '../src/stacks/shadcnConfig.ts';
 import type { Answers, Stack } from '../src/StackTypes.ts';
 import { stacks } from '../src/stacks/stacksConfig.ts';
-import { withLocalPackages } from '../src/withLocalPackages.ts';
+import { withLocalPackages, withoutLocalPackages } from '../src/withLocalPackages.ts';
 
 const { values } = parseArgs({
   options: { stack: { type: 'string' }, all: { type: 'boolean' }, e2e: { type: 'boolean' }, jobs: { type: 'string' }, keep: { type: 'boolean' }, 'local-packages': { type: 'boolean' } },
@@ -53,14 +54,13 @@ async function packLocalPackages(): Promise<Map<string, string>> {
 
 const tarballs = values['local-packages'] === true ? await packLocalPackages() : undefined;
 
-async function install(dir: string): Promise<{ ok: boolean; output: string }> {
-  const args = ['install', '--prefer-offline', '--no-audit', '--no-fund'];
-  if (tarballs === undefined) return run('npm', args, dir);
+async function withLocalManifest(dir: string, command: string, args: string[]): Promise<{ ok: boolean; output: string }> {
+  if (tarballs === undefined) return run(command, args, dir);
   const manifestPath = join(dir, 'package.json');
   const original = readFileSync(manifestPath, 'utf8');
   writeFileSync(manifestPath, withLocalPackages(original, tarballs));
-  const result = await run('npm', args, dir);
-  writeFileSync(manifestPath, original);
+  const result = await run(command, args, dir);
+  writeFileSync(manifestPath, withoutLocalPackages(readFileSync(manifestPath, 'utf8'), original));
   return result;
 }
 
@@ -82,8 +82,12 @@ async function check({ stack, answers, name }: Run): Promise<string | undefined>
   } catch (error) {
     return `scaffolding failed: ${errorMessage(error)}`;
   }
-  const installed = await install(dir);
+  const installed = await withLocalManifest(dir, 'npm', ['install', '--prefer-offline', '--no-audit', '--no-fund']);
   if (!installed.ok) return `npm install failed\n${installed.output.slice(-4000)}`;
+  if (answers['ui'] === 'shadcn') {
+    const added = await withLocalManifest(dir, 'npx', ['shadcn', 'add', ...SHADCN_ADDED_AFTER_SCAFFOLD, '--yes']);
+    if (!added.ok) return `shadcn add failed\n${added.output.slice(-4000)}`;
+  }
   const commands = [['npm', 'run', 'check'], ['npm', 'test'], ...(values.e2e === true && answers['e2e'] ? [['npm', 'run', 'e2e']] : [])];
   for (const [command = '', ...args] of commands) {
     const result = await run(command, args, dir);

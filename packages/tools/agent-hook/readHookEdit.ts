@@ -6,5 +6,5 @@ function field(value: unknown, key: string): unknown {
 
 export function readHookEdit(input: unknown): HookEdit {
   const filePath = field(field(input, 'tool_input'), 'file_path');
-  return { file: typeof filePath === 'string' ? filePath : '', created: field(input, 'tool_name') === 'Write' };
+  return { file: typeof filePath === 'string' ? filePath : '', created: field(input, 'tool_name') === 'Write', before: field(input, 'hook_event_name') === 'PreToolUse' };
 }

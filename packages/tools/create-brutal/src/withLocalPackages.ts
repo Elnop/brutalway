@@ -18,3 +18,22 @@ export function withLocalPackages(manifestText: string, tarballs: Map<string, st
   };
   return `${JSON.stringify(rewritten, null, 2)}\n`;
 }
+
+function restoredRecord(after: unknown, original: unknown): unknown {
+  if (!isRecord(after)) return original;
+  return { ...after, ...(isRecord(original) ? original : {}) };
+}
+
+export function withoutLocalPackages(manifestText: string, originalText: string): string {
+  const manifest: unknown = JSON.parse(manifestText);
+  const original: unknown = JSON.parse(originalText);
+  if (!isRecord(manifest) || !isRecord(original)) throw new Error('package.json is not an object');
+  const { overrides: _local, ...rest } = manifest;
+  const restored = {
+    ...rest,
+    dependencies: restoredRecord(manifest['dependencies'], original['dependencies']),
+    devDependencies: restoredRecord(manifest['devDependencies'], original['devDependencies']),
+    ...(original['overrides'] === undefined ? {} : { overrides: original['overrides'] }),
+  };
+  return `${JSON.stringify(restored, null, 2)}\n`;
+}

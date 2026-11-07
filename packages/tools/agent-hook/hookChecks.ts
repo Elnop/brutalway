@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import type { HookCheck, HookEdit } from './AgentHookTypes.ts';
+import { isVendored } from './vendoredEdit.ts';
 
 const OXLINT_CONFIGS = ['oxlint.config.ts', '.oxlintrc.json'];
 const STYLELINT_CONFIGS = [
@@ -34,8 +35,8 @@ function oxlintFolder(root: string, file: string) {
   return root;
 }
 
-export function hookChecks(root: string, { file, created }: HookEdit, trees: string[]): HookCheck[] {
-  if (file === '' || !inside(root, file)) return [];
+export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file' | 'created'>, trees: string[], vendored: string[] = []): HookCheck[] {
+  if (file === '' || !inside(root, file) || isVendored(root, file, vendored)) return [];
   const fromRoot = relative(root, file);
   const checks: HookCheck[] = [];
   if (/\.tsx?$/u.test(file)) {

@@ -189,6 +189,10 @@ shadcn's colors are mapped onto the neo-brutalist ones under `@theme inline` (`-
 
 The vendored files the example needs are committed in the overlay (`overlays/vite/shadcn/third-party/shadcn/`), written by a script of the repo that runs a pinned version of the shadcn CLI. The scaffold stays offline, and the matrix tests the files the user gets. The repo's `.prettierignore` gets `**/third-party`, since it does not skip `overlays/` today. The generated project pins `shadcn` in its devDependencies, so `npx shadcn add` runs the same version and E5-S5 has a version to compare the folder against.
 
+As built: the vendored files of the example are written by `packages/tools/create-brutal/scripts/vendorShadcn.ts`, which runs the shadcn CLI in a temporary project with the version and the primitives of `src/stacks/shadcnConfig.ts`. The shadcn CLI refuses to run when the root `tsconfig.json` has no `paths`, so it declares `@third-party/*` too, and lists `tsconfig.third-party.json` next to the other two. The tokens also keep two font weights only (`--font-weight-*: initial`), so the `font-medium` of the Button produces nothing and the `[data-slot='button']` rule makes it bold. `--default-border-width: 3px` applies to the app's own `border` classes as well, which the example does not use. In the example, the filters and the Edit and Cancel buttons are the `secondary` variant, Delete and Clear done are `destructive`, and the Checkbox gets `size-6 rounded-none` from `TodoItem.tsx`. The matrix adds `dialog` and `sonner` after the scaffold: `sonner` fails `exactOptionalPropertyTypes`, so it shows that the separate TypeScript project works.
+
+The boundaries of E5-S4 are a third entry point, `@brutalway/dependency-cruiser-config/shadcn`, which extends the layers, so a project without shadcn can still import `radix-ui` from `src/`. E5-S5 is a `--vendored third-party` flag of `@brutalway/agent-hook`: the `PostToolUse` hook skips those files, and the same command as a `PreToolUse` hook refuses the edit. Comparing `third-party/shadcn/` with the registry in CI is not done. E5-S6 and E5-S8 share `@brutalway/oxlint-config-shadcn`: `<input type="checkbox">` points to `Checkbox`, `<input type="radio">` to `RadioGroup`, and `<input type="hidden">` is left alone. Since `shadcn add` runs `npm install`, the matrix runs it with the same `package.json` pointing to the local tarballs as its own install, so a package version not published yet does not stop it.
+
 ### Stories
 
 **E5-S0. Spike.** Done on a project made with `--styling tailwind` and Button, Input, Checkbox and Card added by shadcn 4.23.0, styles measured in Chromium.
@@ -227,12 +231,12 @@ The vendored files the example needs are committed in the overlay (`overlays/vit
 - New package `@brutalway/oxlint-config-shadcn`, added with `--ui shadcn`, as E3 and E4 add theirs.
 - `button`, `input`, `textarea` and `select` are reported, the message names the primitive to import, and gives `npx shadcn add <name>` when it is not vendored yet.
 
-**E5-S7. One icon library.** As someone working on the project, I want a single icon set, so that icons look alike.
+**E5-S8. One icon library.** As someone working on the project, I want a single icon set, so that icons look alike.
 - The one set in `components.json` (`lucide` by default), allowed in `src/`. Imports of `react-icons`, `@heroicons/*`, `@radix-ui/react-icons`, `@tabler/icons-react` and the other sets are reported by `@brutalway/oxlint-config-shadcn`.
 
-**Later. The docs list what is vendored.** A `docs/ui.md` table of each file of `third-party/shadcn/` and each component of `src/shared/ui/`, with a check that fails when a file and a row drift apart. No tool does that yet: it waits for a small generic one (a table in a `.md` against a glob), which E9 could use too.
+**E5-S7, later. The docs list what is vendored.** A `docs/ui.md` table of each file of `third-party/shadcn/` and each component of `src/shared/ui/`, with a check that fails when a file and a row drift apart. No tool does that yet: it waits for a small generic one (a table in a `.md` against a glob), which E9 could use too.
 
-Order: S0, then S1 with S2 and S3 (the option does not pass `npm run check` without them), then S4, then S6 with S7, then S5.
+Order: S0, then S1 with S2 and S3 (the option does not pass `npm run check` without them), then S4, then S6 with S8, then S5.
 
 ## E6. Translations
 

@@ -32,6 +32,9 @@
       "path": "packages/configs/oxlint-config-react-hook-form"
     },
     {
+      "path": "packages/configs/oxlint-config-shadcn"
+    },
+    {
       "path": "packages/configs/stylelint-config"
     },
     {

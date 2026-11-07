@@ -1,0 +1,41 @@
+{
+  "name": "@brutalway/oxlint-config-shadcn",
+  "version": "0.1.0",
+  "description": "Oxlint config for an app built on shadcn/ui primitives vendored in third-party/shadcn/: no raw button, input, select or textarea, and one icon library.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "oxlint-plugin",
+    "shadcn",
+    "shadcn-ui",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-shadcn#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/oxlint-config-shadcn"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "exports": "./dist/ShadcnConfig.js",
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "@oxlint/plugins": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutalway/lint-utils": "^0.1.0",
+    "oxlint": "^1.91.0"
+  }
+}
