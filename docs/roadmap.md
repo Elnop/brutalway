@@ -244,15 +244,39 @@ Source: Wizcard (`messages/en.json`, `messages/fr.json`, `eslint-plugin-i18next`
 
 Wizcard migrated to two languages one domain at a time, turning the rule on for each folder once it was done. For a new project the rule is on from the start.
 
-**E6-S1. i18n as an option.** As someone creating a project, I want `--i18n`, so that every visible string goes through a translation from the first commit.
-- `react-i18next` (next-intl is tied to Next), `en` and `fr` messages for the example, a language switch in the example.
-- Message keys are typed from the default locale: an unknown key is a tsc error.
+The presenters exist once per styling value, so an option that rewrites their text would need four more sets of them. Every project goes through i18next instead: the default one with English only, and `--i18n` adds French and a language switch. The presenters call `t()` in every project and do not change with the option.
+
+Messages are i18next's standard JSON, one file per language and namespace, which is what `i18next-cli`, the i18n Ally editor extension and translation platforms (Locize, Crowdin) read without setup: `src/app/locales/en/todoList.json`. There is one namespace per slice (`app`, `todoList`, `todoStats`), and `src/app/i18n.ts` imports the files statically, so there is no HTTP backend, no Suspense and nothing new for the e2e tests. Features never import them: they call `useTranslation('todoList')`, so `features-not-to-app` still holds.
+
+The checks come from two tools, both tried on the presenters of `--ui shadcn`:
+
+- `eslint-plugin-i18next` runs as an Oxlint JS plugin. In `jsx-only` mode with `aria-label`, `placeholder`, `title` and `alt` listed and `should-validate-template` on, it reports the seven strings of `TodoInput.tsx` and `TodoItem.tsx`, `` aria-label={`Edit ${todo.title}`} `` included. Its message is generic ("disallow literal string") and cannot be changed, so the README of the config says what to do.
+- `i18next-cli` (the official CLI) checks the message files: `types --ci` fails when the types generated from the JSON are out of date, so an unknown key is a tsc error, `status` fails when a key is missing in a language, and `status --unused` when no code uses a key. Its own `lint` found only four of the seven strings (no `placeholder`, no template), so it is not used for that.
+
+The titles of `STARTER_TODOS` are data (with `--server-state` they come from the API) and stay as they are. `countLabel` gives way to i18next plurals (`_one`, `_other`), which French needs too. The message of `TodoDraftSchema` becomes a key, and `useTitleForm` returns the error already translated, so the presenters still get a string.
+
+**E6-S0. Spike.** As a maintainer, I want the stack tried on a generated project before writing the stories, so that they rest on what works.
+- i18next 27 and react-i18next 18 with TypeScript 7 and the flags of `@brutalway/tsconfig`, typed keys through `CustomTypeOptions` (an `interface` in `declare module 'i18next'`, which `oxlint-config-typescript` already accepts).
+- The `.d.ts` written by `i18next-cli types` against Oxlint, Prettier, knip and check-tree, or where to put it so they leave it alone.
+- French plurals, and a Zod message turned into a key with `--forms`.
+
+**E6-S4. i18next in every project.** As someone creating a project, I want every visible string to go through i18next from the first commit, so that adding a language later means adding files, not rewriting components.
+- `i18next` and `react-i18next` in every vite project, `src/app/i18n.ts` set up before the first render, `en` only by default. Each slice has its namespace in `src/app/locales/en/`.
+- The presenters of every styling value call `t()`, and the Vitest setup loads the same instance so component tests find the English text.
+- Without the example, only `app` remains, with the title of the page.
 
 **E6-S2. No visible literal.** As someone working on the project, I want an error when JSX holds visible text, so that no string is left untranslated.
-- `no-literal-string` in `jsx-text-only` mode, with an allowlist for symbols and numbers.
+- New package `@brutalway/oxlint-config-i18next`, in every vite project: `i18next/no-literal-string` in `jsx-only` mode, with `aria-label`, `placeholder`, `title` and `alt`, `should-validate-template` on, and an allowlist for symbols and numbers.
 
-**E6-S3. Same keys in every locale.** As someone working on the project, I want a check that fails when a key exists in one locale and not the other, or when no code uses it, so that the message files do not drift.
-- Script run by `npm run check`, the message names the locale and the key.
+**E6-S3. Same keys in every language.** As someone working on the project, I want a check that fails when a key is missing in one language or unused, so that the message files do not drift.
+- `i18next.config.ts` at the root, and `npm run check` runs `i18next-cli types --ci`, `i18next-cli status` and `i18next-cli status --unused`.
+
+**E6-S1. i18n as an option.** As someone creating a project, I want `--i18n`, so that the example comes in two languages with a switch.
+- Adds `src/app/locales/fr/`, and `status` then checks that French is complete.
+- Two buttons, EN and FR, with `aria-pressed` in the header (a `Button` with `--ui shadcn`). The first language comes from `navigator.languages`, the choice is kept in `localStorage`, and `<html lang>` and the `<title>` follow it.
+- An e2e test switches to French and runs axe.
+
+Order: S0, then S4 with S2 and S3 (the presenters change once, with the checks that keep them that way), then S1.
 
 ## E7. More checks on React code
 
