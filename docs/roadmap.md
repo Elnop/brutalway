@@ -167,7 +167,7 @@ Tried on a project made with `npm create brutal` (vite, every option on), Tailwi
 
 The vendored files go to `third-party/shadcn/`, at the root of the project next to `src/` and `e2e/`, imported through a `@third-party/*` alias. Every alias of `components.json` (components, ui, utils, lib, hooks) points to `@third-party/shadcn`, and the shadcn CLI writes there without complaint, imports between its files included (`@third-party/shadcn/button`). `third-party/` only ever holds code copied from a registry, so a later registry (another shadcn namespace, for instance) gets its own `third-party/<name>/`.
 
-The name of the folder is not settled yet: `third-party/` (Chromium's convention, explicit) or `external/` (shorter, and the alias `@external/` has no dash). This page uses `third-party/` until then. The test ran with a folder called `vendor/` and a `@vendor/*` alias, so the shadcn CLI has to be tried again with the chosen alias, `@third-party/*` in particular.
+The folder is `third-party/`, Chromium's name for it: it says what it holds, and the dash in `@third-party/*` costs nothing in an import. The test ran with a folder called `vendor/` and a `@vendor/*` alias, so the shadcn CLI has to be tried again with `@third-party/*` before anything else (E5-S0).
 
 `src/` stays fully governed, `src/shared/ui/` included. The scripts already target `src` (`oxlint src e2e`, `depcruise src`, `check-tree src`), so they never see `third-party/`. What remains to set up:
 
@@ -183,41 +183,55 @@ The name of the folder is not settled yet: `third-party/` (Chromium's convention
 
 Tailwind v4 finds the classes in `third-party/` by itself. On the test project, with a `Panel.tsx` in `src/shared/ui/` that wraps the shadcn `Card` and a hand-written `Badge.tsx` next to it, `npm run check` and `vite build` pass, and check-tree still applies to `src/shared/ui/`: with two components there, it asked to move them into `components/`.
 
-Styling goes through tokens: shadcn's variables (`--primary`, `--border`, `--radius`...) are defined in `src/app/globals.css` from the neo-brutalist tokens, and what tokens cannot do (thick borders, hard shadows) is written once per primitive with its `data-slot` attribute (`[data-slot='button'] { ... }`). Every shadcn primitive sets one, so the look changes without editing a vendored file. A variant the app needs and shadcn does not have is a component in `src/shared/ui/` that wraps the primitive, written under the usual rules.
+Styling goes through tokens first. shadcn's variables (`--primary`, `--border`, `--radius`...) are defined in `src/app/globals.css` from the neo-brutalist tokens, `--radius` is `0`, and the shadows shadcn uses (`shadow-xs`, `shadow-sm`) are redefined under `@theme` as hard shadows. What tokens cannot do, the thickness of borders for instance, is written once per primitive with its `data-slot` attribute (`[data-slot='button'] { ... }`), which every shadcn primitive sets, so the look changes without editing a vendored file. Where these rules go is the open question: in `@layer components` they lose to the utilities of the vendored file, unlayered they also beat the `className` the app passes to the primitive. `@layer base` is the first thing to try. A variant the app needs and shadcn does not have is a component in `src/shared/ui/` that wraps the primitive, written under the usual rules.
+
+shadcn declares its colors under `@theme inline` (`--color-primary: var(--primary)`), so a project has two vocabularies, `ink`/`paper`/`yellow` and `primary`/`muted-foreground`, mapped onto each other in the same file. Both are tokens: `@brutalway/oxlint-config-tailwind` reads `@theme inline` as well as `@theme`, and `bg-primary` passes in `src/`. There is no `.dark` block, so the `dark:` classes of the vendored files never apply, which matches E1-S5.
+
+The vendored files the example needs are committed in the overlay (`overlays/vite/shadcn/third-party/shadcn/`), written by a script of the repo that runs a pinned version of the shadcn CLI. The scaffold stays offline, and the matrix tests the files the user gets. The repo's `.prettierignore` gets `**/third-party`, since it does not skip `overlays/` today. The generated project pins `shadcn` in its devDependencies, so `npx shadcn add` runs the same version and E5-S5 has a version to compare the folder against.
 
 ### Stories
 
+**E5-S0. Spike.** As a maintainer, I want the three unknowns of the method measured on a generated project before writing the option, so that the stories below rest on what works.
+- The shadcn CLI writes into `third-party/shadcn/` through `@third-party/*`, imports between its files included.
+- `[data-slot]` rules in `@layer base`: a border set there shows on the primitive, and a class passed by the app still wins.
+- `bg-primary` passes `@brutalway/oxlint-config-tailwind` once it reads `@theme inline`.
+
 **E5-S1. shadcn/ui as an option.** As someone creating a project, I want `--ui shadcn`, so that I start with accessible primitives styled like the rest of the series.
-- Requires `--styling tailwind` (E0-S3). Only the primitives the example uses are vendored (Button, Input, Checkbox, Card), and the example uses them.
+- `ui` is a choice option (`none`, `shadcn`), `none` by default. The value `shadcn` declares `requires: { styling: 'tailwind' }`, which `optionRules.ts` already handles.
+- Only the primitives the example uses are vendored (Button, Input, Checkbox, Card). A `shadcn-example` overlay replaces the presenters of `tailwind-example`: the filters are Buttons with `aria-pressed`, the check mark is lucide's `CheckIcon` inside the shadcn Checkbox. `useTitleForm` stays the only form code, with or without `--forms`: no shadcn `Form` or `Field`.
+- The shadcn Checkbox is a `button` with `role="checkbox"` and `onCheckedChange`: `TodoItem.test.tsx` and the e2e test still find it by role and still pass with `toBeChecked()`.
 - The CLI writes `components.json` with every alias on `@third-party/shadcn`, adds the `@third-party/*` alias to the tsconfigs and to Vite, and pins the packages the vendored files import, since the shadcn CLI misses some.
-- The README explains how to add one with `npx shadcn add <name>` and what to do after (E5-S7).
+- The README explains how to add one with `npx shadcn add <name>`, and that a primitive with an animation (`dialog`, `dropdown-menu`...) needs `tw-animate-css` and its `@import` in `src/app/globals.css`, which the shadcn CLI does not write since the project owns that file.
 
 **E5-S2. A TypeScript project for vendored code.** As someone working on the project, I want vendored files checked with shadcn's flags and my code with all of brutalway's, so that adding a component never makes `npm run check` fail on code I did not write.
 - `tsconfig.third-party.json`, the references and the `tsc -b` script as above. An error in `src/` is still reported, an error in `third-party/` only if it fails with the relaxed flags.
 - The `.tsbuildinfo` and declarations stay under `node_modules/.cache`, nothing new to gitignore.
-- Check whether `@brutalway/tsconfig` should ship a `react-vite-third-party.json` with the two flags off, so the relaxed set is defined once.
+- `@brutalway/tsconfig` ships `react-vite-third-party.json` with the two flags off, so the relaxed set is defined once.
 
 **E5-S3. The other tools leave `third-party/` alone.** As someone working on the project, I want Prettier and knip set up as above, so that `--overwrite` gives the registry's file byte for byte and `npm run check` stays green.
 - The matrix (E0-S4) runs with a component added after the scaffold, to catch a tool that starts reading `third-party/`.
 - alint: a rule that `third-party/` only holds folders listed in a config file (`components.json` for shadcn), so nobody drops hand-written code there to escape the rules.
 
 **E5-S4. Boundaries of the vendored folder.** As someone working on the project, I want `third-party/` to import nothing from `src/`, and the packages behind shadcn to be imported only from `third-party/`, so that swapping a primitive happens in one place.
-- Rules in `@brutalway/dependency-cruiser-config`: `third-party-not-to-src`, and `third-party-packages-only-from-third-party` for `radix-ui`, `class-variance-authority` and `cn`. Both tried on the test project: an import of `radix-ui` from `src/shared/lib/` and an import of `src/` from `third-party/shadcn/` are both reported.
+- Rules in `@brutalway/dependency-cruiser-config`: `third-party-not-to-src`, and `third-party-packages-only-from-third-party` for `radix-ui`, `class-variance-authority`, `clsx` and `tailwind-merge`. Both tried on the test project: an import of `radix-ui` from `src/shared/lib/` and an import of `src/` from `third-party/shadcn/` are both reported.
+- `cn` is a file, not a package: `src/` imports it from `@third-party/shadcn/utils` for its conditional classes.
 - Code in `src/` may import `@third-party/shadcn/` from any layer, since `third-party/` imports nothing from the app.
 
 **E5-S5. No hand edits.** As someone working on the project, I want an edit to a vendored file to be refused with what to do instead, so that the folder always matches the registry.
-- `@brutalway/agent-hook` stops on a file under `third-party/`, with the message: run `npx shadcn add <name> --overwrite`, restyle in `src/app/globals.css` through tokens or `data-slot`, or wrap the primitive in `src/shared/ui/`.
+- `@brutalway/agent-hook` stops on a file under `third-party/`, with the message: run `npx shadcn add <name> --overwrite`, restyle in `src/app/globals.css` through tokens or `data-slot`, or wrap the primitive in `src/shared/ui/`. The hook lints after the edit today, so refusing it before means a `PreToolUse` entry next to the current one.
 - Without that, the hook would fail on these files for a different reason: `oxlint <ignored file>` exits with 1 and "No files found to lint". The hook passes `--no-error-on-unmatched-pattern` or skips ignored files.
-- Look into a CI check that compares `third-party/shadcn/` with the registry at the pinned shadcn version.
+- Look into a CI check that compares `third-party/shadcn/` with the registry at the version of `shadcn` pinned in `package.json`.
 
 **E5-S6. Primitives first.** As someone working on the project, I want an error when I write a raw `<button>` or `<input>` in `src/`, so that every control behaves the same way.
-- Lint rule with the list of tags and the primitive to use for each, active only when `components.json` exists.
+- New package `@brutalway/oxlint-config-shadcn`, added with `--ui shadcn`, as E3 and E4 add theirs.
+- `button`, `input`, `textarea` and `select` are reported, the message names the primitive to import, and gives `npx shadcn add <name>` when it is not vendored yet.
 
-**E5-S7. The docs list what is vendored.** As someone (or an agent) arriving on the project, I want a table of the available primitives, so that I use one instead of writing it again.
-- `docs/ui.md` lists each file of `third-party/shadcn/` and each component of `src/shared/ui/`. A check fails when a file is missing from the table or a row has no file.
+**E5-S7. One icon library.** As someone working on the project, I want a single icon set, so that icons look alike.
+- The one set in `components.json` (`lucide` by default), allowed in `src/`. Imports of `react-icons`, `@heroicons/*`, `@radix-ui/react-icons`, `@tabler/icons-react` and the other sets are reported by `@brutalway/oxlint-config-shadcn`.
 
-**E5-S8. One icon library.** As someone working on the project, I want a single icon set, so that icons look alike.
-- The one set in `components.json` (`lucide` by default), imports of the others reported.
+**Later. The docs list what is vendored.** A `docs/ui.md` table of each file of `third-party/shadcn/` and each component of `src/shared/ui/`, with a check that fails when a file and a row drift apart. No tool does that yet: it waits for a small generic one (a table in a `.md` against a glob), which E9 could use too.
+
+Order: S0, then S1 with S2 and S3 (the option does not pass `npm run check` without them), then S4, then S6 with S7, then S5.
 
 ## E6. Translations
 
