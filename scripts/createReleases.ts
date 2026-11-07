@@ -36,24 +36,30 @@ async function servedByNpm(candidates: Tag[]): Promise<Tag[]> {
   return candidates.filter(({ tag }) => served.has(tag));
 }
 
-const directories = new Map(
-  globSync('packages/*/*/package.json').map((manifestPath) => {
-    const manifest: { name: string } = JSON.parse(readFileSync(manifestPath, 'utf8'));
-    return [manifest.name, dirname(manifestPath)];
+type Manifest = { name: string; private?: boolean };
+
+const manifests = new Map(
+  globSync(['packages/*/*/package.json', 'templates/*/package.json']).map((manifestPath) => {
+    const manifest: Manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    return [manifest.name, { directory: dirname(manifestPath), published: manifest.private !== true }];
   }),
 );
 const released = new Set(lines(run('gh', ['release', 'list', '--limit', '1000', '--json', 'tagName', '--jq', '.[].tagName'])));
-const tags = lines(run('git', ['tag', '--list', '@brutalway/*', 'create-brutal@*', '--sort=creatordate']))
+const tags = lines(run('git', ['tag', '--list', '@brutalway/*', 'create-brutal@*', 'template-*@*', '--sort=creatordate']))
   .filter((tag) => !released.has(tag))
   .map((tag): Tag => ({ tag, name: tag.slice(0, tag.lastIndexOf('@')), version: tag.slice(tag.lastIndexOf('@') + 1) }));
 
-for (const { tag, name } of tags) if (!directories.has(name)) process.stderr.write(`skipped ${tag}: no package of that name in packages/\n`);
-const releasable = await servedByNpm(tags.filter(({ name }) => directories.has(name)));
+for (const { tag, name } of tags) if (!manifests.has(name)) process.stderr.write(`skipped ${tag}: no package of that name in packages/ or templates/\n`);
+const known = tags.filter(({ name }) => manifests.has(name));
+const servedTags = new Set((await servedByNpm(known.filter(({ name }) => manifests.get(name)?.published === true))).map(({ tag }) => tag));
+const releasable = known.filter(({ tag, name }) => manifests.get(name)?.published === false || servedTags.has(tag));
 
 for (const [index, { tag, name, version }] of releasable.entries()) {
-  const changelog = readFileSync(join(directories.get(name) ?? '', 'CHANGELOG.md'), 'utf8');
+  const manifest = manifests.get(name);
+  const changelog = readFileSync(join(manifest?.directory ?? '', 'CHANGELOG.md'), 'utf8');
   const notes = releaseNotes(changelog, version) ?? 'First release.';
+  const footer = manifest?.published === true ? `\n\nnpm: https://www.npmjs.com/package/${name}/v/${version}` : '';
   const isLatest = index === releasable.length - 1;
-  run('gh', ['release', 'create', tag, '--verify-tag', '--title', tag, '--notes', `${notes}\n\nnpm: https://www.npmjs.com/package/${name}/v/${version}`, `--latest=${String(isLatest)}`]);
+  run('gh', ['release', 'create', tag, '--verify-tag', '--title', tag, '--notes', `${notes}${footer}`, `--latest=${String(isLatest)}`]);
   process.stdout.write(`released ${tag}\n`);
 }
