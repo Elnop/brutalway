@@ -17,6 +17,13 @@ test('a test fails when the page throws', () => {
   assert.match(output, /boom/u);
 });
 
+test('a test fails when the page breaks its Content Security Policy', () => {
+  const { status, output } = runSpec('csp.spec.ts');
+  assert.equal(status, 1);
+  assert.match(output, /the page broke its Content Security Policy while the test ran/u);
+  assert.match(output, /script-src 'none'/u);
+});
+
 test('axeViolations names each violated rule and its nodes', () => {
   const { status, output } = runSpec('axe.spec.ts');
   assert.equal(status, 0, output);

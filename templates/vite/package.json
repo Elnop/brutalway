@@ -15,7 +15,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "i18next-cli types --quiet && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
-    "lint": "oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts",
+    "lint": "oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts",
     "styles": "stylelint 'src/**/*.css'",
     "deps": "depcruise src",
     "tree": "check-tree src",

@@ -2,7 +2,7 @@ import { cpSync, existsSync, globSync, mkdirSync, readFileSync, readdirSync, rmS
 import { join } from 'node:path';
 import { applyFileEdit } from './applyFileEdit.ts';
 import { errorMessage } from './errorMessage.ts';
-import { formatKnipJson } from './formatKnipJson.ts';
+import { formatJson } from './formatJson.ts';
 import { isRecord } from './isRecord.ts';
 import { PROJECT_NAME_TOKEN } from './ScaffoldConfig.ts';
 import type { Answers, FileEdit, PackageJson, Stack, StackChange } from './StackTypes.ts';
@@ -100,8 +100,10 @@ export function applyStackChanges(dir: string, stack: Stack, answers: Answers, o
     if (change.overlay !== undefined) copyOverlay(join(overlaysRoot, stack.id, change.overlay), dir, projectName);
     keepFolders(dir, change.keep ?? []);
   }
-  const knipConfig = join(dir, 'knip.json');
-  if (existsSync(knipConfig)) writeFileSync(knipConfig, formatKnipJson(readFileSync(knipConfig, 'utf8')));
+  for (const file of ['knip.json', ...globSync('tsconfig*.json', { cwd: dir })]) {
+    const path = join(dir, file);
+    if (existsSync(path)) writeFileSync(path, formatJson(readFileSync(path, 'utf8'), file));
+  }
   updatePackageJson(dir, (pkg) => {
     pkg['name'] = projectName;
     delete pkg['version'];

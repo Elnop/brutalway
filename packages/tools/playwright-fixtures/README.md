@@ -2,7 +2,7 @@
 
 Two things every e2e suite of ours needs:
 
-- `test`: Playwright's `test` with an automatic fixture that fails the test if the page threw a JavaScript error while it ran
+- `test`: Playwright's `test` with two automatic fixtures, which fail the test if the page threw a JavaScript error while it ran, or if the browser reported a violation of the page's Content Security Policy
 - `axeViolations(page)`: runs axe-core on the page and returns one line per violated rule, with the selectors of the nodes, so a failing assertion says what to fix
 
 ```sh

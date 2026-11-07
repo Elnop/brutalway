@@ -7,6 +7,17 @@
       "@e2e/*": ["./e2e/*"]
     }
   },
-  "include": ["src", "node_modules/.cache/i18next", "e2e", "vite.config.ts", "vitest.config.ts", "vitest.setup.ts", "oxlint.config.ts", "playwright.config.ts", "i18next.config.ts"],
+  "include": [
+    "src",
+    "node_modules/.cache/i18next",
+    "e2e",
+    "vite.config.ts",
+    "securityHeaders.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "oxlint.config.ts",
+    "playwright.config.ts",
+    "i18next.config.ts"
+  ],
   "exclude": []
 }

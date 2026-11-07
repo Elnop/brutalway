@@ -279,7 +279,7 @@ export const viteStack: Stack = {
       overlay: 'tailwind',
       edits: [
         { file: 'vite.config.ts', after: "import react from '@vitejs/plugin-react';\n", insert: "import tailwindcss from '@tailwindcss/vite';\n" },
-        { file: 'vite.config.ts', replace: 'plugins: [react()]', with: 'plugins: [react(), tailwindcss()]' },
+        { file: 'vite.config.ts', replace: 'plugins: [react()', with: 'plugins: [react(), tailwindcss()' },
         {
           file: 'oxlint.config.ts',
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
@@ -683,11 +683,11 @@ export const viteStack: Stack = {
       edits: [
         {
           file: 'package.json',
-          replace: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
-          with: 'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
+          replace: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts',
+          with: 'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts securityHeaders.ts',
         },
-        { file: 'tsconfig.test.json', replace: '"node_modules/.cache/i18next", "e2e",', with: '"node_modules/.cache/i18next",' },
-        { file: 'tsconfig.test.json', replace: ' "playwright.config.ts",', with: '' },
+        { file: 'tsconfig.test.json', replace: '    "e2e",\n', with: '' },
+        { file: 'tsconfig.test.json', replace: '    "playwright.config.ts",\n', with: '' },
         { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"],\n      "@e2e/*": ["./e2e/*"]', with: '"@/*": ["./src/*"]' },
         { file: 'oxlint.config.ts', replace: 'import through an alias (@/ in src/, @e2e/ in e2e/).', with: 'import through the @/ alias.' },
         { file: 'README.md', dropLines: '| `npm run e2e` |' },
@@ -696,6 +696,12 @@ export const viteStack: Stack = {
         { file: 'docs/verifications.md', replace: '`@/` in `src/`, `@e2e/` in `e2e/`', with: '`@/` in `src/`' },
         { file: 'docs/verifications.md', dropLines: '| E2e |' },
         { file: 'docs/verifications.md', dropLines: 'The specs import `test`' },
+        { file: 'docs/verifications.md', replace: '`vite preview` sends them, so the e2e tests run under them, and', with: '`vite preview` sends them, and' },
+        {
+          file: 'docs/verifications.md',
+          replace: '`test` from `@brutalway/playwright-fixtures` fails a test when the browser reports a CSP violation, so a script or a request from another origin shows up there first: allow it',
+          with: 'A script or a request from another origin is then refused: allow it',
+        },
       ],
       removeScripts: ['e2e'],
       removeDependencies: ['@playwright/test', '@axe-core/playwright', '@brutalway/playwright-fixtures'],
