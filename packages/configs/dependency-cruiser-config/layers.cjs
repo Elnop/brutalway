@@ -174,6 +174,13 @@ module.exports = {
       to: { path: '(Client\\.ts$|Keys\\.ts$|node_modules/@tanstack/react-query/|/use[^/]+\\.tsx?$)' },
     },
     {
+      name: 'analytics-in-client',
+      severity: 'error',
+      comment: 'Events leave the app through analyticsClient.ts only: call analyticsClient.track() instead of the SDK, so swapping the tool happens in one file.',
+      from: { pathNot: '(^|/)analyticsClient\\.ts$' },
+      to: { path: 'node_modules/(posthog-js|@segment/analytics-next|mixpanel-browser|@amplitude/analytics-browser|react-ga4|@vercel/analytics)/' },
+    },
+    {
       name: 'stores-in-their-folder',
       severity: 'error',
       comment: 'A store lives at the root or in the stores/ folder of a shared feature, a feature, a sub-feature or a shared/.',

@@ -12,7 +12,7 @@ Node 26 is required, like the templates.
 
 | Stack | Template | Options |
 |---|---|---|
-| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `ui`, `server-state`, `forms`, `i18n`, `react-compiler`, `component-tests`, `e2e`, `claude-hook`, `ci` |
+| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `ui`, `server-state`, `forms`, `i18n`, `react-compiler`, `analytics`, `component-tests`, `e2e`, `claude-hook`, `ci` |
 | `fastify` | [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) | `example`, `swagger`, `database`, `claude-hook`, `ci` |
 
 `example` keeps the todo list. Without it you get the same structure with empty `src/features/` and `src/shared-features/` folders. On vite, `App.tsx` then only shows the project name, and zustand can only be removed together with the example, since the example uses it. On fastify, `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name.
@@ -30,6 +30,8 @@ On vite, `forms` is off by default. With it, the title fields of the example go 
 On vite, `i18n` is off by default. With it, the project comes in English and French: the messages of `src/app/locales/fr/` sit next to the English ones, English and Français buttons in the header switch between them, the choice is saved in `localStorage`, and `<html lang>` and the title of the page follow it. `i18next-cli status` then fails when French misses a key, and with e2e, `e2e/language.spec.ts` switches to French and runs axe.
 
 On vite, `react-compiler` is off by default. With it, `vite.config.ts` runs the React Compiler through Babel, so components and hooks are memoized at build time, and `useMemo`, `useCallback` and `memo` imported from `react` are reported. Vitest runs without it: its memo caches add branches the tests would have to reach, while the e2e tests run the compiled build.
+
+On vite, `analytics` takes `none` (the default), `module` or `posthog`. Both values write `src/shared/analyticsClient.ts`, the only place where events leave the app, and the example calls `analyticsClient.track('todo_added')` when a task is added. With `module`, the client dispatches an `analytics` event on `window` for whatever tool you plug in. With `posthog`, it sends the events to PostHog when `VITE_POSTHOG_KEY` is set and nothing otherwise, and `securityHeaders.ts` lets the PostHog hosts through. dependency-cruiser keeps analytics SDKs inside that file.
 
 On fastify, `database` keeps `node:sqlite` and the `DATABASE_PATH` variable. Without it, the example keeps its todos in a `Map`: `todosQueries.ts` has the same functions, so the services and the routes do not change. Without `swagger`, `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
 

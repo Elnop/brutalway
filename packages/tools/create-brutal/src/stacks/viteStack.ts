@@ -196,6 +196,25 @@ const REACT_COMPILER_DOC = `\`vite.config.ts\` runs the [React Compiler](https:/
 
 `;
 
+const ANALYTICS_MODULE_README = `## Analytics
+
+\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it dispatches an \`analytics\` event on \`window\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
+
+`;
+
+const ANALYTICS_POSTHOG_README = `## Analytics
+
+\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`VITE_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`VITE_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev, in preview or in the e2e tests. Autocapture and the scripts PostHog loads from its servers are off, and \`securityHeaders.ts\` lets the PostHog hosts through \`connect-src\`.
+
+`;
+
+const ANALYTICS_LAYOUT_FUNCTION = `
+  function addTodo(title: string) {
+    add(title);
+    analyticsClient.track('todo_added');
+  }
+`;
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -228,6 +247,16 @@ export const viteStack: Stack = {
     { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
     { id: 'i18n', message: 'Add French and a language switch?', default: false },
     { id: 'react-compiler', message: 'Memoize with the React Compiler instead of useMemo and useCallback?', default: false },
+    {
+      id: 'analytics',
+      message: 'How should the app send product events?',
+      default: 'none',
+      values: [
+        { id: 'none', label: 'It does not' },
+        { id: 'module', label: 'Through one module of its own, to plug any tool into' },
+        { id: 'posthog', label: 'Through that module, sending to PostHog' },
+      ],
+    },
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
     {
       id: 'coverage',
@@ -815,6 +844,54 @@ export const viteStack: Stack = {
           replace: 'const todos = useMemo(() => selectVisibleTodos({ todos: allTodos, filter }), [allTodos, filter]);',
           with: 'const todos = selectVisibleTodos({ todos: allTodos, filter });',
         },
+      ],
+    },
+    {
+      when: { analytics: 'module' },
+      overlay: 'analytics-module',
+      edits: [{ file: 'README.md', before: '## Commands', insert: ANALYTICS_MODULE_README }],
+      addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0' },
+    },
+    {
+      when: { analytics: 'posthog' },
+      overlay: 'analytics-posthog',
+      edits: [
+        { file: 'README.md', before: '## Commands', insert: ANALYTICS_POSTHOG_README },
+        { file: 'securityHeaders.ts', replace: `"connect-src 'self'",`, with: `"connect-src 'self' https://*.posthog.com",` },
+      ],
+      addDependencies: { 'posthog-js': '1.447.3' },
+      addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0' },
+    },
+    {
+      when: { analytics: 'module', example: false },
+      edits: [{ file: 'knip.json', replace: '"entry": ["i18next.config.ts"', with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"' }],
+    },
+    {
+      when: { analytics: 'posthog', example: false },
+      edits: [{ file: 'knip.json', replace: '"entry": ["i18next.config.ts"', with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"' }],
+    },
+    {
+      when: { analytics: 'module', example: true },
+      edits: [
+        {
+          file: 'src/features/todo-list/components/TodoListLayout.tsx',
+          after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
+          insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+        },
+        { file: 'src/features/todo-list/components/TodoListLayout.tsx', after: '= useTodoList();\n', insert: ANALYTICS_LAYOUT_FUNCTION },
+        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={add}', with: 'onAdd={addTodo}' },
+      ],
+    },
+    {
+      when: { analytics: 'posthog', example: true },
+      edits: [
+        {
+          file: 'src/features/todo-list/components/TodoListLayout.tsx',
+          after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
+          insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+        },
+        { file: 'src/features/todo-list/components/TodoListLayout.tsx', after: '= useTodoList();\n', insert: ANALYTICS_LAYOUT_FUNCTION },
+        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={add}', with: 'onAdd={addTodo}' },
       ],
     },
     {

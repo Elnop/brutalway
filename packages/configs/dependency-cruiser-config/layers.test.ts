@@ -162,3 +162,15 @@ test('the shadcn rules keep third-party/ apart from the app and its packages ins
   writeFileSync(join(root, 'third-party/shadcn/card.tsx'), "import { Panel } from '../../src/shared/ui/Panel.tsx';\nexport const Card = Panel;\n");
   assert.deepEqual(violatedRules(root, ['src', 'third-party']), ['third-party-not-to-src', 'third-party-packages-only-from-third-party']);
 });
+
+test('the analytics SDK is only imported from analyticsClient.ts', () => {
+  const root = project({
+    'package.json': JSON.stringify({ name: 'fixture', dependencies: { 'posthog-js': '1.0.0' } }),
+    ...fakePackage('posthog-js'),
+    'src/shared/analyticsClient.ts': "import posthog from 'posthog-js';\nexport const analyticsClient = posthog;\n",
+    'src/features/list/listLayout.ts': "import { analyticsClient } from '../../shared/analyticsClient.ts';\nexport const listLayout = analyticsClient;\n",
+  });
+  assert.deepEqual(violatedRules(root), []);
+  writeFileSync(join(root, 'src/features/list/listHelper.ts'), "import posthog from 'posthog-js';\nexport const listHelper = posthog;\n");
+  assert.deepEqual(violatedRules(root), ['analytics-in-client']);
+});
