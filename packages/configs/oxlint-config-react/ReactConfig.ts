@@ -28,6 +28,42 @@ const CALLBACK_PROPS = [
   },
 ];
 
+const MAX_COMPONENT_PROPS = 6;
+
+const ORCHESTRATOR = 'FunctionDeclaration[id.name=/^[A-Z]\\w*(Container|Layout|Page)$/]';
+
+const PRESENTER_FORMATTING = [
+  {
+    selector: 'CallExpression > MemberExpression.callee[property.name=/^(toLocaleString|toLocaleDateString|toLocaleTimeString|toFixed)$/]',
+    message: 'A presenter renders what it gets: format dates and numbers in the orchestrator or in a hook, and pass the string as a prop.',
+  },
+  {
+    selector: 'MemberExpression[object.name="Intl"]',
+    message: 'A presenter renders what it gets: format dates and numbers in the orchestrator or in a hook, and pass the string as a prop.',
+  },
+  {
+    selector: 'CallExpression > MemberExpression.callee[property.name=/^(sort|toSorted|filter|reduce)$/]',
+    message: 'A presenter renders what it gets: sort, filter or reduce the list in the orchestrator or in a hook (a selector), and pass the result as a prop. map stays fine for rendering.',
+  },
+];
+
+const COMPONENT_ROLES = [
+  {
+    selector: `TSTypeAliasDeclaration[id.name=/Props$/] > TSTypeLiteral > TSPropertySignature:nth-child(${MAX_COMPONENT_PROPS + 1})`,
+    message: `A component takes at most ${MAX_COMPONENT_PROPS} props: group the related ones into an object, or split the component.`,
+  },
+];
+
+const ORCHESTRATOR_ROLE = [
+  ...COMPONENT_ROLES,
+  {
+    selector: `${ORCHESTRATOR}:not(:has(CallExpression[callee.name=/^use[A-Z]/]))`,
+    message: 'An XContainer, XLayout or XPage reads state through a hook and hands it to presenters: call the hook here, or rename the component, since it is a presenter.',
+  },
+];
+
+const STORAGE_MESSAGE = 'Only an xStorage.ts file reads and writes the browser storage: move this call into the storage file of its slice, and import its functions.';
+
 export const reactConfig: OxlintConfig = defineConfig({
   extends: [typescriptConfig],
   plugins: ['typescript', 'react', 'import', 'oxc', 'unicorn'],
@@ -35,6 +71,8 @@ export const reactConfig: OxlintConfig = defineConfig({
     { name: 'component-props', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
     { name: 'hook-naming', specifier: fileURLToPath(new URL('./hookNamingPlugin.js', import.meta.url)) },
     { name: 'fetch-placement', specifier: fileURLToPath(new URL('./fetchPlugin.js', import.meta.url)) },
+    { name: 'component-roles', specifier: fileURLToPath(new URL('./componentRolesPlugin.js', import.meta.url)) },
+    { name: 'hook-files', specifier: fileURLToPath(new URL('./hookFilesPlugin.js', import.meta.url)) },
   ],
   env: { browser: true, es2024: true },
   rules: {
@@ -45,6 +83,8 @@ export const reactConfig: OxlintConfig = defineConfig({
     'react/only-export-components': 'error',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
+    'react/no-array-index-key': 'error',
+    'no-restricted-globals': ['error', { name: 'localStorage', message: STORAGE_MESSAGE }, { name: 'sessionStorage', message: STORAGE_MESSAGE }],
   },
   overrides: [
     { files: ['**/*.tsx'], rules: { 'component-props/no-restricted-syntax': ['error', ...COMPONENT_PROPS, ...CALLBACK_PROPS] } },
@@ -81,6 +121,13 @@ export const reactConfig: OxlintConfig = defineConfig({
       },
     },
     { files: ['**/*Client.ts'], rules: { 'fetch-placement/no-restricted-syntax': 'off' } },
-    { files: ['**/*.test.tsx', 'e2e/**'], rules: { 'component-props/no-restricted-syntax': 'off' } },
+    { files: ['**/*Storage.ts'], rules: { 'no-restricted-globals': 'off' } },
+    { files: ['**/*.tsx'], rules: { 'component-roles/no-restricted-syntax': ['error', ...COMPONENT_ROLES, ...PRESENTER_FORMATTING] } },
+    { files: ['**/*Container.tsx', '**/*Layout.tsx', '**/*Page.tsx'], rules: { 'component-roles/no-restricted-syntax': ['error', ...ORCHESTRATOR_ROLE] } },
+    {
+      files: ['**/use[A-Z]*.tsx'],
+      rules: { 'hook-files/no-restricted-syntax': ['error', { selector: 'Program', message: 'A hook file is a useX.ts: move the JSX into a component and rename this file.' }] },
+    },
+    { files: ['**/*.test.tsx', 'e2e/**'], rules: { 'component-props/no-restricted-syntax': 'off', 'component-roles/no-restricted-syntax': 'off' } },
   ],
 });

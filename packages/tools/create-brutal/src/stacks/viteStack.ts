@@ -165,7 +165,20 @@ const THIRD_PARTY_ALINT = `  - id: third-party-only-registries
 
 const THIRD_PARTY_REFERENCES = '  "references": [{ "path": "./tsconfig.third-party.json" }],\n';
 
-const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitch.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languagePreference.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it. To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitch.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languageStorage.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it. To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+
+const COVERAGE_CONFIG = `      coverage: {
+        provider: 'v8',
+        reporter: ['text'],
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: ['src/main.tsx', 'src/app/**', '**/*.test.{ts,tsx}', '**/*{Container,Layout,Page}.tsx', '**/use[A-Z]*.ts', '**/*{Client,Keys,Types,Config,Schemas,Storage}.ts'],
+        thresholds: { lines: 90, functions: 90, branches: 90, statements: 90 },
+      },
+`;
+
+const COVERAGE_DOC = `\`npm test\` also measures coverage with \`@vitest/coverage-v8\` and fails under 90 % of the lines, functions, branches or statements of what Vitest is meant to test: presenters, pure functions, selectors and stores. Orchestrators, hooks, clients, \`xStorage.ts\` files and \`src/app/\` are left out (\`vitest.config.ts\`), since the e2e tests cover them. \`npm run test:unit\` and \`npm run test:component\` run without it.
+
+`;
 
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
@@ -199,6 +212,12 @@ export const viteStack: Stack = {
     { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
     { id: 'i18n', message: 'Add French and a language switch?', default: false },
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
+    {
+      id: 'coverage',
+      message: 'Fail the tests under 90 % coverage of presenters, pure functions, selectors and stores?',
+      default: false,
+      requires: { 'component-tests': true },
+    },
     { id: 'e2e', message: 'Add e2e tests (Playwright)?', default: true },
     { id: 'claude-hook', message: 'Add the Claude Code hook that lints each edited file?', default: true, independent: true },
     { id: 'ci', message: 'Add the GitHub Actions workflow?', default: true },
@@ -523,7 +542,7 @@ export const viteStack: Stack = {
         {
           file: 'src/main.tsx',
           after: "import { createI18n } from '@/app/createI18n.ts';\n",
-          insert: "import { followLanguage, preferredLanguage } from '@/features/language-switch/languagePreference.ts';\n",
+          insert: "import { followLanguage, preferredLanguage } from '@/features/language-switch/languageStorage.ts';\n",
         },
         { file: 'src/main.tsx', replace: 'const i18n = createI18n();', with: 'const i18n = createI18n(preferredLanguage());\nfollowLanguage(i18n);' },
         { file: 'src/app/App.tsx', after: "import { useTranslation } from 'react-i18next';\n", insert: "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n" },
@@ -586,6 +605,22 @@ export const viteStack: Stack = {
           with: 'and renaming. `e2e/language.spec.ts` switches to French, checks the heading, a counter, `<html lang>` and the title of the page, runs axe, and reloads to check that the choice stays.',
         },
       ],
+    },
+    {
+      when: { coverage: true },
+      edits: [
+        { file: 'vitest.config.ts', after: "      setupFiles: ['vitest.setup.ts'],\n", insert: COVERAGE_CONFIG },
+        { file: 'package.json', replace: '"test": "vitest run",', with: '"test": "vitest run --coverage",' },
+        { file: '.gitignore', after: 'test-results\n', insert: 'coverage\n' },
+        { file: '.prettierignore', after: 'test-results\n', insert: 'coverage\n' },
+        { file: 'docs/verifications.md', before: 'Before keeping a test,', insert: COVERAGE_DOC },
+        { file: 'README.md', replace: 'Vitest: unit tests in Node, component tests in headless Chromium', with: 'Vitest: unit tests in Node, component tests in headless Chromium, 90 % coverage' },
+      ],
+      addDevDependencies: { '@vitest/coverage-v8': '5.1.0' },
+    },
+    {
+      when: { i18n: true, 'component-tests': true },
+      overlay: 'i18n-component-tests',
     },
     {
       when: { example: false, e2e: true },

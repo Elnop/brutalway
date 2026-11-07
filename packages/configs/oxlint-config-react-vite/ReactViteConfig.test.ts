@@ -9,6 +9,7 @@ test('reactViteConfig reports each problem once and accepts Vite imports', () =>
     'src/Panel.tsx:10 react-hooks(rules-of-hooks)',
     'src/shapes.ts:1 export-placement(no-restricted-syntax)',
     'src/shared-features/todos/TodosContainer.tsx:1 check-file(filename-blocklist)',
+    'src/shared-features/todos/TodosContainer.tsx:1 component-roles(no-restricted-syntax)',
     'src/viewStore.ts:5 store-layout(store-layout)',
   ]);
 });

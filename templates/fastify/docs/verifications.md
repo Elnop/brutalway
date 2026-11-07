@@ -37,6 +37,10 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 `check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
 
+## Duplicates
+
+jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears twice in `src/`, tests left out: the threshold is 0. Move the shared part into a function the two places call.
+
 ## Repository
 
 alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies.

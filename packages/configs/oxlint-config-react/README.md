@@ -10,6 +10,12 @@ Oxlint config for React with TypeScript. It extends [@brutalway/oxlint-config-ty
 - `fetch` is only called from an `xClient.ts` file, and never inside `useEffect` or `useLayoutEffect`: server data goes through a query hook that calls the client
 - no braces around a plain string in JSX: `className="card"`, not `className={'card'}`
 - no orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) under `shared-features/`: that layer holds business code shared by several features, and the components that read it belong to a feature
+- an orchestrator calls at least one hook: one that only wraps JSX is a presenter with the wrong name
+- a presenter (any other component) does no formatting: no `toLocaleString`, `toLocaleDateString`, `toLocaleTimeString`, `toFixed` or `Intl`, and no `sort`, `toSorted`, `filter` or `reduce`. The orchestrator or a hook does that work and passes the result as a prop. `map` stays fine for rendering.
+- a component takes at most 6 props: past that, group the related ones into an object or split the component
+- no array index as a `key` (`react/no-array-index-key`)
+- a hook file is a `.ts`: a `useX.tsx` is reported, its JSX goes into a component
+- `localStorage` and `sessionStorage` only appear in an `xStorage.ts` file, which the rest of the code calls
 
 ```sh
 npm install --save-dev oxlint @brutalway/oxlint-config-react

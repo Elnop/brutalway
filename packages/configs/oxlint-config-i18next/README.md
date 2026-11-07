@@ -24,6 +24,6 @@ Reported, in JSX only:
 - the attributes a user reads or hears: `aria-label`, `aria-description`, `placeholder`, `title` and `alt`
 - template literals in JSX: `` aria-label={`Remove ${name}`} ``
 
-A string without any letter is left alone (`{count} · 42%`, `×`, an emoji), and so is an all-caps word like `OK`.
+Test files (`*.test.tsx`) are left alone, since they pass literal props to the components they render. A string without any letter is left alone (`{count} · 42%`, `×`, an emoji), and so is an all-caps word like `OK`.
 
 The message of the plugin only says "disallow literal string". The fix is always the same: add the text to the JSON of the namespace in English, `src/app/locales/en/<namespace>.json`, then render `t('key')`, or `t('key', { name })` for a string with a value in it, which the JSON writes `Remove {{name}}`.

@@ -17,4 +17,5 @@ export const i18nextConfig: OxlintConfig = defineConfig({
       },
     ],
   },
+  overrides: [{ files: ['**/*.test.tsx'], rules: { 'i18next/no-literal-string': 'off' } }],
 });

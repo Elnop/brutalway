@@ -17,8 +17,9 @@
     "lint": "oxlint --type-aware src oxlint.config.ts",
     "deps": "depcruise src",
     "tree": "check-tree src",
+    "duplicates": "jscpd src",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && alint check && knip",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && alint check && knip",
     "test": "node --test",
     "prepare": "git config core.hooksPath .githooks"
   },
@@ -52,6 +53,7 @@
     "@swc/core": "1.16.21",
     "@types/node": "26.6.6",
     "dependency-cruiser": "18.7.2",
+    "jscpd": "5.4.2",
     "knip": "6.42.1",
     "oxlint": "1.91.0",
     "oxlint-tsgolint": "7.0.2005",

@@ -9,6 +9,21 @@ function checkGiven(option: StackOption, value: AnswerValue): void {
   throw new Error(`${option.id} takes true or false, not ${JSON.stringify(value)}`);
 }
 
+function givenAnswer(option: StackOption, chosen: AnswerValue, options: StackOption[], known: Answers): AnswerValue {
+  const blocker = blockerOf(option, chosen, options, known);
+  if (blocker !== undefined) throw new Error(`${flag(option.id, chosen)} cannot be used with ${flag(blocker.id, blocker.value)}`);
+  return chosen;
+}
+
+async function pickedAnswer(option: StackOption, options: StackOption[], known: Answers, ask: AskOption | undefined): Promise<AnswerValue> {
+  const allowed = candidateValues(option).filter((value) => blockerOf(option, value, options, known) === undefined);
+  const [first] = allowed;
+  if (first === undefined) throw new Error(`No value of ${option.id} works with the other options`);
+  if (allowed.length === 1) return first;
+  if (ask === undefined) return allowed.includes(option.default) ? option.default : first;
+  return ask(option, allowed);
+}
+
 export async function resolveAnswers(options: StackOption[], given: Answers, ask: AskOption | undefined): Promise<Answers> {
   for (const option of options) {
     const value = given[option.id];
@@ -18,18 +33,7 @@ export async function resolveAnswers(options: StackOption[], given: Answers, ask
   for (const option of options) {
     const known = { ...given, ...answers };
     const chosen = given[option.id];
-    if (chosen !== undefined) {
-      const blocker = blockerOf(option, chosen, options, known);
-      if (blocker !== undefined) throw new Error(`${flag(option.id, chosen)} cannot be used with ${flag(blocker.id, blocker.value)}`);
-      answers[option.id] = chosen;
-      continue;
-    }
-    const allowed = candidateValues(option).filter((value) => blockerOf(option, value, options, known) === undefined);
-    const [first] = allowed;
-    if (first === undefined) throw new Error(`No value of ${option.id} works with the other options`);
-    if (allowed.length === 1) answers[option.id] = first;
-    else if (ask === undefined) answers[option.id] = allowed.includes(option.default) ? option.default : first;
-    else answers[option.id] = await ask(option, allowed);
+    answers[option.id] = chosen === undefined ? await pickedAnswer(option, options, known, ask) : givenAnswer(option, chosen, options, known);
   }
   return answers;
 }

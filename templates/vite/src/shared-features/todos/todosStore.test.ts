@@ -25,4 +25,9 @@ describe('todosActions', () => {
     todosActions.clearCompleted();
     expect(todosStore.getState().todos.map((todo) => todo.id)).toStrictEqual(['write-a-feature']);
   });
+
+  it('sets the filter', () => {
+    todosActions.setFilter('completed');
+    expect(todosStore.getState().filter).toBe('completed');
+  });
 });

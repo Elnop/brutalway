@@ -35,4 +35,9 @@ describe('TodoItem', () => {
     await expect.element(screen.getByRole('checkbox', { name: 'Buy milk' })).toBeVisible();
     expect(props.onRename).toHaveBeenCalledTimes(1);
   });
+
+  it('shows a done todo as checked', async () => {
+    const screen = await render(<TodoItem todo={{ ...TODO, completed: true }} {...handlers()} />);
+    await expect.element(screen.getByRole('checkbox', { name: 'Buy milk' })).toBeChecked();
+  });
 });

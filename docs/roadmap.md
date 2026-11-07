@@ -284,7 +284,7 @@ The titles of `STARTER_TODOS` are data (with `--server-state` they come from the
 
 Order: S0, then S4 with S2 and S3 (the presenters change once, with the checks that keep them that way), then S1.
 
-As built (S1): `src/features/language-switch/` holds the switch, `LanguagesConfig.ts` and `languagePreference.ts`. With `createI18n.ts` already in `src/app/`, a second helper there made check-tree ask for a `lib/` folder, and a feature is where both the header and `main.tsx` can reach them. The switch exists once per styling value, like the presenters, and calls `changeLanguage` through a function that hands its promise to `reportError`, since `no-misused-promises` refuses a promise in `onClick`. The titles of the starter tasks stay in English.
+As built (S1): `src/features/language-switch/` holds the switch, `LanguagesConfig.ts` and `languageStorage.ts` (named `languagePreference.ts` until E7-S1 kept the browser storage in `xStorage.ts` files). With `createI18n.ts` already in `src/app/`, a second helper there made check-tree ask for a `lib/` folder, and a feature is where both the header and `main.tsx` can reach them. The switch exists once per styling value, like the presenters, and calls `changeLanguage` through a function that hands its promise to `reportError`, since `no-misused-promises` refuses a promise in `onClick`. The titles of the starter tasks stay in English.
 
 As built (S2 to S4): the presenters of the four styling values and the three skeletons went through the same replacements, since their text is the same and only the markup differs. The skeleton overlay brings its own `createI18n.ts` and an `app.json` whose title is the project name. `eslint-plugin-i18next` gets its exclusions as strings, since a `RegExp` does not survive the Oxlint config: a string without any letter of the Latin, Greek, Cyrillic, Hebrew, Arabic, Japanese, Chinese or Korean scripts is left alone, so `·`, `%` and `×` pass. With `forms`, `TITLE_ERRORS` is added to `TodosConfig.ts` and `longTitle` to `todoList.json`, since the default project never shows that error and `status --unused` would report it.
 
@@ -320,6 +320,8 @@ jscpd with bedrock's settings (8 lines, 120 tokens, tests left out) finds no clo
 - `sonarjs/cognitive-complexity` at 15 (Sonar's default) in `@brutalway/oxlint-config-typescript`, for vite and fastify, through the plugin above and an exact version of `eslint-plugin-sonarjs`.
 
 Order: S4 and S1 (the configs), then S2, then S3.
+
+As built: the S1 rules are `no-restricted-syntax` selectors in two more plugin instances of `@brutalway/oxlint-config-react` (`component-roles`, `hook-files`), next to the native `react/no-array-index-key` and `no-restricted-globals`. The 7th prop of an `XProps` type is reported (`:nth-child(7)`), and an orchestrator without a hook call through `:has()`. Turning on cognitive complexity in the repository reported `resolveAnswers.ts` at 18, which now hands each answer to `givenAnswer` or `pickedAnswer`. The 90 % threshold first failed on branches (84 %): `TodoEditor.tsx`, a done `TodoItem.tsx` and `setFilter` had no test, and now do. `no-literal-string` is off in `*.test.tsx`, where a test passes literal props. A project without the example and with `coverage` has nearly nothing to measure and passes.
 
 ## E8. Smaller options
 

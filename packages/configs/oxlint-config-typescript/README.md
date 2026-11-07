@@ -23,6 +23,8 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 
 Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules.
 
+A function whose cognitive complexity is above 15 is reported, with Sonar's own rule: `sonarjs/cognitive-complexity`, the S3776 rule of `eslint-plugin-sonarjs`. The whole plugin does not load under Oxlint with TypeScript 7 (its `ts-api-utils` finds the project's TypeScript, which has no JavaScript API), so `cognitiveComplexityPlugin.ts` loads that rule's file alone. `eslint-plugin-sonarjs` is pinned to an exact version, since the path is internal to it, and a fixture test fails if it moves.
+
 ```sh
 npm install --save-dev oxlint @brutalway/oxlint-config-typescript
 ```

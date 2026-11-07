@@ -4,7 +4,7 @@
   "workspaces": {
     ".": {},
     "packages/configs/oxlint-config-typescript": {
-      "ignoreDependencies": ["@brutalway/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments"]
+      "ignoreDependencies": ["@brutalway/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments", "eslint-plugin-sonarjs"]
     },
     "packages/configs/oxlint-config-zustand": {
       "ignoreDependencies": ["@brutalway/eslint-plugin-store-layout"]

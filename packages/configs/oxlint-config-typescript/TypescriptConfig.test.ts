@@ -20,6 +20,7 @@ test('typescriptConfig reports each convention once', () => {
     'helpers.ts:5 export-placement(no-restricted-syntax)',
     'helpers.ts:18 no-comments(disallowComments)',
     'index.ts:1 check-file(no-index)',
+    'settle.ts:1 sonarjs(cognitive-complexity)',
     'shapeConfig.ts:2 export-placement(no-restricted-syntax)',
     'ShapeConfig.tsx:1 check-file(filename-blocklist)',
     'ShapeConfig.tsx:1 export-placement(no-restricted-syntax)',

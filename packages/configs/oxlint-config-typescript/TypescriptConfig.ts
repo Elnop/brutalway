@@ -35,6 +35,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     { name: 'file-named-after-export', specifier: resolveFromHere('@brutalway/eslint-plugin-file-named-after-export') },
     { name: 'no-comments', specifier: resolveFromHere('eslint-plugin-no-comments') },
     { name: 'check-file', specifier: resolveFromHere('eslint-plugin-check-file') },
+    { name: 'sonarjs', specifier: fileURLToPath(new URL('./cognitiveComplexityPlugin.js', import.meta.url)) },
   ],
   categories: { correctness: 'error', suspicious: 'error' },
   env: { es2024: true },
@@ -91,6 +92,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'unicorn/no-array-for-each': 'error',
     'unicorn/prefer-string-replace-all': 'error',
     'unicorn/prefer-number-properties': 'error',
+    'sonarjs/cognitive-complexity': ['error', 15],
   },
   overrides: [
     { files: ['**/*.ts', '**/*.tsx'], rules: { 'export-placement/no-restricted-syntax': ['error', ...EXPORT_PLACEMENT] } },
