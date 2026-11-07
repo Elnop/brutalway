@@ -90,21 +90,33 @@ The first plan was [css-modules-kit](https://github.com/mizdra/css-modules-kit):
 
 Source: bedrock (`.agents/rules/state.md`, `lib/query/keys.ts`, `lib/query/stale-times.ts`, semgrep rules `no-inline-query-key`, `no-magic-stale-time`, `no-fetch-in-use-effect`).
 
-bedrock splits state by what it is: data from an API goes through TanStack Query, UI state goes into zustand, and a store must never hold server data. Query keys come from a `xKeys` factory, cache windows come from named profiles. The series already has an API with the same todo list (template-fastify), so the example can talk to it.
+bedrock splits state by what it is: data from an API goes through TanStack Query, UI state goes into zustand, and a store must never hold server data. Query keys come from a `xKeys` factory, cache windows come from named profiles. The series already has an API with the same todo list (template-fastify), so the example talks to its routes: `GET /todos?filter=`, `POST /todos`, `PATCH /todos/:id`, `DELETE /todos/:id`, `DELETE /todos/completed` and `GET /stats`.
+
+Requests live in `xClient.ts` files, the convention template-fastify already uses for HTTP calls (its dependency-cruiser rule `http-in-clients`, check-tree's `clients/` category). The client parses every response with the Zod schemas of `TodosSchemas.ts`, and the types come from `z.infer`, so a response that drifts from the API fails at the boundary instead of deep in a component. E4 reuses the same schemas for the forms. Ids become numbers, as in the API.
+
+The `/stats` query lives in `src/shared-features/todos/` next to the list, under the same factory (`todosKeys.all`, `todosKeys.list(filter)`, `todosKeys.stats()`): a mutation on the list has to refresh the counters, and a shared feature cannot import `src/features/todo-stats/`. Invalidating `todosKeys.all` refreshes both.
+
+Without `VITE_API_URL`, MSW answers with an in-memory list, in `npm run dev` and in the build the e2e tests run against (`VITE_API_MOCK=true vite build`). With `VITE_API_URL`, the Vite dev server proxies `/api` to template-fastify, which has no CORS. The production build never contains MSW.
 
 **E3-S1. TanStack Query as an option.** As someone creating a project, I want `--server-state`, so that the app reads and writes its data through an API.
-- The example reads and writes todos through `@tanstack/react-query` against the routes of template-fastify. A mock (MSW) answers in tests and in `npm run dev` when no API runs.
-- zustand keeps the filter only. With the option off, the example stays as it is today.
+- The example reads and writes todos through `@tanstack/react-query` against the routes of template-fastify: the list is filtered by the API (`?filter=`), the counters come from `GET /stats`, and each mutation invalidates `todosKeys.all`.
+- `src/shared-features/todos/todosClient.ts` holds the requests and parses each response with the Zod schemas of `TodosSchemas.ts`. Types come from `z.infer`, ids are numbers.
+- MSW answers in `npm run dev` when `VITE_API_URL` is not set, and in the e2e build (`VITE_API_MOCK=true vite build`). With `VITE_API_URL`, the Vite dev server proxies `/api` to the API. The production build contains no MSW.
+- zustand keeps the filter only. With the option off, the example stays as it is today. Without the example, the option only brings the `QueryClientProvider`, `QueryConfig.ts` and the rules.
+- To check: whether `mockServiceWorker.js` in `public/` needs an exception in Prettier, oxlint and knip.
 
 **E3-S2. Query keys from a factory.** As someone working on the project, I want an error when I write a query key inline, so that an invalidation never misses its query.
-- Keys live in `xKeys.ts`, which only exports `xKeys`. Rule in a new `@brutalway/oxlint-config-tanstack-query`: `queryKey` and `invalidateQueries` only take a call or a member of an `xKeys` object.
+- Keys live in `xKeys.ts`, which only exports `xKeys`. check-tree learns `xKeys.ts` as a named file with a `keys/` category.
+- Rule in a new `@brutalway/oxlint-config-tanstack-query`: `queryKey` and `invalidateQueries` only take a call or a member of an `xKeys` object.
+- To check: whether `@tanstack/eslint-plugin-query` runs as an oxlint JS plugin. If it does, take `exhaustive-deps` and `stable-query-client` from it instead of writing them.
 
 **E3-S3. Named cache windows.** As someone working on the project, I want `staleTime` and `gcTime` to come from named profiles, so that the cache can be tuned from one file.
-- `QueryConfig.ts` holds the profiles, a number literal for `staleTime` is reported.
+- `QueryConfig.ts` holds the profiles. A number literal for `staleTime` or `gcTime` is reported, in `useQuery`, `queryOptions` and the `QueryClient` defaults.
 
-**E3-S4. No fetch in an effect, no server data in a store.** As someone working on the project, I want an error when I call `fetch` in `useEffect` or put API types in a zustand store, so that each kind of state stays with its tool.
-- Lint rule on `fetch` inside `useEffect`. dependency-cruiser rule: a store file imports no `xApi.ts` and no query hook.
-- Requests live in `xApi.ts` files, queries and mutations in `hooks/`, and only orchestrators call them (presenters already import no store, the same rule extends to query hooks).
+**E3-S4. No fetch in an effect, no server data in a store.** As someone working on the project, I want an error when I call `fetch` in `useEffect` or put API data in a zustand store, so that each kind of state stays with its tool.
+- `fetch` inside a `useEffect` callback is reported by `@brutalway/oxlint-config-react`, since it holds for any React project, with or without TanStack Query.
+- `fetch` outside an `xClient.ts` is reported, as template-fastify does with `http-in-clients`.
+- dependency-cruiser: a store imports no `xClient.ts` and no query hook. Presenters already import no store, the same rule extends to query hooks, so only orchestrators call them.
 
 ## E4. Forms with react-hook-form and Zod
 
