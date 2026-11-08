@@ -19,7 +19,7 @@ src/shared/           code with no domain
 | `no-cross-sub-feature`               | a sub-feature (`features/<x>/features/<y>/`) importing a sibling or its feature root instead of the feature `shared/` |
 | `feature-shared-not-to-sub-features` | a feature `shared/` importing one of its sub-features                                                                 |
 | `feature-nesting-too-deep`           | a feature nested more than 10 levels deep                                                                             |
-| `presenters-are-pure` | a presenter (any component not named `XContainer`, `XLayout` or `XPage`) importing a store, a shared-feature hook, an `xClient.ts` or `@tanstack/react-query` |
+| `presenters-are-pure` | a presenter (any component not named `XContainer`, `XLayout`, `XPage`, `XContent` or `XConfig`) importing a store, a shared-feature hook, an `xClient.ts` or `@tanstack/react-query` |
 | `stores-hold-no-server-data` | an `xStore.ts` importing an `xClient.ts`, an `xKeys.ts`, a hook or `@tanstack/react-query` |
 | `analytics-in-client` | `posthog-js`, `@segment/analytics-next`, `mixpanel-browser`, `@amplitude/analytics-browser`, `react-ga4` or `@vercel/analytics` imported anywhere but an `analyticsClient.ts` |
 | `stores-in-their-folder`             | an `xStore.ts` outside the root or the `stores/` folder of its level                                                  |
