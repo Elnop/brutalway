@@ -1,20 +1,4 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "composite": true,
-    "rewriteRelativeImportExtensions": true,
-    "rootDir": ".",
-    "outDir": "dist",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
-  },
-  "include": ["*.ts"],
-  "exclude": ["*.test.ts", "dist"],
-  "references": [
-    {
-      "path": "../oxlint-config-react"
-    },
-    {
-      "path": "../oxlint-config-vitest"
-    }
-  ]
+  "extends": "@brutalway/tsconfig/node.json",
+  "include": ["src", "oxlint.config.ts", "tsdown.config.ts"]
 }
