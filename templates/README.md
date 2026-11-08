@@ -6,6 +6,7 @@ Each template is a starter repository where the conventions are checked by tools
 |---|---|---|
 | [template-vite](vite) | Vite, React, zustand, Vitest, Playwright | ready |
 | [template-fastify](fastify) | Fastify, Zod, node:sqlite, node:test, Swagger UI | ready |
+| [template-package](package) | a standalone npm package: tsdown, node:test, changesets | ready |
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 

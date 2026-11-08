@@ -10,6 +10,7 @@ Every template builds the same todo list, so the stacks can be compared side by 
 |---|---|---|
 | [template-vite](templates/vite) | Vite, React, zustand, Vitest, Playwright | ready |
 | [template-fastify](templates/fastify) | Fastify, Zod, node:sqlite, node:test, Swagger UI | ready |
+| [template-package](templates/package) | a standalone npm package: tsdown, node:test, changesets | ready |
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 
@@ -82,7 +83,7 @@ The templates live in `templates/`, and the CLI downloads them from there.
 | Folder | |
 |---|---|
 | `packages/` | the published packages, one npm workspace each |
-| `templates/` | template-vite and template-fastify, each with its own `package.json`, lockfile, version and changelog |
+| `templates/` | template-vite, template-fastify and template-package, each with its own `package.json`, lockfile, version and changelog |
 | `site/` | the landing page and the docs, made from template-vite and deployed to GitHub Pages at [brutalway.elnop.dev](https://brutalway.elnop.dev/) |
 | `docs/` | the intent and the inspirations |
 | `plugins/`, `.claude-plugin/` | the Claude Code plugin and its marketplace |
