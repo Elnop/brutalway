@@ -54,6 +54,7 @@ export type Stack = {
   id: string;
   label: string;
   directory: string;
+  projectVersion?: string;
   options: StackOption[];
   changes: StackChange[];
   nextSteps: (answers: Answers) => string[];

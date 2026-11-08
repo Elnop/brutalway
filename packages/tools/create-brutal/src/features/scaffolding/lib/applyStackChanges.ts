@@ -107,6 +107,7 @@ export function applyStackChanges(dir: string, stack: Stack, answers: Answers, o
   }
   updatePackageJson(dir, (pkg) => {
     pkg['name'] = projectName;
-    delete pkg['version'];
+    if (stack.projectVersion === undefined) delete pkg['version'];
+    else pkg['version'] = stack.projectVersion;
   });
 }

@@ -11,7 +11,7 @@ const HIDE_CURSOR = '\u001B[?25l';
 
 const USAGE = `Usage: npm create brutal [dir] -- [flags]
 
-  --stack <id>       vite, fastify
+  --stack <id>       vite, fastify, package
   --preset <file>    JSON file with stack, options, git and install
   --yes, -y          take the default of every question left
   --no-git           skip git init (the pre-commit hook is dropped)
@@ -41,6 +41,13 @@ fastify
   --[no-]example                 default: yes
   --[no-]swagger                 default: yes
   --[no-]database                default: yes
+  --[no-]claude-hook             default: yes
+  --[no-]ci                      default: yes
+
+package
+  --[no-]example                 default: yes
+  --[no-]bin                     default: yes
+  --[no-]release                 default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
 `;
@@ -97,7 +104,17 @@ function outcome({ status, stdout, stderr }: Run): { status: number | null; stdo
   return { status, stdout, stderr };
 }
 
-function manifest(project: string): { name?: string; scripts?: Record<string, string> } {
+type Manifest = {
+  name?: string;
+  version?: string;
+  private?: boolean;
+  bin?: Record<string, string>;
+  exports?: Record<string, Record<string, string>>;
+  scripts?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+};
+
+function manifest(project: string): Manifest {
   return JSON.parse(readFileSync(join(project, 'package.json'), 'utf8'));
 }
 
@@ -118,7 +135,7 @@ describe('create-brutal', () => {
   });
 
   it('refuses an unknown stack, an unknown flag, a choice without value and options that conflict', () => {
-    assert.deepEqual(outcome(run(['app', '--stack', 'nope', '-y'])), failure('Unknown stack nope. Choose one of: vite, fastify'));
+    assert.deepEqual(outcome(run(['app', '--stack', 'nope', '-y'])), failure('Unknown stack nope. Choose one of: vite, fastify, package'));
     assert.deepEqual(
       outcome(run(['app', '--stack', 'fastify', '--bogus', '-y'])),
       failure(`Unknown option '--bogus'. To specify a positional argument starting with a '-', place it at the end of the command after '--', as in '-- "--bogus"`),
@@ -197,5 +214,64 @@ describe('create-brutal', () => {
     for (const file of ['playwright.config.ts', 'e2e/app.spec.ts', 'src/features/todo-list/todo-list.css']) {
       assert.equal(existsSync(join(project, file)), false, file);
     }
+  });
+
+  it('creates the package project with the example, the todo bin and the release setup, at version 0.1.0 and publishable', () => {
+    const result = run(['app', '--stack', 'package', '-y', ...OFFLINE]);
+    assert.equal(result.status, 0, result.stdout);
+    const project = join(result.cwd, 'app');
+    const pkg = manifest(project);
+    assert.deepEqual([pkg.name, pkg.version, pkg.private], ['app', '0.1.0', undefined]);
+    assert.deepEqual(pkg.bin, { todo: './dist/todo.js' });
+    assert.deepEqual(pkg.exports, { '.': { types: './dist/todos.d.ts', default: './dist/todos.js' } });
+    assert.equal(pkg.scripts?.['release'], 'changeset publish');
+    for (const file of [
+      'src/todo.ts',
+      'src/todos.ts',
+      'src/features/add-todo/addTodo.ts',
+      '.changeset/config.json',
+      '.github/workflows/release.yml',
+      '.github/workflows/ci.yml',
+      '.claude/settings.json',
+    ]) {
+      assert.equal(existsSync(join(project, file)), true, file);
+    }
+    assert.equal(existsSync(join(project, 'CHANGELOG.md')), false);
+    assert.match(readFileSync(join(project, 'README.md'), 'utf8'), /^# app\n[\s\S]*from 'app';/u);
+  });
+
+  it('drops the example, the bin, the release setup, the hook and the workflows of the package stack', () => {
+    const result = run(['app', '--stack', 'package', '-y', ...OFFLINE, '--no-example', '--no-bin', '--no-release', '--no-claude-hook', '--no-ci']);
+    assert.equal(result.status, 0, result.stdout);
+    const project = join(result.cwd, 'app');
+    const pkg = manifest(project);
+    assert.equal(pkg.bin, undefined);
+    assert.deepEqual(pkg.exports, { '.': { types: './dist/greet.d.ts', default: './dist/greet.js' } });
+    assert.equal(pkg.scripts?.['release'], undefined);
+    assert.equal(pkg.devDependencies?.['@changesets/cli'], undefined);
+    assert.equal(pkg.devDependencies?.['@brutalway/agent-hook'], undefined);
+    for (const file of ['src/greet.ts', 'src/greet.test.ts', 'src/features/.gitkeep', 'src/shared/.gitkeep']) assert.equal(existsSync(join(project, file)), true, file);
+    for (const file of ['src/todo.ts', 'src/todos.ts', 'src/cli.ts', 'src/shared/jsonFile.ts', '.changeset', '.github', '.claude']) assert.equal(existsSync(join(project, file)), false, file);
+    assert.equal(readFileSync(join(project, 'tsdown.config.ts'), 'utf8').includes("entry: ['src/greet.ts'],"), true);
+  });
+
+  it('gives the package skeleton a command named after the project when the bin is kept', () => {
+    const result = run(['app', '--stack', 'package', '-y', ...OFFLINE, '--no-example']);
+    assert.equal(result.status, 0, result.stdout);
+    const project = join(result.cwd, 'app');
+    assert.deepEqual(manifest(project).bin, { app: './dist/cli.js' });
+    assert.equal(readFileSync(join(project, 'src/cli.ts'), 'utf8'), "#!/usr/bin/env node\nprocess.stdout.write('app\\n');\n");
+    assert.equal(readFileSync(join(project, 'tsdown.config.ts'), 'utf8').includes("entry: ['src/cli.ts', 'src/greet.ts'],"), true);
+  });
+
+  it('keeps only the export of the package example without the bin', () => {
+    const result = run(['app', '--stack', 'package', '-y', ...OFFLINE, '--no-bin']);
+    assert.equal(result.status, 0, result.stdout);
+    const project = join(result.cwd, 'app');
+    assert.equal(manifest(project).bin, undefined);
+    assert.equal(existsSync(join(project, 'src/todos.ts')), true);
+    for (const file of ['src/todo.ts', 'src/todo.test.ts']) assert.equal(existsSync(join(project, file)), false, file);
+    assert.equal(readFileSync(join(project, 'tsdown.config.ts'), 'utf8').includes("entry: ['src/todos.ts'],"), true);
+    assert.equal(readFileSync(join(project, 'README.md'), 'utf8').includes('todo list --file'), false);
   });
 });
