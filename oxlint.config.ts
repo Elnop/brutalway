@@ -16,6 +16,7 @@ export default defineConfig({
     'packages/tools/check-doc-length/**',
     'packages/tools/check-doc-sources/**',
     'packages/configs/oxlint-config-vitest/**',
+    'packages/configs/oxlint-config-fastify/**',
   ],
   overrides: [{ files: ['packages/tools/playwright-fixtures/**'], rules: { 'export-placement/no-restricted-syntax': 'off' } }],
 });
