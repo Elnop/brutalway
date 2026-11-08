@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-node",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Oxlint config for Node code in TypeScript: the TypeScript base, the #src/ alias instead of relative imports, fetch only in xClient.ts files.",
   "keywords": [
     "oxlint",
@@ -39,17 +39,17 @@
     "test": "node --test 'src/**/*.test.ts'"
   },
   "dependencies": {
-    "@brutalway/oxlint-config-typescript": "^0.4.0"
+    "@brutalway/oxlint-config-typescript": "^0.5.0"
   },
   "peerDependencies": {
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.4.0",
-    "@brutalway/dependency-cruiser-config": "0.4.0",
+    "@brutalway/check-tree": "0.5.0",
+    "@brutalway/dependency-cruiser-config": "0.5.0",
     "@brutalway/lint-utils": "0.1.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.2.0",
+    "@brutalway/tsconfig": "0.3.0",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",
     "oxlint": "1.91.0",

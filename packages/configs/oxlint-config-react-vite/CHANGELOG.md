@@ -1,5 +1,14 @@
 # @brutalkit/oxlint-config-react-vite
 
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [f1b60f3]
+- Updated dependencies [0b57e92]
+  - @brutalway/oxlint-config-react@0.4.0
+  - @brutalway/oxlint-config-zustand@0.2.4
+
 ## 0.4.1
 
 ### Patch Changes

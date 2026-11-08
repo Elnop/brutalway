@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-typescript",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Oxlint config for TypeScript projects: no comments, no barrel files, files named after their export, types and constants in dedicated files.",
   "keywords": [
     "oxlint",
@@ -39,7 +39,7 @@
     "test": "node --test 'src/**/*.test.ts'"
   },
   "dependencies": {
-    "@brutalway/eslint-plugin-file-named-after-export": "^0.1.2",
+    "@brutalway/eslint-plugin-file-named-after-export": "^0.2.0",
     "eslint-plugin-check-file": "3.3.2",
     "eslint-plugin-no-comments": "1.2.1",
     "eslint-plugin-sonarjs": "4.2.2",
@@ -49,11 +49,11 @@
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.4.0",
-    "@brutalway/dependency-cruiser-config": "0.4.0",
+    "@brutalway/check-tree": "0.5.0",
+    "@brutalway/dependency-cruiser-config": "0.5.0",
     "@brutalway/lint-utils": "0.1.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.2.0",
+    "@brutalway/tsconfig": "0.3.0",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",
     "oxlint": "1.91.0",

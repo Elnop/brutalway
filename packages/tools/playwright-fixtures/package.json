@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/playwright-fixtures",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Playwright fixtures: fail a test when the page throws, list axe-core violations.",
   "keywords": [
     "playwright",
@@ -44,11 +44,11 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
-    "@brutalway/check-tree": "0.4.0",
-    "@brutalway/dependency-cruiser-config": "0.4.0",
-    "@brutalway/oxlint-config-node": "0.1.0",
+    "@brutalway/check-tree": "0.5.0",
+    "@brutalway/dependency-cruiser-config": "0.5.0",
+    "@brutalway/oxlint-config-node": "0.2.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.2.0",
+    "@brutalway/tsconfig": "0.3.0",
     "@playwright/test": "^1.64.1",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",

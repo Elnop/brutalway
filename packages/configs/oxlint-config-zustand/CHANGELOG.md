@@ -1,5 +1,14 @@
 # @brutalkit/oxlint-config-zustand
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [5aad351]
+- Updated dependencies [f1b60f3]
+- Updated dependencies [0b57e92]
+  - @brutalway/oxlint-config-typescript@0.5.0
+
 ## 0.2.3
 
 ### Patch Changes

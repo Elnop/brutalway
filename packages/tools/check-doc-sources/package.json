@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check-doc-sources",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Warns when a file cited by a Markdown doc changed and the doc did not, so the doc gets read again before it says something false.",
   "keywords": [
     "markdown",
@@ -44,11 +44,11 @@
     "micromark-extension-gfm": "^3.0.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.4.0",
-    "@brutalway/dependency-cruiser-config": "0.4.0",
-    "@brutalway/oxlint-config-node": "0.1.0",
+    "@brutalway/check-tree": "0.5.0",
+    "@brutalway/dependency-cruiser-config": "0.5.0",
+    "@brutalway/oxlint-config-node": "0.2.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.2.0",
+    "@brutalway/tsconfig": "0.3.0",
     "@types/mdast": "4.0.4",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",

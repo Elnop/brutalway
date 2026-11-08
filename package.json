@@ -23,12 +23,12 @@
     "release": "npm run build && npm run check && changeset publish && (cd templates && changeset git-tag) && git push --follow-tags && node scripts/createReleases.ts"
   },
   "devDependencies": {
-    "@brutalway/check-doc-length": "0.1.0",
-    "@brutalway/check-doc-links": "0.1.0",
-    "@brutalway/check-doc-sources": "0.1.0",
-    "@brutalway/oxlint-config-typescript": "0.4.0",
+    "@brutalway/check-doc-length": "0.2.0",
+    "@brutalway/check-doc-links": "0.2.0",
+    "@brutalway/check-doc-sources": "0.2.0",
+    "@brutalway/oxlint-config-typescript": "0.5.0",
     "@brutalway/prettier-config": "0.2.0",
-    "@brutalway/tsconfig": "0.2.0",
+    "@brutalway/tsconfig": "0.3.0",
     "@changesets/cli": "3.0.3",
     "@types/node": "26.6.6",
     "knip": "6.44.1",

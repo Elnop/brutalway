@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check-tree",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Checks a source tree: no empty folder, no category folder holding a single child, stylesheets grouped in styles/.",
   "keywords": [
     "lint",
@@ -41,10 +41,10 @@
     "test": "node --test 'src/**/*.test.ts'"
   },
   "devDependencies": {
-    "@brutalway/dependency-cruiser-config": "0.4.0",
-    "@brutalway/oxlint-config-node": "0.1.0",
+    "@brutalway/dependency-cruiser-config": "0.5.0",
+    "@brutalway/oxlint-config-node": "0.2.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.2.0",
+    "@brutalway/tsconfig": "0.3.0",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",
     "oxlint": "1.91.0",

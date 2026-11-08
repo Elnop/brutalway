@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-tailwind
 
+## 0.1.1
+
+### Patch Changes
+
+- 96b9f92: The oklab conversion, the color distance and the cached reading of the color tokens come from the private `@brutalway/color-utils`, bundled into `dist` at build time. Each package keeps its own parsing of the stylesheet, and the reported colors and suggestions are the same.
+
 ## 0.1.0
 
 ### Minor Changes
