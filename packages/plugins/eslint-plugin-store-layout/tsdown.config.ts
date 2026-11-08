@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['plugin.ts'],
+  entry: ['src/plugin.ts'],
   format: 'esm',
   platform: 'node',
   dts: true,

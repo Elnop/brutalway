@@ -1,43 +1,87 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["**/fixtures/**", "packages/tools/create-brutal/overlays/**", "templates/**", "site/**"],
+  "ignore": [
+    "**/fixtures/**",
+    "packages/tools/create-brutal/overlays/**",
+    "templates/**",
+    "site/**"
+  ],
   "workspaces": {
     ".": {},
     "packages/configs/oxlint-config-typescript": {
-      "ignoreDependencies": ["@brutalway/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments", "eslint-plugin-sonarjs"]
+      "ignoreDependencies": [
+        "@brutalway/eslint-plugin-file-named-after-export",
+        "eslint-plugin-check-file",
+        "eslint-plugin-no-comments",
+        "eslint-plugin-sonarjs"
+      ]
     },
     "packages/configs/oxlint-config-zustand": {
-      "ignoreDependencies": ["@brutalway/eslint-plugin-store-layout"]
+      "ignoreDependencies": [
+        "@brutalway/eslint-plugin-store-layout"
+      ]
     },
     "packages/configs/dependency-cruiser-config": {
-      "ignoreDependencies": ["@swc/core", "dependency-cruiser"]
+      "ignoreDependencies": [
+        "@swc/core",
+        "dependency-cruiser"
+      ]
     },
     "packages/configs/alint-config": {
-      "ignoreDependencies": ["@asamarts/alint"]
+      "ignoreDependencies": [
+        "@asamarts/alint"
+      ]
     },
     "packages/tools/create-brutal": {
-      "entry": ["src/cli.ts", "scripts/*.ts"]
+      "entry": [
+        "src/cli.ts",
+        "scripts/*.ts"
+      ]
     },
     "packages/tools/check-doc-links": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/configs/oxlint-config-node": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/tools/check-doc-length": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/tools/check-doc-sources": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/configs/oxlint-config-react-hook-form": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/configs/oxlint-config-shadcn": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/configs/oxlint-config-tanstack-query": {
-      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
+    },
+    "packages/plugins/eslint-plugin-file-named-after-export": {
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
+    },
+    "packages/plugins/eslint-plugin-store-layout": {
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     }
   }
 }

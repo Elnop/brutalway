@@ -1,5 +1,5 @@
 import { definePlugin } from '@oxlint/plugins';
-import { storeLayout } from './storeLayout.ts';
+import { storeLayout } from '#src/features/store-layout/storeLayout.ts';
 
 export default definePlugin({
   meta: { name: 'store-layout' },
