@@ -17,6 +17,7 @@ describe('parseDocsRoute', () => {
 
   it('opens a template page, its docs and its changelog', () => {
     expect(parseDocsRoute('#/templates/fastify')).toMatchObject({ source: { key: 'fastify' }, path: 'README.md' });
+    expect(parseDocsRoute('#/templates/package')).toMatchObject({ source: { key: 'package' }, path: 'README.md' });
     expect(parseDocsRoute('#/templates/vite/CHANGELOG.md')).toMatchObject({ source: { key: 'vite' }, path: 'CHANGELOG.md' });
   });
 

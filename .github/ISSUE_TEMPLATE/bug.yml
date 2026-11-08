@@ -9,10 +9,12 @@ body:
       options:
         - template-vite
         - template-fastify
+        - template-package
         - create-brutal
-        - a config package (oxlint, dependency-cruiser, alint, tsconfig, prettier)
+        - a config package (oxlint, stylelint, dependency-cruiser, alint, tsconfig, prettier)
         - an ESLint plugin
         - check-tree
+        - check-doc-length, check-doc-sources or check-doc-links
         - agent-hook or the brutal-checks Claude Code plugin
         - playwright-fixtures
         - the site

@@ -8,4 +8,5 @@ export const DOC_SOURCES: DocSource[] = [
   { key: 'all', label: 'templates', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates', files: ['README.md'] },
   { key: 'vite', label: 'template-vite', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/vite', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
   { key: 'fastify', label: 'template-fastify', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/fastify', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
+  { key: 'package', label: 'template-package', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/package', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
 ];
