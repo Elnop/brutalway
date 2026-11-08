@@ -1,6 +1,11 @@
+import { extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
+
+function siblingModule(name: string) {
+  return fileURLToPath(new URL(`./${name}${extname(import.meta.url)}`, import.meta.url));
+}
 
 function resolveFromHere(specifier: string) {
   return fileURLToPath(import.meta.resolve(specifier));
@@ -30,12 +35,12 @@ const EXPORT_PLACEMENT = [
 export const typescriptConfig: OxlintConfig = defineConfig({
   plugins: ['typescript', 'import', 'oxc', 'unicorn'],
   jsPlugins: [
-    { name: 'export-placement', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
-    { name: 'type-definitions', specifier: fileURLToPath(new URL('./typeDefinitionsPlugin.js', import.meta.url)) },
+    { name: 'export-placement', specifier: siblingModule('plugin') },
+    { name: 'type-definitions', specifier: siblingModule('typeDefinitionsPlugin') },
     { name: 'file-named-after-export', specifier: resolveFromHere('@brutalway/eslint-plugin-file-named-after-export') },
     { name: 'no-comments', specifier: resolveFromHere('eslint-plugin-no-comments') },
     { name: 'check-file', specifier: resolveFromHere('eslint-plugin-check-file') },
-    { name: 'sonarjs', specifier: fileURLToPath(new URL('./cognitiveComplexityPlugin.js', import.meta.url)) },
+    { name: 'sonarjs', specifier: siblingModule('cognitiveComplexityPlugin') },
   ],
   categories: { correctness: 'error', suspicious: 'error' },
   env: { es2024: true },
