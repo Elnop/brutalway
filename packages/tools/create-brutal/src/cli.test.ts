@@ -89,10 +89,15 @@ const OFFLINE = ['--local', '--no-git', '--no-install'];
 
 type Run = { status: number | null; stdout: string; stderr: string; cwd: string };
 
+function uncoloredEnv(): NodeJS.ProcessEnv {
+  const { FORCE_COLOR: _forced, ...env } = process.env;
+  return { ...env, NO_COLOR: '1' };
+}
+
 function run(args: string[], prepare: (cwd: string) => void = () => undefined): Run {
   const cwd = mkdtempSync(join(tmpdir(), 'create-brutal-'));
   prepare(cwd);
-  const result = spawnSync(process.execPath, [CLI, ...args], { cwd, encoding: 'utf8' });
+  const result = spawnSync(process.execPath, [CLI, ...args], { cwd, encoding: 'utf8', env: uncoloredEnv() });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr, cwd };
 }
 
