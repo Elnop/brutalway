@@ -29,6 +29,8 @@
     "packages/configs/oxlint-config-vitest",
     "packages/configs/oxlint-config-fastify",
     "packages/configs/oxlint-config-i18next",
-    "packages/tools/agent-hook"
+    "packages/tools/agent-hook",
+    "packages/utils/lint-utils",
+    "packages/tools/playwright-fixtures"
   ]
 }

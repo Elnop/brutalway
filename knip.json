@@ -118,6 +118,16 @@
       "ignoreDependencies": [
         "@brutalway/dependency-cruiser-config"
       ]
+    },
+    "packages/utils/lint-utils": {
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
+    },
+    "packages/tools/playwright-fixtures": {
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     }
   }
 }
