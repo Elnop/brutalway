@@ -7,7 +7,7 @@
       "ignoreDependencies": ["@brutalway/eslint-plugin-file-named-after-export", "eslint-plugin-check-file", "eslint-plugin-no-comments", "eslint-plugin-sonarjs"]
     },
     "packages/configs/oxlint-config-zustand": {
-      "ignoreDependencies": ["@brutalway/eslint-plugin-store-layout"]
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config", "@brutalway/eslint-plugin-store-layout"]
     },
     "packages/configs/dependency-cruiser-config": {
       "ignoreDependencies": ["@swc/core", "dependency-cruiser"]
