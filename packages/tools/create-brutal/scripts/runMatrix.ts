@@ -3,15 +3,15 @@ import { appendFileSync, globSync, mkdirSync, readFileSync, rmSync, writeFileSyn
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
-import { errorMessage } from '../src/errorMessage.ts';
-import { isRecord } from '../src/isRecord.ts';
-import { matrixCombinations } from '../src/matrixCombinations.ts';
-import { scaffoldProject } from '../src/scaffoldProject.ts';
-import { LOCAL_ROOT } from '../src/ScaffoldConfig.ts';
-import { SHADCN_ADDED_AFTER_SCAFFOLD } from '../src/stacks/shadcnConfig.ts';
-import type { Answers, Stack } from '../src/StackTypes.ts';
-import { stacks } from '../src/stacks/stacksConfig.ts';
-import { withLocalPackages, withoutLocalPackages } from '../src/withLocalPackages.ts';
+import { errorMessage } from '#src/shared/lib/errorMessage.ts';
+import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { matrixCombinations } from '#src/features/matrix/lib/matrixCombinations.ts';
+import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.ts';
+import { LOCAL_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
+import { SHADCN_ADDED_AFTER_SCAFFOLD } from '#src/features/stacks/configs/shadcnConfig.ts';
+import type { Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
+import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
+import { withLocalPackages, withoutLocalPackages } from '#src/features/matrix/lib/withLocalPackages.ts';
 
 const { values } = parseArgs({
   options: {

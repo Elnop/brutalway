@@ -1,9 +1,9 @@
 import { cpSync, globSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { runCommand } from '../src/runCommand.ts';
-import { OVERLAYS_ROOT } from '../src/ScaffoldConfig.ts';
-import { SHADCN_PRIMITIVES, SHADCN_VERSION } from '../src/stacks/shadcnConfig.ts';
+import { runCommand } from '#src/shared/lib/runCommand.ts';
+import { OVERLAYS_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
+import { SHADCN_PRIMITIVES, SHADCN_VERSION } from '#src/features/stacks/configs/shadcnConfig.ts';
 
 const overlay = join(OVERLAYS_ROOT, 'vite', 'shadcn');
 const target = join(overlay, 'third-party', 'shadcn');

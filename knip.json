@@ -25,7 +25,8 @@
       "ignoreDependencies": ["prettier", "prettier-plugin-tailwindcss", "tailwindcss"]
     },
     "packages/tools/create-brutal": {
-      "entry": ["src/cli.ts", "scripts/*.ts"]
+      "entry": ["scripts/*.ts"],
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     },
     "packages/tools/check-doc-links": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]

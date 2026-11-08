@@ -1,4 +1,4 @@
 {
   "extends": "@brutalway/tsconfig/node.json",
-  "include": ["src", "scripts"]
+  "include": ["src", "scripts", "oxlint.config.ts", "tsdown.config.ts"]
 }
