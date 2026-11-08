@@ -174,3 +174,20 @@ test('the analytics SDK is only imported from analyticsClient.ts', () => {
   writeFileSync(join(root, 'src/features/list/listHelper.ts'), "import posthog from 'posthog-js';\nexport const listHelper = posthog;\n");
   assert.deepEqual(violatedRules(root), ['analytics-in-client']);
 });
+
+test('the library rules keep the entry points at the root of src/, imported by nothing but tests', () => {
+  const root = project(
+    {
+      'src/cli.ts': "import { feature } from './features/list/feature.ts';\nexport const cli = feature;\n",
+      'src/cli.test.ts': "import { cli } from './cli.ts';\nexport const checked = cli;\n",
+      'src/features/list/feature.ts': "import { util } from '../../shared/util.ts';\nexport const feature = util;\n",
+      'src/shared/util.ts': 'export const util = 1;\n',
+    },
+    'library.cjs',
+  );
+  assert.deepEqual(violatedRules(root), []);
+  writeFileSync(join(root, 'src/features/list/helper.ts'), "import { cli } from '../../cli.ts';\nexport const helper = cli;\n");
+  mkdirSync(join(root, 'src/app'));
+  writeFileSync(join(root, 'src/app/App.ts'), "import { util } from '../shared/util.ts';\nexport const app = util;\n");
+  assert.deepEqual(violatedRules(root), ['entries-not-imported', 'no-app-folder']);
+});

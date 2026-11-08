@@ -20,12 +20,14 @@
   "files": [
     "layers.cjs",
     "server.cjs",
-    "shadcn.cjs"
+    "shadcn.cjs",
+    "library.cjs"
   ],
   "exports": {
     "./layers": "./layers.cjs",
     "./server": "./server.cjs",
-    "./shadcn": "./shadcn.cjs"
+    "./shadcn": "./shadcn.cjs",
+    "./library": "./library.cjs"
   },
   "scripts": {
     "test": "node --test '**/*.test.ts'"
