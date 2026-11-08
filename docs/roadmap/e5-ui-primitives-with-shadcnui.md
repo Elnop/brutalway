@@ -93,6 +93,6 @@ The boundaries of E5-S4 are a third entry point, `@brutalway/dependency-cruiser-
 **E5-S8. One icon library.** As someone working on the project, I want a single icon set, so that icons look alike.
 - The one set in `components.json` (`lucide` by default), allowed in `src/`. Imports of `react-icons`, `@heroicons/*`, `@radix-ui/react-icons`, `@tabler/icons-react` and the other sets are reported by `@brutalway/oxlint-config-shadcn`.
 
-**E5-S7, later. The docs list what is vendored.** A `docs/ui.md` table of each file of `third-party/shadcn/` and each component of `src/shared/ui/`, with a check that fails when a file and a row drift apart. No tool does that yet: it waits for a small generic one (a table in a `.md` against a glob), which E9 could use too.
+**E5-S7, dropped. The docs list what is vendored.** bedrock keeps a table of its components in the docs and a script that fails when it drifts from the files. Here the primitives are already easy to find without one: they sit in `third-party/shadcn/`, one file per primitive named as in the registry, `AGENTS.md` points to that folder, and `@brutalway/oxlint-config-shadcn` names the primitive to import when a raw `<button>` or `<input>` is written, with the `npx shadcn add` command when it is not vendored yet. A `docs/ui.md` table would repeat what `ls third-party/shadcn` shows, and need one more tool to stay true.
 
 Order: S0, then S1 with S2 and S3 (the option does not pass `npm run check` without them), then S4, then S6 with S8, then S5.
