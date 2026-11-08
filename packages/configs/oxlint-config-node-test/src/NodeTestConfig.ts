@@ -1,3 +1,4 @@
+import { extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
@@ -17,7 +18,11 @@ const NODE_TEST_STYLE = [
   },
 ];
 
+function siblingModule(name: string) {
+  return fileURLToPath(new URL(`./${name}${extname(import.meta.url)}`, import.meta.url));
+}
+
 export const nodeTestConfig: OxlintConfig = defineConfig({
-  jsPlugins: [{ name: 'node-test', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) }],
+  jsPlugins: [{ name: 'node-test', specifier: siblingModule('plugin') }],
   overrides: [{ files: ['**/*.test.ts'], rules: { 'node-test/no-restricted-syntax': ['error', ...NODE_TEST_STYLE] } }],
 });
