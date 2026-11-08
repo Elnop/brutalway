@@ -32,6 +32,9 @@
     },
     "packages/plugins/eslint-plugin-file-named-after-export": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/plugins/eslint-plugin-store-layout": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }

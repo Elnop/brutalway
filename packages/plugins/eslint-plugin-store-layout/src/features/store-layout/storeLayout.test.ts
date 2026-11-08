@@ -1,5 +1,5 @@
 import { ruleTester } from '@brutalway/lint-utils/ruleTester';
-import { storeLayout } from './storeLayout.ts';
+import { storeLayout } from '#src/features/store-layout/storeLayout.ts';
 
 ruleTester.run('store-layout', storeLayout, {
   valid: [
@@ -14,6 +14,7 @@ ruleTester.run('store-layout', storeLayout, {
       errors: [{ messageId: 'foreignExport', data: { file: 'viewStore.ts', store: 'viewStore', actions: 'viewActions', name: 'useView' } }],
     },
     { filename: 'src/stores/viewStore.ts', code: 'export const store = create();', errors: [{ messageId: 'foreignExport' }, { messageId: 'missingStore' }] },
+    { filename: 'src/stores/viewStore.ts', code: 'export const viewActions = {};', errors: [{ messageId: 'missingStore' }] },
     {
       filename: 'src/stores/viewStore.js',
       code: 'export const store = create();',
