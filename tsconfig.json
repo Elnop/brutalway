@@ -15,6 +15,7 @@
     "packages/tools/check-doc-length",
     "packages/tools/check-doc-sources",
     "packages/configs/oxlint-config-vitest",
-    "packages/configs/oxlint-config-fastify"
+    "packages/configs/oxlint-config-fastify",
+    "packages/configs/oxlint-config-i18next"
   ]
 }

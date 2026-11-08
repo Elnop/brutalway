@@ -17,6 +17,9 @@ export function Card({ name, count }: CardProps) {
         ×
       </button>
       <img alt="A cat" src="/cat.png" />
+      <abbr title="Pet card">PET_ID</abbr>
+      <div aria-description="Pet details" />
+      <Card aria-description="Pet details" name={name} count={count} />
     </section>
   );
 }
