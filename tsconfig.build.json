@@ -8,6 +8,9 @@
       "path": "packages/tools/check-tree"
     },
     {
+      "path": "packages/tools/check-doc-length"
+    },
+    {
       "path": "packages/configs/oxlint-config-typescript"
     },
     {

@@ -4,7 +4,7 @@ import type { DocEntry, DocSource, LoadState } from '@/features/docs/DocsTypes.t
 import { docTitle } from '@/features/docs/lib/docTitle.ts';
 import { folderListUrl, rawFileUrl, sourcePath } from '@/features/docs/lib/docsUrls.ts';
 
-const LIST_CACHE_KEY = 'brutal-docs-list-v3';
+const LIST_CACHE_KEY = 'brutal-docs-list-v4';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -16,6 +16,10 @@ function isDocEntry(value: unknown): value is DocEntry {
 
 function isMarkdownFile(value: unknown): value is { type: 'file'; path: string } {
   return isRecord(value) && value['type'] === 'file' && typeof value['path'] === 'string' && value['path'].endsWith('.md');
+}
+
+function isFolder(value: unknown): value is { type: 'dir'; path: string } {
+  return isRecord(value) && value['type'] === 'dir' && typeof value['path'] === 'string';
 }
 
 function toEntry(sourceKey: string, path: string): DocEntry {
@@ -50,13 +54,20 @@ function writeCachedList(entries: DocEntry[]): void {
   }
 }
 
+async function listFolderTree(source: DocSource, folder: string, signal: AbortSignal): Promise<string[] | undefined> {
+  const response = await fetch(folderListUrl(source, folder), { signal });
+  if (!response.ok) return undefined;
+  const items: unknown = await response.json();
+  if (!Array.isArray(items)) return undefined;
+  const files = items.filter(isMarkdownFile).map((item) => sourcePath(source, item.path));
+  const nested = await Promise.all(items.filter(isFolder).map(async (item) => listFolderTree(source, sourcePath(source, item.path), signal)));
+  return nested.every((paths) => paths !== undefined) ? [...files, ...nested.flat()] : undefined;
+}
+
 async function listFolder(source: DocSource, signal: AbortSignal): Promise<string[] | undefined> {
   if (source.folder === undefined) return [];
   try {
-    const response = await fetch(folderListUrl(source, source.folder), { signal });
-    if (!response.ok) return undefined;
-    const items: unknown = await response.json();
-    return Array.isArray(items) ? items.filter(isMarkdownFile).map((item) => sourcePath(source, item.path)) : undefined;
+    return await listFolderTree(source, source.folder, signal);
   } catch {
     return undefined;
   }

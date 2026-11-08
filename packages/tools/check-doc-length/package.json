@@ -1,0 +1,47 @@
+{
+  "name": "@brutalway/check-doc-length",
+  "version": "0.1.0",
+  "description": "Fails when a Markdown file gets too long, and splits it into a folder along its headings, rewriting the links that point into it.",
+  "keywords": [
+    "markdown",
+    "docs",
+    "lint",
+    "split",
+    "cli"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/tools/check-doc-length#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/tools/check-doc-length"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "bin": {
+    "check-doc-length": "./dist/checkDocLength.js"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "github-slugger": "^2.0.0",
+    "mdast-util-from-markdown": "^2.1.0",
+    "mdast-util-frontmatter": "^2.0.1",
+    "mdast-util-gfm": "^3.1.0",
+    "mdast-util-to-string": "^4.0.0",
+    "micromark-extension-frontmatter": "^2.0.0",
+    "micromark-extension-gfm": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4"
+  }
+}

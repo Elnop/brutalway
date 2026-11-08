@@ -14,7 +14,8 @@
     "typecheck": "tsc -p . && tsc -p packages/tools/create-brutal",
     "lint": "oxlint --type-aware --disable-nested-config",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && knip && npm test",
+    "docs": "check-doc-length",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run docs && knip && npm test",
     "test": "npm test --workspaces --if-present && node --test 'scripts/**/*.test.ts'",
     "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
     "templates:changeset": "cd templates && changeset",
@@ -22,6 +23,7 @@
     "release": "npm run build && npm run check && changeset publish && (cd templates && changeset git-tag) && git push --follow-tags && node scripts/createReleases.ts"
   },
   "devDependencies": {
+    "@brutalway/check-doc-length": "0.1.0",
     "@brutalway/oxlint-config-typescript": "0.4.0",
     "@brutalway/prettier-config": "0.2.0",
     "@brutalway/tsconfig": "0.2.0",
@@ -42,5 +44,14 @@
   "allowScripts": {
     "@asamarts/alint@0.21.0": true,
     "@swc/core": false
+  },
+  "docLength": {
+    "ignore": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/CHANGELOG.md",
+      "**/fixtures/**",
+      "**/test-results/**"
+    ]
   }
 }
