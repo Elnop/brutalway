@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.7.1
+
+### Patch Changes
+
+- Projects start from the templates with their lockfiles on the @brutalway packages of the last release, so `npm ci` works in a new project before its first `npm install`.
+
 ## 0.7.0
 
 ### Minor Changes
