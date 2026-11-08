@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, globSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { ProjectContext } from './DocLinksTypes.ts';
+import type { ProjectContext } from '#src/features/local-links/LocalLinksTypes.ts';
 
 function git(cwd: string, args: string[]): string | undefined {
   try {

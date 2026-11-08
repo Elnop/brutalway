@@ -14,9 +14,6 @@
       "path": "packages/tools/check-doc-sources"
     },
     {
-      "path": "packages/tools/check-doc-links"
-    },
-    {
       "path": "packages/configs/oxlint-config-typescript"
     },
     {

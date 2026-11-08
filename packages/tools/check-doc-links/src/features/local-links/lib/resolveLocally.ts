@@ -1,14 +1,10 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { LinkResult, ProjectContext } from './DocLinksTypes.ts';
+import type { ProjectContext } from '#src/features/local-links/LocalLinksTypes.ts';
+import type { LinkResult } from '#src/shared-features/links/LinksTypes.ts';
+import { npmPackageName } from '#src/shared-features/links/npmPackageName.ts';
 
-const NPM_PAGE = /^https:\/\/(?:www\.)?npmjs\.com\/package\/((?:@[^/]+\/)?[^/?#]+)/iu;
 const GITHUB_FILE = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/(?:blob|tree)\/(?:main|master|HEAD)\/([^?#]*)/iu;
-
-export function npmPackageName(url: string): string | undefined {
-  const name = NPM_PAGE.exec(url)?.[1];
-  return name === undefined ? undefined : decodeURIComponent(name);
-}
 
 export function resolveLocally(url: string, context: ProjectContext): LinkResult | undefined {
   const name = npmPackageName(url);

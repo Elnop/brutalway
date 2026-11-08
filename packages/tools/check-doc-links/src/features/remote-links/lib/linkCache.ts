@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { CACHE_MAX_AGE_MS } from './DocLinksConfig.ts';
+import { CACHE_MAX_AGE_MS } from '#src/features/remote-links/RemoteLinksConfig.ts';
 
 function cachePath(cwd: string): string {
   return join(cwd, 'node_modules/.cache/check-doc-links.json');

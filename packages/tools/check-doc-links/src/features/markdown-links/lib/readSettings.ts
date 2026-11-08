@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { DEFAULT_SETTINGS } from './DocLinksConfig.ts';
-import type { DocLinksSettings } from './DocLinksTypes.ts';
+import { DEFAULT_SETTINGS } from '#src/features/markdown-links/MarkdownLinksConfig.ts';
+import type { DocLinksSettings } from '#src/features/markdown-links/MarkdownLinksTypes.ts';
 
 export function readSettings(cwd: string): DocLinksSettings {
   const path = join(cwd, 'package.json');

@@ -17,6 +17,9 @@
     },
     "packages/tools/create-brutal": {
       "entry": ["src/cli.ts", "scripts/*.ts"]
+    },
+    "packages/tools/check-doc-links": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }

@@ -30,11 +30,11 @@ Relative links are left to the tools that check paths in the repository, such as
 
 Under `docLinks` in `package.json`:
 
-| Setting | Default |
-|---|---|
-| `include` | `["**/*.md"]` |
-| `ignore` | `["**/node_modules/**", "**/dist/**", "**/CHANGELOG.md"]` |
-| `skip` | links to `localhost`, `127.0.0.1` and `example.com`, `.org`, `.net`, as regular expressions |
+| Setting   | Default                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------- |
+| `include` | `["**/*.md"]`                                                                               |
+| `ignore`  | `["**/node_modules/**", "**/dist/**", "**/CHANGELOG.md"]`                                   |
+| `skip`    | links to `localhost`, `127.0.0.1` and `example.com`, `.org`, `.net`, as regular expressions |
 
 ```json
 "docLinks": { "skip": ["^https://internal\\.company\\.dev/"] }
