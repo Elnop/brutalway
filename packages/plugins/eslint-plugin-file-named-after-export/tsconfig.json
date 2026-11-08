@@ -1,5 +1,4 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "include": ["*.ts"],
-  "exclude": ["*.test.ts", "tsdown.config.ts", "dist"]
+  "extends": "@brutalway/tsconfig/node.json",
+  "include": ["src", "oxlint.config.ts", "tsdown.config.ts"]
 }
