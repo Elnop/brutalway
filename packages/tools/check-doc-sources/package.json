@@ -1,0 +1,43 @@
+{
+  "name": "@brutalway/check-doc-sources",
+  "version": "0.1.0",
+  "description": "Warns when a file cited by a Markdown doc changed and the doc did not, so the doc gets read again before it says something false.",
+  "keywords": [
+    "markdown",
+    "docs",
+    "lint",
+    "git",
+    "cli"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/tools/check-doc-sources#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/tools/check-doc-sources"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "bin": {
+    "check-doc-sources": "./dist/checkDocSources.js"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "mdast-util-from-markdown": "^2.1.0",
+    "mdast-util-gfm": "^3.1.0",
+    "micromark-extension-gfm": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4"
+  }
+}

@@ -52,6 +52,7 @@ The rules and every shared config are published from `packages/` as `@brutalway/
 | [`@brutalway/eslint-plugin-store-layout`](packages/plugins/eslint-plugin-store-layout) | `xStore.ts` only exports `xStore` and `xActions` |
 | [`@brutalway/check-tree`](packages/tools/check-tree) | no empty folder, no category folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component |
 | [`@brutalway/check-doc-length`](packages/tools/check-doc-length) | fails when a Markdown file is longer than 300 lines, and splits it into a folder along its headings, rewriting the links that point into it |
+| [`@brutalway/check-doc-sources`](packages/tools/check-doc-sources) | warns when a file cited by a Markdown doc changed and the doc did not |
 | [`@brutalway/playwright-fixtures`](packages/tools/playwright-fixtures) | fail a test when the page throws, axe-core violations as readable lines |
 | [`@brutalway/agent-hook`](packages/tools/agent-hook) | Claude Code hook: oxlint on each edited file, stylelint on each edited stylesheet, alint and check-tree on each created file, errors sent back to the agent |
 | [`@brutalway/lint-utils`](packages/utils/lint-utils) | helpers shared by the plugins |

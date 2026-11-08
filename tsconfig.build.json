@@ -11,6 +11,9 @@
       "path": "packages/tools/check-doc-length"
     },
     {
+      "path": "packages/tools/check-doc-sources"
+    },
+    {
       "path": "packages/configs/oxlint-config-typescript"
     },
     {
