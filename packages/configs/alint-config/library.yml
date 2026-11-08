@@ -1,0 +1,11 @@
+version: 1
+extends:
+  - ./base.yml
+rules:
+  - id: exact-dependency-versions
+    kind: json_path_matches
+    paths: ['**/package.json']
+    path: '$.devDependencies.*'
+    matches: '^\d+\.\d+\.\d+$'
+    message: 'Pin each devDependency to an exact version (add save-exact=true to .npmrc so npm install writes them exact). dependencies and peerDependencies keep their ranges.'
+    level: error

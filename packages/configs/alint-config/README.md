@@ -30,3 +30,13 @@ rules:
 ```
 
 alint only follows a local `extends` that stays inside the linted tree, so the path goes through `node_modules`. `markdown_paths_resolve` stays in your file because its `prefixes` depend on your folders. alint downloads its binary in a `postinstall` script, which npm 11 runs only once you approve it (`allowScripts` in `package.json`).
+
+## Library
+
+A published package states its runtime `dependencies` and `peerDependencies` as ranges, so the projects that install it can share one copy. `library.yml` runs the same rules as `base.yml`, except that `exact-dependency-versions` only checks `devDependencies`:
+
+```yaml
+version: 1
+extends:
+  - ./node_modules/@brutalway/alint-config/library.yml
+```

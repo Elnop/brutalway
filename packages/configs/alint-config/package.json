@@ -1,7 +1,7 @@
 {
   "name": "@brutalway/alint-config",
   "version": "0.1.0",
-  "description": "alint rules for a repository: category folders hold only their kind, every dependency is pinned, doc links and anchors resolve.",
+  "description": "alint rules for a repository: category folders hold only their kind, every dependency is pinned (only devDependencies for a published library), doc links and anchors resolve.",
   "keywords": [
     "alint",
     "repository",
@@ -21,7 +21,8 @@
     "node": ">=26"
   },
   "files": [
-    "base.yml"
+    "base.yml",
+    "library.yml"
   ],
   "scripts": {
     "test": "node --test '**/*.test.ts'"
