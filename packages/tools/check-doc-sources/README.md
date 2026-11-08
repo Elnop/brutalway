@@ -24,7 +24,7 @@ check-doc-sources --base origin/main
 
 Without `--base`, the files changed since `HEAD`, staged or not, and the new files git does not ignore. With it, the files changed since the commit the branch started from, which is what a CI job on a pull request wants. A change of whitespace only is left out. Paths are relative to the folder it runs in, so it works in a package of a monorepo.
 
-For each changed file cited by a doc that did not change, it prints the file, the doc and the line of the citation. It always exits with 0: a file can change without making its doc false, and a check that fails would push for an edit made only to silence it. Outside a git repository, it says it has nothing to compare with.
+For each changed file cited by a doc that did not change, it prints the file, the doc and the line of the citation. It always exits with 0: a file can change without making its doc false, and a check that fails would push for an edit made only to silence it. Before the first commit every file is new, so it reports nothing. Outside a git repository, it says it has nothing to compare with.
 
 ## Settings
 

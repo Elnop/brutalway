@@ -39,3 +39,14 @@ test('with a base, the files changed since the commit the branch started from', 
   git(root, 'commit', '-q', '-am', 'second');
   assert.deepEqual([...changedFiles(join(root, 'app'), 'main')], ['src/edited.ts']);
 });
+
+test('a repository with no commit yet has nothing to compare, and is not an error', () => {
+  const root = mkdtempSync(join(tmpdir(), 'doc-sources-git-'));
+  git(root, 'init', '-q');
+  writeFileSync(join(root, 'new.ts'), 'a\n');
+  assert.deepEqual(changedFiles(root, undefined), new Set());
+});
+
+test('outside a git repository it throws, for the command to say so', () => {
+  assert.throws(() => changedFiles(mkdtempSync(join(tmpdir(), 'doc-sources-none-')), undefined));
+});
