@@ -1,0 +1,43 @@
+{
+  "name": "@brutalway/check-doc-links",
+  "version": "0.1.0",
+  "description": "Fails when a Markdown doc links to a page that no longer exists, and skips the check when the machine is offline.",
+  "keywords": [
+    "markdown",
+    "docs",
+    "links",
+    "lint",
+    "cli"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/tools/check-doc-links#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/tools/check-doc-links"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "bin": {
+    "check-doc-links": "./dist/checkDocLinks.js"
+  },
+  "scripts": {
+    "test": "node --test '**/*.test.ts'"
+  },
+  "dependencies": {
+    "mdast-util-from-markdown": "^2.1.0",
+    "mdast-util-gfm": "^3.1.0",
+    "micromark-extension-gfm": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4"
+  }
+}
