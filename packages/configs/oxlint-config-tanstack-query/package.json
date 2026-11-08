@@ -35,7 +35,7 @@
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise src",
-    "tree": "check-tree src",
+    "tree": "check-tree src --root-entries",
     "duplicates": "jscpd src",
     "check": "npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates",
     "test": "node --test 'src/**/*.test.ts'"
