@@ -46,8 +46,8 @@
   "devDependencies": {
     "@brutalway/check-tree": "0.4.0",
     "@brutalway/dependency-cruiser-config": "0.4.0",
+    "@brutalway/oxlint-config-node": "0.1.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/oxlint-config-typescript": "0.4.0",
     "@brutalway/tsconfig": "0.2.0",
     "@types/mdast": "4.0.4",
     "dependency-cruiser": "18.7.2",

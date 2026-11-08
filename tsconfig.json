@@ -5,5 +5,5 @@
     "allowImportingTsExtensions": true
   },
   "include": ["packages", "scripts"],
-  "exclude": ["**/fixtures/**", "**/dist/**", "**/node_modules/**", "packages/tools/create-brutal", "packages/tools/check-doc-links"]
+  "exclude": ["**/fixtures/**", "**/dist/**", "**/node_modules/**", "packages/tools/create-brutal", "packages/tools/check-doc-links", "packages/configs/oxlint-config-node"]
 }

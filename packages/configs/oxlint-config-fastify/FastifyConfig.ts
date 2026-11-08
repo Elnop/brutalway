@@ -1,4 +1,4 @@
-import { typescriptConfig } from '@brutalway/oxlint-config-typescript';
+import { nodeConfig } from '@brutalway/oxlint-config-node';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
@@ -20,20 +20,15 @@ const SERVER_CONVENTIONS = [
 ];
 
 export const fastifyConfig: OxlintConfig = defineConfig({
-  extends: [typescriptConfig],
-  plugins: ['typescript', 'import', 'oxc', 'unicorn', 'node'],
+  extends: [nodeConfig],
   jsPlugins: [{ name: 'fastify-conventions', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) }],
-  env: { node: true, es2024: true },
   rules: {
     'oxc/no-async-endpoint-handlers': 'off',
-    'no-restricted-globals': ['error', { name: 'fetch', message: 'Only an xClient.ts file calls fetch: move this call into the client of the API it targets.' }],
-    'no-restricted-imports': ['error', { patterns: [{ regex: '^\\.\\.?/', message: 'Relative imports are not allowed: import through the #src/ alias declared in package.json "imports".' }] }],
   },
   overrides: [
     { files: ['**/*.ts'], rules: { 'fastify-conventions/no-restricted-syntax': ['error', PROCESS_ENV, ...SERVER_CONVENTIONS] } },
     { files: ['**/*Env.ts'], rules: { 'fastify-conventions/no-restricted-syntax': ['error', ...SERVER_CONVENTIONS] } },
-    { files: ['**/*Service.ts', '**/*Queries.ts', '**/*Schemas.ts', '**/*Routes.ts', '**/*Client.ts', '**/*Worker.ts'], rules: { 'file-named-after-export/file-named-after-export': 'off' } },
-    { files: ['**/*Client.ts', '**/*.test.ts'], rules: { 'no-restricted-globals': 'off' } },
+    { files: ['**/*Service.ts', '**/*Queries.ts', '**/*Schemas.ts', '**/*Routes.ts', '**/*Worker.ts'], rules: { 'file-named-after-export/file-named-after-export': 'off' } },
     { files: ['*.config.ts'], rules: { 'fastify-conventions/no-restricted-syntax': 'off' } },
   ],
 });

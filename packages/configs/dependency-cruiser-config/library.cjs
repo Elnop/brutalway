@@ -2,6 +2,19 @@ module.exports = {
   extends: require.resolve('./layers.cjs'),
   forbidden: [
     {
+      name: 'not-to-dev-dep',
+      severity: 'error',
+      comment: 'Production code only imports packages from dependencies or peerDependencies: devDependencies hold the tooling, which is not installed with the package.',
+      from: {
+        path: '^src/',
+        pathNot: '\\.test\\.tsx?$',
+      },
+      to: {
+        dependencyTypes: ['npm-dev'],
+        dependencyTypesNot: ['npm-peer'],
+      },
+    },
+    {
       name: 'entries-not-imported',
       severity: 'error',
       comment:

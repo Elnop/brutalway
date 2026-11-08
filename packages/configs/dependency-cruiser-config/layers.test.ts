@@ -191,3 +191,17 @@ test('the library rules keep the entry points at the root of src/, imported by n
   writeFileSync(join(root, 'src/app/App.ts'), "import { util } from '../shared/util.ts';\nexport const app = util;\n");
   assert.deepEqual(violatedRules(root), ['entries-not-imported', 'no-app-folder']);
 });
+
+test('the library rules let the code import a peer dependency that is also a dev dependency, not a dev dependency alone', () => {
+  const root = project(
+    {
+      'package.json': JSON.stringify({ name: 'fixture', peerDependencies: { host: '1.0.0' }, devDependencies: { host: '1.0.0', tooling: '1.0.0' } }),
+      ...fakePackage('host'),
+      'src/Config.ts': "import host from 'host';\nexport const config = host;\n",
+    },
+    'library.cjs',
+  );
+  assert.deepEqual(violatedRules(root), []);
+  writeFileSync(join(root, 'src/Build.ts'), "import tooling from 'tooling';\nexport const build = tooling;\n");
+  assert.deepEqual(violatedRules(root), ['not-to-dev-dep']);
+});

@@ -70,6 +70,7 @@ Code in `src/` imports the primitives from any layer, since they import nothing 
 | ---------------------- | --------------------------------------------------------------- |
 | `entries-not-imported` | a file at the root of `src/` imported by anything but a test    |
 | `no-app-folder`        | a file under `src/app/`                                         |
+| `not-to-dev-dep`       | code under `src/` importing a devDependency that is not also a peerDependency |
 
 ```js
 module.exports = {
@@ -77,6 +78,8 @@ module.exports = {
   options: { parser: 'swc', tsPreCompilationDeps: false },
 };
 ```
+
+A peer dependency such as `oxlint` is often a devDependency too, so the package can be tested: the code may import it.
 
 A type-only package such as `mdast` (whose types come from `@types/mdast`) does not resolve with `parser: 'swc'`: leave it out with `exclude: { path: '^mdast$' }` in `options`.
 

@@ -20,6 +20,9 @@
     },
     "packages/tools/check-doc-links": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/configs/oxlint-config-node": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }

@@ -6,6 +6,6 @@ module.exports = {
     tsConfig: { fileName: 'tsconfig.json' },
     parser: 'swc',
     tsPreCompilationDeps: false,
-    enhancedResolveOptions: { extensions: ['.ts', '.js'] },
+    enhancedResolveOptions: { extensions: ['.ts', '.js'], exportsFields: ['exports'], conditionNames: ['import', 'require', 'node', 'default'] },
   },
 };

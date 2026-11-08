@@ -29,7 +29,7 @@
     "test": "node --test '**/*.test.ts'"
   },
   "dependencies": {
-    "@brutalway/oxlint-config-typescript": "^0.4.0",
+    "@brutalway/oxlint-config-node": "^0.1.0",
     "oxlint-plugin-eslint": "^1.91.0"
   },
   "peerDependencies": {
