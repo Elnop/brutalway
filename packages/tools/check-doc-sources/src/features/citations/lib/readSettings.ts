@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { DEFAULT_SETTINGS } from './DocSourcesConfig.ts';
-import type { DocSourcesSettings } from './DocSourcesTypes.ts';
+import { DEFAULT_SETTINGS } from '#src/features/citations/DocSourcesConfig.ts';
+import type { DocSourcesSettings } from '#src/features/citations/DocSourcesTypes.ts';
 
 export function readSettings(cwd: string): DocSourcesSettings {
   const path = join(cwd, 'package.json');

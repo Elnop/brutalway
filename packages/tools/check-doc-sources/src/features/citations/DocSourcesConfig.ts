@@ -1,4 +1,4 @@
-import type { DocSourcesSettings } from './DocSourcesTypes.ts';
+import type { DocSourcesSettings } from '#src/features/citations/DocSourcesTypes.ts';
 
 export const DEFAULT_SETTINGS: DocSourcesSettings = {
   include: ['**/*.md'],

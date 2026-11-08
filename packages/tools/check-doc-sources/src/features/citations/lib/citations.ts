@@ -4,7 +4,7 @@ import type { Nodes } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { gfm } from 'micromark-extension-gfm';
-import type { Citation, MarkdownFile } from './DocSourcesTypes.ts';
+import type { Citation, MarkdownFile } from '#src/features/citations/DocSourcesTypes.ts';
 
 const URL_SCHEME = /^[a-z][\d+.a-z-]*:/iu;
 

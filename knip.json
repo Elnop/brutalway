@@ -26,6 +26,9 @@
     },
     "packages/tools/check-doc-length": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/tools/check-doc-sources": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }

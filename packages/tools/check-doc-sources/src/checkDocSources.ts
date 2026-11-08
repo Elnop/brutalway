@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util';
-import { changedFiles } from './changedFiles.ts';
-import { citations } from './citations.ts';
-import { markdownFiles } from './markdownFiles.ts';
-import { readSettings } from './readSettings.ts';
-import { staleCitations } from './staleCitations.ts';
+import { changedFiles } from '#src/shared/changedFiles.ts';
+import { citations } from '#src/features/citations/lib/citations.ts';
+import { markdownFiles } from '#src/features/citations/lib/markdownFiles.ts';
+import { readSettings } from '#src/features/citations/lib/readSettings.ts';
+import { staleCitations } from '#src/features/citations/lib/staleCitations.ts';
 
 const { values } = parseArgs({ options: { base: { type: 'string' } } });
 
