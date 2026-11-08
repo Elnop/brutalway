@@ -25,6 +25,9 @@
     "packages/configs/oxlint-config-node-test",
     "packages/configs/oxlint-config-typescript",
     "packages/configs/oxlint-config-tailwind",
-    "packages/configs/stylelint-config"
+    "packages/configs/stylelint-config",
+    "packages/configs/oxlint-config-vitest",
+    "packages/configs/oxlint-config-fastify",
+    "packages/configs/oxlint-config-i18next"
   ]
 }
