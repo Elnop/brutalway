@@ -1,5 +1,5 @@
 import type { Nodes, Root } from 'mdast';
-import type { TextEdit } from './DocLengthTypes.ts';
+import type { TextEdit } from '#src/features/split/SplitTypes.ts';
 
 function urlNodes(node: Nodes): Nodes[] {
   const own = node.type === 'link' || node.type === 'image' || node.type === 'definition' ? [node] : [];

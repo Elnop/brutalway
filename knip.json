@@ -23,6 +23,9 @@
     },
     "packages/configs/oxlint-config-node": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/tools/check-doc-length": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }

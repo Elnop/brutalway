@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { DEFAULT_SETTINGS } from './DocLengthConfig.ts';
-import type { DocLengthSettings } from './DocLengthTypes.ts';
+import { DEFAULT_SETTINGS } from '#src/shared-features/docs/DocLengthConfig.ts';
+import type { DocLengthSettings } from '#src/shared-features/docs/DocLengthTypes.ts';
 
 function fromPackage(cwd: string): Partial<DocLengthSettings> {
   const path = join(cwd, 'package.json');

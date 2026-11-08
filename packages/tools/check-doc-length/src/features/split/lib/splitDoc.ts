@@ -2,10 +2,11 @@ import { posix } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import type { Heading, Root } from 'mdast';
 import { toString } from 'mdast-util-to-string';
-import { applyEdits } from './applyEdits.ts';
-import type { DocLengthSettings, SplitPlan, TextEdit, WrittenFile } from './DocLengthTypes.ts';
-import { linkEdits } from './linkEdits.ts';
-import { markdownTree } from './markdownTree.ts';
+import { applyEdits } from '#src/features/split/lib/applyEdits.ts';
+import { linkEdits } from '#src/features/split/lib/linkEdits.ts';
+import { markdownTree } from '#src/features/split/lib/markdownTree.ts';
+import type { SplitPlan, TextEdit } from '#src/features/split/SplitTypes.ts';
+import type { DocLengthSettings, WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
 
 type Section = { node: Heading; start: number; depth: number; text: string };
 type Piece = { path: string; start: number; end: number; shift: number; children: { title: string; path: string }[] };

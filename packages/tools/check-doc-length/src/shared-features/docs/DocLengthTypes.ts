@@ -7,23 +7,7 @@ export type DocLengthSettings = {
   orderPrefix: boolean;
 };
 
-export type LongDoc = {
-  path: string;
-  lines: number;
-};
-
 export type WrittenFile = {
   path: string;
   content: string;
-};
-
-export type SplitPlan = {
-  removed: string;
-  written: WrittenFile[];
-};
-
-export type TextEdit = {
-  start: number;
-  end: number;
-  text: string;
 };

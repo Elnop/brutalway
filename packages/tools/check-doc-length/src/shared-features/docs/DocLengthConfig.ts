@@ -1,4 +1,4 @@
-import type { DocLengthSettings } from './DocLengthTypes.ts';
+import type { DocLengthSettings } from '#src/shared-features/docs/DocLengthTypes.ts';
 
 export const DEFAULT_SETTINGS: DocLengthSettings = {
   maxLines: 300,

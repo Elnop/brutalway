@@ -1,4 +1,4 @@
-import type { TextEdit } from './DocLengthTypes.ts';
+import type { TextEdit } from '#src/features/split/SplitTypes.ts';
 
 export function applyEdits(source: string, edits: TextEdit[], offset = 0): string {
   let text = source;

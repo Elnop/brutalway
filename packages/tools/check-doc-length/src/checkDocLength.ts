@@ -2,10 +2,11 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { parseArgs } from 'node:util';
-import type { DocLengthSettings } from './DocLengthTypes.ts';
-import { longDocs, markdownFiles } from './markdownFiles.ts';
-import { readSettings } from './readSettings.ts';
-import { splitDoc } from './splitDoc.ts';
+import { longDocs } from '#src/features/length-check/longDocs.ts';
+import { splitDoc } from '#src/features/split/lib/splitDoc.ts';
+import type { DocLengthSettings } from '#src/shared-features/docs/DocLengthTypes.ts';
+import { markdownFiles } from '#src/shared-features/docs/lib/markdownFiles.ts';
+import { readSettings } from '#src/shared-features/docs/lib/readSettings.ts';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
