@@ -17,6 +17,9 @@
   "license": "MIT",
   "author": "elnop",
   "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
   "files": [
     "layers.cjs",
     "server.cjs",
@@ -36,7 +39,7 @@
     "dependency-cruiser": "^18.7.2"
   },
   "devDependencies": {
-    "@swc/core": "^1.16.21",
-    "dependency-cruiser": "^18.7.2"
+    "@swc/core": "1.16.21",
+    "dependency-cruiser": "18.7.2"
   }
 }
