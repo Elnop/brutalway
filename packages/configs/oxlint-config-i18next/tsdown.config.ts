@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['src/I18nextConfig.ts'],
+  entry: ['src/I18nextConfig.ts', 'src/plugin.ts'],
   format: 'esm',
   platform: 'node',
   dts: true,

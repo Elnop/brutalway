@@ -1,7 +1,7 @@
 {
   "name": "@brutalway/oxlint-config-i18next",
   "version": "0.1.0",
-  "description": "Oxlint config for a React app translated with i18next: no visible text in JSX, in aria-label, placeholder, title or alt, nor in a template literal.",
+  "description": "Oxlint config for a React app translated with i18next: no visible text in JSX, in aria-label, aria-description, placeholder, title or alt, nor in a template literal.",
   "keywords": [
     "oxlint",
     "oxlint-config",
@@ -41,7 +41,8 @@
     "test": "node --test 'src/**/*.test.ts'"
   },
   "dependencies": {
-    "eslint-plugin-i18next": "^6.1.5"
+    "eslint-plugin-i18next": "^6.1.5",
+    "oxlint-plugin-eslint": "^1.91.0"
   },
   "peerDependencies": {
     "oxlint": "^1.91.0"
