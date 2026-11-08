@@ -44,6 +44,12 @@ npx check-tree src --categories components,hooks,utils
 
 The grouping rule only applies to the kinds listed in the table that are also in this list.
 
+A published package keeps its entry points at the root of `src/`, one file per bin or export, whatever their kind. `--root-entries` leaves the files at the root of the checked folder where they are, and checks everything below as usual:
+
+```sh
+npx check-tree src --root-entries
+```
+
 The check is also exported as a function:
 
 ```ts
@@ -51,3 +57,5 @@ import { treeViolations } from '@brutalway/check-tree/treeViolations';
 
 const violations = treeViolations('src');
 ```
+
+It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`.

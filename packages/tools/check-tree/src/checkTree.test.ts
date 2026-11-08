@@ -55,4 +55,9 @@ describe('check-tree', () => {
       lines: ['src/utils holds a single child: move it up one level and delete the folder'],
     });
   });
+  it('with --root-entries, leaves the files at the root of the checked folder where they are and checks the rest', () => {
+    const root = project(['src/cli.ts', 'src/plugin.ts', 'src/ReactConfig.ts', 'src/HooksConfig.ts', 'src/features/a/one.ts', 'src/features/a/two.ts']);
+    assert.deepEqual(run(root, ['src', '--root-entries']), { status: 1, stdout: '', lines: ['src/features/a holds 2 lib files (one.ts, two.ts): move them into lib/'] });
+    assert.equal(run(root, ['src']).lines.length, 3);
+  });
 });

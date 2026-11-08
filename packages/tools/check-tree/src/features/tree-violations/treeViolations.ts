@@ -1,5 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { basename, join, relative } from 'node:path';
+import type { TreeOptions } from '#src/features/tree-violations/TreeViolationsTypes.ts';
 
 const DEFAULT_CATEGORY_FOLDERS = [
   'components',
@@ -66,7 +67,7 @@ function groupViolations(name: string, folderName: string, fileNames: string[], 
   return violations;
 }
 
-function folderViolations(folder: string, name: string, categoryFolders: ReadonlySet<string>): string[] {
+function folderViolations(folder: string, name: string, categoryFolders: ReadonlySet<string>, groupsFiles: boolean): string[] {
   const entries = readdirSync(folder, { withFileTypes: true });
   const children = entries.filter((entry) => !TEST_FILE.test(entry.name));
   const fileNames = children
@@ -77,14 +78,14 @@ function folderViolations(folder: string, name: string, categoryFolders: Readonl
   const violations: string[] = [];
   if (children.length === 0) violations.push(`${name} is empty: delete it`);
   if (children.length === 1 && categoryFolders.has(basename(folder))) violations.push(`${name} holds a single child: move it up one level and delete the folder`);
-  return [...violations, ...groupViolations(name, basename(folder), fileNames, folderNames, categoryFolders)];
+  return groupsFiles ? [...violations, ...groupViolations(name, basename(folder), fileNames, folderNames, categoryFolders)] : violations;
 }
 
-export function treeViolations(root: string, categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS): string[] {
+export function treeViolations(root: string, categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS, options: TreeOptions = {}): string[] {
   const categories = new Set(categoryFolders);
   function walk(folder: string): string[] {
     return [
-      ...folderViolations(folder, relative(join(root, '..'), folder), categories),
+      ...folderViolations(folder, relative(join(root, '..'), folder), categories, folder !== root || options.rootEntries !== true),
       ...readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .flatMap((entry) => walk(join(folder, entry.name))),
