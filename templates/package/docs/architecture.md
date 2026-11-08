@@ -16,7 +16,7 @@ Enforced by `@brutalway/dependency-cruiser-config/library` (nothing but a test i
 
 A library shares its runtime dependencies with the project that installs it. Exact versions there would install a second copy each time the two disagree on a patch.
 
-We take ranges for `dependencies` and `peerDependencies`, and keep exact versions for `devDependencies`, which only this repository installs. The example has no runtime dependency: `node:fs` and `node:util` cover it.
+We take ranges for `dependencies` and `peerDependencies`, and keep exact versions for `devDependencies`, which only this repository installs. The example needs no runtime dependency.
 
 Enforced by `@brutalway/alint-config/library.yml`.
 

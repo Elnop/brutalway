@@ -12,7 +12,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 - no comments, no relative imports (use `#src/`), no `index.ts`, no `export *`
 - a file with a single export is named after it, an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`
-- `console` only for `console.error`: the `todo` command writes to `process.stdout` and `process.stderr`
+- `console` only for `console.error`: a command writes to `process.stdout` and `process.stderr`
 - `fetch` is called only in an `xClient.ts` file (or a test)
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`
 - in tests, `describe` and `it` from `node:test` (never `test`), and `node:assert/strict`
@@ -47,7 +47,7 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Repository
 
-alint extends `library.yml` of `@brutalway/alint-config`: every path in backticks, link and anchor of the README, `AGENTS.md` and `docs/` exists, category folders only hold their kind, and every devDependency is pinned to an exact version, while `dependencies` and `peerDependencies` keep their ranges. knip rejects unused exports, files and dependencies, and reads the entry points from `bin` and `exports`.
+alint extends `library.yml` of `@brutalway/alint-config`: every path in backticks, link and anchor of the README, `AGENTS.md` and `docs/` exists, category folders only hold their kind, and every devDependency is pinned to an exact version, while `dependencies` and `peerDependencies` keep their ranges. knip rejects unused exports, files and dependencies, and reads the entry points from `package.json`.
 
 ## Tests
 

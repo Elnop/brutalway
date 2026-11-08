@@ -21,17 +21,6 @@ node src/todo.ts list
 
 ## The example
 
-```sh
-todo add Buy milk           # Added 1 [ ] Buy milk
-todo done 1                 # Completed 1 [x] Buy milk
-todo list                   # 1 [x] Buy milk
-todo list --file work.json  # No todos.
-```
-
-The todos live in `todos.json` in the current folder, or in the file given by `--file`. A blank text, an unknown id or a file that does not hold a list of todos prints the reason and exits with 1.
-
-From code:
-
 ```ts
 import { addTodo, completeTodo, listTodos } from 'template-package';
 
@@ -40,7 +29,18 @@ completeTodo('todos.json', todo.id);
 listTodos('todos.json');
 ```
 
-The package has no runtime dependency: `node:fs` reads and writes the file, `node:util` parses the arguments.
+Each function takes the path of the JSON file first. A blank text, an unknown id or a file that does not hold a list of todos throws an error that says why. The package has no runtime dependency: `node:fs` reads and writes the file.
+
+The `todo` command calls the same functions:
+
+```sh
+todo add Buy milk           # Added 1 [ ] Buy milk
+todo done 1                 # Completed 1 [x] Buy milk
+todo list                   # 1 [x] Buy milk
+todo list --file work.json  # No todos.
+```
+
+It keeps the todos in `todos.json` in the current folder, or in the file given by `--file`, and parses its arguments with `node:util`. On an error, it prints the reason and exits with 1.
 
 ## Commands
 
@@ -81,7 +81,7 @@ Each layer only imports the layers below it. `src/shared-features/todos/` holds 
 
 ## Starting your own package
 
-1. Delete `src/features/`, `src/shared-features/todos/` and `src/shared/`, then empty `src/todo.ts` and `src/todos.ts` and their tests.
+1. Delete `src/features/`, `src/shared-features/todos/` and `src/shared/`, then empty the entry points at the root of `src/` and their tests.
 2. Rename the entry points after your package, in `src/`, `package.json` and `tsdown.config.ts`, and write the end-to-end test of each one.
 3. Add a feature per thing the package does, and a shared feature when two of them need the same code.
 4. Run `npm run check` often. It tells you where each file goes as the package grows.
