@@ -8,10 +8,5 @@
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   },
   "include": ["*.ts"],
-  "exclude": ["*.test.ts", "dist"],
-  "references": [
-    {
-      "path": "../oxlint-config-typescript"
-    }
-  ]
+  "exclude": ["*.test.ts", "dist"]
 }
