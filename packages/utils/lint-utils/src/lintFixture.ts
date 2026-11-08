@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import type { OxlintReport } from './OxlintReportTypes.ts';
+import type { OxlintReport } from '#src/shared/types/OxlintReportTypes.ts';
 
 const OXLINT_BIN = fileURLToPath(new URL('bin/oxlint', import.meta.resolve('oxlint/package.json')));
 

@@ -29,6 +29,9 @@
     },
     "packages/tools/check-doc-sources": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/utils/lint-utils": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }
