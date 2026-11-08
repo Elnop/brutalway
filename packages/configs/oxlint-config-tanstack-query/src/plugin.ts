@@ -1,6 +1,6 @@
 import { definePlugin } from '@oxlint/plugins';
-import { namedCacheWindows } from './namedCacheWindows.ts';
-import { queryKeyFactory } from './queryKeyFactory.ts';
+import { namedCacheWindows } from '#src/features/named-cache-windows/namedCacheWindows.ts';
+import { queryKeyFactory } from '#src/features/query-key-factory/queryKeyFactory.ts';
 
 export default definePlugin({
   meta: { name: 'query-conventions' },

@@ -19,3 +19,8 @@ export function useForgetNotes() {
     client.setQueryData(['note', 1], 'cached');
   };
 }
+
+export function NotesProvider() {
+  const client = new QueryClient();
+  return client.isFetching();
+}

@@ -35,6 +35,9 @@
     },
     "packages/configs/oxlint-config-shadcn": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/configs/oxlint-config-tanstack-query": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }
