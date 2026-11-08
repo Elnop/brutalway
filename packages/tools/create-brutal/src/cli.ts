@@ -2,15 +2,16 @@
 import { existsSync, readdirSync, rmSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 import { cancel, confirm, intro, isCancel, log, note, outro, select, spinner, text } from '@clack/prompts';
-import { errorMessage } from './errorMessage.ts';
-import { isChoice } from './optionRules.ts';
-import { readArgs } from './readArgs.ts';
-import { readStackRefs } from './readStackRefs.ts';
-import { resolveAnswers } from './resolveAnswers.ts';
-import { scaffoldProject } from './scaffoldProject.ts';
-import { LOCAL_ROOT } from './ScaffoldConfig.ts';
-import type { AnswerValue, Stack, StackOption, TemplateSource } from './StackTypes.ts';
-import { stacks } from './stacks/stacksConfig.ts';
+import { errorMessage } from '#src/shared/lib/errorMessage.ts';
+import { isChoice } from '#src/shared-features/stack/optionRules.ts';
+import { readArgs } from '#src/features/answers/lib/readArgs.ts';
+import { readStackRefs } from '#src/features/scaffolding/lib/readStackRefs.ts';
+import { resolveAnswers } from '#src/features/answers/lib/resolveAnswers.ts';
+import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.ts';
+import { LOCAL_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
+import type { TemplateSource } from '#src/features/scaffolding/ScaffoldTypes.ts';
+import type { AnswerValue, Stack, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
 
 const PROJECT_NAME = /^[a-z0-9][a-z0-9._-]*$/u;
 

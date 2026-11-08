@@ -11,7 +11,7 @@
   "prettier": "@brutalway/prettier-config",
   "scripts": {
     "build": "node scripts/buildPackages.ts",
-    "typecheck": "tsc -p . && tsc -p packages/tools/create-brutal",
+    "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware --disable-nested-config",
     "format": "prettier --write .",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
@@ -28,7 +28,6 @@
     "@brutalway/check-doc-sources": "0.1.0",
     "@brutalway/oxlint-config-typescript": "0.4.0",
     "@brutalway/prettier-config": "0.2.0",
-    "@brutalway/tsconfig": "0.2.0",
     "@changesets/cli": "3.0.3",
     "@types/node": "26.6.6",
     "knip": "6.44.1",
