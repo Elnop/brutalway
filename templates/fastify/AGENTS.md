@@ -4,7 +4,7 @@ A Fastify + TypeScript API where every convention is checked by a tool. `README.
 
 ## Before calling a change done
 
-Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, alint and knip. Each message says what to change. Then run `npm test`.
+Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, alint and knip. Each message says what to change. Then run `npm test`.
 
 ## Conventions worth knowing first
 

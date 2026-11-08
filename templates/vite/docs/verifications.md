@@ -56,9 +56,11 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 `securityHeaders.ts` holds the HTTP headers of the app: a Content Security Policy that only lets the page load its own scripts, styles, fonts and requests, HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` and `Permissions-Policy`. `vite preview` sends them, so the e2e tests run under them, and `npm run build` writes them into `dist/_headers`, the format of Netlify and Cloudflare Pages. On another host, set the same headers in its config. The dev server sends none, since its hot reload needs inline code. `test` from `@brutalway/playwright-fixtures` fails a test when the browser reports a CSP violation, so a script or a request from another origin shows up there first: allow it in `securityHeaders.ts`, on the narrowest directive.
 
-## Docs length
+## Docs
 
 `check-doc-length` (`@brutalway/check-doc-length`) fails when a Markdown file of the project is longer than 300 lines. `npx check-doc-length split <file>` shows how a file would be cut into a folder of the same name along its `##` headings, and `--write` does it, rewriting the links that point into it.
+
+`check-doc-sources` (`@brutalway/check-doc-sources`) prints a warning, without failing, when a file you changed is cited by a Markdown file that did not change: a path in backticks, or the target of a relative link. Read the doc again and update it if what it says about the file no longer holds. It compares with the last commit, so the pre-commit hook shows it, and leaves `package.json` and the lockfile out.
 
 ## Repository
 

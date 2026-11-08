@@ -24,7 +24,7 @@ npm run dev
 | Command | What it does |
 |---|---|
 | `npm run dev` | Vite dev server |
-| `npm run check` | Prettier, both `tsc` projects, Oxlint, stylelint, dependency-cruiser, check-tree, jscpd, check-doc-length, i18next-cli, alint, knip |
+| `npm run check` | Prettier, both `tsc` projects, Oxlint, stylelint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, i18next-cli, alint, knip |
 | `npm test` | Vitest: unit tests in Node, component tests in headless Chromium |
 | `npm run e2e` | builds, then runs Playwright against `vite preview` |
 | `npm run format` | Prettier in write mode |

@@ -33,7 +33,7 @@ The API listens on `http://127.0.0.1:3000`, and the Swagger UI on `/docs`. `npm 
 |---|---|
 | `npm run dev` | starts the server and restarts it on each change |
 | `npm start` | starts the server |
-| `npm run check` | Prettier, `tsc`, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, alint, knip |
+| `npm run check` | Prettier, `tsc`, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, alint, knip |
 | `npm test` | `node:test`: queries on an in-memory database, routes through `inject()` |
 | `npm run format` | Prettier in write mode |
 
