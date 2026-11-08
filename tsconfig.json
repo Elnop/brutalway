@@ -4,7 +4,10 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["packages", "scripts"],
+  "include": [
+    "packages",
+    "scripts"
+  ],
   "exclude": [
     "**/fixtures/**",
     "**/dist/**",
@@ -28,6 +31,8 @@
     "packages/configs/oxlint-config-i18next",
     "packages/tools/agent-hook",
     "packages/utils/lint-utils",
-    "packages/tools/playwright-fixtures"
+    "packages/tools/playwright-fixtures",
+    "packages/configs/oxlint-config-zustand",
+    "packages/configs/oxlint-config-react-vite"
   ]
 }
