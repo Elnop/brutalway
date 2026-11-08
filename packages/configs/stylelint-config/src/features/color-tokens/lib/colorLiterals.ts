@@ -1,4 +1,4 @@
-import { NAMED_COLORS } from './ColorsConfig.ts';
+import { NAMED_COLORS } from '#src/features/color-tokens/ColorsConfig.ts';
 
 const HEX = /#[0-9a-f]{3,8}(?![\w-])/giu;
 const COLOR_FUNCTION = /\b(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch|color)\([^)]*\)/giu;

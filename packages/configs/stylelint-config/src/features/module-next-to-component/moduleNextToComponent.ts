@@ -1,6 +1,6 @@
 import stylelint from 'stylelint';
 import type { Rule } from 'stylelint';
-import { cssModuleComponent, moduleName } from './cssModuleComponent.ts';
+import { cssModuleComponent, moduleName } from '#src/shared-features/css-modules/cssModuleComponent.ts';
 
 const { utils } = stylelint;
 const ruleName = 'brutalway/module-next-to-component';

@@ -1,8 +1,8 @@
 import stylelint from 'stylelint';
 import type { Rule } from 'stylelint';
-import { classSelectors } from './classSelectors.ts';
-import { cssModuleComponent, moduleName } from './cssModuleComponent.ts';
-import { stylesImport, usedClassNames } from './usedClassNames.ts';
+import { classSelectors } from '#src/features/no-unused-class/lib/classSelectors.ts';
+import { cssModuleComponent, moduleName } from '#src/shared-features/css-modules/cssModuleComponent.ts';
+import { stylesImport, usedClassNames } from '#src/features/no-unused-class/lib/usedClassNames.ts';
 
 const { utils } = stylelint;
 const ruleName = 'brutalway/no-unused-class';

@@ -1,10 +1,10 @@
 import { isAbsolute, join, resolve } from 'node:path';
 import stylelint from 'stylelint';
 import type { Rule } from 'stylelint';
-import { colorLiterals } from './colorLiterals.ts';
-import { oklab, oklabDistance } from './oklab.ts';
-import { readColorTokens } from './readColorTokens.ts';
-import type { ColorToken, ColorTokensOptions, Oklab } from './StylelintTypes.ts';
+import { colorLiterals } from '#src/features/color-tokens/lib/colorLiterals.ts';
+import { oklab, oklabDistance } from '#src/features/color-tokens/lib/oklab.ts';
+import { readColorTokens } from '#src/features/color-tokens/lib/readColorTokens.ts';
+import type { ColorToken, ColorTokensOptions, Oklab } from '#src/features/color-tokens/ColorTokensTypes.ts';
 
 const { utils } = stylelint;
 const ruleName = 'brutalway/color-tokens';

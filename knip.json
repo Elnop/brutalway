@@ -32,6 +32,9 @@
     },
     "packages/configs/oxlint-config-tailwind": {
       "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
+    },
+    "packages/configs/stylelint-config": {
+      "ignoreDependencies": ["@brutalway/dependency-cruiser-config"]
     }
   }
 }

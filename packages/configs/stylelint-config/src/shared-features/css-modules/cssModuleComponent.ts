@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
-import type { ComponentFile } from './StylelintTypes.ts';
+import type { ComponentFile } from '#src/shared-features/css-modules/CssModulesTypes.ts';
 
 const MODULE_SUFFIX = '.module.css';
 
