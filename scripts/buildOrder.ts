@@ -5,9 +5,8 @@ type Manifest = {
   peerDependencies?: Record<string, string>;
 };
 
-function internalDependencies(manifest: Manifest, names: ReadonlySet<string>): string[] {
-  const all = { ...manifest.dependencies, ...manifest.devDependencies, ...manifest.peerDependencies };
-  return Object.keys(all).filter((name) => names.has(name) && name !== manifest.name);
+function internalDependencies(manifest: Manifest, names: ReadonlySet<string>, field: 'dependencies' | 'devDependencies' | 'peerDependencies'): string[] {
+  return Object.keys(manifest[field] ?? {}).filter((name) => names.has(name) && name !== manifest.name);
 }
 
 export function buildOrder(manifests: Manifest[]): string[] {
@@ -20,7 +19,10 @@ export function buildOrder(manifests: Manifest[]): string[] {
     if (visiting.has(name)) throw new Error(`Dependency cycle between workspaces: ${[...path, name].join(' -> ')}`);
     visiting.add(name);
     const manifest = byName.get(name);
-    for (const dependency of manifest === undefined ? [] : internalDependencies(manifest, names)) visit(dependency, [...path, name]);
+    if (manifest !== undefined) {
+      for (const dependency of [...internalDependencies(manifest, names, 'dependencies'), ...internalDependencies(manifest, names, 'peerDependencies')]) visit(dependency, [...path, name]);
+      for (const dependency of internalDependencies(manifest, names, 'devDependencies')) if (!visiting.has(dependency)) visit(dependency, [...path, name]);
+    }
     visiting.delete(name);
     order.push(name);
   }
