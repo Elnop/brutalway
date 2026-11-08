@@ -1,4 +1,4 @@
-import { axeViolations, expect, test } from '../playwrightFixtures.ts';
+import { axeViolations, expect, test } from '#src/playwrightFixtures.ts';
 
 test('axe lists the violations of a page', async ({ page }) => {
   await page.setContent('<!doctype html><html lang="en"><head><title>Fixture</title></head><body><main><img src="data:," id="logo"></main></body></html>');

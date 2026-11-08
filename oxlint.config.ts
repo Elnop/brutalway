@@ -16,6 +16,6 @@ export default defineConfig({
     'packages/tools/check-doc-length/**',
     'packages/tools/check-doc-sources/**',
     'packages/utils/lint-utils/**',
+    'packages/tools/playwright-fixtures/**',
   ],
-  overrides: [{ files: ['packages/tools/playwright-fixtures/**'], rules: { 'export-placement/no-restricted-syntax': 'off' } }],
 });
