@@ -1,4 +1,4 @@
-import type { Oklab } from './TailwindTypes.ts';
+import type { Oklab } from '#src/features/color-tokens/ColorTokensTypes.ts';
 
 function toLinear(channel: number): number {
   return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;

@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { isAbsolute, join } from 'node:path';
-import { oklab } from './oklab.ts';
-import type { ColorToken } from './TailwindTypes.ts';
+import { oklab } from '#src/features/color-tokens/lib/oklab.ts';
+import type { ColorToken } from '#src/features/color-tokens/ColorTokensTypes.ts';
 
 const cache = new Map<string, { mtime: number; tokens: ColorToken[] }>();
 

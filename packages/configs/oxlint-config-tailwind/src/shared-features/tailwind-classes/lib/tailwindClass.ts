@@ -1,4 +1,4 @@
-import type { TailwindClass } from './TailwindTypes.ts';
+import type { TailwindClass } from '#src/shared-features/tailwind-classes/TailwindClassesTypes.ts';
 
 export function tailwindClass(name: string): TailwindClass {
   const parts: string[] = [];

@@ -1,5 +1,5 @@
 import type { ESTree } from '@oxlint/plugins';
-import type { ClassString } from './TailwindTypes.ts';
+import type { ClassString } from '#src/shared-features/tailwind-classes/TailwindClassesTypes.ts';
 
 const CLASS_ATTRIBUTES = new Set(['className', 'class']);
 

@@ -1,6 +1,6 @@
 import { defineRule } from '@oxlint/plugins';
-import { classNames, classStrings, isClassAttribute } from './classStrings.ts';
-import { tailwindClass } from './tailwindClass.ts';
+import { classNames, classStrings, isClassAttribute } from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
+import { tailwindClass } from '#src/shared-features/tailwind-classes/lib/tailwindClass.ts';
 
 export const noDarkVariant = defineRule({
   meta: {

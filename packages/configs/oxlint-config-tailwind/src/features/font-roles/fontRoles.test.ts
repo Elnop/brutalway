@@ -1,5 +1,5 @@
 import { ruleTester } from '@brutalway/lint-utils/ruleTester';
-import { fontRoles } from './fontRoles.ts';
+import { fontRoles } from '#src/features/font-roles/fontRoles.ts';
 
 ruleTester.run('font-roles', fontRoles, {
   valid: [

@@ -1,5 +1,5 @@
 import { ruleTester } from '@brutalway/lint-utils/ruleTester';
-import { noDarkVariant } from './noDarkVariant.ts';
+import { noDarkVariant } from '#src/features/no-dark-variant/noDarkVariant.ts';
 
 ruleTester.run('no-dark-variant', noDarkVariant, {
   valid: [{ filename: 'Card.tsx', code: '<div className="bg-paper hover:bg-yellow data-[theme=dark]:p-2" />' }],

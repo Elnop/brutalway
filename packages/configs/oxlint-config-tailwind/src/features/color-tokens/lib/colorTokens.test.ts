@@ -1,8 +1,8 @@
 import { fileURLToPath } from 'node:url';
 import { ruleTester } from '@brutalway/lint-utils/ruleTester';
-import { colorTokens } from './colorTokens.ts';
+import { colorTokens } from '#src/features/color-tokens/lib/colorTokens.ts';
 
-const STYLESHEET = fileURLToPath(new URL('fixtures/src/app/globals.css', import.meta.url));
+const STYLESHEET = fileURLToPath(new URL('../../../../fixtures/src/app/globals.css', import.meta.url));
 const options = [{ stylesheet: STYLESHEET }];
 
 function notToken(text: string, closest: string) {
