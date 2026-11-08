@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { treeViolations } from './treeViolations.ts';
+import { treeViolations } from '#src/features/tree-violations/treeViolations.ts';
 
 const { values, positionals } = parseArgs({ allowPositionals: true, options: { categories: { type: 'string' } } });
 const categories = values.categories?.split(',').map((category) => category.trim());
