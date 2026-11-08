@@ -11,7 +11,14 @@ describe('i18nextConfig', () => {
       'Card.tsx:16 i18next(no-literal-string)',
       'Card.tsx:19 i18next(no-literal-string)',
       'Card.tsx:20 i18next(no-literal-string)',
+      'Card.tsx:21 i18next-attributes(no-restricted-syntax)',
       'Card.tsx:22 i18next(no-literal-string)',
+      'Card.tsx:23 i18next(no-literal-string)',
+      'Card.tsx:24 i18next(no-literal-string)',
+      'Card.tsx:25 i18next(no-literal-string)',
+      'Card.tsx:26 i18next(no-literal-string)',
+      'Card.tsx:27 i18next-attributes(no-restricted-syntax)',
+      'Card.tsx:28 i18next-attributes(no-restricted-syntax)',
     ]);
   });
 });
