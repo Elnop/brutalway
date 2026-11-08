@@ -114,6 +114,15 @@ describe('brutal-agent-hook', () => {
     assert.deepEqual(run({ cwd: elsewhere, input: edit('src/a.ts'), failing: ['oxlint'], projectDir: root }), expected);
   });
 
+  it('says which command could not start, and from which root, when the project root does not exist', () => {
+    const missing = join(mkdtempSync(join(tmpdir(), 'agent-hook-')), 'missing');
+    assert.deepEqual(run({ cwd: tmpdir(), input: edit(join(missing, 'src/a.ts')), args: ['--root', missing] }), {
+      status: 2,
+      stdout: '',
+      stderr: `Could not start npx --no-install oxlint --type-aware src/a.ts in ${missing}, the project root is ${missing}: spawnSync npx ENOENT\n`,
+    });
+  });
+
   it('ignores files outside the project, in node_modules, or without a path', () => {
     const root = project({ 'oxlint.config.ts': '', '.alint.yml': '' });
     const failing = ['oxlint', 'alint', 'check-tree'];
