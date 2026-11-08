@@ -29,6 +29,7 @@
     "./treeViolations": "./dist/treeViolations.js"
   },
   "scripts": {
+    "build": "tsc -b",
     "test": "node --test '**/*.test.ts'"
   }
 }

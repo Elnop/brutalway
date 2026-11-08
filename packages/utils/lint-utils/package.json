@@ -38,5 +38,8 @@
   },
   "devDependencies": {
     "oxlint": "^1.91.0"
+  },
+  "scripts": {
+    "build": "tsc -b"
   }
 }

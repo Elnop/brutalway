@@ -27,6 +27,7 @@
     "brutal-agent-hook": "./dist/agentHook.js"
   },
   "scripts": {
+    "build": "tsc -b",
     "test": "node --test '**/*.test.ts'"
   }
 }
