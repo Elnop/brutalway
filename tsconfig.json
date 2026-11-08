@@ -1,37 +1,4 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "allowImportingTsExtensions": true
-  },
-  "include": ["packages", "scripts"],
-  "exclude": [
-    "**/fixtures/**",
-    "**/dist/**",
-    "**/node_modules/**",
-    "packages/tools/create-brutal",
-    "packages/tools/check-doc-links",
-    "packages/configs/oxlint-config-node",
-    "packages/tools/check-doc-length",
-    "packages/tools/check-doc-sources",
-    "packages/configs/oxlint-config-react-hook-form",
-    "packages/configs/oxlint-config-shadcn",
-    "packages/configs/oxlint-config-tanstack-query",
-    "packages/plugins/eslint-plugin-file-named-after-export",
-    "packages/plugins/eslint-plugin-store-layout",
-    "packages/configs/oxlint-config-node-test",
-    "packages/configs/oxlint-config-typescript",
-    "packages/configs/oxlint-config-tailwind",
-    "packages/configs/stylelint-config",
-    "packages/configs/oxlint-config-vitest",
-    "packages/configs/oxlint-config-fastify",
-    "packages/configs/oxlint-config-i18next",
-    "packages/tools/agent-hook",
-    "packages/utils/lint-utils",
-    "packages/tools/playwright-fixtures",
-    "packages/configs/oxlint-config-zustand",
-    "packages/configs/oxlint-config-react-vite",
-    "packages/tools/check-tree",
-    "packages/configs/oxlint-config-react"
-  ]
+  "extends": "@brutalway/tsconfig/node.json",
+  "include": ["scripts"]
 }
