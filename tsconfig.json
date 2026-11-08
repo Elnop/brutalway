@@ -4,10 +4,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": [
-    "packages",
-    "scripts"
-  ],
+  "include": ["packages", "scripts"],
   "exclude": [
     "**/fixtures/**",
     "**/dist/**",
