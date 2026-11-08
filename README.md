@@ -58,6 +58,7 @@ The rules and every shared config are published from `packages/` as `@brutalway/
 | [`@brutalway/playwright-fixtures`](packages/tools/playwright-fixtures) | fail a test when the page throws, axe-core violations as readable lines |
 | [`@brutalway/agent-hook`](packages/tools/agent-hook) | Claude Code hook: oxlint on each edited file, stylelint on each edited stylesheet, alint and check-tree on each created file, errors sent back to the agent |
 | [`@brutalway/lint-utils`](packages/utils/lint-utils) | helpers shared by the plugins |
+| [`@brutalway/color-utils`](packages/utils/color-utils) | oklab conversion and cached color token reading, shared by the Tailwind and Stylelint configs |
 | [`create-brutal`](packages/tools/create-brutal) | the CLI behind `npm create brutal` |
 
 ## Claude Code plugin

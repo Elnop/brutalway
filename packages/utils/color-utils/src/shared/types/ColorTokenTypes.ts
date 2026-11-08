@@ -1,3 +1,3 @@
-export type Oklab = { l: number; a: number; b: number };
+import type { Oklab } from '#src/shared/types/OklabTypes.ts';
 
 export type ColorToken = { name: string; color: Oklab | undefined };

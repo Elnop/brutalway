@@ -1,8 +1,6 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { oklab } from '#src/features/color-tokens/lib/oklab.ts';
-import type { ColorToken } from '#src/features/color-tokens/ColorTokensTypes.ts';
-
-const cache = new Map<string, { mtime: number; tokens: ColorToken[] }>();
+import { createColorTokenReader } from '@brutalway/color-utils/createColorTokenReader';
+import { oklab } from '@brutalway/color-utils/oklab';
+import type { ColorToken } from '@brutalway/color-utils/ColorTypes';
 
 function colorProperties(css: string): ColorToken[] {
   return [...css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/gu)].flatMap((match) => {
@@ -11,12 +9,8 @@ function colorProperties(css: string): ColorToken[] {
   });
 }
 
+const readCached = createColorTokenReader(colorProperties);
+
 export function readColorTokens(path: string): ColorToken[] {
-  if (!existsSync(path)) return [];
-  const mtime = statSync(path).mtimeMs;
-  const cached = cache.get(path);
-  if (cached?.mtime === mtime) return cached.tokens;
-  const tokens = colorProperties(readFileSync(path, 'utf8'));
-  cache.set(path, { mtime, tokens });
-  return tokens;
+  return readCached(path);
 }
