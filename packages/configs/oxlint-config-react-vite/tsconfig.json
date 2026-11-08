@@ -15,9 +15,6 @@
     },
     {
       "path": "../oxlint-config-zustand"
-    },
-    {
-      "path": "../oxlint-config-vitest"
     }
   ]
 }

@@ -13,6 +13,7 @@
     "packages/tools/check-doc-links",
     "packages/configs/oxlint-config-node",
     "packages/tools/check-doc-length",
-    "packages/tools/check-doc-sources"
+    "packages/tools/check-doc-sources",
+    "packages/configs/oxlint-config-vitest"
   ]
 }

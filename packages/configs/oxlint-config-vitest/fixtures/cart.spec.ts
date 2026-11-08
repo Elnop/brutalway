@@ -19,5 +19,7 @@ describe('cart', () => {
     expect([1]).toEqual([1]);
     expect(Boolean(typed)).toBeTruthy();
     expect(typed).toHaveBeenCalledOnce();
+    expect(typed.mock.lastCall).toBe(null);
+    expect(1, 'one item', 'extra').toBe(1);
   });
 });
