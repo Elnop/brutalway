@@ -1,12 +1,5 @@
 import { basename, extname, relative } from 'node:path';
-
-function vendoredFolder(fromRoot: string, vendored: string[]): string | undefined {
-  return vendored.map((folder) => folder.replace(/\/+$/u, '')).find((folder) => fromRoot.startsWith(`${folder}/`));
-}
-
-export function isVendored(root: string, file: string, vendored: string[]): boolean {
-  return vendoredFolder(relative(root, file), vendored) !== undefined;
-}
+import { vendoredFolder } from '#src/shared-features/vendored/vendoredFolder.ts';
 
 export function vendoredEditMessage(root: string, file: string, vendored: string[]): string | undefined {
   const fromRoot = relative(root, file);

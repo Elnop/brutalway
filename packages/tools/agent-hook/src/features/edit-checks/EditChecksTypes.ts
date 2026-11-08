@@ -4,9 +4,3 @@ export type HookCheck = {
   args: string[];
   cwd: string;
 };
-
-export type HookEdit = {
-  file: string;
-  created: boolean;
-  before: boolean;
-};
