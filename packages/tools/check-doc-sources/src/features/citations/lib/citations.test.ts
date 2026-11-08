@@ -48,4 +48,11 @@ describe('citations', () => {
     const content = '`src/main.tsx`\n\nAgain `src/main.tsx`.\n';
     assert.deepEqual(citations(root, { path: 'README.md', content }), [{ doc: 'README.md', file: 'src/main.tsx', line: 1 }]);
   });
+
+  it('a link with a malformed % sequence points to the file named as written', () => {
+    const root = project();
+    writeFileSync(join(root, 'src/a%zz.ts'), '');
+    const content = '[a](src/a%zz.ts) and [b](src/b%zz.ts)\n';
+    assert.deepEqual(citations(root, { path: 'README.md', content }), [{ doc: 'README.md', file: 'src/a%zz.ts', line: 1 }]);
+  });
 });

@@ -61,6 +61,12 @@ describe('check-doc-sources', () => {
     assert.deepEqual(run(root), { status: 0, stdout: '', lines: [] });
   });
 
+  it('does not crash on a link with a malformed % sequence, and exits with 0', () => {
+    const root = repository({ 'src/a.ts': 'a\n', 'README.md': '[x](src/a%zz.ts)\n' });
+    write(root, { 'src/a.ts': 'b\n' });
+    assert.deepEqual(run(root), { status: 0, stdout: '', lines: [] });
+  });
+
   it('reads the docSources settings of package.json', () => {
     const root = repository({ ...PROJECT, 'package.json': JSON.stringify({ docSources: { ignore: ['docs/**'], ignoreSources: [] } }) });
     write(root, { 'src/main.ts': 'b\n', 'package.json': JSON.stringify({ name: 'app', docSources: { ignore: ['docs/**'], ignoreSources: [] } }) });

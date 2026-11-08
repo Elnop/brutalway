@@ -13,10 +13,18 @@ function citedNodes(node: Nodes): Nodes[] {
   return 'children' in node ? [...own, ...node.children.flatMap((child) => citedNodes(child))] : own;
 }
 
+function decodedPath(path: string): string {
+  try {
+    return decodeURI(path);
+  } catch {
+    return path;
+  }
+}
+
 function linkTarget(doc: string, url: string): string | undefined {
   if (url === '' || url.startsWith('#') || url.startsWith('/') || URL_SCHEME.test(url)) return undefined;
   const [path = ''] = url.split(/[#?]/u);
-  return posix.join(posix.dirname(doc), decodeURI(path));
+  return posix.join(posix.dirname(doc), decodedPath(path));
 }
 
 function isFile(cwd: string, path: string): boolean {
