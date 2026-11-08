@@ -2,7 +2,8 @@ import type { OxlintOverride } from 'oxlint';
 
 const COMPONENT_PROPS_MESSAGE = 'A component types its props with a named type called after it: ComponentProps.';
 
-const COMPONENT_PARAMS = ':matches(FunctionDeclaration[id.name=/^[A-Z]/], VariableDeclarator[id.name=/^[A-Z]/] > :matches(ArrowFunctionExpression, FunctionExpression)) > :matches(ObjectPattern, Identifier).params';
+const COMPONENT_PARAMS =
+  ':matches(FunctionDeclaration[id.name=/^[A-Z]/], VariableDeclarator[id.name=/^[A-Z]/] > :matches(ArrowFunctionExpression, FunctionExpression)) > :matches(ObjectPattern, Identifier).params';
 
 const COMPONENT_PROPS = [
   { selector: `${COMPONENT_PARAMS}[typeAnnotation=null]`, message: COMPONENT_PROPS_MESSAGE },

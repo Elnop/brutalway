@@ -4,10 +4,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": [
-    "packages",
-    "scripts"
-  ],
+  "include": ["packages", "scripts"],
   "exclude": [
     "**/fixtures/**",
     "**/dist/**",
@@ -34,6 +31,7 @@
     "packages/tools/playwright-fixtures",
     "packages/configs/oxlint-config-zustand",
     "packages/configs/oxlint-config-react-vite",
-    "packages/tools/check-tree"
+    "packages/tools/check-tree",
+    "packages/configs/oxlint-config-react"
   ]
 }
