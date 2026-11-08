@@ -4,7 +4,7 @@ A Vite + React + TypeScript app where every convention is checked by a tool. `RE
 
 ## Before calling a change done
 
-Run `npm run check`: Prettier, tsc, Oxlint, stylelint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, i18next-cli, alint and knip. Each message says what to change. Then run `npm test`, and `npm run e2e` when the change shows on screen.
+Run `npm run check`: Prettier, tsc, Oxlint, stylelint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, i18next-cli, alint and knip. Each message says what to change. Then run `npm test`, and `npm run e2e` when the change shows on screen.
 
 ## Conventions worth knowing first
 
