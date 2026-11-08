@@ -3,9 +3,9 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { hookChecks } from './hookChecks.ts';
-import { readHookEdit } from './readHookEdit.ts';
-import { vendoredEditMessage } from './vendoredEdit.ts';
+import { hookChecks } from '#src/features/edit-checks/hookChecks.ts';
+import { readHookEdit } from '#src/shared-features/hook-edit/readHookEdit.ts';
+import { vendoredEditMessage } from '#src/features/vendored-refusal/vendoredEditMessage.ts';
 
 const { values } = parseArgs({
   options: { tree: { type: 'string', multiple: true, default: ['src'] }, vendored: { type: 'string', multiple: true, default: [] }, root: { type: 'string' } },

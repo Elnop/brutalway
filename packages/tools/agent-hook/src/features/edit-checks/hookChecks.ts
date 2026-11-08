@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import type { HookCheck, HookEdit } from './AgentHookTypes.ts';
-import { isVendored } from './vendoredEdit.ts';
+import type { HookCheck } from '#src/features/edit-checks/EditChecksTypes.ts';
+import type { HookEdit } from '#src/shared-features/hook-edit/HookEditTypes.ts';
+import { vendoredFolder } from '#src/shared-features/vendored/vendoredFolder.ts';
 
 const OXLINT_CONFIGS = ['oxlint.config.ts', '.oxlintrc.json'];
 const STYLELINT_CONFIGS = [
@@ -20,6 +21,10 @@ function hasStylelintConfig(root: string) {
   if (STYLELINT_CONFIGS.some((config) => existsSync(join(root, config)))) return true;
   const manifest = join(root, 'package.json');
   return existsSync(manifest) && /"stylelint"\s*:\s*\{/u.test(readFileSync(manifest, 'utf8'));
+}
+
+function isVendored(root: string, file: string, vendored: string[]) {
+  return vendoredFolder(relative(root, file), vendored) !== undefined;
 }
 
 function inside(root: string, path: string) {

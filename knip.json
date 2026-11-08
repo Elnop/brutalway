@@ -113,6 +113,11 @@
       "ignoreDependencies": [
         "@brutalway/dependency-cruiser-config"
       ]
+    },
+    "packages/tools/agent-hook": {
+      "ignoreDependencies": [
+        "@brutalway/dependency-cruiser-config"
+      ]
     }
   }
 }

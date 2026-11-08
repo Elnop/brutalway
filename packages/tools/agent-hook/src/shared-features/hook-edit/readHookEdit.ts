@@ -1,4 +1,4 @@
-import type { HookEdit } from './AgentHookTypes.ts';
+import type { HookEdit } from '#src/shared-features/hook-edit/HookEditTypes.ts';
 
 function field(value: unknown, key: string): unknown {
   return typeof value === 'object' && value !== null ? Reflect.get(value, key) : undefined;

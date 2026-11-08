@@ -28,6 +28,7 @@
     "packages/configs/stylelint-config",
     "packages/configs/oxlint-config-vitest",
     "packages/configs/oxlint-config-fastify",
-    "packages/configs/oxlint-config-i18next"
+    "packages/configs/oxlint-config-i18next",
+    "packages/tools/agent-hook"
   ]
 }
