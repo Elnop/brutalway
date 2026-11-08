@@ -7,7 +7,7 @@ A Claude Code `PostToolUse` hook, and optionally a `PreToolUse` one for vendored
 - a created file, or an edited Markdown file, runs `alint check` if the project has an `.alint.yml`
 - a created file inside one of the `--tree` folders runs `check-tree` on that folder (default: `src`)
 
-If one of them fails, the hook prints their output and exits with code 2: Claude Code sends it back to the agent, which fixes the problem before going on. The tools are run with `npx --no-install`, so they must be dependencies of the project.
+If one of them fails, the hook prints their output and exits with code 2: Claude Code sends it back to the agent, which fixes the problem before going on. The tools are run with `npx --no-install`, so they must be dependencies of the project. When a tool cannot start, for example because the project root does not exist, the hook says which command failed, in which folder, and the error from Node, and also exits with code 2.
 
 ```sh
 npm install --save-dev @brutalway/agent-hook
