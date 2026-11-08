@@ -75,6 +75,26 @@ describe('brutal-agent-hook', () => {
     });
   });
 
+  it('runs check-tree with --root-entries when the hook gets it', () => {
+    const root = project({ 'src/features/a/a.ts': '' });
+    assert.deepEqual(run({ cwd: root, input: edit(join(root, 'src/features/a/a.ts'), 'Write'), args: ['--root-entries'], failing: ['oxlint', 'check-tree'] }), {
+      status: 2,
+      stdout: '',
+      stderr: [
+        'oxlint found problems in src/features/a/a.ts:',
+        'oxlint --type-aware src/features/a/a.ts in ',
+        'oxlint says no',
+        '',
+        'check-tree found problems in src:',
+        'check-tree src --root-entries in ',
+        'check-tree says no',
+        '',
+        'Fix them before going on.',
+        '',
+      ].join('\n'),
+    });
+  });
+
   it('lints stylesheets only when the project configures stylelint', () => {
     const withConfig = project({ 'package.json': '{ "stylelint": { "extends": "x" } }', 'src/a.css': '' });
     assert.deepEqual(run({ cwd: withConfig, input: edit(join(withConfig, 'src/a.css')), failing: ['stylelint'] }), {

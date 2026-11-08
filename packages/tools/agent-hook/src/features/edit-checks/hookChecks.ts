@@ -40,7 +40,7 @@ function oxlintFolder(root: string, file: string) {
   return root;
 }
 
-export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file' | 'created'>, trees: string[], vendored: string[] = []): HookCheck[] {
+export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file' | 'created'>, trees: string[], vendored: string[] = [], rootEntries = false): HookCheck[] {
   if (file === '' || !inside(root, file) || isVendored(root, file, vendored)) return [];
   const fromRoot = relative(root, file);
   const checks: HookCheck[] = [];
@@ -56,7 +56,7 @@ export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file
   }
   if (created) {
     for (const tree of trees.filter((folder) => fromRoot.startsWith(`${folder}/`))) {
-      checks.push({ label: `check-tree found problems in ${tree}`, command: 'check-tree', args: [tree], cwd: root });
+      checks.push({ label: `check-tree found problems in ${tree}`, command: 'check-tree', args: rootEntries ? [tree, '--root-entries'] : [tree], cwd: root });
     }
   }
   return checks;

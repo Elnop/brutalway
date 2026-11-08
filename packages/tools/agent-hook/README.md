@@ -30,6 +30,8 @@ npm install --save-dev @brutalway/agent-hook
 
 Pass `--tree` once per source folder (`--tree web/src --tree server/src`). The project root is `$CLAUDE_PROJECT_DIR`, or `--root`.
 
+A published package keeps one entry point per bin or export at the root of `src/`: `--root-entries` passes the same flag to `check-tree`, which then leaves those files where they are.
+
 ## Vendored code
 
 `--vendored <folder>` names a folder of code copied from a registry, like the shadcn/ui primitives in `third-party/`. The `PostToolUse` hook runs no check on a file there. As a `PreToolUse` hook, it refuses the edit before it happens and tells the agent what to do instead: run `npx shadcn add <name> --overwrite`, restyle through the tokens or a `data-slot` rule in `src/app/globals.css`, or wrap the primitive in `src/`.
