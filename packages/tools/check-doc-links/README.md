@@ -39,3 +39,5 @@ Under `docLinks` in `package.json`:
 ```json
 "docLinks": { "skip": ["^https://internal\\.company\\.dev/"] }
 ```
+
+The `skip` patterns of `package.json` are added to the default ones, so `localhost` and `example.com` stay skipped. A list given for `include` or `ignore` replaces its default.

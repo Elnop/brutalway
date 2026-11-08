@@ -66,4 +66,12 @@ describe('check-doc-links', () => {
     });
     assert.deepEqual(run(root, OFFLINE), { status: 0, lines: [] });
   });
+
+  it('keeps skipping the default patterns when docLinks.skip adds one', () => {
+    const root = project({
+      'package.json': JSON.stringify({ docLinks: { skip: ['^https://internal\\.'] } }),
+      'README.md': '[local](http://localhost:3000/) [example](https://example.com/page) [internal](https://internal.company.dev/)\n',
+    });
+    assert.deepEqual(run(root, OFFLINE), { status: 0, lines: [] });
+  });
 });
