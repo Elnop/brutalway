@@ -41,6 +41,10 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears twice in `src/`, tests left out: the threshold is 0. Move the shared part into a function the two places call.
 
+## Docs length
+
+`check-doc-length` (`@brutalway/check-doc-length`) fails when a Markdown file of the project is longer than 300 lines. `npx check-doc-length split <file>` shows how a file would be cut into a folder of the same name along its `##` headings, and `--write` does it, rewriting the links that point into it.
+
 ## Repository
 
 alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies.

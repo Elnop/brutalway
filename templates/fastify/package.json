@@ -18,8 +18,9 @@
     "deps": "depcruise src",
     "tree": "check-tree src",
     "duplicates": "jscpd src",
+    "docs": "check-doc-length",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && alint check && knip",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run docs && alint check && knip",
     "test": "node --test",
     "prepare": "git config core.hooksPath .githooks"
   },
@@ -44,6 +45,7 @@
     "@asamarts/alint": "0.21.0",
     "@brutalway/agent-hook": "0.1.0",
     "@brutalway/alint-config": "0.1.0",
+    "@brutalway/check-doc-length": "0.1.0",
     "@brutalway/check-tree": "0.4.0",
     "@brutalway/dependency-cruiser-config": "0.4.0",
     "@brutalway/oxlint-config-fastify": "0.2.0",
