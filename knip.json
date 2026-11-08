@@ -15,6 +15,9 @@
     "packages/configs/alint-config": {
       "ignoreDependencies": ["@asamarts/alint"]
     },
+    "packages/configs/prettier-config": {
+      "ignoreDependencies": ["prettier", "prettier-plugin-tailwindcss", "tailwindcss"]
+    },
     "packages/tools/create-brutal": {
       "entry": ["src/cli.ts", "scripts/*.ts"]
     },
