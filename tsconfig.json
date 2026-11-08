@@ -23,6 +23,8 @@
     "packages/plugins/eslint-plugin-file-named-after-export",
     "packages/plugins/eslint-plugin-store-layout",
     "packages/configs/oxlint-config-node-test",
-    "packages/configs/oxlint-config-typescript"
+    "packages/configs/oxlint-config-typescript",
+    "packages/configs/oxlint-config-tailwind",
+    "packages/configs/stylelint-config"
   ]
 }
