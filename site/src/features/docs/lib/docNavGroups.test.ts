@@ -15,6 +15,7 @@ describe('docNavGroups', () => {
   it('nests the pages of a folder under its README', () => {
     const [group] = docNavGroups(entries, { source: brutalway, path: 'README.md' }, []);
     expect(group?.label).toBe('brutalway');
+    expect(group?.href).toBe('#/docs/brutalway/README.md');
     expect(outline(group?.nodes ?? [])).toStrictEqual([
       'README.md',
       'packages/tools/create-brutal/README.md',

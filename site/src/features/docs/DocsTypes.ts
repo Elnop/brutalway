@@ -38,6 +38,7 @@ export type DocNavNode = {
 export type DocNavGroup = {
   key: string;
   label: string;
+  href: string;
   nodes: DocNavNode[];
 };
 

@@ -24,6 +24,8 @@
 }
 
 .docs-nav-label {
+  display: block;
+  text-decoration: none;
   font-family: var(--mono);
   font-size: 0.875rem;
   font-weight: 700;

@@ -53,6 +53,7 @@ export function docNavGroups(entries: DocEntry[], route: DocsRoute, headings: Do
   return DOC_SOURCES.filter((source) => source.route === route.source.route).map((source) => ({
     key: source.key,
     label: source.label,
+    href: docHref(source, source.files[0] ?? ''),
     nodes: sourceNodes(
       source,
       entries.filter((entry) => entry.sourceKey === source.key),
