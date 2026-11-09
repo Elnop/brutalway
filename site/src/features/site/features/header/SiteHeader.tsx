@@ -26,17 +26,10 @@ export function SiteHeader({ actions }: SiteHeaderProps) {
           brutalway
         </a>
         <div className="site-header-links">
-          <div className="site-header-sections">
-            <a href="#axioms">Axioms</a>
-            <a href="#authors">Authors</a>
-            <a href="#stacks">Stacks</a>
-          </div>
-          <div className="site-header-pages">
-            <a href={DOCS_ROUTE}>Docs</a>
-            <a href={TEMPLATES_ROUTE}>Templates</a>
-            <a href={PACKAGES_ROUTE}>Packages</a>
-            <SiteLink href={REPOSITORY_URL}>GitHub</SiteLink>
-          </div>
+          <a href={DOCS_ROUTE}>Docs</a>
+          <a href={TEMPLATES_ROUTE}>Templates</a>
+          <a href={PACKAGES_ROUTE}>Packages</a>
+          <SiteLink href={REPOSITORY_URL}>GitHub</SiteLink>
         </div>
         <div className="site-header-actions">{actions}</div>
       </nav>

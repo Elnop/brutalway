@@ -42,19 +42,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 1.5rem;
-  font-weight: 500;
-}
-
-.site-header-sections,
-.site-header-pages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-}
-
-.site-header-pages {
-  padding-inline-start: 1.5rem;
-  border-inline-start: var(--border);
   font-weight: 700;
 }
 
@@ -62,6 +49,10 @@
   .site-header-nav {
     gap: 0.5rem;
     padding-block: 0.75rem;
+  }
+
+  .site-header-logo {
+    font-size: 1.375rem;
   }
 
   .site-header-actions {
@@ -72,39 +63,14 @@
   .site-header-links {
     order: 2;
     margin-inline-start: 0;
-  }
-
-  .site-header-logo {
-    font-size: 1.375rem;
-  }
-
-  .site-header-links,
-  .site-header-sections,
-  .site-header-pages {
-    flex-wrap: nowrap;
-    gap: 0.875rem;
+    gap: 0.375rem 0.875rem;
     font-size: 0.9375rem;
-  }
-
-  .site-header-links {
-    flex-wrap: wrap;
-    row-gap: 0.375rem;
-  }
-
-  .site-header-pages {
-    padding-inline-start: 0.875rem;
   }
 }
 
 @media (max-width: 24rem) {
-  .site-header-links,
-  .site-header-sections,
-  .site-header-pages {
-    gap: 0.625rem;
+  .site-header-links {
+    gap: 0.375rem 0.625rem;
     font-size: 0.875rem;
-  }
-
-  .site-header-pages {
-    padding-inline-start: 0.625rem;
   }
 }
