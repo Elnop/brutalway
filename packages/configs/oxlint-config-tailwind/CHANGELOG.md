@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-tailwind
 
+## 0.1.2
+
+### Patch Changes
+
+- 5c45ee3: The message of `no-dark-variant` no longer says the project is light only. It says to give the token its dark value in the stylesheet that declares it, since a theme changes the values of the tokens, never a class.
+
 ## 0.1.1
 
 ### Patch Changes

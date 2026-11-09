@@ -1,5 +1,20 @@
 # create-brutal
 
+## 0.8.0
+
+### Minor Changes
+
+- 5c45ee3: New `dark-theme` option on vite, off by default. It adds a `@media (prefers-color-scheme: dark)` block to `src/app/globals.css` that gives each color token a dark value, so the app follows the theme of the system with the same classes and stylesheets, in plain CSS, CSS Modules and Tailwind. Text keeps a contrast of 4.5:1 on every color, and with e2e tests on, `e2e/darkTheme.spec.ts` runs axe with the system in dark mode.
+  
+  With `--ui shadcn`, the `dark:` classes of the vendored primitives now only apply under a `.dark` class (`@custom-variant dark` in `src/app/globals.css`). Before, a system in dark mode turned the fields and checkboxes grey on a light page.
+  
+  `@brutalway/oxlint-config-tailwind`: the message of `no-dark-variant` no longer says the project is light only. It says to give the token its dark value in the stylesheet that declares it.
+- 7a815dc: The vite projects take a pastel palette in every styling value: yellow `#ffe98f`, pink `#ffb8e6` and blue `#b3c5ff`. Text on these colors uses a new `on-accent` token, dark in both themes, and the focus outline has its own `focus` token so it keeps a strong blue on the cream page. With `dark-theme`, the accents stay pastel in the dark and keep their dark text. With shadcn/ui, the primary and destructive buttons and the checked checkbox use `on-accent` too.
+
+### Patch Changes
+
+- A Tailwind, shadcn/ui, react-hook-form or TanStack Query project installs the current `@brutalway/oxlint-config-tailwind` 0.1.2, `oxlint-config-shadcn` 0.2.0, `oxlint-config-react-hook-form` 0.2.0 and `oxlint-config-tanstack-query` 0.2.0, instead of the 0.1.0 versions it still pinned.
+
 ## 0.7.1
 
 ### Patch Changes

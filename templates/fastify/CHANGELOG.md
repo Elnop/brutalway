@@ -1,5 +1,11 @@
 # template-fastify
 
+## 0.2.1
+
+### Patch Changes
+
+- 7a815dc: The Swagger UI theme uses the pastel colors of the series: yellow `#ffe98f`, pink `#ffb8e6` and blue `#b3c5ff`, with dark text on the blue method badge.
+
 ## 0.2.0
 
 ### Minor Changes

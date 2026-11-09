@@ -388,7 +388,7 @@ export const viteStack: Stack = {
       removeScripts: ['styles'],
       removeDependencies: ['stylelint', '@brutalway/stylelint-config'],
       addDevDependencies: {
-        '@brutalway/oxlint-config-tailwind': '0.1.0',
+        '@brutalway/oxlint-config-tailwind': '0.1.2',
         '@brutalway/prettier-config': '0.2.0',
         '@tailwindcss/vite': '4.3.3',
         'prettier-plugin-tailwindcss': '0.8.1',
@@ -451,7 +451,7 @@ export const viteStack: Stack = {
         },
       ],
       addDependencies: SHADCN_DEPENDENCIES,
-      addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0', '@brutalway/oxlint-config-shadcn': '0.1.0', '@brutalway/tsconfig': '0.3.0', shadcn: SHADCN_VERSION },
+      addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0', '@brutalway/oxlint-config-shadcn': '0.2.0', '@brutalway/tsconfig': '0.3.0', shadcn: SHADCN_VERSION },
     },
     {
       when: { ui: 'shadcn', example: true },
@@ -527,7 +527,7 @@ export const viteStack: Stack = {
         { file: 'docs/architecture.md', before: '## Sub-features', insert: SERVER_STATE_ARCHITECTURE },
       ],
       addDependencies: { '@tanstack/react-query': '5.107.1' },
-      addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.1.0' },
+      addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.2.0' },
     },
     {
       when: { 'server-state': true, example: false },
@@ -566,7 +566,7 @@ export const viteStack: Stack = {
         { file: 'docs/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: FORMS_LINT_DOC },
       ],
       addDependencies: { '@hookform/resolvers': '5.9.2', 'react-hook-form': '7.91.0', zod: '4.6.7' },
-      addDevDependencies: { '@brutalway/oxlint-config-react-hook-form': '0.1.0' },
+      addDevDependencies: { '@brutalway/oxlint-config-react-hook-form': '0.2.0' },
     },
     {
       when: { forms: true, example: false },
