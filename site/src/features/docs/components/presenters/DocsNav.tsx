@@ -1,29 +1,35 @@
-import type { DocGroup } from '@/features/docs/DocsTypes.ts';
-import { docHref } from '@/features/docs/lib/docsUrls.ts';
+import type { DocNavGroup, DocNavNode } from '@/features/docs/DocsTypes.ts';
 
 type DocsNavProps = {
-  groups: DocGroup[];
-  currentHref: string;
+  groups: DocNavGroup[];
 };
 
-export function DocsNav({ groups, currentHref }: DocsNavProps) {
+type DocsNavListProps = {
+  nodes: DocNavNode[];
+};
+
+function DocsNavList({ nodes }: DocsNavListProps) {
+  return (
+    <ul>
+      {nodes.map((node) => (
+        <li key={node.href} className={node.kind === 'section' ? 'docs-nav-section' : undefined}>
+          <a href={node.href} aria-current={node.current}>
+            {node.title}
+          </a>
+          {node.children.length > 0 && <DocsNavList nodes={node.children} />}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function DocsNav({ groups }: DocsNavProps) {
   return (
     <nav aria-label="Documentation" className="docs-nav">
       {groups.map((group) => (
-        <div key={group.source.key} className="docs-nav-group">
-          <p className="docs-nav-label">{group.source.label}</p>
-          <ul>
-            {group.entries.map((entry) => {
-              const href = docHref(group.source, entry.path);
-              return (
-                <li key={href}>
-                  <a href={href} aria-current={href === currentHref ? 'page' : undefined}>
-                    {entry.title}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+        <div key={group.key} className="docs-nav-group">
+          <p className="docs-nav-label">{group.label}</p>
+          <DocsNavList nodes={group.nodes} />
         </div>
       ))}
     </nav>

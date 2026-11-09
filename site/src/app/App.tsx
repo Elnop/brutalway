@@ -9,7 +9,8 @@ export function App() {
   const hash = useHash();
   const isDocs = PAGE_ROUTES.some((route) => hash.startsWith(route));
   useEffect(() => {
-    if (isDocs || hash.length <= 1) {
+    if (isDocs) return;
+    if (hash.length <= 1) {
       window.scrollTo(0, 0);
       return;
     }

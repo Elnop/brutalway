@@ -1,5 +1,6 @@
 import Markdown, { defaultUrlTransform } from 'react-markdown';
 import type { Components } from 'react-markdown';
+import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
 import { githubFileUrl, repositoryPath } from '@/features/docs/lib/docsUrls.ts';
@@ -30,6 +31,7 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
       {content.status === 'ready' && (
         <Markdown
           remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeSlug]}
           components={markdownComponents}
           urlTransform={(url, attribute) => defaultUrlTransform(resolveDocUrl({ url, attribute, source, docPath: path, knownPaths }))}
         >

@@ -46,6 +46,23 @@
   text-decoration: none;
 }
 
+.docs-nav ul ul {
+  margin-top: 0.25rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--ink);
+}
+
+.docs-nav-section a {
+  padding-block: 0.125rem;
+  font-size: 0.875rem;
+}
+
+.docs-nav a[aria-current='location'] {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  font-weight: 700;
+}
+
 .docs-nav a[aria-current='page'] {
   border-color: var(--ink);
   background: var(--yellow);
@@ -68,6 +85,10 @@
 
 .docs-article h1 {
   font-size: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.docs-article :is(h2, h3) {
+  scroll-margin-top: calc(var(--header-offset, 0px) + 1.5rem);
 }
 
 .docs-article h2 {

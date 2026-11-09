@@ -15,14 +15,30 @@ export type DocEntry = {
   title: string;
 };
 
-export type DocGroup = {
-  source: DocSource;
-  entries: DocEntry[];
-};
-
 export type DocsRoute = {
   source: DocSource;
   path: string;
+  section?: string;
+};
+
+export type DocHeading = {
+  depth: number;
+  text: string;
+  slug: string;
+};
+
+export type DocNavNode = {
+  kind: 'page' | 'section';
+  title: string;
+  href: string;
+  current: 'page' | 'location' | undefined;
+  children: DocNavNode[];
+};
+
+export type DocNavGroup = {
+  key: string;
+  label: string;
+  nodes: DocNavNode[];
 };
 
 export type LoadState<T> = { status: 'loading' } | { status: 'ready'; value: T } | { status: 'error'; message: string };

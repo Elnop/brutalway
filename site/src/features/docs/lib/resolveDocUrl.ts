@@ -41,10 +41,11 @@ function siteHref(source: DocSource, fullPath: string, knownPaths: string[]): st
 
 export function resolveDocUrl({ url, attribute, source, docPath, knownPaths }: DocLink): string {
   if (ABSOLUTE_URL.test(url)) return url;
-  if (url.startsWith('#')) return `${githubFileUrl(source, docPath)}${url}`;
+  if (url.startsWith('#')) return `${docHref(source, docPath)}${url}`;
   const resolved = new URL(url, `https://repository.invalid/${repositoryPath(source, docPath)}`);
   const fullPath = decodeURIComponent(resolved.pathname.slice(1)).replace(/\/+$/u, '');
   const repository = { ...source, directory: '' };
   if (attribute === 'src') return rawFileUrl(repository, fullPath);
-  return siteHref(source, fullPath, knownPaths) ?? `${githubFileUrl(repository, fullPath)}${resolved.hash}`;
+  const href = siteHref(source, fullPath, knownPaths);
+  return href === undefined ? `${githubFileUrl(repository, fullPath)}${resolved.hash}` : `${href}${resolved.hash}`;
 }

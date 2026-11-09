@@ -26,6 +26,12 @@ describe('parseDocsRoute', () => {
     expect(parseDocsRoute('#/templates/brutalway')).toBeUndefined();
   });
 
+  it('reads the section after the page', () => {
+    expect(parseDocsRoute('#/docs/brutalway/docs/intent.md#why-it-exists')).toStrictEqual({ source: expect.objectContaining({ key: 'brutalway' }), path: 'docs/intent.md', section: 'why-it-exists' });
+    expect(parseDocsRoute('#/docs/brutalway/docs/intent.md')).not.toHaveProperty('section');
+    expect(parseDocsRoute('#/templates/vite#install')).toMatchObject({ source: { key: 'vite' }, path: 'README.md', section: 'install' });
+  });
+
   it('rejects an unknown source', () => {
     expect(parseDocsRoute('#/docs/unknown/readme.md')).toBeUndefined();
   });
