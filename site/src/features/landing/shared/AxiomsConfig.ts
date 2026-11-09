@@ -34,7 +34,7 @@ export const AXIOMS: Axiom[] = [
     name: 'Atomic',
     motto: 'One unit, one thing.',
     detail: 'One file, one export, named after it. One rule, one message. Every CLI option can be added or left out on its own.',
-    tone: 'ink',
+    tone: 'pink',
   },
   {
     letter: 'L',

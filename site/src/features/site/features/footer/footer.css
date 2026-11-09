@@ -1,6 +1,9 @@
 .site-footer {
+  --link-highlight: var(--paper);
+  --link-highlight-text: var(--ink);
   border-top: var(--border);
   background: var(--yellow);
+  color: var(--on-yellow);
 }
 
 .site-footer-inner {

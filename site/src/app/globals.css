@@ -2,7 +2,8 @@
   --ink: light-dark(#111111, #f4ede0);
   --paper: light-dark(#fffdf5, #1f1d1a);
   --page: light-dark(#f4e9d8, #12110f);
-  --yellow: light-dark(#ffd23f, #806100);
+  --yellow: light-dark(#ffe98f, #f2df8a);
+  --on-yellow: #111111;
   --pink: light-dark(#ff6ad5, #b02c86);
   --blue: light-dark(#2a5cff, #3558e0);
   --on-blue: light-dark(#ffffff, #f4ede0);
@@ -75,7 +76,7 @@ a {
 
 a:hover {
   background-size: 100% 100%;
-  color: var(--ink);
+  color: var(--link-highlight-text, var(--on-yellow));
   text-decoration: none;
 }
 
@@ -143,7 +144,7 @@ pre {
 .command:hover .command-status,
 .command-status-copied {
   background: var(--yellow);
-  color: var(--ink);
+  color: var(--on-yellow);
 }
 
 .command-status-failed {
@@ -202,8 +203,9 @@ pre {
 
 .tone-yellow {
   --link-highlight: var(--paper);
+  --link-highlight-text: var(--ink);
   background: var(--yellow);
-  color: var(--ink);
+  color: var(--on-yellow);
 }
 
 .tone-pink {

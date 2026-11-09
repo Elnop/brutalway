@@ -66,7 +66,7 @@
 .docs-nav a[aria-current='page'] {
   border-color: var(--ink);
   background: var(--yellow);
-  color: var(--ink);
+  color: var(--on-yellow);
   font-weight: 700;
 }
 
@@ -131,8 +131,10 @@
   margin-inline: 0;
   padding: 0.75rem 1.25rem;
   --link-highlight: var(--paper);
+  --link-highlight-text: var(--ink);
   border-left: 6px solid var(--ink);
   background: var(--yellow);
+  color: var(--on-yellow);
 }
 
 .docs-article table {
