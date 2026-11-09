@@ -59,7 +59,6 @@
 .docs-nav ul ul {
   margin-top: 0.25rem;
   padding-left: 0.75rem;
-  border-left: 3px solid var(--ink);
 }
 
 .docs-nav-category {
