@@ -36,7 +36,7 @@
   display: block;
   text-decoration: none;
   font-family: var(--mono);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -65,11 +65,19 @@
   margin-top: 0.375rem;
 }
 
+.docs-nav-title {
+  font-size: 1.25rem;
+}
+
 .docs-nav-category > a {
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.docs-nav-category .docs-nav-category > a {
+  font-size: 0.75rem;
 }
 
 .docs-nav-section {

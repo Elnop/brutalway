@@ -83,8 +83,8 @@ function categoryNode(category: PackageCategory, context: NavContext): DocNavNod
 }
 
 function packageGroups(categories: PackageCategory[], context: NavContext): DocNavGroup[] {
-  const index = { key: PACKAGES_INDEX.key, label: PACKAGES_INDEX.label, href: docHref(PACKAGES_INDEX, README), nodes: [] };
-  return [index, ...categories.map((category) => ({ key: category.slug, label: category.title, href: categoryHref(category.slug), nodes: categoryContents(category, context) }))];
+  const index = { key: PACKAGES_INDEX.key, label: PACKAGES_INDEX.label, href: docHref(PACKAGES_INDEX, README), isTitle: true, nodes: [] };
+  return [index, ...categories.map((category) => ({ key: category.slug, label: category.title, href: categoryHref(category.slug), isTitle: false, nodes: categoryContents(category, context) }))];
 }
 
 export function docNavGroups(entries: DocEntry[], route: DocsRoute, headings: DocHeading[], categories: PackageCategory[] = []): DocNavGroup[] {
@@ -93,6 +93,7 @@ export function docNavGroups(entries: DocEntry[], route: DocsRoute, headings: Do
     key: source.key,
     label: source.label,
     href: docHref(source, source.files[0] ?? ''),
+    isTitle: false,
     nodes: sourceNodes(
       source,
       entries.filter((entry) => entry.sourceKey === source.key),

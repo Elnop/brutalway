@@ -39,6 +39,7 @@ export type DocNavGroup = {
   key: string;
   label: string;
   href: string;
+  isTitle: boolean;
   nodes: DocNavNode[];
 };
 
