@@ -1,5 +1,5 @@
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
-import type { DocEntry, DocHeading, DocNavGroup, DocNavNode, DocSource, DocsRoute } from '@/features/docs/DocsTypes.ts';
+import { DOC_SOURCES, PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
+import type { DocEntry, DocHeading, DocNavGroup, DocNavNode, DocSource, DocsRoute, PackageCategory } from '@/features/docs/DocsTypes.ts';
 import { docHref } from '@/features/docs/lib/docsUrls.ts';
 
 const README = 'README.md';
@@ -49,7 +49,46 @@ function sourceNodes(source: DocSource, entries: DocEntry[], route: DocsRoute, h
   return (childrenOf.get(undefined) ?? []).map(build);
 }
 
-export function docNavGroups(entries: DocEntry[], route: DocsRoute, headings: DocHeading[]): DocNavGroup[] {
+type NavContext = {
+  entries: DocEntry[];
+  route: DocsRoute;
+  headings: DocHeading[];
+};
+
+function packageNode(url: string, context: NavContext): DocNavNode[] {
+  const source = DOC_SOURCES.find((candidate) => candidate.directory === `packages/${url.replace(/\/+$/u, '')}`);
+  if (source === undefined) return [];
+  const [readme, ...others] = sourceNodes(
+    source,
+    context.entries.filter((entry) => entry.sourceKey === source.key),
+    context.route,
+    context.headings,
+  );
+  if (readme === undefined) return [];
+  const children = source.key === context.route.source.key ? [...readme.children, ...others.map((node) => ({ ...node, kind: 'detail' as const }))] : [];
+  return [{ kind: 'page', title: source.key.replace(/^(?:oxlint-config|eslint-plugin)-/u, ''), href: readme.href, current: readme.current, children }];
+}
+
+function categoryContents(category: PackageCategory, context: NavContext): DocNavNode[] {
+  return [...category.packages.flatMap((url) => packageNode(url, context)), ...category.children.map((child) => categoryNode(child, context))];
+}
+
+function categoryHref(slug: string): string {
+  return `${docHref(PACKAGES_INDEX, README)}#${slug}`;
+}
+
+function categoryNode(category: PackageCategory, context: NavContext): DocNavNode {
+  const isOpen = context.route.source.key === PACKAGES_INDEX.key && context.route.section === category.slug;
+  return { kind: 'category', title: category.title, href: categoryHref(category.slug), current: isOpen ? 'location' : undefined, children: categoryContents(category, context) };
+}
+
+function packageGroups(categories: PackageCategory[], context: NavContext): DocNavGroup[] {
+  const index = { key: PACKAGES_INDEX.key, label: PACKAGES_INDEX.label, href: docHref(PACKAGES_INDEX, README), nodes: [] };
+  return [index, ...categories.map((category) => ({ key: category.slug, label: category.title, href: categoryHref(category.slug), nodes: categoryContents(category, context) }))];
+}
+
+export function docNavGroups(entries: DocEntry[], route: DocsRoute, headings: DocHeading[], categories: PackageCategory[] = []): DocNavGroup[] {
+  if (route.source.route === PACKAGES_INDEX.route && categories.length > 0) return packageGroups(categories, { entries, route, headings });
   return DOC_SOURCES.filter((source) => source.route === route.source.route).map((source) => ({
     key: source.key,
     label: source.label,

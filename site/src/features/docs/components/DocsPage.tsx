@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import type { DocsRoute } from '@/features/docs/DocsTypes.ts';
 import { DocsArticle } from '@/features/docs/components/presenters/DocsArticle.tsx';
 import { DocsNav } from '@/features/docs/components/presenters/DocsNav.tsx';
-import { useDocContent, useDocList } from '@/features/docs/hooks/useDocs.ts';
+import { PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
+import { useDocContent, useDocList, usePackageCategories } from '@/features/docs/hooks/useDocs.ts';
 import { useScrollToSection } from '@/features/docs/hooks/useScrollToSection.ts';
 import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
 import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
@@ -20,7 +21,8 @@ function DocsView({ route }: DocsViewProps) {
   const markdown = content.status === 'ready' ? content.value : undefined;
   const headings = useMemo(() => (markdown === undefined ? [] : docHeadings(markdown)), [markdown]);
   useScrollToSection(route.section, markdown !== undefined);
-  const groups = docNavGroups(entries, route, headings);
+  const categories = usePackageCategories(route.source.route === PACKAGES_INDEX.route);
+  const groups = docNavGroups(entries, route, headings, categories);
   const knownPaths = entries.filter((entry) => entry.sourceKey === route.source.key).map((entry) => entry.path);
   return (
     <div className="docs">

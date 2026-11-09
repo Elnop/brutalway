@@ -41,13 +41,15 @@ function packageSource(folder: string, changelog: boolean): DocSource {
   return changelog ? { ...source, changelog: 'CHANGELOG.md' } : source;
 }
 
+export const PACKAGES_INDEX: DocSource = { key: 'packages', label: 'packages', route: PACKAGES_ROUTE, repo: 'Elnop/brutalway', directory: 'packages', files: ['README.md'] };
+
 export const DOC_SOURCES: DocSource[] = [
   { key: 'brutalway', label: 'brutalway', route: DOCS_ROUTE, repo: 'Elnop/brutalway', directory: '', files: ['README.md', 'packages/tools/create-brutal/README.md'], folder: 'docs' },
   { key: 'all', label: 'templates', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates', files: ['README.md'] },
   { key: 'vite', label: 'template-vite', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/vite', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
   { key: 'fastify', label: 'template-fastify', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/fastify', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
   { key: 'package', label: 'template-package', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/package', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
-  { key: 'packages', label: 'packages', route: PACKAGES_ROUTE, repo: 'Elnop/brutalway', directory: 'packages', files: ['README.md'] },
+  PACKAGES_INDEX,
   ...PUBLISHED_PACKAGES.map((folder) => packageSource(folder, true)),
   ...PRIVATE_PACKAGES.map((folder) => packageSource(folder, false)),
 ];

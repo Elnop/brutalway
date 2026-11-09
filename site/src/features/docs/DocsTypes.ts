@@ -28,7 +28,7 @@ export type DocHeading = {
 };
 
 export type DocNavNode = {
-  kind: 'page' | 'section';
+  kind: 'page' | 'detail' | 'section' | 'category';
   title: string;
   href: string;
   current: 'page' | 'location' | undefined;
@@ -43,3 +43,11 @@ export type DocNavGroup = {
 };
 
 export type LoadState<T> = { status: 'loading' } | { status: 'ready'; value: T } | { status: 'error'; message: string };
+
+export type PackageCategory = {
+  title: string;
+  slug: string;
+  depth: number;
+  packages: string[];
+  children: PackageCategory[];
+};
