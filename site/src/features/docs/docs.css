@@ -20,7 +20,15 @@
   border: var(--border);
   background: var(--paper);
   box-shadow: var(--shadow);
-  transition: top 300ms ease;
+  transition:
+    top 300ms ease,
+    max-height 300ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-nav {
+    transition: none;
+  }
 }
 
 .docs-nav-label {
