@@ -3,27 +3,25 @@
   grid-template-columns: minmax(0, 1fr) 22rem;
   align-items: start;
   gap: 2.5rem;
-  padding: 2.5rem 0 6rem 1.5rem;
+  padding-left: 1.5rem;
 }
 
 .docs-nav {
   position: sticky;
-  top: calc(var(--header-offset, 0px) + 1.5rem);
+  top: var(--header-offset, 0px);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  max-height: calc(100vh - var(--header-offset, 0px) - 3rem);
+  height: calc(100dvh - var(--header-offset, 0px));
   padding: 1.25rem;
   font-size: 1rem;
   overflow-y: auto;
   order: 2;
-  border: var(--border);
-  border-right: 0;
+  border-left: var(--border);
   background: var(--paper);
-  box-shadow: -6px 6px 0 var(--ink);
   transition:
     top 300ms ease,
-    max-height 300ms ease;
+    height 300ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -120,6 +118,7 @@
 
 .docs-article {
   justify-self: center;
+  margin-block: 2.5rem 6rem;
   width: 100%;
   max-width: 80rem;
   min-width: 0;
@@ -232,12 +231,14 @@
   .docs-nav {
     order: 0;
     position: static;
-    max-height: none;
-    border-right: var(--border);
+    height: auto;
+    margin-top: 2.5rem;
+    border: var(--border);
     box-shadow: var(--shadow);
   }
 
   .docs-article {
+    margin-top: 0;
     padding: 1.5rem;
   }
 }
