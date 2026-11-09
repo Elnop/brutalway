@@ -1,7 +1,7 @@
 .authors {
   border-top: var(--border);
   background: var(--blue);
-  color: var(--on-blue);
+  color: var(--on-accent);
 }
 
 .authors-inner {
@@ -62,7 +62,7 @@
 }
 
 .authors-arrow path {
-  stroke: var(--ink);
+  stroke: var(--on-accent);
 }
 
 .authors-check {

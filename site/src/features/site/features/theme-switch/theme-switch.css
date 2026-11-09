@@ -22,7 +22,7 @@
 
 .theme-switch button:hover {
   background: var(--yellow);
-  color: var(--on-yellow);
+  color: var(--on-accent);
 }
 
 .theme-switch button[aria-pressed='true'] {

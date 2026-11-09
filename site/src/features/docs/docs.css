@@ -66,7 +66,7 @@
 .docs-nav a[aria-current='page'] {
   border-color: var(--ink);
   background: var(--yellow);
-  color: var(--on-yellow);
+  color: var(--on-accent);
   font-weight: 700;
 }
 
@@ -134,7 +134,7 @@
   --link-highlight-text: var(--ink);
   border-left: 6px solid var(--ink);
   background: var(--yellow);
-  color: var(--on-yellow);
+  color: var(--on-accent);
 }
 
 .docs-article table {

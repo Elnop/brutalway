@@ -3,13 +3,13 @@
   --paper: light-dark(#fffdf5, #1f1d1a);
   --page: light-dark(#f4e9d8, #12110f);
   --yellow: light-dark(#ffe98f, #f2df8a);
-  --on-yellow: #111111;
-  --pink: light-dark(#ff6ad5, #b02c86);
-  --blue: light-dark(#2a5cff, #3558e0);
-  --on-blue: light-dark(#ffffff, #f4ede0);
+  --pink: light-dark(#ffb8e6, #f0a6d6);
+  --blue: light-dark(#b3c5ff, #9fb4f5);
+  --on-accent: #111111;
+  --focus: light-dark(#2a5cff, #b3c5ff);
   --screen: light-dark(#111111, #000000);
   --on-screen: light-dark(#fffdf5, #f4ede0);
-  --screen-error: #ff6ad5;
+  --screen-error: #ffb8e6;
   --border: 3px solid var(--ink);
   --shadow: 6px 6px 0 var(--ink);
   --shadow-large: 10px 10px 0 var(--ink);
@@ -76,7 +76,7 @@ a {
 
 a:hover {
   background-size: 100% 100%;
-  color: var(--link-highlight-text, var(--on-yellow));
+  color: var(--link-highlight-text, var(--on-accent));
   text-decoration: none;
 }
 
@@ -92,7 +92,7 @@ pre {
 }
 
 :focus-visible {
-  outline: 3px solid var(--blue);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
@@ -144,12 +144,12 @@ pre {
 .command:hover .command-status,
 .command-status-copied {
   background: var(--yellow);
-  color: var(--on-yellow);
+  color: var(--on-accent);
 }
 
 .command-status-failed {
   background: var(--pink);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 .command:active {
@@ -205,17 +205,17 @@ pre {
   --link-highlight: var(--paper);
   --link-highlight-text: var(--ink);
   background: var(--yellow);
-  color: var(--on-yellow);
+  color: var(--on-accent);
 }
 
 .tone-pink {
   background: var(--pink);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 .tone-blue {
   background: var(--blue);
-  color: var(--on-blue);
+  color: var(--on-accent);
 }
 
 .tone-paper {

@@ -3,7 +3,7 @@
   --link-highlight-text: var(--ink);
   border-top: var(--border);
   background: var(--yellow);
-  color: var(--on-yellow);
+  color: var(--on-accent);
 }
 
 .site-footer-inner {
