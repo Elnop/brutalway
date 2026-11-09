@@ -8,6 +8,7 @@
   --color-yellow: #ffd23f;
   --color-pink: #ff6ad5;
   --color-blue: #2a5cff;
+  --color-on-blue: var(--color-paper);
 
   --font-*: initial;
   --font-sans: 'Space Grotesk', system-ui, sans-serif;

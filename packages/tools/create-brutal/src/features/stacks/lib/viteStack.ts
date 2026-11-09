@@ -30,7 +30,7 @@ const COMPONENT_PROJECT = `        {
 
 const PRESENTER_TEST_EXAMPLE = { file: 'docs/architecture.md', replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,', with: ',' };
 
-const TAILWIND_DOC = `\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tailwind\`. A color is a token declared under \`@theme\` in \`src/app/globals.css\`: no \`bg-white\`, no \`bg-[#0f0f0f]\`, no hex in \`style\`, and the message names the closest tokens. \`h1\` to \`h3\` take \`font-display\`, \`code\` and \`pre\` take \`font-mono\`, and \`dark:\` is reported, since the project is light only. Prettier sorts the classes with \`prettier-plugin-tailwindcss\`, through \`@brutalway/prettier-config/tailwind\`.
+const TAILWIND_DOC = `\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tailwind\`. A color is a token declared under \`@theme\` in \`src/app/globals.css\`: no \`bg-white\`, no \`bg-[#0f0f0f]\`, no hex in \`style\`, and the message names the closest tokens. \`h1\` to \`h3\` take \`font-display\`, \`code\` and \`pre\` take \`font-mono\`, and \`dark:\` is reported, since a theme changes the values of the tokens, never a class. Prettier sorts the classes with \`prettier-plugin-tailwindcss\`, through \`@brutalway/prettier-config/tailwind\`.
 
 `;
 
@@ -118,7 +118,7 @@ The buttons, fields, checkboxes and cards come from [shadcn/ui](https://ui.shadc
 
 To add one, run \`npx shadcn add <name>\` (\`dialog\`, \`select\`, \`tabs\`...), then check \`package.json\`: the CLI sometimes misses a package the file imports, and sometimes installs one no file imports (\`date-fns\` with \`calendar\`). knip reports both. A primitive with an animation (\`dialog\`, \`dropdown-menu\`, \`sheet\`...) also needs \`npm install -E tw-animate-css\` and \`@import 'tw-animate-css';\` in \`src/app/globals.css\`, which the CLI does not write since the project owns that file.
 
-To change how a primitive looks, leave its file alone. shadcn's colors are mapped onto the project's under \`@theme inline\` in \`src/app/globals.css\`, where the tokens also make every border thick, every corner square and every shadow hard. Beyond that, add a rule on the primitive's \`data-slot\` in the same file, pass a class from the component that uses it, or write a component in \`src/shared/\` that wraps it.
+To change how a primitive looks, leave its file alone. shadcn's colors are mapped onto the project's under \`@theme inline\` in \`src/app/globals.css\`, where the tokens also make every border thick, every corner square and every shadow hard. Beyond that, add a rule on the primitive's \`data-slot\` in the same file, pass a class from the component that uses it, or write a component in \`src/shared/\` that wraps it. The \`dark:\` classes of the primitives only apply under a \`.dark\` class (\`@custom-variant dark\` in \`src/app/globals.css\`), which the app never sets, so the primitives do not change when the system turns dark: the theme comes from the tokens.
 
 `;
 
@@ -215,6 +215,42 @@ const ANALYTICS_LAYOUT_FUNCTION = `
   }
 `;
 
+const DARK_TOKENS = `  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #f4ede0;
+    --paper: #1f1d1a;
+    --page: #12110f;
+    --yellow: #806100;
+    --pink: #b02c86;
+    --blue: #3558e0;
+    --on-blue: var(--ink);
+  }
+}
+`;
+
+const DARK_TAILWIND_TOKENS = `  html {
+    color-scheme: light dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-ink: #f4ede0;
+      --color-paper: #1f1d1a;
+      --color-page: #12110f;
+      --color-yellow: #806100;
+      --color-pink: #b02c86;
+      --color-blue: #3558e0;
+      --color-on-blue: var(--color-ink);
+    }
+  }`;
+
+const DARK_THEME_README = `The colors follow the theme of the system. The \`@media (prefers-color-scheme: dark)\` block of \`src/app/globals.css\` gives each color token its dark value, so a component never picks a color per theme. The dark values keep text at a contrast of at least 4.5:1 on every color, and the accents at 3:1 against the page, which the focus outline needs.
+
+`;
+
 const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
@@ -243,6 +279,7 @@ export const viteStack: Stack = {
         { id: 'shadcn', label: 'shadcn/ui, vendored in third-party/shadcn/ (needs Tailwind)', requires: { styling: 'tailwind' } },
       ],
     },
+    { id: 'dark-theme', message: 'Follow the dark mode of the system?', default: false },
     { id: 'server-state', message: 'Read and write the data through an API with TanStack Query?', default: false },
     { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
     { id: 'i18n', message: 'Add French and a language switch?', default: false },
@@ -369,6 +406,7 @@ export const viteStack: Stack = {
       edits: [
         { file: 'src/app/globals.css', replace: '  --shadow-hard-sm: 4px 4px 0 var(--color-ink);\n}', with: SHADCN_THEME },
         { file: 'src/app/globals.css', before: '  :focus-visible {', insert: SHADCN_SLOTS },
+        { file: 'src/app/globals.css', replace: "@import 'tailwindcss';\n", with: "@import 'tailwindcss';\n\n@custom-variant dark (&:where(.dark, .dark *));\n" },
         {
           file: 'vite.config.ts',
           replace: "alias: [{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],",
@@ -955,6 +993,37 @@ export const viteStack: Stack = {
     {
       when: { analytics: 'posthog' },
       edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n' }],
+    },
+    {
+      when: { 'dark-theme': true, styling: 'css' },
+      edits: [{ file: 'src/app/globals.css', replace: '  color-scheme: light;\n}\n', with: DARK_TOKENS }],
+    },
+    {
+      when: { 'dark-theme': true, styling: 'css-modules' },
+      edits: [{ file: 'src/app/globals.css', replace: '  color-scheme: light;\n}\n', with: DARK_TOKENS }],
+    },
+    {
+      when: { 'dark-theme': true, styling: 'tailwind' },
+      edits: [{ file: 'src/app/globals.css', replace: '  html {\n    color-scheme: light;\n  }', with: DARK_TAILWIND_TOKENS }],
+    },
+    {
+      when: { 'dark-theme': true },
+      edits: [
+        { file: 'README.md', before: 'Part of [brutalway]', insert: DARK_THEME_README },
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert: '- Colors follow the theme of the system: a token gets its dark value in the `prefers-color-scheme: dark` block of `src/app/globals.css`, never in a component.\n',
+        },
+      ],
+    },
+    {
+      when: { 'dark-theme': true, e2e: true, example: true },
+      overlay: 'dark-theme-e2e-example',
+    },
+    {
+      when: { 'dark-theme': true, e2e: true, example: false },
+      overlay: 'dark-theme-e2e',
     },
     {
       when: { e2e: false },

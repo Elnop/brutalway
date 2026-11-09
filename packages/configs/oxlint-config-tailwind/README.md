@@ -44,4 +44,4 @@ rules: { 'tailwind/color-tokens': ['error', { stylesheet: 'app/styles.css' }] }
 
 ## `tailwind/no-dark-variant`
 
-The project is light only, so a `dark:` class never applies and is reported. Remove the rule once the stylesheet declares dark tokens.
+A `dark:` class is reported. A dark theme gives each token a dark value in the stylesheet that declares it, under `@media (prefers-color-scheme: dark)`, so the classes stay the same in both themes and a component never picks a color per theme.

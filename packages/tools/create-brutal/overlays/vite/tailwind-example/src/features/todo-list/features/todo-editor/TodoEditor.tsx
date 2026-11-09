@@ -33,7 +33,7 @@ export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
         {...field}
         onKeyDown={cancelOnEscape}
       />
-      <button type="submit" className="button bg-blue px-[0.7rem] py-[0.3rem] text-[0.9rem] text-paper">
+      <button type="submit" className="button bg-blue px-[0.7rem] py-[0.3rem] text-[0.9rem] text-on-blue">
         {t('save')}
       </button>
       <button type="button" className="button bg-paper px-[0.7rem] py-[0.3rem] text-[0.9rem]" onClick={onCancel}>

@@ -15,7 +15,7 @@
 
 .left {
   background: var(--blue);
-  color: var(--paper);
+  color: var(--on-blue);
 }
 
 .done {

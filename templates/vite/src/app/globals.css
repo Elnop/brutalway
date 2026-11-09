@@ -5,6 +5,7 @@
   --yellow: #ffd23f;
   --pink: #ff6ad5;
   --blue: #2a5cff;
+  --on-blue: var(--paper);
   --border: 3px solid var(--ink);
   --shadow: 6px 6px 0 var(--ink);
   --shadow-small: 4px 4px 0 var(--ink);
@@ -105,7 +106,7 @@ input:not([type='checkbox']) {
 
 .button-blue {
   background: var(--blue);
-  color: var(--paper);
+  color: var(--on-blue);
 }
 
 .card {

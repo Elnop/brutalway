@@ -5,8 +5,8 @@ import { tailwindClass } from '#src/shared-features/tailwind-classes/lib/tailwin
 export const noDarkVariant = defineRule({
   meta: {
     type: 'suggestion',
-    docs: { description: 'The project is light only: no dark: variant.' },
-    messages: { darkVariant: 'The project is light only, so {{name}} never applies: remove the dark: class.' },
+    docs: { description: 'No dark: variant: a theme changes the values of the tokens.' },
+    messages: { darkVariant: 'A theme changes the values of the tokens, never a class: remove {{name}}, and give the token its dark value in the stylesheet that declares it.' },
     schema: [],
   },
   create(context) {

@@ -12,7 +12,7 @@ Node 26 is required, like the templates.
 
 | Stack | Template | Options |
 |---|---|---|
-| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `ui`, `server-state`, `forms`, `i18n`, `react-compiler`, `analytics`, `component-tests`, `e2e`, `claude-hook`, `ci` |
+| `vite` | [template-vite](https://github.com/Elnop/brutalway/tree/main/templates/vite) | `example`, `zustand`, `styling`, `ui`, `dark-theme`, `server-state`, `forms`, `i18n`, `react-compiler`, `analytics`, `component-tests`, `e2e`, `claude-hook`, `ci` |
 | `fastify` | [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) | `example`, `swagger`, `database`, `claude-hook`, `ci` |
 | `package` | [template-package](https://github.com/Elnop/brutalway/tree/main/templates/package) | `example`, `bin`, `release`, `claude-hook`, `ci` |
 
@@ -29,6 +29,8 @@ On vite, `server-state` is off by default. With it, the example reads and writes
 On vite, `forms` is off by default. With it, the title fields of the example go through `react-hook-form` with `zodResolver(TodoDraftSchema)`, and `@brutalway/oxlint-config-react-hook-form` reports a `useForm` without that resolver and any validation passed to `register` or a `Controller`. The components are the same with or without it: both read their field through `useTitleForm.ts`, and every project shows "The title is blank" under the field instead of disabling the button. With `server-state`, `TodoDraftSchema` joins the API schemas and `todosClient.create` takes its inferred type.
 
 On vite, `i18n` is off by default. With it, the project comes in English and French: the messages of `src/app/locales/fr/` sit next to the English ones, English and Français buttons in the header switch between them, the choice is saved in `localStorage`, and `<html lang>` and the title of the page follow it. `i18next-cli status` then fails when French misses a key, and with e2e, `e2e/language.spec.ts` switches to French and runs axe.
+
+On vite, `dark-theme` is off by default. With it, `src/app/globals.css` gives each color token a dark value under `@media (prefers-color-scheme: dark)`, so the app follows the theme of the system with the same classes and stylesheets, and the e2e tests also run axe in dark mode.
 
 On vite, `react-compiler` is off by default. With it, `vite.config.ts` runs the React Compiler through Babel, so components and hooks are memoized at build time, and `useMemo`, `useCallback` and `memo` imported from `react` are reported. Vitest runs without it: its memo caches add branches the tests would have to reach, while the e2e tests run the compiled build.
 
