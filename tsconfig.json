@@ -1,4 +1,4 @@
 {
-  "extends": "@brutalway/tsconfig/node.json",
+  "extends": "./packages/configs/tsconfig/node.json",
   "include": ["scripts"]
 }
