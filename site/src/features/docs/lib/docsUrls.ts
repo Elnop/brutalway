@@ -22,6 +22,6 @@ export function githubFileUrl(source: DocSource, path: string): string {
   return `https://github.com/${source.repo}/blob/${DOCS_BRANCH}/${repositoryPath(source, path)}`;
 }
 
-export function folderListUrl(source: DocSource, folder: string): string {
-  return `https://api.github.com/repos/${source.repo}/contents/${repositoryPath(source, folder)}?ref=${DOCS_BRANCH}`;
+export function repositoryTreeUrl(repo: string): string {
+  return `https://api.github.com/repos/${repo}/git/trees/${DOCS_BRANCH}?recursive=1`;
 }

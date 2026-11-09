@@ -1,22 +1,27 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fixedEntries, loadDocList } from '@/features/docs/lib/docList.ts';
-import { readCachedList } from '@/features/docs/lib/docsStorage.ts';
 
-function memoryStorage(): Pick<Storage, 'getItem' | 'setItem'> {
-  const items = new Map<string, string>();
-  return { getItem: (key) => items.get(key) ?? null, setItem: (key, value) => void items.set(key, value) };
+const REPOSITORY_FILES = [
+  'README.md',
+  'docs/intent.md',
+  'docs/roadmap.md',
+  'docs/notes.txt',
+  'packages/tools/create-brutal/README.md',
+  'templates/vite/README.md',
+  'templates/vite/docs/architecture.md',
+  'templates/vite/docs/guides/setup.md',
+  'templates/vite/src/README.md',
+];
+
+function treeAnswer(): Response {
+  return new Response(JSON.stringify({ truncated: false, tree: REPOSITORY_FILES.map((path) => ({ type: 'blob', path })) }));
 }
 
-function folderAnswer(url: string): Response {
-  const directory = /contents\/(.*)\?ref=main$/u.exec(url)?.[1] ?? '';
-  return new Response(JSON.stringify([{ type: 'file', path: `${directory}/guide.md` }]));
+function paths(entries: { sourceKey: string; path: string }[], sourceKey: string): string[] {
+  return entries.filter((entry) => entry.sourceKey === sourceKey).map((entry) => entry.path);
 }
 
 describe('docList', () => {
-  beforeEach(() => {
-    vi.stubGlobal('sessionStorage', memoryStorage());
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
   });
@@ -28,24 +33,20 @@ describe('docList', () => {
     ]);
   });
 
-  it('adds the folder files and keeps the complete list for the session', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn<(url: string) => Promise<Response>>(async (url: string) => folderAnswer(url)),
-    );
+  it('adds the Markdown files the repository holds under each docs folder, and only those', async () => {
+    const fetchMock = vi.fn<() => Promise<Response>>(async () => treeAnswer());
+    vi.stubGlobal('fetch', fetchMock);
     const entries = await loadDocList(new AbortController().signal);
-    expect(entries.filter((entry) => entry.sourceKey === 'vite').map((entry) => entry.path)).toStrictEqual(['README.md', 'docs/guide.md', 'CHANGELOG.md']);
-    expect(readCachedList()).toStrictEqual(entries);
+    expect(paths(entries, 'brutalway')).toStrictEqual(['README.md', 'packages/tools/create-brutal/README.md', 'docs/intent.md', 'docs/roadmap.md']);
+    expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/architecture.md', 'docs/guides/setup.md', 'CHANGELOG.md']);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it('shows a partial list without keeping it when a folder fails', async () => {
+  it('keeps the named files when GitHub does not answer', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn<(url: string) => Promise<Response>>(async (url: string) => (url.includes('templates/vite') ? new Response('', { status: 500 }) : folderAnswer(url))),
+      vi.fn(async () => new Response('', { status: 403 })),
     );
-    const entries = await loadDocList(new AbortController().signal);
-    expect(entries.filter((entry) => entry.sourceKey === 'vite').map((entry) => entry.path)).toStrictEqual(['README.md', 'CHANGELOG.md']);
-    expect(entries.some((entry) => entry.path === 'docs/guide.md')).toBe(true);
-    expect(readCachedList()).toBeUndefined();
+    expect(await loadDocList(new AbortController().signal)).toStrictEqual(fixedEntries());
   });
 });

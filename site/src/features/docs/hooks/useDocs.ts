@@ -3,12 +3,11 @@ import type { DocEntry, DocSource, LoadState } from '@/features/docs/DocsTypes.t
 import { docsKeys } from '@/features/docs/docsKeys.ts';
 import { fetchDocText } from '@/features/docs/githubClient.ts';
 import { fixedEntries, loadDocList } from '@/features/docs/lib/docList.ts';
-import { readCachedList } from '@/features/docs/lib/docsStorage.ts';
 import { rawFileUrl } from '@/features/docs/lib/docsUrls.ts';
 import { QUERY_CACHE } from '@/shared/configs/QueryConfig.ts';
 
 export function useDocList(): DocEntry[] {
-  const query = useQuery({ queryKey: docsKeys.list(), queryFn: async ({ signal }) => loadDocList(signal), initialData: readCachedList, ...QUERY_CACHE.session });
+  const query = useQuery({ queryKey: docsKeys.list(), queryFn: async ({ signal }) => loadDocList(signal), ...QUERY_CACHE.session });
   return query.data ?? fixedEntries();
 }
 

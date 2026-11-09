@@ -1,32 +1,20 @@
-import type { DocSource } from '@/features/docs/DocsTypes.ts';
-import { folderListUrl, sourcePath } from '@/features/docs/lib/docsUrls.ts';
+import { repositoryTreeUrl } from '@/features/docs/lib/docsUrls.ts';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
-function isMarkdownFile(value: unknown): value is { type: 'file'; path: string } {
-  return isRecord(value) && value['type'] === 'file' && typeof value['path'] === 'string' && value['path'].endsWith('.md');
+function isFile(value: unknown): value is { type: 'blob'; path: string } {
+  return isRecord(value) && value['type'] === 'blob' && typeof value['path'] === 'string';
 }
 
-function isFolder(value: unknown): value is { type: 'dir'; path: string } {
-  return isRecord(value) && value['type'] === 'dir' && typeof value['path'] === 'string';
-}
-
-async function listFolderTree(source: DocSource, folder: string, signal: AbortSignal): Promise<string[] | undefined> {
-  const response = await fetch(folderListUrl(source, folder), { signal });
-  if (!response.ok) return undefined;
-  const items: unknown = await response.json();
-  if (!Array.isArray(items)) return undefined;
-  const files = items.filter(isMarkdownFile).map((item) => sourcePath(source, item.path));
-  const nested = await Promise.all(items.filter(isFolder).map(async (item) => listFolderTree(source, sourcePath(source, item.path), signal)));
-  return nested.every((paths) => paths !== undefined) ? [...files, ...nested.flat()] : undefined;
-}
-
-export async function listMarkdownFiles(source: DocSource, signal: AbortSignal): Promise<string[] | undefined> {
-  if (source.folder === undefined) return [];
+export async function listRepositoryFiles(repo: string, signal: AbortSignal): Promise<string[] | undefined> {
   try {
-    return await listFolderTree(source, source.folder, signal);
+    const response = await fetch(repositoryTreeUrl(repo), { signal });
+    if (!response.ok) return undefined;
+    const tree: unknown = await response.json();
+    if (!isRecord(tree) || tree['truncated'] === true || !Array.isArray(tree['tree'])) return undefined;
+    return tree['tree'].filter(isFile).map((item) => item.path);
   } catch {
     return undefined;
   }

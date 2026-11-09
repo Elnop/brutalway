@@ -1,8 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
-import { fetchDocText, listMarkdownFiles } from '@/features/docs/githubClient.ts';
-
-const [brutalway, templates, vite] = DOC_SOURCES;
+import { fetchDocText, listRepositoryFiles } from '@/features/docs/githubClient.ts';
 
 function answer(body: unknown, status = 200): Response {
   return new Response(typeof body === 'string' ? body : JSON.stringify(body), { status });
@@ -13,31 +10,36 @@ describe('githubClient', () => {
     vi.unstubAllGlobals();
   });
 
-  it('lists the Markdown files of a folder and its subfolders, relative to the source directory', async () => {
-    const fetchMock = vi.fn<(url: string) => Promise<Response>>(async (url: string) => {
-      if (url === 'https://api.github.com/repos/Elnop/brutalway/contents/templates/vite/docs?ref=main') {
-        return answer([
-          { type: 'file', path: 'templates/vite/docs/intent.md' },
-          { type: 'file', path: 'templates/vite/docs/logo.png' },
-          { type: 'dir', path: 'templates/vite/docs/guides' },
-        ]);
-      }
-      return answer([{ type: 'file', path: 'templates/vite/docs/guides/setup.md' }]);
-    });
+  it('lists every file of the repository in one request to the tree of main', async () => {
+    const fetchMock = vi.fn<(url: string) => Promise<Response>>(async () =>
+      answer({
+        truncated: false,
+        tree: [
+          { type: 'blob', path: 'README.md' },
+          { type: 'tree', path: 'docs' },
+          { type: 'blob', path: 'docs/roadmap.md' },
+        ],
+      }),
+    );
     vi.stubGlobal('fetch', fetchMock);
-    await expect(listMarkdownFiles(vite, new AbortController().signal)).resolves.toStrictEqual(['docs/intent.md', 'docs/guides/setup.md']);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    await expect(listRepositoryFiles('Elnop/brutalway', new AbortController().signal)).resolves.toStrictEqual(['README.md', 'docs/roadmap.md']);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0]?.[0]).toBe('https://api.github.com/repos/Elnop/brutalway/git/trees/main?recursive=1');
   });
 
-  it('lists nothing without a folder, and gives up when GitHub fails anywhere in the tree', async () => {
+  it('gives up on an error, a truncated tree or no network', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => answer({ message: 'rate limited' }, 403)),
     );
-    await expect(listMarkdownFiles(templates, new AbortController().signal)).resolves.toStrictEqual([]);
-    await expect(listMarkdownFiles(brutalway, new AbortController().signal)).resolves.toBeUndefined();
+    await expect(listRepositoryFiles('Elnop/brutalway', new AbortController().signal)).resolves.toBeUndefined();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => answer({ truncated: true, tree: [] })),
+    );
+    await expect(listRepositoryFiles('Elnop/brutalway', new AbortController().signal)).resolves.toBeUndefined();
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')));
-    await expect(listMarkdownFiles(brutalway, new AbortController().signal)).resolves.toBeUndefined();
+    await expect(listRepositoryFiles('Elnop/brutalway', new AbortController().signal)).resolves.toBeUndefined();
   });
 
   it('reads a raw file, and turns a failure into the message shown on the page', async () => {
