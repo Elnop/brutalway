@@ -21,6 +21,13 @@ describe('parseDocsRoute', () => {
     expect(parseDocsRoute('#/templates/vite/CHANGELOG.md')).toMatchObject({ source: { key: 'vite' }, path: 'CHANGELOG.md' });
   });
 
+  it('opens the package index by default, then each package README and changelog', () => {
+    expect(parseDocsRoute('#/packages')).toMatchObject({ source: { key: 'packages', directory: 'packages' }, path: 'README.md' });
+    expect(parseDocsRoute('#/packages/check-tree')).toMatchObject({ source: { key: 'check-tree', label: '@brutalway/check-tree', directory: 'packages/tools/check-tree' }, path: 'README.md' });
+    expect(parseDocsRoute('#/packages/create-brutal/CHANGELOG.md')).toMatchObject({ source: { key: 'create-brutal', label: 'create-brutal' }, path: 'CHANGELOG.md' });
+    expect(parseDocsRoute('#/packages/lint-utils')).not.toHaveProperty('source.changelog');
+  });
+
   it('keeps each source in its own section', () => {
     expect(parseDocsRoute('#/docs/vite')).toBeUndefined();
     expect(parseDocsRoute('#/templates/brutalway')).toBeUndefined();

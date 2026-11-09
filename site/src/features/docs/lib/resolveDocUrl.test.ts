@@ -37,6 +37,17 @@ describe('resolveDocUrl', () => {
     );
   });
 
+  it('turns a link to a package folder into its page on the site', () => {
+    const [packages] = DOC_SOURCES.filter((candidate) => candidate.key === 'packages');
+    expect(packages).toBeDefined();
+    if (packages === undefined) return;
+    expect(resolveDocUrl({ url: 'tools/check-tree', attribute: 'href', source: packages, docPath: 'README.md', knownPaths: ['README.md'] })).toBe('#/packages/check-tree/README.md');
+    expect(resolveDocUrl({ url: 'packages/README.md', attribute: 'href', source, docPath: 'README.md', knownPaths })).toBe('#/packages/packages/README.md');
+    expect(resolveDocUrl({ url: '../README.md#the-common-rules', attribute: 'href', source: packages, docPath: 'README.md', knownPaths: ['README.md'] })).toBe(
+      '#/docs/brutalway/README.md#the-common-rules',
+    );
+  });
+
   it('sends other relative links to GitHub', () => {
     expect(resolveDocUrl({ url: 'create-brutal/src/cli.ts', attribute: 'href', source, docPath: 'README.md', knownPaths })).toBe(
       'https://github.com/Elnop/brutalway/blob/main/create-brutal/src/cli.ts',

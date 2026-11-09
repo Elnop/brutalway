@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useHideOnScrollDown } from '@/features/site/features/header/useHideOnScrollDown.ts';
-import { DOCS_ROUTE, REPOSITORY_URL, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
+import { DOCS_ROUTE, PACKAGES_ROUTE, REPOSITORY_URL, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
@@ -34,6 +34,7 @@ export function SiteHeader({ actions }: SiteHeaderProps) {
           <div className="site-header-pages">
             <a href={DOCS_ROUTE}>Docs</a>
             <a href={TEMPLATES_ROUTE}>Templates</a>
+            <a href={PACKAGES_ROUTE}>Packages</a>
             <SiteLink href={REPOSITORY_URL}>GitHub</SiteLink>
           </div>
         </div>
