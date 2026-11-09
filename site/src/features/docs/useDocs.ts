@@ -1,117 +1,21 @@
-import { useEffect, useState } from 'react';
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
+import { useQuery } from '@tanstack/react-query';
 import type { DocEntry, DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
-import { docTitle } from '@/features/docs/lib/docTitle.ts';
-import { folderListUrl, rawFileUrl, sourcePath } from '@/features/docs/lib/docsUrls.ts';
-
-const LIST_CACHE_KEY = 'brutal-docs-list-v4';
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function isDocEntry(value: unknown): value is DocEntry {
-  return isRecord(value) && typeof value['sourceKey'] === 'string' && typeof value['path'] === 'string' && typeof value['title'] === 'string';
-}
-
-function isMarkdownFile(value: unknown): value is { type: 'file'; path: string } {
-  return isRecord(value) && value['type'] === 'file' && typeof value['path'] === 'string' && value['path'].endsWith('.md');
-}
-
-function isFolder(value: unknown): value is { type: 'dir'; path: string } {
-  return isRecord(value) && value['type'] === 'dir' && typeof value['path'] === 'string';
-}
-
-function toEntry(sourceKey: string, path: string): DocEntry {
-  return { sourceKey, path, title: docTitle(path) };
-}
-
-function sourceEntries(source: DocSource, folderPaths: string[]): DocEntry[] {
-  const paths = [...source.files, ...folderPaths, ...(source.changelog === undefined ? [] : [source.changelog])];
-  return paths.map((path) => toEntry(source.key, path));
-}
-
-function fixedEntries(): DocEntry[] {
-  return DOC_SOURCES.flatMap((source) => sourceEntries(source, []));
-}
-
-function readCachedList(): DocEntry[] | undefined {
-  try {
-    const cached = sessionStorage.getItem(LIST_CACHE_KEY);
-    if (cached === null) return undefined;
-    const parsed: unknown = JSON.parse(cached);
-    return Array.isArray(parsed) && parsed.every(isDocEntry) ? parsed : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function writeCachedList(entries: DocEntry[]): void {
-  try {
-    sessionStorage.setItem(LIST_CACHE_KEY, JSON.stringify(entries));
-  } catch {
-    return;
-  }
-}
-
-async function listFolderTree(source: DocSource, folder: string, signal: AbortSignal): Promise<string[] | undefined> {
-  const response = await fetch(folderListUrl(source, folder), { signal });
-  if (!response.ok) return undefined;
-  const items: unknown = await response.json();
-  if (!Array.isArray(items)) return undefined;
-  const files = items.filter(isMarkdownFile).map((item) => sourcePath(source, item.path));
-  const nested = await Promise.all(items.filter(isFolder).map(async (item) => listFolderTree(source, sourcePath(source, item.path), signal)));
-  return nested.every((paths) => paths !== undefined) ? [...files, ...nested.flat()] : undefined;
-}
-
-async function listFolder(source: DocSource, signal: AbortSignal): Promise<string[] | undefined> {
-  if (source.folder === undefined) return [];
-  try {
-    return await listFolderTree(source, source.folder, signal);
-  } catch {
-    return undefined;
-  }
-}
-
-async function listAll(signal: AbortSignal): Promise<{ entries: DocEntry[]; complete: boolean }> {
-  const folders = await Promise.all(DOC_SOURCES.map((source) => listFolder(source, signal)));
-  const entries = DOC_SOURCES.flatMap((source, index) => sourceEntries(source, folders[index] ?? []));
-  return { entries, complete: folders.every((folder) => folder !== undefined) };
-}
+import { docsKeys } from '@/features/docs/docsKeys.ts';
+import { fetchDocText } from '@/features/docs/githubClient.ts';
+import { fixedEntries, loadDocList } from '@/features/docs/lib/docList.ts';
+import { readCachedList } from '@/features/docs/lib/docsStorage.ts';
+import { rawFileUrl } from '@/features/docs/lib/docsUrls.ts';
+import { QUERY_CACHE } from '@/shared/configs/QueryConfig.ts';
 
 export function useDocList(): DocEntry[] {
-  const [entries, setEntries] = useState<DocEntry[]>(() => readCachedList() ?? fixedEntries());
-  useEffect(() => {
-    if (readCachedList() !== undefined) return undefined;
-    const controller = new AbortController();
-    async function load(): Promise<void> {
-      const { entries: all, complete } = await listAll(controller.signal);
-      if (controller.signal.aborted) return;
-      if (complete) writeCachedList(all);
-      setEntries(all);
-    }
-    void load();
-    return () => controller.abort();
-  }, []);
-  return entries;
+  const query = useQuery({ queryKey: docsKeys.list(), queryFn: async ({ signal }) => loadDocList(signal), initialData: readCachedList, ...QUERY_CACHE.session });
+  return query.data ?? fixedEntries();
 }
 
 export function useDocContent(source: DocSource, path: string): LoadState<string> {
   const url = rawFileUrl(source, path);
-  const [loaded, setLoaded] = useState<{ url: string; state: LoadState<string> } | undefined>(undefined);
-  useEffect(() => {
-    const controller = new AbortController();
-    async function load(): Promise<void> {
-      try {
-        const response = await fetch(url, { signal: controller.signal });
-        const state: LoadState<string> = response.ok ? { status: 'ready', value: await response.text() } : { status: 'error', message: `GitHub answered ${String(response.status)}.` };
-        if (!controller.signal.aborted) setLoaded({ url, state });
-      } catch {
-        if (!controller.signal.aborted) setLoaded({ url, state: { status: 'error', message: 'The page could not be loaded from GitHub.' } });
-      }
-    }
-    void load();
-    return () => controller.abort();
-  }, [url]);
-  return loaded?.url === url ? loaded.state : { status: 'loading' };
+  const query = useQuery({ queryKey: docsKeys.content(url), queryFn: async ({ signal }) => fetchDocText(url, signal), ...QUERY_CACHE.session });
+  if (query.isPending) return { status: 'loading' };
+  if (query.isError) return { status: 'error', message: query.error.message };
+  return { status: 'ready', value: query.data };
 }

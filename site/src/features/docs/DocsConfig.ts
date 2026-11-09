@@ -1,5 +1,5 @@
 import type { DocSource } from '@/features/docs/DocsTypes.ts';
-import { DOCS_ROUTE, TEMPLATES_ROUTE } from '@/shared/LinksConfig.ts';
+import { DOCS_ROUTE, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
 
 export const DOCS_BRANCH = 'main';
 

@@ -5,11 +5,8 @@ import { DocsNav } from '@/features/docs/components/presenters/DocsNav.tsx';
 import { docHref } from '@/features/docs/lib/docsUrls.ts';
 import { parseDocsRoute } from '@/features/docs/lib/parseDocsRoute.ts';
 import { useDocContent, useDocList } from '@/features/docs/useDocs.ts';
+import { useHash } from '@/shared/hooks/useHash.ts';
 import '@/features/docs/docs.css';
-
-type DocsPageProps = {
-  hash: string;
-};
 
 type DocsViewProps = {
   route: DocsRoute;
@@ -28,8 +25,8 @@ function DocsView({ route }: DocsViewProps) {
   );
 }
 
-export function DocsPage({ hash }: DocsPageProps) {
-  const route = parseDocsRoute(hash);
+export function DocsPage() {
+  const route = parseDocsRoute(useHash());
   if (route === undefined) {
     return (
       <div className="docs">

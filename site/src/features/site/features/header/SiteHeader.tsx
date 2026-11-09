@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useHideOnScrollDown } from '@/features/site/features/header/useHideOnScrollDown.ts';
-import { DOCS_ROUTE, REPOSITORY_URL, TEMPLATES_ROUTE } from '@/shared/LinksConfig.ts';
+import { DOCS_ROUTE, REPOSITORY_URL, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 

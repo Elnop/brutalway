@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { DocsPage } from '@/features/docs/components/DocsPage.tsx';
 import { LandingPage } from '@/features/landing/LandingPage.tsx';
-import { SiteLayout } from '@/features/site/SiteLayout.tsx';
-import { PAGE_ROUTES } from '@/shared/LinksConfig.ts';
+import { SiteFrame } from '@/features/site/SiteFrame.tsx';
+import { PAGE_ROUTES } from '@/shared/configs/LinksConfig.ts';
 import { useHash } from '@/shared/hooks/useHash.ts';
 
 export function App() {
@@ -15,5 +15,5 @@ export function App() {
     }
     document.getElementById(hash.slice(1))?.scrollIntoView();
   }, [hash, isDocs]);
-  return <SiteLayout>{isDocs ? <DocsPage hash={hash} /> : <LandingPage />}</SiteLayout>;
+  return <SiteFrame>{isDocs ? <DocsPage /> : <LandingPage />}</SiteFrame>;
 }
