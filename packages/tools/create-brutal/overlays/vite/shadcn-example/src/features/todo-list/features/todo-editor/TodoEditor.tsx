@@ -28,7 +28,7 @@ export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
       </label>
       <Input
         id={id}
-        className="h-auto flex-[1_1_10rem] bg-paper py-[0.55rem] text-base"
+        className="h-auto flex-[1_1_10rem] bg-paper py-[0.55rem] text-base text-ink"
         autoFocus
         aria-invalid={error !== undefined}
         aria-describedby={error === undefined ? undefined : errorId}
@@ -42,7 +42,7 @@ export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
         {t('cancel')}
       </Button>
       {error === undefined ? null : (
-        <p id={errorId} role="alert" className="basis-full border-3 border-ink bg-pink px-[0.6rem] py-[0.2rem] font-bold">
+        <p id={errorId} role="alert" className="basis-full border-3 border-ink bg-pink px-[0.6rem] py-[0.2rem] font-bold text-on-accent">
           {error}
         </p>
       )}

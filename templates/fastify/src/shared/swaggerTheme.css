@@ -12,7 +12,7 @@ body {
 
 .swagger-ui .topbar {
   border-bottom: 3px solid #111111;
-  background: #ffd23f;
+  background: #ffe98f;
 }
 
 .swagger-ui .topbar .download-url-wrapper .select-label,
@@ -44,12 +44,12 @@ body {
 }
 
 .swagger-ui .opblock.opblock-get .opblock-summary-method {
-  background: #2a5cff;
-  color: #fffdf5;
+  background: #b3c5ff;
+  color: #111111;
 }
 
 .swagger-ui .opblock.opblock-post .opblock-summary-method {
-  background: #ffd23f;
+  background: #ffe98f;
 }
 
 .swagger-ui .opblock.opblock-patch .opblock-summary-method {
@@ -57,7 +57,7 @@ body {
 }
 
 .swagger-ui .opblock.opblock-delete .opblock-summary-method {
-  background: #ff6ad5;
+  background: #ffb8e6;
 }
 
 .swagger-ui .btn {

@@ -4,7 +4,7 @@
 
 Project templates where the conventions are enforced by deterministic checks. When several people or AI agents write in the same codebase, a convention that is only written down drifts within days. Here each one is a lint rule, an import rule or a tree rule, and `npm run check` fails with a message that says what to change.
 
-Every template builds the same todo list, so the stacks can be compared side by side. The front ends share one neo-brutalist look (thick black borders, flat bright colors, hard shadows), and so does the Swagger UI of the API.
+Every template builds the same todo list, so the stacks can be compared side by side. The front ends share one neo-brutalist look (thick black borders, flat pastel colors, hard shadows), and so does the Swagger UI of the API.
 
 | Template | Stack | Status |
 |---|---|---|

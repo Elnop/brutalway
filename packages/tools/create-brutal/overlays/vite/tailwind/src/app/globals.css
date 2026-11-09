@@ -5,10 +5,11 @@
   --color-ink: #111111;
   --color-paper: #fffdf5;
   --color-page: #f4e9d8;
-  --color-yellow: #ffd23f;
-  --color-pink: #ff6ad5;
-  --color-blue: #2a5cff;
-  --color-on-blue: var(--color-paper);
+  --color-yellow: #ffe98f;
+  --color-pink: #ffb8e6;
+  --color-blue: #b3c5ff;
+  --color-on-accent: #111111;
+  --color-focus: #2a5cff;
 
   --font-*: initial;
   --font-sans: 'Space Grotesk', system-ui, sans-serif;
@@ -34,7 +35,7 @@
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-blue);
+    outline: 3px solid var(--color-focus);
     outline-offset: 3px;
   }
 }

@@ -7,6 +7,7 @@
   border: var(--border);
   background: var(--paper);
   box-shadow: var(--shadow-small);
+  color: var(--ink);
 }
 
 .check {
@@ -33,13 +34,13 @@
 }
 
 .check input:checked {
-  background: var(--ink);
+  background: var(--yellow);
 }
 
 .check input:checked::before {
   width: 0.9rem;
   height: 0.9rem;
-  background: var(--yellow);
+  background: var(--on-accent);
   content: '';
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3 3 7-7' fill='none' stroke='black' stroke-width='2.5'/%3E%3C/svg%3E") center / contain
     no-repeat;

@@ -14,10 +14,10 @@ export function TodoStats({ remaining, completed, onClearCompleted }: TodoStatsP
       <h2 id="todo-stats-title" className="sr-only font-display">
         {t('title')}
       </h2>
-      <p className="border-3 border-ink bg-blue px-[0.9rem] py-[0.4rem] font-bold text-on-blue shadow-hard-sm" aria-live="polite">
+      <p className="border-3 border-ink bg-blue px-[0.9rem] py-[0.4rem] font-bold text-on-accent shadow-hard-sm" aria-live="polite">
         {t('left', { count: remaining })}
       </p>
-      <p className="border-3 border-ink bg-paper px-[0.9rem] py-[0.4rem] font-bold shadow-hard-sm">{t('done', { count: completed })}</p>
+      <p className="border-3 border-ink bg-paper px-[0.9rem] py-[0.4rem] font-bold text-ink shadow-hard-sm">{t('done', { count: completed })}</p>
       <Button type="button" variant="destructive" className="ml-auto h-auto py-[0.55rem]" disabled={completed === 0} onClick={onClearCompleted}>
         {t('clear')}
       </Button>

@@ -15,7 +15,7 @@ export function TodoFilters({ filter, onChange }: TodoFiltersProps) {
         <button
           key={value}
           type="button"
-          className="button bg-paper px-[0.7rem] py-[0.3rem] text-[0.9rem] aria-pressed:bg-ink aria-pressed:text-paper"
+          className="button bg-paper px-[0.7rem] py-[0.3rem] text-[0.9rem] text-ink aria-pressed:bg-ink aria-pressed:text-paper"
           aria-pressed={filter === value}
           onClick={() => onChange(value)}
         >

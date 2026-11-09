@@ -84,18 +84,18 @@ const SHADCN_THEME = `  --shadow-hard-sm: 4px 4px 0 var(--color-ink);
   --color-background: var(--color-paper);
   --color-foreground: var(--color-ink);
   --color-primary: var(--color-yellow);
-  --color-primary-foreground: var(--color-ink);
+  --color-primary-foreground: var(--color-on-accent);
   --color-secondary: var(--color-paper);
   --color-secondary-foreground: var(--color-ink);
   --color-destructive: var(--color-pink);
   --color-accent: var(--color-yellow);
-  --color-accent-foreground: var(--color-ink);
+  --color-accent-foreground: var(--color-on-accent);
   --color-card: var(--color-paper);
   --color-card-foreground: var(--color-ink);
   --color-muted-foreground: var(--color-ink);
   --color-border: var(--color-ink);
   --color-input: var(--color-ink);
-  --color-ring: var(--color-blue);
+  --color-ring: var(--color-focus);
 }`;
 
 const SHADCN_SLOTS = `  [data-slot='button'] {
@@ -107,6 +107,10 @@ const SHADCN_SLOTS = `  [data-slot='button'] {
     &:active:not(:disabled) {
       transform: translate(4px, 4px);
       box-shadow: none;
+    }
+
+    &[data-variant='destructive'] {
+      color: var(--color-on-accent);
     }
   }
 
@@ -223,10 +227,10 @@ const DARK_TOKENS = `  color-scheme: light dark;
     --ink: #f4ede0;
     --paper: #1f1d1a;
     --page: #12110f;
-    --yellow: #806100;
-    --pink: #b02c86;
-    --blue: #3558e0;
-    --on-blue: var(--ink);
+    --yellow: #f2df8a;
+    --pink: #f0a6d6;
+    --blue: #9fb4f5;
+    --focus: #b3c5ff;
   }
 }
 `;
@@ -240,14 +244,14 @@ const DARK_TAILWIND_TOKENS = `  html {
       --color-ink: #f4ede0;
       --color-paper: #1f1d1a;
       --color-page: #12110f;
-      --color-yellow: #806100;
-      --color-pink: #b02c86;
-      --color-blue: #3558e0;
-      --color-on-blue: var(--color-ink);
+      --color-yellow: #f2df8a;
+      --color-pink: #f0a6d6;
+      --color-blue: #9fb4f5;
+      --color-focus: #b3c5ff;
     }
   }`;
 
-const DARK_THEME_README = `The colors follow the theme of the system. The \`@media (prefers-color-scheme: dark)\` block of \`src/app/globals.css\` gives each color token its dark value, so a component never picks a color per theme. The dark values keep text at a contrast of at least 4.5:1 on every color, and the accents at 3:1 against the page, which the focus outline needs.
+const DARK_THEME_README = `The colors follow the theme of the system. The \`@media (prefers-color-scheme: dark)\` block of \`src/app/globals.css\` gives each color token its dark value, so a component never picks a color per theme. The pastel accents carry dark text in both themes (\`on-accent\`) and the other surfaces the ink of the theme, so text keeps a contrast of at least 4.5:1 everywhere.
 
 `;
 

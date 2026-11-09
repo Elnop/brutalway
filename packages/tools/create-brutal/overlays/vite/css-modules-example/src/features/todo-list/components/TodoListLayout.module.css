@@ -3,6 +3,7 @@
   border: var(--border);
   background: var(--yellow);
   box-shadow: var(--shadow);
+  color: var(--on-accent);
 }
 
 .items {

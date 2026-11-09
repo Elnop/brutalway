@@ -8,7 +8,7 @@ export function TodoListLayout() {
   const { t } = useTranslation('todoList');
   const { todos, filter, add, setFilter, toggle, rename, remove } = useTodoList();
   return (
-    <section className="border-3 border-ink bg-yellow p-6 shadow-hard" aria-labelledby="todo-list-title">
+    <section className="border-3 border-ink bg-yellow p-6 text-on-accent shadow-hard" aria-labelledby="todo-list-title">
       <h2 id="todo-list-title" className="mb-5 font-display text-2xl leading-none font-bold uppercase">
         {t('title')}
       </h2>

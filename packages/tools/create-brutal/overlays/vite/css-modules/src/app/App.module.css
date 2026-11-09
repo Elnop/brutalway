@@ -16,6 +16,7 @@
   background: var(--pink);
   font-weight: 700;
   transform: rotate(-2deg);
+  color: var(--on-accent);
 }
 
 .body {

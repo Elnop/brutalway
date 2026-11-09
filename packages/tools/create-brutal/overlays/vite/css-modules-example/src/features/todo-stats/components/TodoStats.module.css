@@ -15,7 +15,7 @@
 
 .left {
   background: var(--blue);
-  color: var(--on-blue);
+  color: var(--on-accent);
 }
 
 .done {

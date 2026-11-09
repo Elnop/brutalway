@@ -10,7 +10,7 @@ export function TodoListLayout() {
   const { todos, filter, add, setFilter, toggle, rename, remove } = useTodoList();
   return (
     <section aria-labelledby="todo-list-title">
-      <Card className="bg-yellow shadow-hard">
+      <Card className="bg-yellow text-on-accent shadow-hard">
         <CardHeader>
           <h2 id="todo-list-title" className="font-display text-2xl leading-none font-bold uppercase">
             {t('title')}

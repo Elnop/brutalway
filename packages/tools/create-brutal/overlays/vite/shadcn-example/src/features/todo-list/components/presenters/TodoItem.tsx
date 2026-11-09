@@ -18,7 +18,7 @@ export function TodoItem({ todo, onToggle, onRename, onRemove }: TodoItemProps) 
 
   if (editing) {
     return (
-      <li className="flex flex-wrap items-center gap-2 border-3 border-ink bg-paper px-3 py-[0.6rem] shadow-hard-sm">
+      <li className="flex flex-wrap items-center gap-2 border-3 border-ink bg-paper px-3 py-[0.6rem] text-ink shadow-hard-sm">
         <TodoEditor
           title={todo.title}
           onSave={(title) => {
@@ -32,7 +32,7 @@ export function TodoItem({ todo, onToggle, onRename, onRemove }: TodoItemProps) 
   }
 
   return (
-    <li className="flex flex-wrap items-center gap-2 border-3 border-ink bg-paper px-3 py-[0.6rem] shadow-hard-sm">
+    <li className="flex flex-wrap items-center gap-2 border-3 border-ink bg-paper px-3 py-[0.6rem] text-ink shadow-hard-sm">
       <label className="flex min-w-40 flex-1 cursor-pointer items-center gap-3 font-bold">
         <Checkbox className="size-6 rounded-none" checked={todo.completed} onCheckedChange={() => onToggle(todo.id)} />
         <span className={todo.completed ? 'line-through decoration-3' : undefined}>{todo.title}</span>

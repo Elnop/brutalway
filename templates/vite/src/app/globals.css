@@ -2,10 +2,11 @@
   --ink: #111111;
   --paper: #fffdf5;
   --page: #f4e9d8;
-  --yellow: #ffd23f;
-  --pink: #ff6ad5;
-  --blue: #2a5cff;
-  --on-blue: var(--paper);
+  --yellow: #ffe98f;
+  --pink: #ffb8e6;
+  --blue: #b3c5ff;
+  --on-accent: #111111;
+  --focus: #2a5cff;
   --border: 3px solid var(--ink);
   --shadow: 6px 6px 0 var(--ink);
   --shadow-small: 4px 4px 0 var(--ink);
@@ -56,10 +57,11 @@ input:not([type='checkbox']) {
   padding: 0.55rem 0.75rem;
   border: var(--border);
   background: var(--paper);
+  color: var(--ink);
 }
 
 :focus-visible {
-  outline: 3px solid var(--blue);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
@@ -73,6 +75,7 @@ input:not([type='checkbox']) {
   transition:
     transform 80ms ease,
     box-shadow 80ms ease;
+  color: var(--ink);
 }
 
 .button:active:not(:disabled) {
@@ -98,15 +101,17 @@ input:not([type='checkbox']) {
 
 .button-yellow {
   background: var(--yellow);
+  color: var(--on-accent);
 }
 
 .button-pink {
   background: var(--pink);
+  color: var(--on-accent);
 }
 
 .button-blue {
   background: var(--blue);
-  color: var(--on-blue);
+  color: var(--on-accent);
 }
 
 .card {
@@ -114,6 +119,7 @@ input:not([type='checkbox']) {
   border: var(--border);
   background: var(--yellow);
   box-shadow: var(--shadow);
+  color: var(--on-accent);
 }
 
 .page {
@@ -134,6 +140,7 @@ input:not([type='checkbox']) {
   background: var(--pink);
   font-weight: 700;
   transform: rotate(-2deg);
+  color: var(--on-accent);
 }
 
 .page-body {
@@ -149,6 +156,7 @@ input:not([type='checkbox']) {
   border: var(--border);
   background: var(--pink);
   font-weight: 700;
+  color: var(--on-accent);
 }
 
 .visually-hidden {
