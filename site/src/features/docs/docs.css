@@ -171,6 +171,11 @@
   font-size: 0.875em;
 }
 
+.docs-article a:hover code {
+  border-color: currentColor;
+  background: transparent;
+}
+
 .docs-article :is(th, td) code {
   white-space: nowrap;
   overflow-wrap: normal;
