@@ -1,10 +1,15 @@
 import { useRef } from 'react';
+import type { ReactNode } from 'react';
 import { useHideOnScrollDown } from '@/features/site/features/header/useHideOnScrollDown.ts';
 import { DOCS_ROUTE, REPOSITORY_URL, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  actions: ReactNode;
+};
+
+export function SiteHeader({ actions }: SiteHeaderProps) {
   const headerRef = useRef<HTMLElement>(null);
   const isHidden = useHideOnScrollDown(headerRef);
   return (
@@ -32,6 +37,7 @@ export function SiteHeader() {
             <SiteLink href={REPOSITORY_URL}>GitHub</SiteLink>
           </div>
         </div>
+        <div className="site-header-actions">{actions}</div>
       </nav>
     </header>
   );

@@ -1,0 +1,37 @@
+.theme-switch {
+  display: flex;
+  border: var(--border);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.theme-switch button {
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.theme-switch button + button {
+  border-inline-start: var(--border);
+}
+
+.theme-switch button:hover {
+  background: var(--yellow);
+}
+
+.theme-switch button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+@media (max-width: 40rem) {
+  .theme-switch button {
+    padding: 0.2rem 0.375rem;
+    font-size: 0.6875rem;
+  }
+}

@@ -31,12 +31,12 @@ export function AuthorsSection() {
           <div className="authors-crowd">
             {authors.map((author) => (
               <div key={author.id} className={author.isAgent ? 'authors-tile tone-yellow' : 'authors-tile tone-paper'} style={{ opacity: author.opacity }}>
-                <img src={`${import.meta.env.BASE_URL}${author.isAgent ? 'agent' : 'human'}.svg`} alt="" width="24" height="24" />
+                <span className="authors-icon" style={{ maskImage: `url(${import.meta.env.BASE_URL}${author.isAgent ? 'agent' : 'human'}.svg)` }} />
               </div>
             ))}
           </div>
-          <svg width="40" height="56" viewBox="0 0 40 56">
-            <path d="M20 0 V48 M6 34 L20 50 L34 34" fill="none" stroke="#111111" strokeWidth="5" strokeLinecap="square" />
+          <svg className="authors-arrow" width="40" height="56" viewBox="0 0 40 56">
+            <path d="M20 0 V48 M6 34 L20 50 L34 34" fill="none" strokeWidth="5" strokeLinecap="square" />
           </svg>
           <code className="authors-check">npm run check</code>
         </div>
