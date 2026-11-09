@@ -1,7 +1,7 @@
 .authors {
   border-top: var(--border);
   background: var(--blue);
-  color: #ffffff;
+  color: var(--on-blue);
 }
 
 .authors-inner {

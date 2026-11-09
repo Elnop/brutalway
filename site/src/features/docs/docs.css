@@ -121,8 +121,8 @@
 .docs-article pre {
   padding: 1.25rem;
   border: var(--border);
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--screen);
+  color: var(--on-screen);
   font-size: 0.9375rem;
   overflow-x: auto;
 }
