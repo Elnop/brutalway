@@ -33,8 +33,7 @@
 }
 
 .docs-nav ul {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 0.25rem;
   margin-top: 0.5rem;
   padding: 0;
@@ -52,6 +51,26 @@
   margin-top: 0.25rem;
   padding-left: 0.75rem;
   border-left: 3px solid var(--ink);
+}
+
+.docs-nav-section {
+  overflow: clip;
+  overflow-clip-margin: 6px;
+  interpolate-size: allow-keywords;
+  transition:
+    height 200ms ease,
+    opacity 200ms ease;
+
+  @starting-style {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-nav-section {
+    transition: none;
+  }
 }
 
 .docs-nav-section a {
