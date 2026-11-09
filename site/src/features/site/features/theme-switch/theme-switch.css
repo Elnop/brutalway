@@ -1,7 +1,7 @@
 .theme-switch {
   display: flex;
   border: var(--border);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 3px 3px 0 light-dark(#111111, #f2df8a);
 }
 
 .theme-switch button {
