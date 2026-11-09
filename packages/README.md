@@ -2,6 +2,44 @@
 
 The rules and every shared config are published from this folder as `@brutalway/*`, next to `create-brutal`, the CLI behind `npm create brutal`. Each package has its own README. The templates use them through their configs, and each template README lists the tools it uses and how they map to the [common rules](../README.md#the-common-rules).
 
+## Tools
+
+| Package | What it does |
+|---|---|
+| [`create-brutal`](tools/create-brutal) | the CLI behind `npm create brutal` |
+| [`@brutalway/playwright-fixtures`](tools/playwright-fixtures) | fail a test when the page throws, axe-core violations as readable lines |
+
+## AI
+
+| Package | What it does |
+|---|---|
+| [`@brutalway/agent-hook`](tools/agent-hook) | Claude Code hook: oxlint on each edited file, stylelint on each edited stylesheet, alint and check-tree on each created file, errors sent back to the agent |
+
+## Checks
+
+### Source tree
+
+| Package | What it does |
+|---|---|
+| [`@brutalway/check-tree`](tools/check-tree) | no empty folder, no category folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component |
+
+### Docs
+
+| Package | What it does |
+|---|---|
+| [`@brutalway/check-doc-length`](tools/check-doc-length) | fails when a Markdown file is longer than 300 lines, and splits it into a folder along its headings, rewriting the links that point into it |
+| [`@brutalway/check-doc-links`](tools/check-doc-links) | fails when a Markdown doc links to a page that is gone, and skips the check offline |
+| [`@brutalway/check-doc-sources`](tools/check-doc-sources) | warns when a file cited by a Markdown doc changed and the doc did not |
+
+## Plugins
+
+The rules these plugins hold run in both Oxlint and ESLint.
+
+| Package | What it does |
+|---|---|
+| [`@brutalway/eslint-plugin-file-named-after-export`](plugins/eslint-plugin-file-named-after-export) | a file with a single export is named after it |
+| [`@brutalway/eslint-plugin-store-layout`](plugins/eslint-plugin-store-layout) | `xStore.ts` only exports `xStore` and `xActions` |
+
 ## Configs
 
 ### Oxlint
@@ -58,44 +96,6 @@ The rules and every shared config are published from this folder as `@brutalway/
 |---|---|
 | [`@brutalway/dependency-cruiser-config`](configs/dependency-cruiser-config) | the four layers, route, service and query rules for servers, no import between features, pure presenters, stores in their folder and holding no server data |
 | [`@brutalway/alint-config`](configs/alint-config) | category folders hold only their kind, pinned dependencies, doc links and anchors resolve |
-
-## Plugins
-
-The rules these plugins hold run in both Oxlint and ESLint.
-
-| Package | What it does |
-|---|---|
-| [`@brutalway/eslint-plugin-file-named-after-export`](plugins/eslint-plugin-file-named-after-export) | a file with a single export is named after it |
-| [`@brutalway/eslint-plugin-store-layout`](plugins/eslint-plugin-store-layout) | `xStore.ts` only exports `xStore` and `xActions` |
-
-## Checks
-
-### Source tree
-
-| Package | What it does |
-|---|---|
-| [`@brutalway/check-tree`](tools/check-tree) | no empty folder, no category folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component |
-
-### Docs
-
-| Package | What it does |
-|---|---|
-| [`@brutalway/check-doc-length`](tools/check-doc-length) | fails when a Markdown file is longer than 300 lines, and splits it into a folder along its headings, rewriting the links that point into it |
-| [`@brutalway/check-doc-links`](tools/check-doc-links) | fails when a Markdown doc links to a page that is gone, and skips the check offline |
-| [`@brutalway/check-doc-sources`](tools/check-doc-sources) | warns when a file cited by a Markdown doc changed and the doc did not |
-
-## AI
-
-| Package | What it does |
-|---|---|
-| [`@brutalway/agent-hook`](tools/agent-hook) | Claude Code hook: oxlint on each edited file, stylelint on each edited stylesheet, alint and check-tree on each created file, errors sent back to the agent |
-
-## Tools
-
-| Package | What it does |
-|---|---|
-| [`create-brutal`](tools/create-brutal) | the CLI behind `npm create brutal` |
-| [`@brutalway/playwright-fixtures`](tools/playwright-fixtures) | fail a test when the page throws, axe-core violations as readable lines |
 
 ## Internal
 
