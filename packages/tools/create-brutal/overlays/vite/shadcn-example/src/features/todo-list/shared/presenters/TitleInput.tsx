@@ -13,7 +13,12 @@ export function TitleInput({ id, label, error, ...input }: TitleInputProps) {
       <label htmlFor={id} className="sr-only">
         {label}
       </label>
-      <Input id={id} aria-invalid={error !== undefined} aria-describedby={error === undefined ? undefined : `${id}-error`} {...input} />
+      <Input
+        id={id}
+        aria-invalid={error !== undefined}
+        aria-describedby={error === undefined ? undefined : `${id}-error`}
+        {...input}
+      />
     </>
   );
 }

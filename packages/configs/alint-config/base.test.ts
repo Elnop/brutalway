@@ -5,7 +5,17 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
-const ALINT = join(import.meta.dirname, '..', '..', '..', 'node_modules', '@asamarts', 'alint', 'bin-platform', 'alint');
+const ALINT = join(
+  import.meta.dirname,
+  '..',
+  '..',
+  '..',
+  'node_modules',
+  '@asamarts',
+  'alint',
+  'bin-platform',
+  'alint',
+);
 
 const EXTENDS_BASE = 'version: 1\nextends:\n  - ./node_modules/@brutalway/alint-config/base.yml\n';
 
@@ -15,7 +25,10 @@ function repository(files: Record<string, string>): string {
   const root = mkdtempSync(join(tmpdir(), 'alint-'));
   spawnSync('git', ['init', '-q'], { cwd: root });
   mkdirSync(join(root, 'node_modules', '@brutalway', 'alint-config'), { recursive: true });
-  copyFileSync(join(import.meta.dirname, 'base.yml'), join(root, 'node_modules', '@brutalway', 'alint-config', 'base.yml'));
+  copyFileSync(
+    join(import.meta.dirname, 'base.yml'),
+    join(root, 'node_modules', '@brutalway', 'alint-config', 'base.yml'),
+  );
   const all: Record<string, string> = { '.alint.yml': EXTENDS_BASE, ...files };
   for (const [path, content] of Object.entries(all)) {
     mkdirSync(dirname(join(root, path)), { recursive: true });
@@ -36,7 +49,10 @@ function failingRules(root: string): string[] {
 describe('base.yml', () => {
   it('passes every rule on a tidy repository', () => {
     const root = repository({
-      'package.json': JSON.stringify({ dependencies: { react: '19.3.1' }, devDependencies: { vite: '8.3.5' } }),
+      'package.json': JSON.stringify({
+        dependencies: { react: '19.3.1' },
+        devDependencies: { vite: '8.3.5' },
+      }),
       'web/package.json': JSON.stringify({ dependencies: { zustand: '5.0.16' } }),
       'README.md': '# App\n\nSee [the checks](docs/checks.md#tree).\n',
       'docs/checks.md': '# Checks\n\n## Tree\n',
@@ -52,13 +68,21 @@ describe('base.yml', () => {
     const root = repository({
       'package.json': JSON.stringify({ dependencies: { react: '^19.3.1' } }),
       'web/package.json': JSON.stringify({ devDependencies: { vite: 'latest' } }),
-      'README.md': '# App\n\nSee [the checks](docs/missing.md) and [the tree](docs/checks.md#nowhere).\n',
+      'README.md':
+        '# App\n\nSee [the checks](docs/missing.md) and [the tree](docs/checks.md#nowhere).\n',
       'docs/checks.md': '# Checks\n',
       'src/styles/helper.ts': '',
       'src/types/types.ts': '',
       'src/configs/Logo.tsx': '',
     });
-    assert.deepEqual(failingRules(root), ['configs-only-config-files', 'doc-fragments-resolve', 'doc-links-resolve', 'exact-dependency-versions', 'styles-only-css', 'types-only-types-files']);
+    assert.deepEqual(failingRules(root), [
+      'configs-only-config-files',
+      'doc-fragments-resolve',
+      'doc-links-resolve',
+      'exact-dependency-versions',
+      'styles-only-css',
+      'types-only-types-files',
+    ]);
   });
 
   it('runs the .alint.yml of the README, base rules and the local markdown_paths_resolve rule together', () => {
@@ -69,7 +93,10 @@ describe('base.yml', () => {
       'src/main.ts': '',
     });
     assert.deepEqual(failingRules(root), []);
-    writeFileSync(join(root, 'README.md'), '# App\n\nThe entry is `src/gone.ts`, see [the checks](docs/missing.md).\n');
+    writeFileSync(
+      join(root, 'README.md'),
+      '# App\n\nThe entry is `src/gone.ts`, see [the checks](docs/missing.md).\n',
+    );
     assert.deepEqual(failingRules(root), ['doc-links-resolve', 'doc-paths-resolve']);
   });
 });

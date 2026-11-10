@@ -29,8 +29,8 @@ export function TodoItem({ todo, onToggle, onRename, onRemove }: TodoItemProps) 
 
   return (
     <li className="flex flex-wrap items-center gap-2 border-3 border-ink bg-paper px-3 py-[0.6rem] text-ink shadow-hard-sm">
-      <TodoItemCheck title={todo.title} completed={todo.completed} onToggle={() => onToggle(todo.id)} />
-      <TodoItemActions title={todo.title} onEdit={() => setEditing(true)} onRemove={() => onRemove(todo.id)} />
+      <TodoItemCheck todo={todo} onToggle={onToggle} />
+      <TodoItemActions todo={todo} onEdit={() => setEditing(true)} onRemove={onRemove} />
     </li>
   );
 }

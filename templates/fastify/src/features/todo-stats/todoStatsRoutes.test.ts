@@ -11,10 +11,18 @@ describe('todo stats routes', () => {
     const todos = createTodosQueries(openDatabase(':memory:'));
     const app = createServer({ logLevel: 'silent' });
     await app.register(todoStatsRoutes(createTodoStatsService({ todos })));
-    assert.deepEqual((await app.inject({ method: 'GET', url: '/stats' })).json(), { total: 0, completed: 0, remaining: 0 });
+    assert.deepEqual((await app.inject({ method: 'GET', url: '/stats' })).json(), {
+      total: 0,
+      completed: 0,
+      remaining: 0,
+    });
     for (const title of ['a', 'b', 'c']) todos.insert({ title });
     todos.update(1, { completed: true });
-    assert.deepEqual((await app.inject({ method: 'GET', url: '/stats' })).json(), { total: 3, completed: 1, remaining: 2 });
+    assert.deepEqual((await app.inject({ method: 'GET', url: '/stats' })).json(), {
+      total: 3,
+      completed: 1,
+      remaining: 2,
+    });
     await app.close();
   });
 });

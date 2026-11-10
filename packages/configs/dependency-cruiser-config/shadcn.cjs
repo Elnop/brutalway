@@ -4,7 +4,8 @@ module.exports = {
     {
       name: 'third-party-not-to-src',
       severity: 'error',
-      comment: 'third-party/ holds code copied from a registry, which knows nothing about the app: it never imports src/. Wrap the primitive in src/ instead.',
+      comment:
+        'third-party/ holds code copied from a registry, which knows nothing about the app: it never imports src/. Wrap the primitive in src/ instead.',
       from: { path: '^third-party/' },
       to: { path: '^src/' },
     },

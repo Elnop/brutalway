@@ -18,8 +18,13 @@ function isExternal(url: string): boolean {
 export function movedUrl(url: string, from: string, moved: MovedDoc): string | undefined {
   if (isExternal(url)) return undefined;
   const [pathPart = '', anchor] = url.split('#');
-  const resolved = pathPart === '' ? moved.docPath : posix.normalize(posix.join(posix.dirname(moved.docPath), pathPart));
-  if (resolved !== moved.docPath) return `${posix.relative(posix.dirname(from), resolved)}${anchor === undefined ? '' : `#${anchor}`}`;
+  const resolved =
+    pathPart === ''
+      ? moved.docPath
+      : posix.normalize(posix.join(posix.dirname(moved.docPath), pathPart));
+  if (resolved !== moved.docPath) {
+    return `${posix.relative(posix.dirname(from), resolved)}${anchor === undefined ? '' : `#${anchor}`}`;
+  }
   const target = anchor === undefined ? undefined : moved.targets.get(anchor);
   return linkTo(from, target ?? { path: moved.indexPath, slug: anchor });
 }
@@ -28,9 +33,16 @@ export function rewrittenLinks(other: WrittenFile, moved: MovedDoc): WrittenFile
   const otherEdits = linkEdits(other.content, markdownTree(other.content), (url) => {
     if (isExternal(url)) return undefined;
     const [pathPart = '', anchor] = url.split('#');
-    if (pathPart === '' || posix.normalize(posix.join(posix.dirname(other.path), pathPart)) !== moved.docPath) return undefined;
+    if (
+      pathPart === '' ||
+      posix.normalize(posix.join(posix.dirname(other.path), pathPart)) !== moved.docPath
+    ) {
+      return undefined;
+    }
     const target = anchor === undefined ? undefined : moved.targets.get(anchor);
     return linkTo(other.path, target ?? { path: moved.indexPath, slug: anchor });
   });
-  return otherEdits.length === 0 ? [] : [{ path: other.path, content: applyEdits(other.content, otherEdits) }];
+  return otherEdits.length === 0
+    ? []
+    : [{ path: other.path, content: applyEdits(other.content, otherEdits) }];
 }

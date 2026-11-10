@@ -3,7 +3,13 @@ import { applyEdits } from '#src/features/split/lib/applyEdits.ts';
 import { linkEdits } from '#src/features/split/lib/linkEdits.ts';
 import { movedUrl } from '#src/features/split/lib/movedLinks.ts';
 import { pieceAt } from '#src/features/split/lib/pieceAt.ts';
-import type { MovedDoc, Piece, Section, SplitSource, TextEdit } from '#src/features/split/SplitTypes.ts';
+import type {
+  MovedDoc,
+  Piece,
+  Section,
+  SplitSource,
+  TextEdit,
+} from '#src/features/split/SplitTypes.ts';
 import type { WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
 
 function headingEdit(source: string, section: Section, shift: number): TextEdit | undefined {
@@ -20,7 +26,9 @@ function headingEdit(source: string, section: Section, shift: number): TextEdit 
 }
 
 function childList(piece: Piece): string {
-  return piece.children.map((child) => `- [${child.title}](${posix.relative(posix.dirname(piece.path), child.path)})`).join('\n');
+  return piece.children
+    .map((child) => `- [${child.title}](${posix.relative(posix.dirname(piece.path), child.path)})`)
+    .join('\n');
 }
 
 function pieceContent(source: string, piece: Piece, edits: TextEdit[]): string {
@@ -39,7 +47,12 @@ function headingEdits(source: string, sections: Section[], pieces: Piece[]): Tex
 export function writtenPieces(split: SplitSource, moved: MovedDoc): WrittenFile[] {
   const edits = [
     ...headingEdits(split.source, split.sections, split.pieces),
-    ...linkEdits(split.source, split.tree, (url, offset) => movedUrl(url, pieceAt(split.pieces, offset)?.path ?? moved.indexPath, moved)),
+    ...linkEdits(split.source, split.tree, (url, offset) =>
+      movedUrl(url, pieceAt(split.pieces, offset)?.path ?? moved.indexPath, moved),
+    ),
   ];
-  return split.pieces.map((piece) => ({ path: piece.path, content: pieceContent(split.source, piece, edits) }));
+  return split.pieces.map((piece) => ({
+    path: piece.path,
+    content: pieceContent(split.source, piece, edits),
+  }));
 }

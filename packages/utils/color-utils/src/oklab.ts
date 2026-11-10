@@ -21,7 +21,9 @@ export function oklab(value: string): Oklab | undefined {
   if (call === null) return undefined;
   const [first, second, third] = channels(call[2] ?? '');
   if (first === undefined || second === undefined || third === undefined) return undefined;
-  return call[1] === 'oklch' ? fromOklch(first, second, third) : fromRgbChannels(call[2] ?? '', first, second, third);
+  return call[1] === 'oklch'
+    ? fromOklch(first, second, third)
+    : fromRgbChannels(call[2] ?? '', first, second, third);
 }
 
 export function oklabDistance(left: Oklab, right: Oklab): number {

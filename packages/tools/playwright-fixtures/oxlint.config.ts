@@ -4,5 +4,10 @@ import { defineConfig } from 'oxlint';
 
 export default defineConfig({
   extends: [nodeConfig, nodeTestConfig],
-  overrides: [{ files: ['src/playwrightFixtures.ts'], rules: { 'export-placement/no-restricted-syntax': 'off' } }],
+  overrides: [
+    {
+      files: ['src/playwrightFixtures.ts'],
+      rules: { 'export-placement/no-restricted-syntax': 'off' },
+    },
+  ],
 });

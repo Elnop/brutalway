@@ -9,13 +9,21 @@ export default mergeConfig(
       passWithNoTests: true,
       setupFiles: ['vitest.setup.ts'],
       projects: [
-        { extends: true, test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] } },
+        {
+          extends: true,
+          test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] },
+        },
         {
           extends: true,
           test: {
             name: 'component',
             include: ['src/**/*.test.tsx'],
-            browser: { enabled: true, provider: playwright(), headless: true, instances: [{ browser: 'chromium' }] },
+            browser: {
+              enabled: true,
+              provider: playwright(),
+              headless: true,
+              instances: [{ browser: 'chromium' }],
+            },
           },
         },
       ],

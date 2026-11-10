@@ -6,16 +6,26 @@ import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 const FIXTURES = fileURLToPath(new URL('../fixtures', import.meta.url));
-const STYLELINT_BIN = join(createRequire(import.meta.url).resolve('stylelint/package.json'), '..', 'bin', 'stylelint.mjs');
+const STYLELINT_BIN = join(
+  createRequire(import.meta.url).resolve('stylelint/package.json'),
+  '..',
+  'bin',
+  'stylelint.mjs',
+);
 
 type Warning = { line: number; rule: string; text: string };
 type FileResult = { source: string; warnings: Warning[] };
 
 function lintFixtures(): string[] {
-  const run = spawnSync(process.execPath, [STYLELINT_BIN, 'src/**/*.css', '--formatter', 'json'], { cwd: FIXTURES, encoding: 'utf8' });
+  const run = spawnSync(process.execPath, [STYLELINT_BIN, 'src/**/*.css', '--formatter', 'json'], {
+    cwd: FIXTURES,
+    encoding: 'utf8',
+  });
   const results: FileResult[] = JSON.parse(run.stderr.trim() === '' ? run.stdout : run.stderr);
   return results
-    .flatMap(({ source, warnings }) => warnings.map(({ line, text }) => `${source.slice(FIXTURES.length + 1)}:${line} ${text}`))
+    .flatMap(({ source, warnings }) =>
+      warnings.map(({ line, text }) => `${source.slice(FIXTURES.length + 1)}:${line} ${text}`),
+    )
     .toSorted((left, right) => left.localeCompare(right, 'en', { numeric: true }));
 }
 

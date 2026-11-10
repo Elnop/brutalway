@@ -20,7 +20,12 @@ function normalizedTitle(title: unknown): string | undefined {
 const LIST_ROUTES: Record<string, (list: MockList, url: URL, body: Body) => MockAnswer> = {
   'GET /todos': (list, url) => {
     const filter = url.searchParams.get('filter') ?? 'all';
-    return { status: 200, body: list.todos.filter((todo) => filter === 'all' || todo.completed === (filter === 'completed')) };
+    return {
+      status: 200,
+      body: list.todos.filter(
+        (todo) => filter === 'all' || todo.completed === (filter === 'completed'),
+      ),
+    };
   },
   'POST /todos': (list, _url, body) => {
     const title = normalizedTitle(body['title']);
@@ -38,7 +43,10 @@ const LIST_ROUTES: Record<string, (list: MockList, url: URL, body: Body) => Mock
   },
   'GET /stats': (list) => {
     const completed = list.todos.filter((todo) => todo.completed).length;
-    return { status: 200, body: { total: list.todos.length, completed, remaining: list.todos.length - completed } };
+    return {
+      status: 200,
+      body: { total: list.todos.length, completed, remaining: list.todos.length - completed },
+    };
   },
 };
 

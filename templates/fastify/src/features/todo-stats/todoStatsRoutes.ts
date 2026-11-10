@@ -4,6 +4,8 @@ import type { TodoStatsService } from '#src/features/todo-stats/TodoStatsTypes.t
 
 export function todoStatsRoutes(service: TodoStatsService): FastifyPluginAsyncZod {
   return async (app) => {
-    app.get('/stats', { schema: { tags: ['stats'], response: { 200: StatsSchema } } }, async () => service.stats());
+    app.get('/stats', { schema: { tags: ['stats'], response: { 200: StatsSchema } } }, async () =>
+      service.stats(),
+    );
   };
 }

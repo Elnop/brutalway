@@ -15,10 +15,17 @@ function replaceText(text: string, search: string, replacement: string, all: boo
   return all ? text.replaceAll(search, () => replacement) : text.replace(search, () => replacement);
 }
 
-function insertText(text: string, anchor: string, insertion: string, position: 'after' | 'before'): string {
+function insertText(
+  text: string,
+  anchor: string,
+  insertion: string,
+  position: 'after' | 'before',
+): string {
   const count = text.split(anchor).length - 1;
   if (count !== 1) throw new Error(`expected the anchor "${anchor}" once, found it ${count} times`);
-  return text.replace(anchor, () => (position === 'after' ? `${anchor}${insertion}` : `${insertion}${anchor}`));
+  return text.replace(anchor, () =>
+    position === 'after' ? `${anchor}${insertion}` : `${insertion}${anchor}`,
+  );
 }
 
 export function applyFileEdit(text: string, edit: FileEdit): string {

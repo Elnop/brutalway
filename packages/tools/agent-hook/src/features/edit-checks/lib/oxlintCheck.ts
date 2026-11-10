@@ -15,5 +15,10 @@ function oxlintFolder(root: string, file: string) {
 
 export function oxlintCheck(root: string, file: string): HookCheck {
   const cwd = oxlintFolder(root, file);
-  return { label: `oxlint found problems in ${relative(root, file)}`, command: 'oxlint', args: ['--type-aware', relative(cwd, file)], cwd };
+  return {
+    label: `oxlint found problems in ${relative(root, file)}`,
+    command: 'oxlint',
+    args: ['--type-aware', relative(cwd, file)],
+    cwd,
+  };
 }

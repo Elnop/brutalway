@@ -17,29 +17,50 @@ function cancelOnEscape(onCancel: () => void) {
   };
 }
 
+type TodoEditorActionsProps = {
+  onCancel: () => void;
+};
+
+function TodoEditorActions({ onCancel }: TodoEditorActionsProps) {
+  const { t } = useTranslation('todoList');
+
+  return (
+    <>
+      <button
+        type="submit"
+        className="button bg-blue px-[0.7rem] py-[0.3rem] text-[0.9rem] text-on-accent"
+      >
+        {t('save')}
+      </button>
+      <button
+        type="button"
+        className="button bg-paper px-[0.7rem] py-[0.3rem] text-[0.9rem] text-ink"
+        onClick={onCancel}
+      >
+        {t('cancel')}
+      </button>
+    </>
+  );
+}
+
 export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
   const { t } = useTranslation('todoList');
   const id = useId();
-  const { field, error, submit } = useTitleForm({ initialTitle: title, clearOnSubmit: false, onSubmit: onSave });
+  const form = useTitleForm({ initialTitle: title, clearOnSubmit: false, onSubmit: onSave });
 
   return (
-    <form className="flex min-w-0 flex-[1_1_100%] flex-wrap gap-2" onSubmit={submit}>
+    <form className="flex min-w-0 flex-[1_1_100%] flex-wrap gap-2" onSubmit={form.submit}>
       <TitleInput
         id={id}
         className="min-w-0 flex-[1_1_10rem] border-3 border-ink bg-paper px-3 py-[0.55rem] text-ink"
         label={t('rename', { title })}
-        error={error}
+        error={form.error}
         autoFocus
-        {...field}
+        {...form.field}
         onKeyDown={cancelOnEscape(onCancel)}
       />
-      <button type="submit" className="button bg-blue px-[0.7rem] py-[0.3rem] text-[0.9rem] text-on-accent">
-        {t('save')}
-      </button>
-      <button type="button" className="button bg-paper px-[0.7rem] py-[0.3rem] text-[0.9rem] text-ink" onClick={onCancel}>
-        {t('cancel')}
-      </button>
-      <TitleError id={id} error={error} />
+      <TodoEditorActions onCancel={onCancel} />
+      <TitleError id={id} error={form.error} />
     </form>
   );
 }

@@ -1,4 +1,8 @@
-export async function inPool<T, R>(items: T[], size: number, task: (item: T) => Promise<R>): Promise<R[]> {
+export async function inPool<T, R>(
+  items: T[],
+  size: number,
+  task: (item: T) => Promise<R>,
+): Promise<R[]> {
   const results: R[] = [];
   let next = 0;
   async function work(): Promise<void> {

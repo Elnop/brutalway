@@ -5,7 +5,8 @@ import { completeTodo } from '#src/features/complete-todo/completeTodo.ts';
 import { listTodos } from '#src/features/list-todos/listTodos.ts';
 import type { Todo } from '#src/shared-features/todos/TodosTypes.ts';
 
-const USAGE = 'Usage: todo add <text> | todo list | todo done <id>, with --file <path> (default: todos.json)';
+const USAGE =
+  'Usage: todo add <text> | todo list | todo done <id>, with --file <path> (default: todos.json)';
 
 function line(todo: Todo): string {
   return `${todo.id} [${todo.done ? 'x' : ' '}] ${todo.text}`;
@@ -13,7 +14,9 @@ function line(todo: Todo): string {
 
 function todoId(text: string | undefined): number {
   const id = Number(text);
-  if (!Number.isInteger(id) || id < 1) throw new Error(`${text ?? 'Nothing'} is not a todo id. ${USAGE}`);
+  if (!Number.isInteger(id) || id < 1) {
+    throw new Error(`${text ?? 'Nothing'} is not a todo id. ${USAGE}`);
+  }
   return id;
 }
 
@@ -27,7 +30,10 @@ function output(command: string | undefined, args: string[], file: string): stri
 }
 
 try {
-  const { values, positionals } = parseArgs({ allowPositionals: true, options: { file: { type: 'string', default: 'todos.json' } } });
+  const { values, positionals } = parseArgs({
+    allowPositionals: true,
+    options: { file: { type: 'string', default: 'todos.json' } },
+  });
   const [command, ...args] = positionals;
   process.stdout.write(output(command, args, values.file));
 } catch (error) {

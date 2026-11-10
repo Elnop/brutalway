@@ -20,11 +20,15 @@ function changedOrUndefined(): Set<string> | undefined {
 
 const changed = changedOrUndefined();
 if (changed === undefined) {
-  process.stderr.write(`check-doc-sources: no git history to compare with${values.base === undefined ? '' : ` ${values.base}`}, nothing checked.\n`);
+  process.stderr.write(
+    `check-doc-sources: no git history to compare with${values.base === undefined ? '' : ` ${values.base}`}, nothing checked.\n`,
+  );
 } else {
   const settings = readSettings(cwd);
   const cited = markdownFiles(cwd, settings).flatMap((doc) => citations(cwd, doc));
   for (const citation of staleCitations(cited, changed, settings.ignoreSources)) {
-    process.stderr.write(`${citation.file} changed, and ${citation.doc}:${citation.line} cites it but did not change: check that what it says about it still holds.\n`);
+    process.stderr.write(
+      `${citation.file} changed, and ${citation.doc}:${citation.line} cites it but did not change: check that what it says about it still holds.\n`,
+    );
   }
 }

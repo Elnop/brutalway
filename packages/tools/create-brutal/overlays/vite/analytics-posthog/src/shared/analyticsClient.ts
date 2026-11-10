@@ -5,7 +5,11 @@ const host: unknown = import.meta.env['VITE_POSTHOG_HOST'];
 const enabled = typeof key === 'string' && key !== '';
 
 if (enabled) {
-  posthog.init(key, { api_host: typeof host === 'string' && host !== '' ? host : 'https://eu.i.posthog.com', autocapture: false, disable_external_dependency_loading: true });
+  posthog.init(key, {
+    api_host: typeof host === 'string' && host !== '' ? host : 'https://eu.i.posthog.com',
+    autocapture: false,
+    disable_external_dependency_loading: true,
+  });
 }
 
 export const analyticsClient = {

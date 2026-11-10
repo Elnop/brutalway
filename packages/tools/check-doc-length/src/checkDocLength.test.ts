@@ -6,7 +6,8 @@ import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
 const CLI = join(import.meta.dirname, 'checkDocLength.ts');
-const GUIDE = '# Guide\n\nRead [usage](#usage).\n\n## Setup\n\nInstall it.\n\n### Notes\n\nFirst notes.\n\n## Usage\n\nRun it.\n';
+const GUIDE =
+  '# Guide\n\nRead [usage](#usage).\n\n## Setup\n\nInstall it.\n\n### Notes\n\nFirst notes.\n\n## Usage\n\nRun it.\n';
 
 function project(files: Record<string, string>): string {
   const root = mkdtempSync(join(tmpdir(), 'check-doc-length-'));
@@ -17,7 +18,10 @@ function project(files: Record<string, string>): string {
   return root;
 }
 
-function run(cwd: string, args: string[] = []): { status: number | null; stdout: string; stderr: string } {
+function run(
+  cwd: string,
+  args: string[] = [],
+): { status: number | null; stdout: string; stderr: string } {
   const result = spawnSync(process.execPath, [CLI, ...args], { cwd, encoding: 'utf8' });
   return { status: result.status, stdout: result.stdout, stderr: result.stderr };
 }
@@ -56,7 +60,8 @@ describe('check-doc-length', () => {
     assert.deepEqual(run(root), {
       status: 1,
       stdout: '',
-      stderr: 'a.md has 3 lines, more than 2: run check-doc-length split a.md to see how it would be split along its headings, then add --write.\n',
+      stderr:
+        'a.md has 3 lines, more than 2: run check-doc-length split a.md to see how it would be split along its headings, then add --write.\n',
     });
     assert.deepEqual(run(root, ['--max-lines', '3']), { status: 0, stdout: '', stderr: '' });
   });
@@ -65,7 +70,8 @@ describe('check-doc-length', () => {
     const root = project({ 'docs/guide.md': GUIDE });
     assert.deepEqual(run(root, ['split', 'docs/guide.md']), {
       status: 0,
-      stdout: 'docs/guide/README.md (6 lines)\ndocs/guide/setup.md (7 lines)\ndocs/guide/usage.md (3 lines)\n\nNothing written. Run it again with --write to replace docs/guide.md with these files.\n',
+      stdout:
+        'docs/guide/README.md (6 lines)\ndocs/guide/setup.md (7 lines)\ndocs/guide/usage.md (3 lines)\n\nNothing written. Run it again with --write to replace docs/guide.md with these files.\n',
       stderr: '',
     });
     assert.equal(readFileSync(join(root, 'docs/guide.md'), 'utf8'), GUIDE);
@@ -73,31 +79,58 @@ describe('check-doc-length', () => {
   });
 
   it('writes the split with --write, removes the doc and rewrites the links into it', () => {
-    const root = project({ 'docs/guide.md': GUIDE, 'README.md': 'See [usage](docs/guide.md#usage).\n' });
+    const root = project({
+      'docs/guide.md': GUIDE,
+      'README.md': 'See [usage](docs/guide.md#usage).\n',
+    });
     assert.deepEqual(run(root, ['split', 'docs/guide.md', '--write']), {
       status: 0,
-      stdout: 'docs/guide/README.md (6 lines)\ndocs/guide/setup.md (7 lines)\ndocs/guide/usage.md (3 lines)\nREADME.md (1 lines)\n',
+      stdout:
+        'docs/guide/README.md (6 lines)\ndocs/guide/setup.md (7 lines)\ndocs/guide/usage.md (3 lines)\nREADME.md (1 lines)\n',
       stderr: '',
     });
     assert.equal(existsSync(join(root, 'docs/guide.md')), false);
-    assert.equal(readFileSync(join(root, 'docs/guide/README.md'), 'utf8'), '# Guide\n\nRead [usage](usage.md).\n\n- [Setup](setup.md)\n- [Usage](usage.md)\n');
-    assert.equal(readFileSync(join(root, 'docs/guide/setup.md'), 'utf8'), '# Setup\n\nInstall it.\n\n## Notes\n\nFirst notes.\n');
-    assert.equal(readFileSync(join(root, 'README.md'), 'utf8'), 'See [usage](docs/guide/usage.md).\n');
+    assert.equal(
+      readFileSync(join(root, 'docs/guide/README.md'), 'utf8'),
+      '# Guide\n\nRead [usage](usage.md).\n\n- [Setup](setup.md)\n- [Usage](usage.md)\n',
+    );
+    assert.equal(
+      readFileSync(join(root, 'docs/guide/setup.md'), 'utf8'),
+      '# Setup\n\nInstall it.\n\n## Notes\n\nFirst notes.\n',
+    );
+    assert.equal(
+      readFileSync(join(root, 'README.md'), 'utf8'),
+      'See [usage](docs/guide/usage.md).\n',
+    );
   });
 
   it('applies --file-depth, --order-prefix and --index-name to the split', () => {
     const root = project({ 'guide.md': GUIDE });
-    assert.deepEqual(run(root, ['split', 'guide.md', '--file-depth', '3', '--order-prefix', '--index-name', 'index.md']), {
-      status: 0,
-      stdout:
-        'guide/index.md (6 lines)\nguide/01-setup/index.md (5 lines)\nguide/01-setup/01-notes.md (3 lines)\nguide/02-usage.md (3 lines)\n\nNothing written. Run it again with --write to replace guide.md with these files.\n',
-      stderr: '',
-    });
+    assert.deepEqual(
+      run(root, [
+        'split',
+        'guide.md',
+        '--file-depth',
+        '3',
+        '--order-prefix',
+        '--index-name',
+        'index.md',
+      ]),
+      {
+        status: 0,
+        stdout:
+          'guide/index.md (6 lines)\nguide/01-setup/index.md (5 lines)\nguide/01-setup/01-notes.md (3 lines)\nguide/02-usage.md (3 lines)\n\nNothing written. Run it again with --write to replace guide.md with these files.\n',
+        stderr: '',
+      },
+    );
   });
 
   it('fails on a split of a file that is not a Markdown file of the project', () => {
     const result = run(project({ 'a.md': '# A\n' }), ['split', 'missing.md']);
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /Error: missing\.md is not one of the Markdown files of this project/u);
+    assert.match(
+      result.stderr,
+      /Error: missing\.md is not one of the Markdown files of this project/u,
+    );
   });
 });

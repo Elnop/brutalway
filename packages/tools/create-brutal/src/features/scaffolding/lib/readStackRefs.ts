@@ -6,5 +6,9 @@ export function readStackRefs(): Map<string, string> {
   if (!existsSync(STACK_REFS_URL)) return new Map();
   const parsed: unknown = JSON.parse(readFileSync(STACK_REFS_URL, 'utf8'));
   if (!isRecord(parsed)) throw new Error('stackRefs.json is not an object');
-  return new Map(Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === 'string'));
+  return new Map(
+    Object.entries(parsed).filter(
+      (entry): entry is [string, string] => typeof entry[1] === 'string',
+    ),
+  );
 }

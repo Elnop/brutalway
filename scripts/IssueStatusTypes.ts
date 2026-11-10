@@ -30,5 +30,11 @@ export type IssueNode = {
   authorAssociation: string;
   labels: { nodes: { name: string }[] };
   timelineItems: { nodes: { createdAt?: string; label?: { name: string } | null }[] };
-  projectItems: { nodes: { id: string; project: { id: string }; fieldValueByName: { name: string; updatedAt: string } | null }[] };
+  projectItems: {
+    nodes: {
+      id: string;
+      project: { id: string };
+      fieldValueByName: { name: string; updatedAt: string } | null;
+    }[];
+  };
 };

@@ -9,6 +9,8 @@ test('axe finds no violation on the first screen', async ({ page }) => {
 test('the first screen never scrolls sideways at 320 px', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await openApp(page);
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
   expect(overflow).toBe(0);
 });

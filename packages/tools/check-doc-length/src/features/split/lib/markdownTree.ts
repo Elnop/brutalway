@@ -6,5 +6,8 @@ import { frontmatter } from 'micromark-extension-frontmatter';
 import { gfm } from 'micromark-extension-gfm';
 
 export function markdownTree(source: string): Root {
-  return fromMarkdown(source, { extensions: [frontmatter(['yaml']), gfm()], mdastExtensions: [frontmatterFromMarkdown(['yaml']), gfmFromMarkdown()] });
+  return fromMarkdown(source, {
+    extensions: [frontmatter(['yaml']), gfm()],
+    mdastExtensions: [frontmatterFromMarkdown(['yaml']), gfmFromMarkdown()],
+  });
 }

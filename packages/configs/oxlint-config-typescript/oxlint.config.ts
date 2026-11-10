@@ -7,6 +7,17 @@ export default defineConfig({
   plugins: ['typescript', 'import', 'oxc', 'unicorn', 'node'],
   env: { node: true, es2024: true },
   rules: {
-    'no-restricted-imports': ['error', { patterns: [{ regex: '^\\.\\.?/', message: 'Relative imports are not allowed: import through the #src/ alias declared in package.json "imports".' }] }],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            regex: '^\\.\\.?/',
+            message:
+              'Relative imports are not allowed: import through the #src/ alias declared in package.json "imports".',
+          },
+        ],
+      },
+    ],
   },
 });

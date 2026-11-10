@@ -6,8 +6,12 @@ import { errorMessage } from '#src/shared/lib/errorMessage.ts';
 import type { FileEdit } from '#src/shared-features/stack/StackTypes.ts';
 
 function withProjectName(edit: FileEdit, projectName: string): FileEdit {
-  if ('with' in edit) return { ...edit, with: edit.with.replaceAll(PROJECT_NAME_TOKEN, projectName) };
-  if ('insert' in edit) return { ...edit, insert: edit.insert.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+  if ('with' in edit) {
+    return { ...edit, with: edit.with.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+  }
+  if ('insert' in edit) {
+    return { ...edit, insert: edit.insert.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+  }
   return edit;
 }
 

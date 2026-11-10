@@ -1,4 +1,8 @@
-import type { AnswerValue, ChoiceOption, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import type {
+  AnswerValue,
+  ChoiceOption,
+  StackOption,
+} from '#src/shared-features/stack/StackTypes.ts';
 
 export function isChoice(option: StackOption): option is ChoiceOption {
   return 'values' in option;

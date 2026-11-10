@@ -14,7 +14,12 @@ describe('externalLinks', () => {
     ].join('\n');
     assert.deepEqual(
       externalLinks({ path: 'README.md', content }).map((link) => `${link.line} ${link.url}`),
-      ['1 https://example.dev/docs', '1 http://example.dev/logo.png', '3 https://example.dev/auto', '5 https://example.dev/ref'],
+      [
+        '1 https://example.dev/docs',
+        '1 http://example.dev/logo.png',
+        '3 https://example.dev/auto',
+        '5 https://example.dev/ref',
+      ],
     );
   });
 });

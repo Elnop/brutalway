@@ -5,5 +5,11 @@ import { useTodoStatsQuery } from '@/shared-features/todos/hooks/useTodoStatsQue
 export function TodoStatsContainer() {
   const stats = useTodoStatsQuery().data;
   const { clearCompleted } = useTodoMutations();
-  return <TodoStats remaining={stats?.remaining ?? 0} completed={stats?.completed ?? 0} onClearCompleted={() => clearCompleted()} />;
+  return (
+    <TodoStats
+      remaining={stats?.remaining ?? 0}
+      completed={stats?.completed ?? 0}
+      onClearCompleted={() => clearCompleted()}
+    />
+  );
 }

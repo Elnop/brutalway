@@ -7,7 +7,10 @@ import { describe, it } from 'node:test';
 import { changedFiles } from '#src/shared/changedFiles.ts';
 
 function git(cwd: string, ...args: string[]): void {
-  execFileSync('git', ['-c', 'user.name=test', '-c', 'user.email=test@example.com', ...args], { cwd, stdio: 'ignore' });
+  execFileSync('git', ['-c', 'user.name=test', '-c', 'user.email=test@example.com', ...args], {
+    cwd,
+    stdio: 'ignore',
+  });
 }
 
 function repository(): string {
@@ -30,7 +33,10 @@ describe('changedFiles', () => {
     writeFileSync(join(root, 'app/src/new.ts'), 'a\n');
     writeFileSync(join(root, 'outside.ts'), 'b\n');
     git(root, 'add', 'app/src/edited.ts');
-    assert.deepEqual([...changedFiles(join(root, 'app'), undefined)].toSorted(), ['src/edited.ts', 'src/new.ts']);
+    assert.deepEqual([...changedFiles(join(root, 'app'), undefined)].toSorted(), [
+      'src/edited.ts',
+      'src/new.ts',
+    ]);
   });
 
   it('with a base, the files changed since the commit the branch started from', () => {

@@ -42,10 +42,14 @@ test('renaming a task keeps it in the list', async ({ page }) => {
   await expect(page.getByRole('checkbox', { name: 'Write two features' })).toBeVisible();
 });
 
-test('the page never scrolls sideways at 320 px while a task is being renamed', async ({ page }) => {
+test('the page never scrolls sideways at 320 px while a task is being renamed', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await openApp(page);
   await page.getByRole('button', { name: 'Edit Run npm run check' }).click();
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
   expect(overflow).toBe(0);
 });

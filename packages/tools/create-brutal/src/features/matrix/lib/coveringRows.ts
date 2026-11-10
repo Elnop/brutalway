@@ -7,11 +7,15 @@ function defaults(options: StackOption[]): Answers {
 }
 
 function removeCovered(uncovered: Set<string>, rows: Answers[], groups: string[][]): void {
-  for (const target of rows.flatMap((answers) => targetsOf(answers, groups))) uncovered.delete(target);
+  for (const target of rows.flatMap((answers) => targetsOf(answers, groups))) {
+    uncovered.delete(target);
+  }
 }
 
 function bestRow(valid: Answers[], groups: string[][], uncovered: Set<string>): Answers {
-  const gains = valid.map((answers) => targetsOf(answers, groups).filter((target) => uncovered.has(target)).length);
+  const gains = valid.map(
+    (answers) => targetsOf(answers, groups).filter((target) => uncovered.has(target)).length,
+  );
   return valid[gains.indexOf(Math.max(...gains))] ?? {};
 }
 

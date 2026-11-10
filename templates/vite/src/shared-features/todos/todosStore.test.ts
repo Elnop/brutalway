@@ -10,7 +10,12 @@ describe('todosActions', () => {
   it('adds a normalized todo and ignores a blank one', () => {
     todosActions.add('  ship   it ');
     todosActions.add('   ');
-    expect(todosStore.getState().todos.map((todo) => todo.title)).toStrictEqual(['Read the README', 'Run npm run check', 'Write your first feature', 'ship it']);
+    expect(todosStore.getState().todos.map((todo) => todo.title)).toStrictEqual([
+      'Read the README',
+      'Run npm run check',
+      'Write your first feature',
+      'ship it',
+    ]);
   });
 
   it('toggles, renames, removes and clears completed todos', () => {

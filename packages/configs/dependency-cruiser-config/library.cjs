@@ -4,7 +4,8 @@ module.exports = {
     {
       name: 'not-to-dev-dep',
       severity: 'error',
-      comment: 'Production code only imports packages from dependencies or peerDependencies: devDependencies hold the tooling, which is not installed with the package.',
+      comment:
+        'Production code only imports packages from dependencies or peerDependencies: devDependencies hold the tooling, which is not installed with the package.',
       from: {
         path: '^src/',
         pathNot: '\\.test\\.tsx?$',
@@ -25,7 +26,8 @@ module.exports = {
     {
       name: 'no-app-folder',
       severity: 'error',
-      comment: 'A package has no src/app/: its entry points are files at the root of src/, one per bin or export.',
+      comment:
+        'A package has no src/app/: its entry points are files at the root of src/, one per bin or export.',
       from: { path: '^src/app/' },
       to: {},
     },

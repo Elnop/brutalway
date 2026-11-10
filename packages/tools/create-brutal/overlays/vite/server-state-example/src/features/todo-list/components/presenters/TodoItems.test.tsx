@@ -8,7 +8,11 @@ const TODOS = [
 ];
 
 function handlers() {
-  return { onToggle: vi.fn<(id: number) => void>(), onRename: vi.fn<(id: number, title: string) => void>(), onRemove: vi.fn<(id: number) => void>() };
+  return {
+    onToggle: vi.fn<(id: number) => void>(),
+    onRename: vi.fn<(id: number, title: string) => void>(),
+    onRemove: vi.fn<(id: number) => void>(),
+  };
 }
 
 describe('TodoItems', () => {

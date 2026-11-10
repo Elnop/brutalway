@@ -16,19 +16,32 @@ const E2E_JOB = `
 ${CHROMIUM_LINE}      - run: npm run e2e
 `;
 
-const UNIT_PROJECT = "{ extends: true, test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] } }";
+const UNIT_PROJECT = `        {
+          extends: true,
+          test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] },
+        },
+`;
 
 const COMPONENT_PROJECT = `        {
           extends: true,
           test: {
             name: 'component',
             include: ['src/**/*.test.tsx'],
-            browser: { enabled: true, provider: playwright(), headless: true, instances: [{ browser: 'chromium' }] },
+            browser: {
+              enabled: true,
+              provider: playwright(),
+              headless: true,
+              instances: [{ browser: 'chromium' }],
+            },
           },
         },
 `;
 
-const PRESENTER_TEST_EXAMPLE = { file: 'docs/concepts/architecture.md', replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,', with: ',' };
+const PRESENTER_TEST_EXAMPLE = {
+  file: 'docs/concepts/architecture.md',
+  replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,',
+  with: ',',
+};
 
 const TAILWIND_DOC = `\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tailwind\`. A color is a token declared under \`@theme\` in \`src/app/globals.css\`: no \`bg-white\`, no \`bg-[#0f0f0f]\`, no hex in \`style\`, and the message names the closest tokens. \`h1\` to \`h3\` take \`font-display\`, \`code\` and \`pre\` take \`font-mono\`, and \`dark:\` is reported, since a theme changes the values of the tokens, never a class. Prettier sorts the classes with \`prettier-plugin-tailwindcss\`, through \`@brutalway/prettier-config/tailwind\`.
 
@@ -38,7 +51,8 @@ const CSS_MODULES_DOC = `A component with styles has its own \`X.module.css\` ne
 
 `;
 
-const CSS_MODULES_TYPES = "hcm 'src/**/*.module.css' --outDir node_modules/.cache/css-modules --no-declarationMap --no-cache --logLevel silent";
+const CSS_MODULES_TYPES =
+  "hcm 'src/**/*.module.css' --outDir node_modules/.cache/css-modules --no-declarationMap --no-cache --logLevel silent";
 
 const STYLELINT_SETTINGS = '  "stylelint": {\n    "extends": "@brutalway/stylelint-config"\n  },\n';
 
@@ -179,7 +193,14 @@ const COVERAGE_CONFIG = `      coverage: {
         provider: 'v8',
         reporter: ['text'],
         include: ['src/**/*.{ts,tsx}'],
-        exclude: ['src/main.tsx', 'src/app/**', '**/*.test.{ts,tsx}', '**/*{Container,Layout,Page}.tsx', '**/use[A-Z]*.ts', '**/*{Client,Keys,Types,Config,Schemas,Storage}.ts'],
+        exclude: [
+          'src/main.tsx',
+          'src/app/**',
+          '**/*.test.{ts,tsx}',
+          '**/*{Container,Layout,Page}.tsx',
+          '**/use[A-Z]*.ts',
+          '**/*{Client,Keys,Types,Config,Schemas,Storage}.ts',
+        ],
         thresholds: { lines: 90, functions: 90, branches: 90, statements: 90 },
       },
 `;
@@ -188,17 +209,22 @@ const COVERAGE_DOC = `\`npm test\` also measures coverage with \`@vitest/coverag
 
 `;
 
-const REACT_COMPILER_LINT = `'no-restricted-imports': [
-      'error',
-      {
+const REACT_COMPILER_PLUGINS = `const reactCompiler =
+  process.env['VITEST'] === undefined ? [babel({ presets: [reactCompilerPreset()] })] : [];
+
+`;
+
+const REACT_COMPILER_LINT = `      {
         paths: [
           {
             name: 'react',
             importNames: ['useMemo', 'useCallback', 'memo'],
-            message: 'The React Compiler memoizes components and hooks: drop useMemo, useCallback and memo, and write the plain value or function.',
+            message:
+              'The React Compiler memoizes components and hooks: drop useMemo, useCallback and memo, and write the plain value or function.',
           },
         ],
-        patterns: [{ regex:`;
+        patterns: [
+`;
 
 const REACT_COMPILER_DOC = `\`vite.config.ts\` runs the [React Compiler](https://react.dev/learn/react-compiler) through Babel (\`babel-plugin-react-compiler\`, \`reactCompilerPreset()\` of \`@vitejs/plugin-react\`), so components and hooks are memoized at build time. Vitest runs without it, since its memo caches add branches the tests would have to reach: unit and component tests check the code as written, and the e2e tests run the compiled build. \`oxlint.config.ts\` reports \`useMemo\`, \`useCallback\` and \`memo\` imported from \`react\`.
 
@@ -259,14 +285,20 @@ const DARK_THEME_README = `The colors follow the theme of the system. The \`@med
 
 `;
 
-const CHROMIUM_DOC = 'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
+const CHROMIUM_DOC =
+  'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 export const viteStack: Stack = {
   id: 'vite',
   label: 'Vite + React',
   directory: 'templates/vite',
   options: [
-    { id: 'example', message: 'Keep the todo list example?', default: true, requires: { zustand: true } },
+    {
+      id: 'example',
+      message: 'Keep the todo list example?',
+      default: true,
+      requires: { zustand: true },
+    },
     { id: 'zustand', message: 'Add zustand for state?', default: true },
     {
       id: 'styling',
@@ -284,14 +316,26 @@ export const viteStack: Stack = {
       default: 'none',
       values: [
         { id: 'none', label: 'None, the components style plain elements' },
-        { id: 'shadcn', label: 'shadcn/ui, vendored in third-party/shadcn/ (needs Tailwind)', requires: { styling: 'tailwind' } },
+        {
+          id: 'shadcn',
+          label: 'shadcn/ui, vendored in third-party/shadcn/ (needs Tailwind)',
+          requires: { styling: 'tailwind' },
+        },
       ],
     },
     { id: 'dark-theme', message: 'Follow the dark mode of the system?', default: false },
-    { id: 'server-state', message: 'Read and write the data through an API with TanStack Query?', default: false },
+    {
+      id: 'server-state',
+      message: 'Read and write the data through an API with TanStack Query?',
+      default: false,
+    },
     { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
     { id: 'i18n', message: 'Add French and a language switch?', default: false },
-    { id: 'react-compiler', message: 'Memoize with the React Compiler instead of useMemo and useCallback?', default: false },
+    {
+      id: 'react-compiler',
+      message: 'Memoize with the React Compiler instead of useMemo and useCallback?',
+      default: false,
+    },
     {
       id: 'analytics',
       message: 'How should the app send product events?',
@@ -305,12 +349,18 @@ export const viteStack: Stack = {
     { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
     {
       id: 'coverage',
-      message: 'Fail the tests under 90 % coverage of presenters, pure functions, selectors and stores?',
+      message:
+        'Fail the tests under 90 % coverage of presenters, pure functions, selectors and stores?',
       default: false,
       requires: { 'component-tests': true },
     },
     { id: 'e2e', message: 'Add e2e tests (Playwright)?', default: true },
-    { id: 'claude-hook', message: 'Add the Claude Code hook that lints each edited file?', default: true, independent: true },
+    {
+      id: 'claude-hook',
+      message: 'Add the Claude Code hook that lints each edited file?',
+      default: true,
+      independent: true,
+    },
     { id: 'ci', message: 'Add the GitHub Actions workflow?', default: true },
   ],
   changes: [
@@ -330,10 +380,15 @@ export const viteStack: Stack = {
         'src/app/locales/en/todoStats.json',
       ],
       edits: [
-        { file: 'index.html', replace: '<title>Todos</title>', with: '<title>__PROJECT_NAME__</title>' },
+        {
+          file: 'index.html',
+          replace: '<title>Todos</title>',
+          with: '<title>__PROJECT_NAME__</title>',
+        },
         {
           file: 'README.md',
-          replace: 'The example app is a todo list. It is there so every rule has real code to check: delete it and keep the structure. The look',
+          replace:
+            'The example app is a todo list. It is there so every rule has real code to check: delete it and keep the structure. The look',
           with: 'The look',
         },
         {
@@ -343,18 +398,41 @@ export const viteStack: Stack = {
           with: '',
         },
         { file: 'docs/guides/start-your-own-app.md', dropLines: '1. Delete `src/features/`' },
-        { file: 'docs/guides/translations.md', replace: 'each slice has its own namespace (`app`, `todoList`, `todoStats`)', with: 'each slice gets its own namespace, `app` for now' },
-        { file: 'docs/guides/start-your-own-app.md', replace: '2. Write your first feature', with: '1. Write your first feature' },
-        { file: 'docs/guides/start-your-own-app.md', replace: '3. Run `npm run check` often', with: '2. Run `npm run check` often' },
-        { file: 'docs/reference/verifications.md', replace: '`src/shared/normalizeTitle.test.ts` next to its source', with: 'next to its source' },
-        { file: 'docs/reference/verifications.md', replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`', with: 'next to the presenter' },
+        {
+          file: 'docs/guides/translations.md',
+          replace: 'each slice has its own namespace (`app`, `todoList`, `todoStats`)',
+          with: 'each slice gets its own namespace, `app` for now',
+        },
+        {
+          file: 'docs/guides/start-your-own-app.md',
+          replace: '2. Write your first feature',
+          with: '1. Write your first feature',
+        },
+        {
+          file: 'docs/guides/start-your-own-app.md',
+          replace: '3. Run `npm run check` often',
+          with: '2. Run `npm run check` often',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: '`src/shared/normalizeTitle.test.ts` next to its source',
+          with: 'next to its source',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`',
+          with: 'next to the presenter',
+        },
         {
           file: 'docs/concepts/architecture.md',
           replace:
             ' `src/features/todo-list/components/TodoListLayout.tsx` reads the todos through `src/features/todo-list/useTodoList.ts` and hands them to the presenters in `src/features/todo-list/components/presenters/`.',
           with: '',
         },
-        { file: 'docs/concepts/architecture.md', dropLines: 'Renaming a task is a sub-feature of the list' },
+        {
+          file: 'docs/concepts/architecture.md',
+          dropLines: 'Renaming a task is a sub-feature of the list',
+        },
         {
           file: 'docs/concepts/architecture.md',
           replace:
@@ -369,31 +447,59 @@ export const viteStack: Stack = {
       when: { styling: 'tailwind' },
       overlay: 'tailwind',
       edits: [
-        { file: 'vite.config.ts', after: "import react from '@vitejs/plugin-react';\n", insert: "import tailwindcss from '@tailwindcss/vite';\n" },
-        { file: 'vite.config.ts', replace: 'plugins: [react()', with: 'plugins: [react(), tailwindcss()' },
+        {
+          file: 'vite.config.ts',
+          after: "import react from '@vitejs/plugin-react';\n",
+          insert: "import tailwindcss from '@tailwindcss/vite';\n",
+        },
+        {
+          file: 'vite.config.ts',
+          replace: 'plugins: [react()',
+          with: 'plugins: [react(), tailwindcss()',
+        },
         {
           file: 'oxlint.config.ts',
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
           insert: "import { tailwindConfig } from '@brutalway/oxlint-config-tailwind';\n",
         },
-        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, tailwindConfig' },
-        { file: 'package.json', replace: '"prettier": "@brutalway/prettier-config"', with: '"prettier": "@brutalway/prettier-config/tailwind"' },
+        {
+          file: 'oxlint.config.ts',
+          replace: 'extends: [reactViteConfig',
+          with: 'extends: [reactViteConfig, tailwindConfig',
+        },
+        {
+          file: 'package.json',
+          replace: '"prettier": "@brutalway/prettier-config"',
+          with: '"prettier": "@brutalway/prettier-config/tailwind"',
+        },
         {
           file: 'README.md',
           replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
           with: 'easy to swap: the colors, fonts and shadows are tokens declared under `@theme` in `src/app/globals.css`, and the components style themselves with Tailwind classes built on them.',
         },
-        { file: 'docs/reference/verifications.md', before: '## Dependencies', insert: TAILWIND_DOC },
+        {
+          file: 'docs/reference/verifications.md',
+          before: '## Dependencies',
+          insert: TAILWIND_DOC,
+        },
         { file: 'docs/reference/verifications.md', dropSection: '## Styles' },
         { file: 'package.json', replace: STYLELINT_SETTINGS, with: '' },
-        { file: 'package.json', replace: 'npm run lint && npm run styles && ', with: 'npm run lint && ' },
-        { file: 'docs/reference/commands.md', replace: 'Oxlint, stylelint, dependency-cruiser', with: 'Oxlint, dependency-cruiser' },
+        {
+          file: 'package.json',
+          replace: 'npm run lint && npm run styles && ',
+          with: 'npm run lint && ',
+        },
+        {
+          file: 'docs/reference/commands.md',
+          replace: 'Oxlint, stylelint, dependency-cruiser',
+          with: 'Oxlint, dependency-cruiser',
+        },
       ],
       removeScripts: ['styles'],
       removeDependencies: ['stylelint', '@brutalway/stylelint-config'],
       addDevDependencies: {
         '@brutalway/oxlint-config-tailwind': '0.1.2',
-        '@brutalway/prettier-config': '0.2.0',
+        '@brutalway/prettier-config': '0.3.0',
         '@tailwindcss/vite': '4.3.3',
         'prettier-plugin-tailwindcss': '0.8.1',
         tailwindcss: '4.3.3',
@@ -412,50 +518,115 @@ export const viteStack: Stack = {
       when: { ui: 'shadcn' },
       overlay: 'shadcn',
       edits: [
-        { file: 'src/app/globals.css', replace: '  --shadow-hard-sm: 4px 4px 0 var(--color-ink);\n}', with: SHADCN_THEME },
+        {
+          file: 'src/app/globals.css',
+          replace: '  --shadow-hard-sm: 4px 4px 0 var(--color-ink);\n}',
+          with: SHADCN_THEME,
+        },
         { file: 'src/app/globals.css', before: '  :focus-visible {', insert: SHADCN_SLOTS },
-        { file: 'src/app/globals.css', replace: "@import 'tailwindcss';\n", with: "@import 'tailwindcss';\n\n@custom-variant dark (&:where(.dark, .dark *));\n" },
+        {
+          file: 'src/app/globals.css',
+          replace: "@import 'tailwindcss';\n",
+          with: "@import 'tailwindcss';\n\n@custom-variant dark (&:where(.dark, .dark *));\n",
+        },
         {
           file: 'vite.config.ts',
-          replace: "alias: [{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],",
-          with: "alias: [\n      { find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) },\n      { find: /^@third-party\\//u, replacement: fileURLToPath(new URL('./third-party/', import.meta.url)) },\n    ],",
+          replace:
+            "alias: [{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],",
+          with: "alias: [\n      { find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) },\n      {\n        find: /^@third-party\\//u,\n        replacement: fileURLToPath(new URL('./third-party/', import.meta.url)),\n      },\n    ],",
         },
         {
           file: 'tsconfig.json',
-          replace: '{\n  "files": [],\n  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.test.json" }]',
+          replace:
+            '{\n  "files": [],\n  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.test.json" }]',
           with: '{\n  "compilerOptions": {\n    "paths": { "@third-party/*": ["./third-party/*"] }\n  },\n  "files": [],\n  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.test.json" }, { "path": "./tsconfig.third-party.json" }]',
         },
         { file: 'tsconfig.app.json', before: '  "include": [', insert: THIRD_PARTY_REFERENCES },
         { file: 'tsconfig.test.json', before: '  "include": [', insert: THIRD_PARTY_REFERENCES },
-        { file: 'package.json', replace: 'tsc -p tsconfig.app.json && tsc -p tsconfig.test.json"', with: 'tsc -b tsconfig.app.json tsconfig.test.json"' },
+        {
+          file: 'package.json',
+          replace: 'tsc -p tsconfig.app.json && tsc -p tsconfig.test.json"',
+          with: 'tsc -b tsconfig.app.json tsconfig.test.json"',
+        },
         { file: '.prettierignore', before: 'dist\n', insert: 'components.json\n' },
         { file: '.prettierignore', after: 'test-results\n', insert: 'third-party\n' },
-        { file: 'knip.json', replace: '"entry": ["i18next.config.ts"]', with: '"entry": ["i18next.config.ts", "third-party/**/*.{ts,tsx}"]' },
-        { file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "shadcn", ' },
-        { file: 'oxlint.config.ts', replace: "ignorePatterns: ['dist']", with: "ignorePatterns: ['dist', 'third-party']" },
-        { file: '.alint.yml', replace: "prefixes: ['src/',", with: "prefixes: ['src/', 'third-party/'," },
+        {
+          file: 'knip.json',
+          replace: '"entry": ["i18next.config.ts"]',
+          with: '"entry": ["i18next.config.ts", "third-party/**/*.{ts,tsx}"]',
+        },
+        {
+          file: 'knip.json',
+          replace: '"ignoreDependencies": [\n    "@swc/core",\n',
+          with: '"ignoreDependencies": [\n    "@swc/core",\n    "shadcn",\n',
+        },
+        {
+          file: 'oxlint.config.ts',
+          replace: "ignorePatterns: ['dist']",
+          with: "ignorePatterns: ['dist', 'third-party']",
+        },
+        {
+          file: '.alint.yml',
+          replace: "prefixes: ['src/',",
+          with: "prefixes: ['src/', 'third-party/',",
+        },
         { file: '.alint.yml', after: '    level: error\n', insert: THIRD_PARTY_ALINT },
         { file: 'README.md', before: '## Documentation', insert: SHADCN_README },
-        { file: 'docs/reference/commands.md', replace: '| `npm run check` | Prettier, both `tsc` projects,', with: '| `npm run check` | Prettier, the three `tsc` projects,' },
-        { file: 'docs/reference/verifications.md', before: '## Lint', insert: SHADCN_TYPESCRIPT_DOC },
-        { file: 'docs/reference/verifications.md', before: '## Tests', insert: SHADCN_VERIFICATIONS_DOC },
-        { file: '.dependency-cruiser.cjs', replace: "extends: '@brutalway/dependency-cruiser-config/layers'", with: "extends: '@brutalway/dependency-cruiser-config/shadcn'" },
-        { file: 'package.json', replace: '"deps": "depcruise --output-type err-long src"', with: '"deps": "depcruise --output-type err-long src third-party"' },
+        {
+          file: 'docs/reference/commands.md',
+          replace: '| `npm run check` | Prettier, both `tsc` projects,',
+          with: '| `npm run check` | Prettier, the three `tsc` projects,',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          before: '## Lint',
+          insert: SHADCN_TYPESCRIPT_DOC,
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          before: '## Tests',
+          insert: SHADCN_VERIFICATIONS_DOC,
+        },
+        {
+          file: '.dependency-cruiser.cjs',
+          replace: "extends: '@brutalway/dependency-cruiser-config/layers'",
+          with: "extends: '@brutalway/dependency-cruiser-config/shadcn'",
+        },
+        {
+          file: 'package.json',
+          replace: '"deps": "depcruise --output-type err-long src"',
+          with: '"deps": "depcruise --output-type err-long src third-party"',
+        },
         {
           file: 'oxlint.config.ts',
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
           insert: "import { shadcnConfig } from '@brutalway/oxlint-config-shadcn';\n",
         },
-        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, shadcnConfig' },
-        { file: 'docs/reference/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: SHADCN_LINT_DOC },
+        {
+          file: 'oxlint.config.ts',
+          replace: 'extends: [reactViteConfig',
+          with: 'extends: [reactViteConfig, shadcnConfig',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          after:
+            '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n',
+          insert: SHADCN_LINT_DOC,
+        },
         {
           file: 'docs/reference/verifications.md',
           after: '- a store lives at the root or in the `stores/` folder of its level\n',
-          insert: '- `third-party/` imports nothing from `src/`, and `radix-ui` and `class-variance-authority` are only imported from `third-party/`: `src/` uses the primitives\n',
+          insert:
+            '- `third-party/` imports nothing from `src/`, and `radix-ui` and `class-variance-authority` are only imported from `third-party/`: `src/` uses the primitives\n',
         },
       ],
       addDependencies: SHADCN_DEPENDENCIES,
-      addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0', '@brutalway/oxlint-config-shadcn': '0.2.0', '@brutalway/tsconfig': '0.3.0', shadcn: SHADCN_VERSION },
+      addDevDependencies: {
+        '@brutalway/dependency-cruiser-config': '0.5.0',
+        '@brutalway/oxlint-config-shadcn': '0.2.0',
+        '@brutalway/tsconfig': '0.3.0',
+        shadcn: SHADCN_VERSION,
+      },
     },
     {
       when: { ui: 'shadcn', example: true },
@@ -464,11 +635,20 @@ export const viteStack: Stack = {
     {
       when: { ui: 'shadcn', 'claude-hook': true },
       edits: [
-        { file: '.claude/settings.json', replace: '"hooks": {\n    "PostToolUse": [', with: `"hooks": {\n${VENDORED_PRE_TOOL_USE}    "PostToolUse": [` },
-        { file: '.claude/settings.json', replace: 'brutal-agent-hook --tree src"', with: 'brutal-agent-hook --tree src --vendored third-party"' },
+        {
+          file: '.claude/settings.json',
+          replace: '"hooks": {\n    "PostToolUse": [',
+          with: `"hooks": {\n${VENDORED_PRE_TOOL_USE}    "PostToolUse": [`,
+        },
+        {
+          file: '.claude/settings.json',
+          replace: 'brutal-agent-hook --tree src"',
+          with: 'brutal-agent-hook --tree src --vendored third-party"',
+        },
         {
           file: 'docs/guides/work-with-an-agent.md',
-          replace: 'Every message says what to change, so the agent does not need to know the convention beforehand.',
+          replace:
+            'Every message says what to change, so the agent does not need to know the convention beforehand.',
           with: 'Every message says what to change, so the agent does not need to know the convention beforehand. Before an edit, the same hook refuses any change to a file in `third-party/` and tells the agent to run `npx shadcn add <name> --overwrite`, restyle through `src/app/globals.css` or wrap the primitive in `src/`.',
         },
       ],
@@ -478,10 +658,15 @@ export const viteStack: Stack = {
       when: { styling: 'css-modules' },
       overlay: 'css-modules',
       edits: [
-        { file: 'package.json', replace: '"typecheck": "i18next-cli types --quiet && tsc -p', with: '"typecheck": "i18next-cli types --quiet && npm run css-types && tsc -p' },
         {
           file: 'package.json',
-          after: '"typecheck": "i18next-cli types --quiet && npm run css-types && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",\n',
+          replace: '"typecheck": "i18next-cli types --quiet && tsc -p',
+          with: '"typecheck": "i18next-cli types --quiet && npm run css-types && tsc -p',
+        },
+        {
+          file: 'package.json',
+          after:
+            '"typecheck": "i18next-cli types --quiet && npm run css-types && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",\n',
           insert: `    "css-types": "${CSS_MODULES_TYPES}",\n`,
         },
         {
@@ -494,7 +679,11 @@ export const viteStack: Stack = {
           replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
           with: 'easy to swap: the tokens are at the top of `src/app/globals.css`, and each component styles itself in the `X.module.css` next to it.',
         },
-        { file: 'docs/reference/verifications.md', before: '## Dependencies', insert: CSS_MODULES_DOC },
+        {
+          file: 'docs/reference/verifications.md',
+          before: '## Dependencies',
+          insert: CSS_MODULES_DOC,
+        },
         {
           file: 'docs/reference/verifications.md',
           replace: 'It also rejects two CSS files outside a `styles/` folder.',
@@ -519,12 +708,18 @@ export const viteStack: Stack = {
         {
           file: 'oxlint.config.ts',
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
-          insert: "import { tanstackQueryConfig } from '@brutalway/oxlint-config-tanstack-query';\n",
+          insert:
+            "import { tanstackQueryConfig } from '@brutalway/oxlint-config-tanstack-query';\n",
         },
-        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, tanstackQueryConfig' },
+        {
+          file: 'oxlint.config.ts',
+          replace: 'extends: [reactViteConfig',
+          with: 'extends: [reactViteConfig, tanstackQueryConfig',
+        },
         {
           file: 'docs/reference/verifications.md',
-          after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n',
+          after:
+            '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n',
           insert: SERVER_STATE_LINT_DOC,
         },
         {
@@ -532,7 +727,11 @@ export const viteStack: Stack = {
           replace: '- a presenter imports no store and no shared-feature hook\n',
           with: '- a presenter imports no store, no shared-feature hook, no `xClient.ts` and no `@tanstack/react-query`\n- a store imports no `xClient.ts`, no `xKeys.ts` and no hook: it only holds UI state\n',
         },
-        { file: 'docs/concepts/architecture.md', before: '## Sub-features', insert: SERVER_STATE_ARCHITECTURE },
+        {
+          file: 'docs/concepts/architecture.md',
+          before: '## Sub-features',
+          insert: SERVER_STATE_ARCHITECTURE,
+        },
       ],
       addDependencies: { '@tanstack/react-query': '5.107.1' },
       addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.2.0' },
@@ -544,10 +743,22 @@ export const viteStack: Stack = {
     {
       when: { 'server-state': true, example: true },
       overlay: 'server-state-example',
-      remove: ['src/shared-features/todos/useTodos.ts', 'src/shared-features/todos/todosSelectors.ts', 'src/shared-features/todos/todosSelectors.test.ts'],
+      remove: [
+        'src/shared-features/todos/useTodos.ts',
+        'src/shared-features/todos/todosSelectors.ts',
+        'src/shared-features/todos/todosSelectors.test.ts',
+      ],
       edits: [
-        { file: 'vite.config.ts', after: "import react from '@vitejs/plugin-react';\n", insert: "import { devApi } from './devApi.ts';\n" },
-        { file: 'vite.config.ts', replace: 'plugins: [react()', with: 'plugins: [react(), devApi()' },
+        {
+          file: 'vite.config.ts',
+          after: "import react from '@vitejs/plugin-react';\n",
+          insert: "import { devApi } from './devApi.ts';\n",
+        },
+        {
+          file: 'vite.config.ts',
+          replace: 'plugins: [react()',
+          with: 'plugins: [react(), devApi()',
+        },
         { file: 'README.md', before: '## Documentation', insert: SERVER_STATE_README },
         {
           file: 'docs/reference/layout.md',
@@ -556,7 +767,8 @@ export const viteStack: Stack = {
         },
         {
           file: 'docs/concepts/architecture.md',
-          replace: ', `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
+          replace:
+            ', `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
           with: ', and components read the store through `src/shared-features/todos/hooks/useTodos.ts`. The store only holds the filter: the todos and the counters come from the API (see Server state below).',
         },
       ],
@@ -568,17 +780,59 @@ export const viteStack: Stack = {
         {
           file: 'oxlint.config.ts',
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
-          insert: "import { reactHookFormConfig } from '@brutalway/oxlint-config-react-hook-form';\n",
+          insert:
+            "import { reactHookFormConfig } from '@brutalway/oxlint-config-react-hook-form';\n",
         },
-        { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, reactHookFormConfig' },
-        { file: 'docs/reference/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: FORMS_LINT_DOC },
+        {
+          file: 'oxlint.config.ts',
+          replace: 'extends: [reactViteConfig',
+          with: 'extends: [reactViteConfig, reactHookFormConfig',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          after:
+            '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n',
+          insert: FORMS_LINT_DOC,
+        },
       ],
-      addDependencies: { '@hookform/resolvers': '5.9.2', 'react-hook-form': '7.91.0', zod: '4.6.7' },
+      addDependencies: {
+        '@hookform/resolvers': '5.9.2',
+        'react-hook-form': '7.91.0',
+        zod: '4.6.7',
+      },
       addDevDependencies: { '@brutalway/oxlint-config-react-hook-form': '0.2.0' },
     },
     {
+      when: { forms: true, 'server-state': true, styling: 'tailwind', ui: 'none' },
+      edits: [
+        {
+          file: 'oxlint.config.ts',
+          replace:
+            'extends: [reactViteConfig, reactHookFormConfig, tanstackQueryConfig, tailwindConfig, i18nextConfig],',
+          with: 'extends: [\n    reactViteConfig,\n    reactHookFormConfig,\n    tanstackQueryConfig,\n    tailwindConfig,\n    i18nextConfig,\n  ],',
+        },
+      ],
+    },
+    {
+      when: { forms: true, 'server-state': true, styling: 'tailwind', ui: 'shadcn' },
+      edits: [
+        {
+          file: 'oxlint.config.ts',
+          replace:
+            'extends: [reactViteConfig, reactHookFormConfig, tanstackQueryConfig, shadcnConfig, tailwindConfig, i18nextConfig],',
+          with: 'extends: [\n    reactViteConfig,\n    reactHookFormConfig,\n    tanstackQueryConfig,\n    shadcnConfig,\n    tailwindConfig,\n    i18nextConfig,\n  ],',
+        },
+      ],
+    },
+    {
       when: { forms: true, example: false },
-      edits: [{ file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "@hookform/resolvers", "react-hook-form", "zod", ' }],
+      edits: [
+        {
+          file: 'knip.json',
+          replace: '"ignoreDependencies": [\n    "@swc/core",\n',
+          with: '"ignoreDependencies": [\n    "@swc/core",\n    "@hookform/resolvers",\n    "react-hook-form",\n    "zod",\n',
+        },
+      ],
     },
     {
       when: { forms: true, example: true },
@@ -606,43 +860,82 @@ export const viteStack: Stack = {
         {
           file: 'src/shared-features/todos/TodosSchemas.ts',
           after: "import { z } from 'zod';\n",
-          insert: "import { normalizeTitle } from '@/shared/normalizeTitle.ts';\nimport { TITLE_ERRORS } from '@/shared-features/todos/TodosConfig.ts';\n",
+          insert:
+            "import { normalizeTitle } from '@/shared/normalizeTitle.ts';\nimport { TITLE_ERRORS } from '@/shared-features/todos/TodosConfig.ts';\n",
         },
         {
           file: 'src/shared-features/todos/TodosSchemas.ts',
           after: 'export const ClearedSchema = z.object({ deleted: z.number().int().min(0) });\n',
-          insert: '\nexport const TodoDraftSchema = z.object({\n  title: z.string().transform(normalizeTitle).pipe(z.string().min(1, TITLE_ERRORS[0]).max(200, TITLE_ERRORS[1])),\n});\n',
+          insert:
+            '\nexport const TodoDraftSchema = z.object({\n  title: z\n    .string()\n    .transform(normalizeTitle)\n    .pipe(z.string().min(1, TITLE_ERRORS[0]).max(200, TITLE_ERRORS[1])),\n});\n',
         },
-        { file: 'src/shared-features/todos/TodosTypes.ts', replace: 'import type { TodoFilterSchema, TodoSchema } from', with: 'import type { TodoDraftSchema, TodoFilterSchema, TodoSchema } from' },
+        {
+          file: 'src/shared-features/todos/TodosTypes.ts',
+          replace: 'import type { TodoFilterSchema, TodoSchema } from',
+          with: 'import type {\n  TodoDraftSchema,\n  TodoFilterSchema,\n  TodoSchema,\n} from',
+        },
         {
           file: 'src/shared-features/todos/TodosTypes.ts',
           after: 'export type TodoFilter = z.infer<typeof TodoFilterSchema>;\n',
           insert: '\nexport type TodoDraft = z.output<typeof TodoDraftSchema>;\n',
         },
-        { file: 'src/shared-features/todos/todosClient.ts', replace: 'import type { Todo, TodoFilter, TodoUpdate }', with: 'import type { Todo, TodoDraft, TodoFilter, TodoUpdate }' },
         {
           file: 'src/shared-features/todos/todosClient.ts',
-          replace: "create: async (title: string) => request(TodoSchema, 'POST', '/todos', { title }),",
+          replace: 'import type { Todo, TodoFilter, TodoUpdate }',
+          with: 'import type {\n  Todo,\n  TodoDraft,\n  TodoFilter,\n  TodoUpdate,\n}',
+        },
+        {
+          file: 'src/shared-features/todos/todosClient.ts',
+          replace:
+            "create: async (title: string) => request(TodoSchema, 'POST', '/todos', { title }),",
           with: "create: async (draft: TodoDraft) => request(TodoSchema, 'POST', '/todos', draft),",
         },
-        { file: 'src/features/todo-list/useTodoList.ts', replace: 'return { todos, filter, add, setFilter', with: 'return { todos, filter, add: (title: string) => add({ title }), setFilter' },
+        {
+          file: 'src/features/todo-list/useTodoList.ts',
+          replace:
+            'return { todos, filter, add, setFilter: todosActions.setFilter, toggle, rename, remove };',
+          with: 'return {\n    todos,\n    filter,\n    add: (title: string) => add({ title }),\n    setFilter: todosActions.setFilter,\n    toggle,\n    rename,\n    remove,\n  };',
+        },
       ],
     },
     {
       when: { i18n: true },
       overlay: 'i18n',
       edits: [
-        { file: 'src/app/locales/en/app.json', after: '{\n', insert: '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n' },
-        { file: 'src/app/createI18n.ts', replace: '      en: {', with: '      fr: FRENCH,\n      en: {' },
+        {
+          file: 'src/app/locales/en/app.json',
+          after: '{\n',
+          insert:
+            '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n',
+        },
+        {
+          file: 'src/app/createI18n.ts',
+          replace: '      en: {',
+          with: '      fr: FRENCH,\n      en: {',
+        },
         { file: 'i18next.config.ts', replace: "locales: ['en'],", with: "locales: ['en', 'fr']," },
         {
           file: 'src/main.tsx',
           after: "import { createI18n } from '@/app/createI18n.ts';\n",
-          insert: "import { followLanguage, preferredLanguage } from '@/features/language-switch/languageStorage.ts';\n",
+          insert:
+            "import { followLanguage, preferredLanguage } from '@/features/language-switch/languageStorage.ts';\n",
         },
-        { file: 'src/main.tsx', replace: 'const i18n = createI18n();', with: 'const i18n = createI18n(preferredLanguage());\nfollowLanguage(i18n);' },
-        { file: 'src/app/App.tsx', after: "import { useTranslation } from 'react-i18next';\n", insert: "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n" },
-        { file: 'src/app/App.tsx', before: '      </header>', insert: '        <LanguageSwitch />\n' },
+        {
+          file: 'src/main.tsx',
+          replace: 'const i18n = createI18n();',
+          with: 'const i18n = createI18n(preferredLanguage());\nfollowLanguage(i18n);',
+        },
+        {
+          file: 'src/app/App.tsx',
+          after: "import { useTranslation } from 'react-i18next';\n",
+          insert:
+            "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n",
+        },
+        {
+          file: 'src/app/App.tsx',
+          before: '      </header>',
+          insert: '        <LanguageSwitch />\n',
+        },
         {
           file: 'docs/guides/translations.md',
           replace:
@@ -658,9 +951,14 @@ export const viteStack: Stack = {
         {
           file: 'src/app/createI18n.ts',
           after: "import todoStats from '@/app/locales/en/todoStats.json';\n",
-          insert: "import frApp from '@/app/locales/fr/app.json';\nimport frTodoList from '@/app/locales/fr/todoList.json';\nimport frTodoStats from '@/app/locales/fr/todoStats.json';\n",
+          insert:
+            "import frApp from '@/app/locales/fr/app.json';\nimport frTodoList from '@/app/locales/fr/todoList.json';\nimport frTodoStats from '@/app/locales/fr/todoStats.json';\n",
         },
-        { file: 'src/app/createI18n.ts', replace: 'fr: FRENCH,', with: 'fr: { app: frApp, todoList: frTodoList, todoStats: frTodoStats },' },
+        {
+          file: 'src/app/createI18n.ts',
+          replace: 'fr: FRENCH,',
+          with: 'fr: { app: frApp, todoList: frTodoList, todoStats: frTodoStats },',
+        },
       ],
     },
     {
@@ -668,7 +966,11 @@ export const viteStack: Stack = {
       overlay: 'i18n-skeleton',
       remove: ['src/features/.gitkeep'],
       edits: [
-        { file: 'src/app/createI18n.ts', after: "import app from '@/app/locales/en/app.json';\n", insert: "import frApp from '@/app/locales/fr/app.json';\n" },
+        {
+          file: 'src/app/createI18n.ts',
+          after: "import app from '@/app/locales/en/app.json';\n",
+          insert: "import frApp from '@/app/locales/fr/app.json';\n",
+        },
         { file: 'src/app/createI18n.ts', replace: 'fr: FRENCH,', with: 'fr: { app: frApp },' },
       ],
     },
@@ -689,7 +991,11 @@ export const viteStack: Stack = {
     {
       when: { i18n: true, example: true, forms: true },
       edits: [
-        { file: 'src/app/locales/fr/todoList.json', replace: '"blankTitle": "Le titre est vide"', with: '"blankTitle": "Le titre est vide",\n    "longTitle": "Le titre fait au plus 200 caractères"' },
+        {
+          file: 'src/app/locales/fr/todoList.json',
+          replace: '"blankTitle": "Le titre est vide"',
+          with: '"blankTitle": "Le titre est vide",\n    "longTitle": "Le titre fait au plus 200 caractères"',
+        },
       ],
     },
     {
@@ -706,11 +1012,23 @@ export const viteStack: Stack = {
     {
       when: { coverage: true },
       edits: [
-        { file: 'vitest.config.ts', after: "      setupFiles: ['vitest.setup.ts'],\n", insert: COVERAGE_CONFIG },
-        { file: 'package.json', replace: '"test": "vitest run",', with: '"test": "vitest run --coverage",' },
+        {
+          file: 'vitest.config.ts',
+          after: "      setupFiles: ['vitest.setup.ts'],\n",
+          insert: COVERAGE_CONFIG,
+        },
+        {
+          file: 'package.json',
+          replace: '"test": "vitest run",',
+          with: '"test": "vitest run --coverage",',
+        },
         { file: '.gitignore', after: 'test-results\n', insert: 'coverage\n' },
         { file: '.prettierignore', after: 'test-results\n', insert: 'coverage\n' },
-        { file: 'docs/reference/verifications.md', before: 'Before keeping a test,', insert: COVERAGE_DOC },
+        {
+          file: 'docs/reference/verifications.md',
+          before: 'Before keeping a test,',
+          insert: COVERAGE_DOC,
+        },
         {
           file: 'docs/reference/commands.md',
           replace: 'Vitest: unit tests in Node, component tests in headless Chromium',
@@ -741,15 +1059,29 @@ export const viteStack: Stack = {
     },
     {
       when: { example: false, zustand: true },
-      edits: [{ file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "zustand", ' }],
+      edits: [
+        {
+          file: 'knip.json',
+          replace: '"ignoreDependencies": [\n    "@swc/core",\n',
+          with: '"ignoreDependencies": [\n    "@swc/core",\n    "zustand",\n',
+        },
+      ],
     },
     {
       when: { example: false, 'component-tests': true },
-      edits: [{ file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "vitest-browser-react", ' }],
+      edits: [
+        {
+          file: 'knip.json',
+          replace: '"ignoreDependencies": [\n    "@swc/core",\n',
+          with: '"ignoreDependencies": [\n    "@swc/core",\n    "vitest-browser-react",\n',
+        },
+      ],
     },
     {
       when: { zustand: false },
-      edits: [{ file: 'docs/concepts/architecture.md', dropSection: '## Store, actions and selectors' }],
+      edits: [
+        { file: 'docs/concepts/architecture.md', dropSection: '## Store, actions and selectors' },
+      ],
       removeDependencies: ['zustand'],
     },
     {
@@ -759,15 +1091,28 @@ export const viteStack: Stack = {
     {
       when: { 'component-tests': false },
       edits: [
-        { file: 'vitest.config.ts', replace: "import { playwright } from '@vitest/browser-playwright';\n", with: '' },
-        { file: 'vitest.config.ts', replace: `      projects: [\n        ${UNIT_PROJECT},\n${COMPONENT_PROJECT}      ],\n`, with: `      projects: [${UNIT_PROJECT}],\n` },
+        {
+          file: 'vitest.config.ts',
+          replace: "import { playwright } from '@vitest/browser-playwright';\n",
+          with: '',
+        },
+        {
+          file: 'vitest.config.ts',
+          replace: `      projects: [\n${UNIT_PROJECT}${COMPONENT_PROJECT}      ],\n`,
+          with: `      projects: [\n${UNIT_PROJECT}      ],\n`,
+        },
         { file: 'tsconfig.test.json', replace: ', "@vitest/browser-playwright"]', with: ']' },
-        { file: 'docs/reference/commands.md', replace: 'Vitest: unit tests in Node, component tests in headless Chromium', with: 'Vitest unit tests, in Node' },
+        {
+          file: 'docs/reference/commands.md',
+          replace: 'Vitest: unit tests in Node, component tests in headless Chromium',
+          with: 'Vitest unit tests, in Node',
+        },
         { file: 'docs/reference/verifications.md', dropLines: '| Component |' },
         PRESENTER_TEST_EXAMPLE,
         {
           file: 'docs/reference/verifications.md',
-          replace: 'The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. ',
+          replace:
+            'The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. ',
           with: '',
         },
       ],
@@ -776,7 +1121,13 @@ export const viteStack: Stack = {
     },
     {
       when: { 'component-tests': false, ci: true },
-      edits: [{ file: '.github/workflows/ci.yml', replace: `      - run: npm ci\n${CHROMIUM_LINE}      - run: npm run check`, with: '      - run: npm ci\n      - run: npm run check' }],
+      edits: [
+        {
+          file: '.github/workflows/ci.yml',
+          replace: `      - run: npm ci\n${CHROMIUM_LINE}      - run: npm run check`,
+          with: '      - run: npm ci\n      - run: npm run check',
+        },
+      ],
     },
     {
       when: { e2e: false },
@@ -784,35 +1135,67 @@ export const viteStack: Stack = {
       edits: [
         {
           file: 'package.json',
-          replace: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts',
+          replace:
+            'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts',
           with: 'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts securityHeaders.ts',
         },
         { file: 'tsconfig.test.json', replace: '    "e2e",\n', with: '' },
         { file: 'tsconfig.test.json', replace: '    "playwright.config.ts",\n', with: '' },
-        { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"],\n      "@e2e/*": ["./e2e/*"]', with: '"@/*": ["./src/*"]' },
-        { file: 'oxlint.config.ts', replace: 'import through an alias (@/ in src/, @e2e/ in e2e/).', with: 'import through the @/ alias.' },
+        {
+          file: 'tsconfig.test.json',
+          replace: '"@/*": ["./src/*"],\n      "@e2e/*": ["./e2e/*"]',
+          with: '"@/*": ["./src/*"]',
+        },
+        {
+          file: 'oxlint.config.ts',
+          replace:
+            "message:\n              'Relative imports are not allowed: import through an alias (@/ in src/, @e2e/ in e2e/).',",
+          with: "message: 'Relative imports are not allowed: import through the @/ alias.',",
+        },
         { file: 'docs/reference/commands.md', dropLines: '| `npm run e2e` |' },
-        { file: 'docs/reference/verifications.md', replace: " That last one is why `playwright.config.ts` reads `process.env['CI']`.", with: '' },
-        { file: 'docs/reference/verifications.md', replace: 'on tests, e2e and configs', with: 'on tests and configs' },
-        { file: 'docs/reference/verifications.md', replace: '`@/` in `src/`, `@e2e/` in `e2e/`', with: '`@/` in `src/`' },
-        { file: 'docs/reference/verifications.md', dropLines: '| E2e |' },
-        { file: 'docs/reference/verifications.md', dropLines: 'The specs import `test`' },
-        { file: 'docs/reference/verifications.md', replace: '`vite preview` sends them, so the e2e tests run under them, and', with: '`vite preview` sends them, and' },
         {
           file: 'docs/reference/verifications.md',
-          replace: '`test` from `@brutalway/playwright-fixtures` fails a test when the browser reports a CSP violation, so a script or a request from another origin shows up there first: allow it',
+          replace: " That last one is why `playwright.config.ts` reads `process.env['CI']`.",
+          with: '',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'on tests, e2e and configs',
+          with: 'on tests and configs',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: '`@/` in `src/`, `@e2e/` in `e2e/`',
+          with: '`@/` in `src/`',
+        },
+        { file: 'docs/reference/verifications.md', dropLines: '| E2e |' },
+        { file: 'docs/reference/verifications.md', dropLines: 'The specs import `test`' },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: '`vite preview` sends them, so the e2e tests run under them, and',
+          with: '`vite preview` sends them, and',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace:
+            '`test` from `@brutalway/playwright-fixtures` fails a test when the browser reports a CSP violation, so a script or a request from another origin shows up there first: allow it',
           with: 'A script or a request from another origin is then refused: allow it',
         },
       ],
       removeScripts: ['e2e'],
-      removeDependencies: ['@playwright/test', '@axe-core/playwright', '@brutalway/playwright-fixtures'],
+      removeDependencies: [
+        '@playwright/test',
+        '@axe-core/playwright',
+        '@brutalway/playwright-fixtures',
+      ],
     },
     {
       when: { e2e: false, example: true },
       edits: [
         {
           file: 'docs/guides/start-your-own-app.md',
-          replace: ', the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.',
+          replace:
+            ', the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.',
           with: ' and the files in `src/shared/`.',
         },
       ],
@@ -821,20 +1204,38 @@ export const viteStack: Stack = {
       when: { e2e: false, ci: true },
       edits: [
         { file: '.github/workflows/ci.yml', replace: E2E_JOB, with: '' },
-        { file: 'docs/reference/commands.md', replace: ' in one job and `e2e` in another.', with: '.' },
+        {
+          file: 'docs/reference/commands.md',
+          replace: ' in one job and `e2e` in another.',
+          with: '.',
+        },
       ],
     },
     {
       when: { e2e: false, 'component-tests': true },
       addDevDependencies: { playwright: '1.64.1' },
       edits: [
-        { file: 'docs/reference/verifications.md', replace: CHROMIUM_DOC, with: 'Component tests need headless Chromium: `npx playwright install --only-shell chromium`.' },
-        { file: 'docs/reference/verifications.md', replace: ', since orchestrators read stores and e2e covers them.', with: ', since orchestrators read stores.' },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: CHROMIUM_DOC,
+          with: 'Component tests need headless Chromium: `npx playwright install --only-shell chromium`.',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: ', since orchestrators read stores and e2e covers them.',
+          with: ', since orchestrators read stores.',
+        },
       ],
     },
     {
       when: { e2e: true, 'component-tests': false },
-      edits: [{ file: 'docs/reference/verifications.md', replace: CHROMIUM_DOC, with: 'E2e needs headless Chromium: `npx playwright install --only-shell chromium`.' }],
+      edits: [
+        {
+          file: 'docs/reference/verifications.md',
+          replace: CHROMIUM_DOC,
+          with: 'E2e needs headless Chromium: `npx playwright install --only-shell chromium`.',
+        },
+      ],
     },
     {
       when: { e2e: false, 'component-tests': false },
@@ -847,7 +1248,7 @@ export const viteStack: Stack = {
       when: { 'claude-hook': false },
       remove: ['.claude', 'docs/guides/work-with-an-agent.md'],
       edits: [
-        { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
+        { file: 'knip.json', replace: '    "@brutalway/agent-hook",\n', with: '' },
         { file: 'README.md', dropLines: 'docs/guides/work-with-an-agent.md' },
       ],
       removeDependencies: ['@brutalway/agent-hook'],
@@ -857,22 +1258,46 @@ export const viteStack: Stack = {
       remove: ['.github'],
       edits: [
         { file: 'docs/reference/commands.md', dropLines: 'CI (`.github/workflows/ci.yml`)' },
-        { file: 'docs/reference/verifications.md', replace: 'runs locally, in the pre-commit hook and in CI.', with: 'runs locally and in the pre-commit hook.' },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'runs locally, in the pre-commit hook and in CI.',
+          with: 'runs locally and in the pre-commit hook.',
+        },
       ],
     },
     {
       when: { 'server-state': true, example: true },
       edits: [
-        { file: 'package.json', replace: 'oxlint.config.ts vite.config.ts', with: 'oxlint.config.ts vite.config.ts devApi.ts devApiRoutes.ts' },
-        { file: 'tsconfig.test.json', replace: '"vite.config.ts",', with: '"vite.config.ts", "devApi.ts", "devApiRoutes.ts",' },
-        { file: 'oxlint.config.ts', replace: "files: ['*.config.ts']", with: "files: ['*.config.ts', 'devApi.ts']" },
+        {
+          file: 'package.json',
+          replace: 'oxlint.config.ts vite.config.ts',
+          with: 'oxlint.config.ts vite.config.ts devApi.ts devApiRoutes.ts',
+        },
+        {
+          file: 'tsconfig.test.json',
+          replace: '"vite.config.ts",',
+          with: '"vite.config.ts", "devApi.ts", "devApiRoutes.ts",',
+        },
+        {
+          file: 'oxlint.config.ts',
+          replace: "files: ['*.config.ts']",
+          with: "files: ['*.config.ts', 'devApi.ts']",
+        },
       ],
     },
     {
       when: { styling: 'css-modules' },
       edits: [
-        { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
-        { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]' },
+        {
+          file: 'tsconfig.app.json',
+          replace: '"@/*": ["./src/*"]',
+          with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]',
+        },
+        {
+          file: 'tsconfig.test.json',
+          replace: '"@/*": ["./src/*"]',
+          with: '"@/*": ["./src/*", "./node_modules/.cache/css-modules/src/*"]',
+        },
       ],
     },
     {
@@ -883,21 +1308,50 @@ export const viteStack: Stack = {
           replace: "import react from '@vitejs/plugin-react';\n",
           with: "import babel from '@rolldown/plugin-babel';\nimport react, { reactCompilerPreset } from '@vitejs/plugin-react';\n",
         },
-        { file: 'vite.config.ts', replace: 'plugins: [react()', with: "plugins: [react(), ...(process.env['VITEST'] === undefined ? [babel({ presets: [reactCompilerPreset()] })] : [])" },
-        { file: 'oxlint.config.ts', replace: "'no-restricted-imports': ['error', { patterns: [{ regex:", with: REACT_COMPILER_LINT },
-        { file: 'oxlint.config.ts', replace: "' }] }],\n  },\n});", with: "' }],\n      },\n    ],\n  },\n});" },
-        { file: 'docs/reference/verifications.md', before: '## Dependencies', insert: REACT_COMPILER_DOC },
-        { file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "@babel/core", "babel-plugin-react-compiler", ' },
+        {
+          file: 'vite.config.ts',
+          before: 'export default defineConfig({',
+          insert: REACT_COMPILER_PLUGINS,
+        },
+        {
+          file: 'vite.config.ts',
+          replace: 'plugins: [react()',
+          with: 'plugins: [react(), ...reactCompiler',
+        },
+        {
+          file: 'oxlint.config.ts',
+          replace: '      {\n        patterns: [\n',
+          with: REACT_COMPILER_LINT,
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          before: '## Dependencies',
+          insert: REACT_COMPILER_DOC,
+        },
+        {
+          file: 'knip.json',
+          replace: '"ignoreDependencies": [\n    "@swc/core",\n',
+          with: '"ignoreDependencies": [\n    "@swc/core",\n    "@babel/core",\n    "babel-plugin-react-compiler",\n',
+        },
       ],
-      addDevDependencies: { '@babel/core': '7.29.13', '@rolldown/plugin-babel': '0.3.0', 'babel-plugin-react-compiler': '1.0.0' },
+      addDevDependencies: {
+        '@babel/core': '7.29.13',
+        '@rolldown/plugin-babel': '0.3.0',
+        'babel-plugin-react-compiler': '1.0.0',
+      },
     },
     {
       when: { 'react-compiler': true, example: true, 'server-state': false },
       edits: [
-        { file: 'src/features/todo-list/useTodoList.ts', replace: "import { useMemo } from 'react';\n", with: '' },
         {
           file: 'src/features/todo-list/useTodoList.ts',
-          replace: 'const todos = useMemo(() => selectVisibleTodos({ todos: allTodos, filter }), [allTodos, filter]);',
+          replace: "import { useMemo } from 'react';\n",
+          with: '',
+        },
+        {
+          file: 'src/features/todo-list/useTodoList.ts',
+          replace:
+            'const todos = useMemo(() => selectVisibleTodos({ todos: allTodos, filter }), [allTodos, filter]);',
           with: 'const todos = selectVisibleTodos({ todos: allTodos, filter });',
         },
       ],
@@ -913,18 +1367,34 @@ export const viteStack: Stack = {
       overlay: 'analytics-posthog',
       edits: [
         { file: 'README.md', before: '## Documentation', insert: ANALYTICS_POSTHOG_README },
-        { file: 'securityHeaders.ts', replace: `"connect-src 'self'",`, with: `"connect-src 'self' https://*.posthog.com",` },
+        {
+          file: 'securityHeaders.ts',
+          replace: `"connect-src 'self'",`,
+          with: `"connect-src 'self' https://*.posthog.com",`,
+        },
       ],
       addDependencies: { 'posthog-js': '1.447.3' },
       addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0' },
     },
     {
       when: { analytics: 'module', example: false },
-      edits: [{ file: 'knip.json', replace: '"entry": ["i18next.config.ts"', with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"' }],
+      edits: [
+        {
+          file: 'knip.json',
+          replace: '"entry": ["i18next.config.ts"',
+          with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"',
+        },
+      ],
     },
     {
       when: { analytics: 'posthog', example: false },
-      edits: [{ file: 'knip.json', replace: '"entry": ["i18next.config.ts"', with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"' }],
+      edits: [
+        {
+          file: 'knip.json',
+          replace: '"entry": ["i18next.config.ts"',
+          with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"',
+        },
+      ],
     },
     {
       when: { analytics: 'module', example: true },
@@ -934,8 +1404,16 @@ export const viteStack: Stack = {
           after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
           insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
         },
-        { file: 'src/features/todo-list/components/TodoListLayout.tsx', after: '= useTodoList();\n', insert: ANALYTICS_LAYOUT_FUNCTION },
-        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={list.add}', with: 'onAdd={addTodo}' },
+        {
+          file: 'src/features/todo-list/components/TodoListLayout.tsx',
+          after: '= useTodoList();\n',
+          insert: ANALYTICS_LAYOUT_FUNCTION,
+        },
+        {
+          file: 'src/features/todo-list/components/TodoListLayout.tsx',
+          replace: 'onAdd={list.add}',
+          with: 'onAdd={addTodo}',
+        },
       ],
     },
     {
@@ -946,8 +1424,16 @@ export const viteStack: Stack = {
           after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
           insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
         },
-        { file: 'src/features/todo-list/components/TodoListLayout.tsx', after: '= useTodoList();\n', insert: ANALYTICS_LAYOUT_FUNCTION },
-        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={list.add}', with: 'onAdd={addTodo}' },
+        {
+          file: 'src/features/todo-list/components/TodoListLayout.tsx',
+          after: '= useTodoList();\n',
+          insert: ANALYTICS_LAYOUT_FUNCTION,
+        },
+        {
+          file: 'src/features/todo-list/components/TodoListLayout.tsx',
+          replace: 'onAdd={list.add}',
+          with: 'onAdd={addTodo}',
+        },
       ],
     },
     {
@@ -955,10 +1441,15 @@ export const viteStack: Stack = {
       edits: [
         {
           file: 'AGENTS.md',
-          replace: '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
+          replace:
+            '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
           with: '- Styles are Tailwind classes built on the tokens declared under `@theme` in `src/app/globals.css`: no palette class, no arbitrary color.',
         },
-        { file: 'AGENTS.md', replace: 'Oxlint, stylelint, dependency-cruiser', with: 'Oxlint, dependency-cruiser' },
+        {
+          file: 'AGENTS.md',
+          replace: 'Oxlint, stylelint, dependency-cruiser',
+          with: 'Oxlint, dependency-cruiser',
+        },
       ],
     },
     {
@@ -966,7 +1457,8 @@ export const viteStack: Stack = {
       edits: [
         {
           file: 'AGENTS.md',
-          replace: '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
+          replace:
+            '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
           with: '- A component with styles has its `X.module.css` next to it, and a color is a `var()` of a token of `src/app/globals.css`.',
         },
       ],
@@ -988,41 +1480,84 @@ export const viteStack: Stack = {
         {
           file: 'AGENTS.md',
           before: '- No comments,',
-          insert: '- Data from the API goes through the query hooks of TanStack Query, each request lives in an `xClient.ts` that parses the response with Zod, and a store only holds UI state.\n',
+          insert:
+            '- Data from the API goes through the query hooks of TanStack Query, each request lives in an `xClient.ts` that parses the response with Zod, and a store only holds UI state.\n',
         },
       ],
     },
     {
       when: { forms: true },
-      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- A form validates through its Zod schema and `zodResolver`, nowhere else.\n' }],
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert: '- A form validates through its Zod schema and `zodResolver`, nowhere else.\n',
+        },
+      ],
     },
     {
       when: { i18n: true },
-      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Every key exists in English and in French, `npm run messages` fails otherwise.\n' }],
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert:
+            '- Every key exists in English and in French, `npm run messages` fails otherwise.\n',
+        },
+      ],
     },
     {
       when: { 'react-compiler': true },
-      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- The React Compiler memoizes components and hooks: no `useMemo`, `useCallback` or `memo`.\n' }],
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert:
+            '- The React Compiler memoizes components and hooks: no `useMemo`, `useCallback` or `memo`.\n',
+        },
+      ],
     },
     {
       when: { analytics: 'module' },
-      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n' }],
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n',
+        },
+      ],
     },
     {
       when: { analytics: 'posthog' },
-      edits: [{ file: 'AGENTS.md', before: '- No comments,', insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n' }],
+      edits: [
+        {
+          file: 'AGENTS.md',
+          before: '- No comments,',
+          insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n',
+        },
+      ],
     },
     {
       when: { 'dark-theme': true, styling: 'css' },
-      edits: [{ file: 'src/app/globals.css', replace: '  color-scheme: light;\n}\n', with: DARK_TOKENS }],
+      edits: [
+        { file: 'src/app/globals.css', replace: '  color-scheme: light;\n}\n', with: DARK_TOKENS },
+      ],
     },
     {
       when: { 'dark-theme': true, styling: 'css-modules' },
-      edits: [{ file: 'src/app/globals.css', replace: '  color-scheme: light;\n}\n', with: DARK_TOKENS }],
+      edits: [
+        { file: 'src/app/globals.css', replace: '  color-scheme: light;\n}\n', with: DARK_TOKENS },
+      ],
     },
     {
       when: { 'dark-theme': true, styling: 'tailwind' },
-      edits: [{ file: 'src/app/globals.css', replace: '  html {\n    color-scheme: light;\n  }', with: DARK_TAILWIND_TOKENS }],
+      edits: [
+        {
+          file: 'src/app/globals.css',
+          replace: '  html {\n    color-scheme: light;\n  }',
+          with: DARK_TAILWIND_TOKENS,
+        },
+      ],
     },
     {
       when: { 'dark-theme': true },
@@ -1031,7 +1566,8 @@ export const viteStack: Stack = {
         {
           file: 'AGENTS.md',
           before: '- No comments,',
-          insert: '- Colors follow the theme of the system: a token gets its dark value in the `prefers-color-scheme: dark` block of `src/app/globals.css`, never in a component.\n',
+          insert:
+            '- Colors follow the theme of the system: a token gets its dark value in the `prefers-color-scheme: dark` block of `src/app/globals.css`, never in a component.\n',
         },
       ],
     },
@@ -1045,15 +1581,34 @@ export const viteStack: Stack = {
     },
     {
       when: { e2e: false },
-      edits: [{ file: 'AGENTS.md', replace: 'Then run `npm test`, and `npm run e2e` when the change shows on screen.', with: 'Then run `npm test`.' }],
+      edits: [
+        {
+          file: 'AGENTS.md',
+          replace: 'Then run `npm test`, and `npm run e2e` when the change shows on screen.',
+          with: 'Then run `npm test`.',
+        },
+      ],
     },
     {
       when: { ui: 'shadcn' },
       edits: [
-        { file: 'tsconfig.app.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]' },
-        { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"]', with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]' },
+        {
+          file: 'tsconfig.app.json',
+          replace: '"@/*": ["./src/*"]',
+          with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]',
+        },
+        {
+          file: 'tsconfig.test.json',
+          replace: '"@/*": ["./src/*"]',
+          with: '"@/*": ["./src/*"],\n      "@third-party/*": ["./third-party/*"]',
+        },
       ],
     },
   ],
-  nextSteps: (answers) => [...(answers['e2e'] || answers['component-tests'] ? ['npx playwright install --only-shell chromium'] : []), 'npm run dev'],
+  nextSteps: (answers) => [
+    ...(answers['e2e'] || answers['component-tests']
+      ? ['npx playwright install --only-shell chromium']
+      : []),
+    'npm run dev',
+  ],
 };

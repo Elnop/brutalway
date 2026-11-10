@@ -24,8 +24,11 @@ async function createProject(dir: string, plan: () => ScaffoldPlan): Promise<voi
     await scaffoldProject(plan(), (message) => progress.message(message));
   } catch (error) {
     progress.error('Failed');
-    if (existed) for (const entry of readdirSync(dir)) rmSync(resolve(dir, entry), { recursive: true, force: true });
-    else rmSync(dir, { recursive: true, force: true });
+    if (existed) {
+      for (const entry of readdirSync(dir)) {
+        rmSync(resolve(dir, entry), { recursive: true, force: true });
+      }
+    } else rmSync(dir, { recursive: true, force: true });
     throw error;
   }
   progress.stop(`Created ${dir}`);
@@ -37,8 +40,28 @@ async function askChoices(argv: string[], first: CliArgs): Promise<ProjectChoice
   const dir = await pickDir(first.dir, first.yes);
   const stack = await pickStack(stacks, first.stack, first.yes);
   const args = readArgs(argv, stack);
-  const answers = await resolveAnswers(stack.options, args.options, args.yes ? undefined : askOption);
-  return { dir, stack, answers, local: args.local, git: await askYesNo(args.git, args.yes, 'Run git init?'), install: await askYesNo(args.install, args.yes, 'Run npm install?') };
+  const answers = await resolveAnswers(
+    stack.options,
+    args.options,
+    args.yes ? undefined : askOption,
+  );
+  return {
+    dir,
+    stack,
+    answers,
+    local: args.local,
+    git: await askYesNo(args.git, args.yes, 'Run git init?'),
+    install: await askYesNo(args.install, args.yes, 'Run npm install?'),
+  };
+}
+
+function nextSteps(choices: ProjectChoices): string {
+  return [
+    `cd ${choices.dir}`,
+    ...(choices.install ? [] : ['npm install']),
+    ...(choices.git ? [] : ['git init && git config core.hooksPath .githooks']),
+    ...choices.stack.nextSteps(choices.answers),
+  ].join('\n');
 }
 
 async function main(): Promise<void> {
@@ -50,13 +73,13 @@ async function main(): Promise<void> {
   }
   intro('create-brutal');
   const choices = await askChoices(argv, first);
-  await createProject(choices.dir, () => ({ ...choices, dir: resolve(choices.dir), projectName: basename(resolve(choices.dir)), source: templateSource(choices.stack, choices.local) }));
-  note(
-    [`cd ${choices.dir}`, ...(choices.install ? [] : ['npm install']), ...(choices.git ? [] : ['git init && git config core.hooksPath .githooks']), ...choices.stack.nextSteps(choices.answers)].join(
-      '\n',
-    ),
-    'Next steps',
-  );
+  await createProject(choices.dir, () => ({
+    ...choices,
+    dir: resolve(choices.dir),
+    projectName: basename(resolve(choices.dir)),
+    source: templateSource(choices.stack, choices.local),
+  }));
+  note(nextSteps(choices), 'Next steps');
   outro('Run npm run check before each commit.');
 }
 

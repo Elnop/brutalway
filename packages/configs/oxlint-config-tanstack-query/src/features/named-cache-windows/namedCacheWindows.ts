@@ -15,14 +15,27 @@ export const namedCacheWindows = defineRule({
   meta: {
     type: 'suggestion',
     docs: { description: 'staleTime and gcTime come from the named profiles of QueryConfig.ts.' },
-    messages: { magicWindow: '{{name}} takes a named profile from QueryConfig.ts, not a number, so the cache is tuned from one file.' },
+    messages: {
+      magicWindow:
+        '{{name}} takes a named profile from QueryConfig.ts, not a number, so the cache is tuned from one file.',
+    },
     schema: [],
   },
   create(context) {
     return {
       Property(property) {
-        if (property.key.type !== 'Identifier' || !CACHE_WINDOWS.has(property.key.name) || !isNumber(property.value)) return;
-        context.report({ node: property.value, messageId: 'magicWindow', data: { name: property.key.name } });
+        if (
+          property.key.type !== 'Identifier' ||
+          !CACHE_WINDOWS.has(property.key.name) ||
+          !isNumber(property.value)
+        ) {
+          return;
+        }
+        context.report({
+          node: property.value,
+          messageId: 'magicWindow',
+          data: { name: property.key.name },
+        });
       },
     };
   },

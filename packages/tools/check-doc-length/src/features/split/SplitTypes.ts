@@ -13,7 +13,13 @@ export type TextEdit = {
 };
 
 export type Section = { node: Heading; start: number; depth: number; text: string };
-export type Piece = { path: string; start: number; end: number; shift: number; children: { title: string; path: string }[] };
+export type Piece = {
+  path: string;
+  start: number;
+  end: number;
+  shift: number;
+  children: { title: string; path: string }[];
+};
 export type Target = { path: string; slug: string | undefined };
 export type PlanRange = { from: number; to: number; depth: number; dir: string };
 export type MovedDoc = { docPath: string; targets: Map<string, Target>; indexPath: string };

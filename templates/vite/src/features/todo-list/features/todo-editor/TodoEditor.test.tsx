@@ -13,7 +13,9 @@ describe('TodoEditor', () => {
     await screen.getByLabelText('Rename Buy milk').fill('  ');
     await screen.getByRole('button', { name: 'Save' }).click();
     await expect.element(screen.getByRole('alert')).toHaveTextContent('The title is blank');
-    await expect.element(screen.getByLabelText('Rename Buy milk')).toHaveAttribute('aria-invalid', 'true');
+    await expect
+      .element(screen.getByLabelText('Rename Buy milk'))
+      .toHaveAttribute('aria-invalid', 'true');
     expect(props.onSave).not.toHaveBeenCalled();
   });
 

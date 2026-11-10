@@ -28,7 +28,11 @@ describe('buildOrder', () => {
   it('lets two packages check each other through devDependencies, since checks run once everything is built', () => {
     const order = buildOrder([
       { name: 'check-tree', devDependencies: { 'oxlint-config-node': '1.0.0' } },
-      { name: 'oxlint-config-node', dependencies: { typescript: '1.0.0' }, devDependencies: { 'check-tree': '1.0.0' } },
+      {
+        name: 'oxlint-config-node',
+        dependencies: { typescript: '1.0.0' },
+        devDependencies: { 'check-tree': '1.0.0' },
+      },
       { name: 'typescript' },
     ]);
     assert.ok(order.indexOf('typescript') < order.indexOf('oxlint-config-node'));

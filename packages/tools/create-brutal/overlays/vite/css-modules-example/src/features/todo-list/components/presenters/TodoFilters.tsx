@@ -13,7 +13,13 @@ export function TodoFilters({ filter, onChange }: TodoFiltersProps) {
   return (
     <div className={styles.filters} role="group" aria-label={t('show')}>
       {TODO_FILTERS.map((value) => (
-        <button key={value} type="button" className="button button-small" aria-pressed={filter === value} onClick={() => onChange(value)}>
+        <button
+          key={value}
+          type="button"
+          className="button button-small"
+          aria-pressed={filter === value}
+          onClick={() => onChange(value)}
+        >
           {t(`filters.${value}`)}
         </button>
       ))}

@@ -9,7 +9,12 @@
     {
       "files": ["**/*.module.css"],
       "rules": {
-        "selector-class-pattern": ["^[a-z][a-zA-Z0-9]*$", { "message": "Write the classes of a CSS Module in camelCase, so the component reads them as styles.name (selector-class-pattern)" }]
+        "selector-class-pattern": [
+          "^[a-z][a-zA-Z0-9]*$",
+          {
+            "message": "Write the classes of a CSS Module in camelCase, so the component reads them as styles.name (selector-class-pattern)"
+          }
+        ]
       }
     }
   ]

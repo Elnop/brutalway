@@ -9,10 +9,16 @@ const API_PREFIX = '/api';
 const SESSION_COOKIE = 'dev-api-list';
 
 function sessionId(request: IncomingMessage): string | undefined {
-  return new RegExp(String.raw`(?:^|;\s*)${SESSION_COOKIE}=([\w-]+)`, 'u').exec(request.headers.cookie ?? '')?.[1];
+  return new RegExp(String.raw`(?:^|;\s*)${SESSION_COOKIE}=([\w-]+)`, 'u').exec(
+    request.headers.cookie ?? '',
+  )?.[1];
 }
 
-function listOf(lists: Map<string, MockList>, request: IncomingMessage, response: ServerResponse): MockList {
+function listOf(
+  lists: Map<string, MockList>,
+  request: IncomingMessage,
+  response: ServerResponse,
+): MockList {
   const id = sessionId(request);
   const existing = id === undefined ? undefined : lists.get(id);
   if (existing !== undefined) return existing;
@@ -27,7 +33,9 @@ async function readJson(request: IncomingMessage): Promise<Record<string, unknow
   let text = '';
   for await (const chunk of request) text += String(chunk);
   const parsed: unknown = text === '' ? {} : JSON.parse(text);
-  return typeof parsed === 'object' && parsed !== null ? Object.fromEntries(Object.entries(parsed)) : {};
+  return typeof parsed === 'object' && parsed !== null
+    ? Object.fromEntries(Object.entries(parsed))
+    : {};
 }
 
 function mockMiddleware(): Connect.NextHandleFunction {
@@ -54,7 +62,13 @@ function mockMiddleware(): Connect.NextHandleFunction {
 export function devApi(): Plugin {
   const target = process.env['API_URL'];
   if (target !== undefined) {
-    const proxy: Record<string, ProxyOptions> = { [API_PREFIX]: { target, changeOrigin: true, rewrite: (path) => path.slice(API_PREFIX.length) } };
+    const proxy: Record<string, ProxyOptions> = {
+      [API_PREFIX]: {
+        target,
+        changeOrigin: true,
+        rewrite: (path) => path.slice(API_PREFIX.length),
+      },
+    };
     return { name: 'dev-api', config: () => ({ server: { proxy }, preview: { proxy } }) };
   }
   return {

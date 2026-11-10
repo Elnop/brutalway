@@ -23,9 +23,15 @@ export const storeLayout = defineRule({
         const entries = exportsOf(program);
         for (const entry of entries) {
           if (entry.name === store || entry.name === actions) continue;
-          context.report({ node: entry.node, messageId: 'foreignExport', data: { file, store, actions, name: entry.name } });
+          context.report({
+            node: entry.node,
+            messageId: 'foreignExport',
+            data: { file, store, actions, name: entry.name },
+          });
         }
-        if (!entries.some((entry) => entry.name === store)) context.report({ node: program, messageId: 'missingStore', data: { file, store } });
+        if (!entries.some((entry) => entry.name === store)) {
+          context.report({ node: program, messageId: 'missingStore', data: { file, store } });
+        }
       },
     };
   },

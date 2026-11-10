@@ -5,14 +5,24 @@ import { graphql } from './githubCli.ts';
 const STATUS_FIELD = STATUS_PROJECT.field;
 
 export function loadProject(): StatusProject {
-  const answer: { data: { user: { projectV2: { id: string; field: { id: string; options: { id: string; name: string }[] } } } } } = JSON.parse(
+  const answer: {
+    data: {
+      user: {
+        projectV2: { id: string; field: { id: string; options: { id: string; name: string }[] } };
+      };
+    };
+  } = JSON.parse(
     graphql(
       `query($owner: String!, $number: Int!) { user(login: $owner) { projectV2(number: $number) { id field(name: "${STATUS_FIELD}") { ... on ProjectV2SingleSelectField { id options { id name } } } } } }`,
       { owner: STATUS_PROJECT.owner, number: STATUS_PROJECT.number },
     ),
   );
   const { id, field } = answer.data.user.projectV2;
-  return { id, fieldId: field.id, options: new Map(field.options.map((option) => [option.name, option.id])) };
+  return {
+    id,
+    fieldId: field.id,
+    options: new Map(field.options.map((option) => [option.name, option.id])),
+  };
 }
 
 function projectItemId(issue: IssueNode, project: StatusProject): string {
@@ -38,19 +48,36 @@ function projectItemId(issue: IssueNode, project: StatusProject): string {
   return answer.data.addProjectV2ItemById.item.id;
 }
 
-export function setBoardStatus(issue: IssueNode, project: StatusProject, boardStatus: string): void {
-  const option = project.options.get(boardStatus);
-  if (option === undefined) throw new Error(`The ${STATUS_FIELD} field of the project has no option named ${boardStatus}.`);
-  graphql(
-    `
+const SET_STATUS_MUTATION = `
       mutation ($project: ID!, $item: ID!, $field: ID!, $option: String!) {
-        updateProjectV2ItemFieldValue(input: { projectId: $project, itemId: $item, fieldId: $field, value: { singleSelectOptionId: $option } }) {
+        updateProjectV2ItemFieldValue(
+          input: {
+            projectId: $project
+            itemId: $item
+            fieldId: $field
+            value: { singleSelectOptionId: $option }
+          }
+        ) {
           projectV2Item {
             id
           }
         }
       }
-    `,
-    { project: project.id, item: projectItemId(issue, project), field: project.fieldId, option },
-  );
+    `;
+
+export function setBoardStatus(
+  issue: IssueNode,
+  project: StatusProject,
+  boardStatus: string,
+): void {
+  const option = project.options.get(boardStatus);
+  if (option === undefined) {
+    throw new Error(`The ${STATUS_FIELD} field of the project has no option named ${boardStatus}.`);
+  }
+  graphql(SET_STATUS_MUTATION, {
+    project: project.id,
+    item: projectItemId(issue, project),
+    field: project.fieldId,
+    option,
+  });
 }

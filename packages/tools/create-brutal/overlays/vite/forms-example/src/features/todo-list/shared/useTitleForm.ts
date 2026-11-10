@@ -17,7 +17,10 @@ function titleError(message: string | undefined): (typeof TITLE_ERRORS)[number] 
 
 export function useTitleForm({ initialTitle, clearOnSubmit, onSubmit }: TitleFormOptions) {
   const { t } = useTranslation('todoList');
-  const form = useForm({ resolver: zodResolver(TodoDraftSchema), defaultValues: { title: initialTitle } });
+  const form = useForm({
+    resolver: zodResolver(TodoDraftSchema),
+    defaultValues: { title: initialTitle },
+  });
 
   function submit(event: SubmitEvent<HTMLFormElement>) {
     form
@@ -29,5 +32,9 @@ export function useTitleForm({ initialTitle, clearOnSubmit, onSubmit }: TitleFor
   }
 
   const error = titleError(form.formState.errors.title?.message);
-  return { field: form.register('title'), error: error === undefined ? undefined : t(`errors.${error}`), submit };
+  return {
+    field: form.register('title'),
+    error: error === undefined ? undefined : t(`errors.${error}`),
+    submit,
+  };
 }

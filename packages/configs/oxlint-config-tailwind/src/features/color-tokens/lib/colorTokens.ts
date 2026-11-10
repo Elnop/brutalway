@@ -15,37 +15,66 @@ function closestTokens(tokens: ColorToken[], color: Oklab | undefined): ColorTok
   if (color === undefined) return tokens.slice(0, SUGGESTIONS);
   return tokens
     .filter((token) => token.color !== undefined)
-    .toSorted((left, right) => oklabDistance(left.color ?? color, color) - oklabDistance(right.color ?? color, color))
+    .toSorted(
+      (left, right) =>
+        oklabDistance(left.color ?? color, color) - oklabDistance(right.color ?? color, color),
+    )
     .slice(0, SUGGESTIONS);
 }
 
 function stylesheetOption(option: unknown): string {
-  return typeof option === 'object' && option !== null && 'stylesheet' in option && typeof option.stylesheet === 'string' ? option.stylesheet : DEFAULT_STYLESHEET;
+  return typeof option === 'object' &&
+    option !== null &&
+    'stylesheet' in option &&
+    typeof option.stylesheet === 'string'
+    ? option.stylesheet
+    : DEFAULT_STYLESHEET;
+}
+
+function offenseReport(tokens: ColorToken[], offense: Offense, stylesheet: string) {
+  const closest = closestTokens(tokens, offense.color).map((token) => offense.format(token.name));
+  if (closest.length === 0) {
+    return { messageId: 'noTokens' as const, data: { text: offense.text, stylesheet } };
+  }
+  return {
+    messageId: 'notToken' as const,
+    data: { text: offense.text, stylesheet, closest: closest.join(', ') },
+  };
 }
 
 export const colorTokens = defineRule({
   meta: {
     type: 'problem',
-    docs: { description: 'Colors come from the tokens declared under @theme: no Tailwind palette class, no arbitrary color, no color literal in style, fill or stroke.' },
-    messages: {
-      notToken: '{{text}} is not a color token. Use a color declared under @theme in {{stylesheet}}, closest: {{closest}}.',
-      noTokens: '{{text}} is not a color token. Declare the colors as --color-* under @theme in {{stylesheet}} and use those.',
+    docs: {
+      description:
+        'Colors come from the tokens declared under @theme: no Tailwind palette class, no arbitrary color, no color literal in style, fill or stroke.',
     },
-    schema: [{ type: 'object', properties: { stylesheet: { type: 'string' } }, additionalProperties: false }],
+    messages: {
+      notToken:
+        '{{text}} is not a color token. Use a color declared under @theme in {{stylesheet}}, closest: {{closest}}.',
+      noTokens:
+        '{{text}} is not a color token. Declare the colors as --color-* under @theme in {{stylesheet}} and use those.',
+    },
+    schema: [
+      {
+        type: 'object',
+        properties: { stylesheet: { type: 'string' } },
+        additionalProperties: false,
+      },
+    ],
   },
   create(context) {
     const stylesheet = stylesheetOption(context.options[0]);
     const tokens = readColorTokens(stylesheet, context.cwd);
     function report(node: ESTree.Node, offense: Offense) {
-      const closest = closestTokens(tokens, offense.color).map((token) => offense.format(token.name));
-      if (closest.length === 0) context.report({ node, messageId: 'noTokens', data: { text: offense.text, stylesheet } });
-      else context.report({ node, messageId: 'notToken', data: { text: offense.text, stylesheet, closest: closest.join(', ') } });
+      context.report({ node, ...offenseReport(tokens, offense, stylesheet) });
     }
     return {
       JSXAttribute(attribute) {
         if (attribute.name.type !== 'JSXIdentifier') return;
-        if (isClassAttribute(attribute)) reportClassOffenses(attribute, readPalette(context.cwd), report);
-        else reportLiteralOffenses(attribute, attribute.name.name, report);
+        if (isClassAttribute(attribute)) {
+          reportClassOffenses(attribute, readPalette(context.cwd), report);
+        } else reportLiteralOffenses(attribute, attribute.name.name, report);
       },
     };
   },

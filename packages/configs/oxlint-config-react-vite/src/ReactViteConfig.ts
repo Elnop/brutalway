@@ -9,7 +9,17 @@ export const reactViteConfig: OxlintConfig = defineConfig({
   plugins: ['typescript', 'react', 'import', 'oxc', 'unicorn'],
   env: { browser: true, es2024: true },
   rules: {
-    'no-restricted-imports': ['error', { patterns: [{ regex: '^\\.\\.?/', message: 'Relative imports are not allowed: import through an alias.' }] }],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            regex: '^\\.\\.?/',
+            message: 'Relative imports are not allowed: import through an alias.',
+          },
+        ],
+      },
+    ],
     'import/default': 'off',
     'import/no-unassigned-import': ['error', { allow: ['**/*.css'] }],
     'typescript/no-non-null-assertion': 'off',

@@ -1,8 +1,15 @@
 import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
 
 const NPM_TEST_ROW = '`node:test`: queries on an in-memory database, routes through `inject()`';
-const ROW_ID_SENTENCE = " That is also why `src/shared-features/todos/todosQueries.ts` reads `row['id']`.";
-const TEST_FILES_OPENING_A_DATABASE = ['src/shared-features/todos/todosQueries.test.ts', 'src/features/todo-list/todoListRoutes.test.ts', 'src/features/todo-stats/todoStatsRoutes.test.ts'];
+const ROW_ID_SENTENCE =
+  " That is also why `src/shared-features/todos/todosQueries.ts` reads `row['id']`.";
+const TEST_FILES_OPENING_A_DATABASE = [
+  'src/shared-features/todos/todosQueries.test.ts',
+  'src/features/todo-list/todoListRoutes.test.ts',
+  'src/features/todo-stats/todoStatsRoutes.test.ts',
+];
+
+const TODO_LIST_ROUTES_TEST = 'src/features/todo-list/todoListRoutes.test.ts';
 
 export const fastifyStack: Stack = {
   id: 'fastify',
@@ -11,8 +18,17 @@ export const fastifyStack: Stack = {
   options: [
     { id: 'example', message: 'Keep the todo list API example?', default: true },
     { id: 'swagger', message: 'Serve a Swagger UI on /docs?', default: true },
-    { id: 'database', message: 'Use SQLite (node:sqlite)? Without it, the example keeps its todos in memory.', default: true },
-    { id: 'claude-hook', message: 'Add the Claude Code hook that lints each edited file?', default: true, independent: true },
+    {
+      id: 'database',
+      message: 'Use SQLite (node:sqlite)? Without it, the example keeps its todos in memory.',
+      default: true,
+    },
+    {
+      id: 'claude-hook',
+      message: 'Add the Claude Code hook that lints each edited file?',
+      default: true,
+      independent: true,
+    },
     { id: 'ci', message: 'Add the GitHub Actions workflow?', default: true, independent: true },
   ],
   changes: [
@@ -23,12 +39,22 @@ export const fastifyStack: Stack = {
     },
     {
       when: { example: false },
-      remove: ['src/features', 'src/shared-features/todos', 'src/shared/ErrorSchemas.ts', 'docs/reference/endpoints.md'],
+      remove: [
+        'src/features',
+        'src/shared-features/todos',
+        'src/shared/ErrorSchemas.ts',
+        'docs/reference/endpoints.md',
+      ],
       edits: [
         { file: 'src/app/buildApp.ts', dropLines: '#src/features/' },
         { file: 'src/app/buildApp.ts', dropLines: 'createTodosQueries' },
         { file: 'src/app/buildApp.ts', dropLines: 'Routes(create' },
-        { file: 'src/app/buildApp.ts', replace: "'Todos API'", with: "'__PROJECT_NAME__'", all: true },
+        {
+          file: 'src/app/buildApp.ts',
+          replace: "'Todos API'",
+          with: "'__PROJECT_NAME__'",
+          all: true,
+        },
         { file: 'README.md', dropLines: 'The example is the todo list API' },
         { file: 'README.md', dropLines: 'docs/reference/endpoints.md' },
         {
@@ -37,16 +63,29 @@ export const fastifyStack: Stack = {
             ' `src/shared-features/todos/` holds the schemas, the types and `todosQueries.ts`, the only file that runs SQL on the todos table. `src/features/todo-list/` and `src/features/todo-stats/` both use it without knowing each other.',
           with: '',
         },
-        { file: 'docs/reference/commands.md', replace: NPM_TEST_ROW, with: '`node:test`, routes through `inject()`' },
+        {
+          file: 'docs/reference/commands.md',
+          replace: NPM_TEST_ROW,
+          with: '`node:test`, routes through `inject()`',
+        },
         { file: 'docs/guides/start-your-own-api.md', dropLines: '1. Delete `src/features/`' },
-        { file: 'docs/guides/start-your-own-api.md', replace: '2. Add a shared feature', with: '1. Add a shared feature' },
-        { file: 'docs/guides/start-your-own-api.md', replace: '3. Run `npm run check` often', with: '2. Run `npm run check` often' },
+        {
+          file: 'docs/guides/start-your-own-api.md',
+          replace: '2. Add a shared feature',
+          with: '1. Add a shared feature',
+        },
+        {
+          file: 'docs/guides/start-your-own-api.md',
+          replace: '3. Run `npm run check` often',
+          with: '2. Run `npm run check` often',
+        },
         { file: 'docs/reference/verifications.md', replace: ROW_ID_SENTENCE, with: '' },
         { file: 'docs/reference/verifications.md', dropLines: '| Queries |' },
         { file: 'docs/reference/verifications.md', dropLines: '| Routes |' },
         {
           file: 'docs/concepts/architecture.md',
-          replace: ' A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared-features/todos/todosQueries.ts`, and only queries run SQL.',
+          replace:
+            ' A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared-features/todos/todosQueries.ts`, and only queries run SQL.',
           with: ' Only queries run SQL.',
         },
       ],
@@ -63,7 +102,14 @@ export const fastifyStack: Stack = {
     {
       when: { example: true, swagger: false },
       overlay: 'example-no-swagger',
-      edits: [{ file: 'docs/reference/endpoints.md', replace: ', serialize the output and produce the OpenAPI document served on `/docs/json`.', with: ' and serialize the output.' }],
+      edits: [
+        {
+          file: 'docs/reference/endpoints.md',
+          replace:
+            ', serialize the output and produce the OpenAPI document served on `/docs/json`.',
+          with: ' and serialize the output.',
+        },
+      ],
     },
     {
       when: { swagger: false },
@@ -73,9 +119,17 @@ export const fastifyStack: Stack = {
         { file: 'src/app/buildApp.ts', dropLines: '@fastify/swagger' },
         { file: 'src/app/buildApp.ts', dropLines: 'jsonSchemaTransform' },
         { file: 'src/app/buildApp.ts', dropLines: 'SWAGGER_THEME' },
+        { file: 'src/app/buildApp.ts', dropLines: 'app.register(swagger' },
+        { file: 'src/app/buildApp.ts', dropLines: 'openapi: { info:' },
+        { file: 'src/app/buildApp.ts', dropLines: "routePrefix: '/docs'" },
+        { file: 'src/app/buildApp.ts', replace: '\n\n  });\n  });\n', with: '\n' },
         { file: 'README.md', replace: ', and the Swagger UI on `/docs`.', with: '.' },
         { file: 'docs/reference/layout.md', replace: ', routes, Swagger', with: ', routes' },
-        { file: 'docs/reference/verifications.md', replace: 'the full wiring and the OpenAPI document', with: 'the full wiring' },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'the full wiring and the OpenAPI document',
+          with: 'the full wiring',
+        },
       ],
       removeDependencies: ['@fastify/swagger-ui'],
     },
@@ -85,13 +139,39 @@ export const fastifyStack: Stack = {
       edits: [
         ...TEST_FILES_OPENING_A_DATABASE.flatMap((file) => [
           { file, dropLines: "import { openDatabase } from '#src/shared/lib/openDatabase.ts';" },
-          { file, replace: "createTodosQueries(openDatabase(':memory:'))", with: 'createTodosQueries()' },
+          {
+            file,
+            replace: "createTodosQueries(openDatabase(':memory:'))",
+            with: 'createTodosQueries()',
+          },
         ]),
-        { file: 'src/app/buildApp.ts', replace: 'createTodosQueries(database)', with: 'createTodosQueries()' },
-        { file: 'docs/reference/layout.md', replace: 'the only file that runs SQL on the todos table', with: 'which keeps the todos in memory' },
-        { file: 'docs/reference/commands.md', replace: NPM_TEST_ROW, with: '`node:test`: queries, routes through `inject()`' },
+        {
+          file: TODO_LIST_ROUTES_TEST,
+          replace:
+            'await app.register(\n    todoListRoutes(createTodoListService({ todos: createTodosQueries() })),\n  );',
+          with: 'await app.register(todoListRoutes(createTodoListService({ todos: createTodosQueries() })));',
+        },
+        {
+          file: 'src/app/buildApp.ts',
+          replace: 'createTodosQueries(database)',
+          with: 'createTodosQueries()',
+        },
+        {
+          file: 'docs/reference/layout.md',
+          replace: 'the only file that runs SQL on the todos table',
+          with: 'which keeps the todos in memory',
+        },
+        {
+          file: 'docs/reference/commands.md',
+          replace: NPM_TEST_ROW,
+          with: '`node:test`: queries, routes through `inject()`',
+        },
         { file: 'docs/reference/verifications.md', replace: ROW_ID_SENTENCE, with: '' },
-        { file: 'docs/reference/verifications.md', replace: 'the SQL, on a `:memory:` database', with: 'the in-memory store' },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'the SQL, on a `:memory:` database',
+          with: 'the in-memory store',
+        },
       ],
     },
     {
@@ -100,26 +180,51 @@ export const fastifyStack: Stack = {
       edits: [
         { file: 'src/app/buildApp.ts', dropLines: 'openDatabase' },
         { file: 'src/app/buildApp.ts', dropLines: 'database.close()' },
-        { file: 'src/app/buildApp.ts', replace: '{ databasePath, logLevel }', with: '{ logLevel }' },
-        { file: 'src/app/buildApp.test.ts', replace: "databasePath: ':memory:', ", with: '', all: true },
+        {
+          file: 'src/app/buildApp.ts',
+          replace: '{ databasePath, logLevel }',
+          with: '{ logLevel }',
+        },
+        {
+          file: 'src/app/buildApp.test.ts',
+          replace: "databasePath: ':memory:', ",
+          with: '',
+          all: true,
+        },
         { file: 'src/app/AppTypes.ts', replace: "'databasePath' | 'logLevel'", with: "'logLevel'" },
         { file: 'src/shared/EnvTypes.ts', dropLines: 'databasePath' },
         { file: 'src/shared/lib/readEnv.ts', dropLines: 'DATABASE_PATH: z' },
-        { file: 'src/shared/lib/readEnv.ts', replace: ', databasePath: env.DATABASE_PATH', with: '' },
-        { file: 'src/shared/lib/readEnv.test.ts', replace: ", databasePath: 'todos.db'", with: '' },
-        { file: 'src/shared/lib/readEnv.test.ts', replace: " DATABASE_PATH: ':memory:',", with: '' },
-        { file: 'src/shared/lib/readEnv.test.ts', dropLines: "databasePath: ':memory:'" },
+        { file: 'src/shared/lib/readEnv.ts', dropLines: 'databasePath: env.DATABASE_PATH' },
+        { file: 'src/shared/lib/readEnv.test.ts', dropLines: "databasePath: 'todos.db'" },
+        {
+          file: 'src/shared/lib/readEnv.test.ts',
+          replace:
+            "    assert.deepEqual(\n      readEnv({ HOST: '0.0.0.0', PORT: '8080', DATABASE_PATH: ':memory:', LOG_LEVEL: 'silent' }),\n      {\n        host: '0.0.0.0',\n        port: 8080,\n        databasePath: ':memory:',\n        logLevel: 'silent',\n      },\n    );\n",
+          with: "    assert.deepEqual(readEnv({ HOST: '0.0.0.0', PORT: '8080', LOG_LEVEL: 'silent' }), {\n      host: '0.0.0.0',\n      port: 8080,\n      logLevel: 'silent',\n    });\n",
+        },
         { file: 'README.md', dropLines: '| `DATABASE_PATH` |' },
-        { file: 'docs/reference/layout.md', replace: 'wires everything: database, ', with: 'wires everything: ' },
-        { file: 'docs/reference/layout.md', replace: 'env, database connection, server factory', with: 'env, server factory' },
-        { file: 'docs/reference/verifications.md', replace: 'it holds three plain modules', with: 'it holds two plain modules' },
+        {
+          file: 'docs/reference/layout.md',
+          replace: 'wires everything: database, ',
+          with: 'wires everything: ',
+        },
+        {
+          file: 'docs/reference/layout.md',
+          replace: 'env, database connection, server factory',
+          with: 'env, server factory',
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'it holds three plain modules',
+          with: 'it holds two plain modules',
+        },
       ],
     },
     {
       when: { 'claude-hook': false },
       remove: ['.claude', 'docs/guides/work-with-an-agent.md'],
       edits: [
-        { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
+        { file: 'knip.json', replace: '    "@brutalway/agent-hook",\n', with: '' },
         { file: 'README.md', dropLines: 'docs/guides/work-with-an-agent.md' },
       ],
       removeDependencies: ['@brutalway/agent-hook'],
@@ -127,7 +232,13 @@ export const fastifyStack: Stack = {
     {
       when: { ci: false },
       remove: ['.github'],
-      edits: [{ file: 'docs/reference/verifications.md', replace: 'runs locally, in the pre-commit hook and in CI.', with: 'runs locally and in the pre-commit hook.' }],
+      edits: [
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'runs locally, in the pre-commit hook and in CI.',
+          with: 'runs locally and in the pre-commit hook.',
+        },
+      ],
     },
   ],
   nextSteps: () => ['npm run dev'],

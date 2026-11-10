@@ -1,5 +1,10 @@
 import type { z } from 'zod';
-import type { TodoDraftSchema, TodoFilterSchema, TodoPatchSchema, TodoSchema } from '#src/shared-features/todos/TodosSchemas.ts';
+import type {
+  TodoDraftSchema,
+  TodoFilterSchema,
+  TodoPatchSchema,
+  TodoSchema,
+} from '#src/shared-features/todos/TodosSchemas.ts';
 
 export type Todo = z.infer<typeof TodoSchema>;
 

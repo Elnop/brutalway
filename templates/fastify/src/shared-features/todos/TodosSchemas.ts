@@ -13,8 +13,10 @@ const TODO_TITLE = z
 
 export const TodoDraftSchema = z.object({ title: TODO_TITLE });
 
-export const TodoPatchSchema = z.object({ title: TODO_TITLE.optional(), completed: z.boolean().optional() }).refine((patch) => patch.title !== undefined || patch.completed !== undefined, {
-  message: 'Send a title, completed, or both',
-});
+export const TodoPatchSchema = z
+  .object({ title: TODO_TITLE.optional(), completed: z.boolean().optional() })
+  .refine((patch) => patch.title !== undefined || patch.completed !== undefined, {
+    message: 'Send a title, completed, or both',
+  });
 
 export const TodoFilterSchema = z.enum(['all', 'active', 'completed']);

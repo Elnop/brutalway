@@ -52,7 +52,7 @@
     "@brutalway/oxlint-config-i18next": "0.2.0",
     "@brutalway/oxlint-config-react-vite": "0.4.2",
     "@brutalway/playwright-fixtures": "0.2.0",
-    "@brutalway/prettier-config": "0.1.0",
+    "@brutalway/prettier-config": "0.3.0",
     "@brutalway/stylelint-config": "0.2.0",
     "@brutalway/tsconfig": "0.3.0",
     "@playwright/test": "1.64.1",

@@ -1,8 +1,15 @@
-import { ONLINE_PROBE_TIMEOUT_MS, ONLINE_PROBE_URL, REQUEST_TIMEOUT_MS } from '#src/features/remote-links/RemoteLinksConfig.ts';
+import {
+  ONLINE_PROBE_TIMEOUT_MS,
+  ONLINE_PROBE_URL,
+  REQUEST_TIMEOUT_MS,
+} from '#src/features/remote-links/RemoteLinksConfig.ts';
 import type { LinkResult, LinkVerdict } from '#src/shared-features/links/LinksTypes.ts';
 import { npmPackageName } from '#src/shared-features/links/npmPackageName.ts';
 
-const HEADERS = { 'user-agent': 'check-doc-links (+https://github.com/Elnop/brutalway)', accept: 'text/html,application/json;q=0.9,*/*;q=0.8' };
+const HEADERS = {
+  'user-agent': 'check-doc-links (+https://github.com/Elnop/brutalway)',
+  accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
+};
 
 export function statusVerdict(status: number): LinkVerdict {
   if (status < 400) return 'alive';
@@ -15,13 +22,20 @@ function requestedUrl(url: string): string {
 }
 
 async function status(url: string, method: 'HEAD' | 'GET'): Promise<number> {
-  const response = await fetch(url, { method, headers: HEADERS, redirect: 'follow', signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+  const response = await fetch(url, {
+    method,
+    headers: HEADERS,
+    redirect: 'follow',
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
   await response.body?.cancel();
   return response.status;
 }
 
 function failureCode(error: unknown): unknown {
-  return error instanceof Error && typeof error.cause === 'object' && error.cause !== null ? Reflect.get(error.cause, 'code') : undefined;
+  return error instanceof Error && typeof error.cause === 'object' && error.cause !== null
+    ? Reflect.get(error.cause, 'code')
+    : undefined;
 }
 
 export const linkClient = {
@@ -32,13 +46,22 @@ export const linkClient = {
       const code = head < 400 ? head : await status(target, 'GET');
       return { verdict: statusVerdict(code), reason: `status ${code}` };
     } catch (error) {
-      if (failureCode(error) === 'ENOTFOUND') return { verdict: 'dead', reason: 'the domain does not exist' };
-      return { verdict: 'unsure', reason: error instanceof Error && error.name === 'TimeoutError' ? 'no answer' : 'no connection' };
+      if (failureCode(error) === 'ENOTFOUND') {
+        return { verdict: 'dead', reason: 'the domain does not exist' };
+      }
+      return {
+        verdict: 'unsure',
+        reason:
+          error instanceof Error && error.name === 'TimeoutError' ? 'no answer' : 'no connection',
+      };
     }
   },
   async isOnline(): Promise<boolean> {
     try {
-      const response = await fetch(ONLINE_PROBE_URL, { method: 'HEAD', signal: AbortSignal.timeout(ONLINE_PROBE_TIMEOUT_MS) });
+      const response = await fetch(ONLINE_PROBE_URL, {
+        method: 'HEAD',
+        signal: AbortSignal.timeout(ONLINE_PROBE_TIMEOUT_MS),
+      });
       await response.body?.cancel();
       return true;
     } catch {

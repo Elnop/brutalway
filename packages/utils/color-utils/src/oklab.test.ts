@@ -4,7 +4,13 @@ import { oklab, oklabDistance } from '#src/oklab.ts';
 import type { Oklab } from '#src/ColorTypes.ts';
 
 function rounded(color: Oklab | undefined) {
-  return color === undefined ? undefined : { l: Number(color.l.toFixed(3)), a: Number(color.a.toFixed(3)), b: Number(color.b.toFixed(3)) };
+  return color === undefined
+    ? undefined
+    : {
+        l: Number(color.l.toFixed(3)),
+        a: Number(color.a.toFixed(3)),
+        b: Number(color.b.toFixed(3)),
+      };
 }
 
 describe('oklab', () => {

@@ -6,7 +6,9 @@ import { checkRemoteLinks } from '#src/features/remote-links/lib/checkRemoteLink
 import type { ExternalLink, LinkResult } from '#src/shared-features/links/LinksTypes.ts';
 
 function report(link: ExternalLink, result: LinkResult): string {
-  if (result.verdict === 'dead') return `${link.doc}:${link.line} links to ${link.url}, which is gone (${result.reason}): fix the link or remove it.`;
+  if (result.verdict === 'dead') {
+    return `${link.doc}:${link.line} links to ${link.url}, which is gone (${result.reason}): fix the link or remove it.`;
+  }
   return `${link.doc}:${link.line} links to ${link.url}, which did not answer clearly (${result.reason}): not counted as broken, open it to check.`;
 }
 
@@ -22,7 +24,11 @@ for (const url of new Set(links.map((link) => link.url))) {
 }
 
 const remoteCheck = await checkRemoteLinks(cwd, remote, Date.now());
-if (remoteCheck.unchecked > 0) process.stderr.write(`check-doc-links: offline, ${remoteCheck.unchecked} external links not checked.\n`);
+if (remoteCheck.unchecked > 0) {
+  process.stderr.write(
+    `check-doc-links: offline, ${remoteCheck.unchecked} external links not checked.\n`,
+  );
+}
 for (const [url, result] of remoteCheck.results) results.set(url, result);
 
 let dead = 0;

@@ -5,7 +5,10 @@ import { runCommand } from '#src/shared/lib/runCommand.ts';
 import { OVERLAYS_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
 
-export async function scaffoldProject(plan: ScaffoldPlan, step: (message: string) => void): Promise<void> {
+export async function scaffoldProject(
+  plan: ScaffoldPlan,
+  step: (message: string) => void,
+): Promise<void> {
   step(`Downloading ${plan.stack.directory}`);
   await fetchTemplate(plan.stack, plan.dir, plan.source);
   step('Applying the options');

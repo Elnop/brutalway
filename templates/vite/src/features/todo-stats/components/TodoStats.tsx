@@ -18,7 +18,12 @@ export function TodoStats({ remaining, completed, onClearCompleted }: TodoStatsP
         {t('left', { count: remaining })}
       </p>
       <p className="todo-stats-chip todo-stats-done">{t('done', { count: completed })}</p>
-      <button type="button" className="button button-pink" disabled={completed === 0} onClick={onClearCompleted}>
+      <button
+        type="button"
+        className="button button-pink"
+        disabled={completed === 0}
+        onClick={onClearCompleted}
+      >
         {t('clear')}
       </button>
     </section>

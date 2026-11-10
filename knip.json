@@ -1,6 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["**/fixtures/**", "packages/tools/create-brutal/overlays/**", "templates/**", "site/**"],
+  "ignore": [
+    "**/fixtures/**",
+    "packages/tools/create-brutal/overlays/**",
+    "templates/**",
+    "site/**"
+  ],
   "workspaces": {
     ".": {},
     "packages/configs/oxlint-config-typescript": {
@@ -13,7 +18,10 @@
       ]
     },
     "packages/configs/oxlint-config-zustand": {
-      "ignoreDependencies": ["@brutalway/eslint-plugin-store-layout", "@brutalway/dependency-cruiser-config"]
+      "ignoreDependencies": [
+        "@brutalway/eslint-plugin-store-layout",
+        "@brutalway/dependency-cruiser-config"
+      ]
     },
     "packages/configs/dependency-cruiser-config": {
       "ignoreDependencies": ["@swc/core", "dependency-cruiser"]

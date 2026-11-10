@@ -15,30 +15,45 @@ const ISSUE_FIELDS = `id number state authorAssociation
 export function loadIssue(number: number): IssueNode {
   const [owner, name] = repository.split('/');
   const answer: { data: { repository: { issue: IssueNode } } } = JSON.parse(
-    graphql(`query($owner: String!, $name: String!, $number: Int!) { repository(owner: $owner, name: $name) { issue(number: $number) { ${ISSUE_FIELDS} } } }`, {
-      owner: owner ?? '',
-      name: name ?? '',
-      number,
-    }),
+    graphql(
+      `query($owner: String!, $name: String!, $number: Int!) { repository(owner: $owner, name: $name) { issue(number: $number) { ${ISSUE_FIELDS} } } }`,
+      {
+        owner: owner ?? '',
+        name: name ?? '',
+        number,
+      },
+    ),
   );
   return answer.data.repository.issue;
 }
 
 export function loadOpenIssues(after?: string): IssueNode[] {
   const [owner, name] = repository.split('/');
-  const answer: { data: { repository: { issues: { nodes: IssueNode[]; pageInfo: { hasNextPage: boolean; endCursor: string } } } } } = JSON.parse(
+  const answer: {
+    data: {
+      repository: {
+        issues: { nodes: IssueNode[]; pageInfo: { hasNextPage: boolean; endCursor: string } };
+      };
+    };
+  } = JSON.parse(
     graphql(
       `query($owner: String!, $name: String!, $after: String) { repository(owner: $owner, name: $name) { issues(states: OPEN, first: 50, after: $after) { nodes { ${ISSUE_FIELDS} } pageInfo { hasNextPage endCursor } } } }`,
-      after === undefined ? { owner: owner ?? '', name: name ?? '' } : { owner: owner ?? '', name: name ?? '', after },
+      after === undefined
+        ? { owner: owner ?? '', name: name ?? '' }
+        : { owner: owner ?? '', name: name ?? '', after },
     ),
   );
   const page = answer.data.repository.issues;
-  return page.pageInfo.hasNextPage ? [...page.nodes, ...loadOpenIssues(page.pageInfo.endCursor)] : page.nodes;
+  return page.pageInfo.hasNextPage
+    ? [...page.nodes, ...loadOpenIssues(page.pageInfo.endCursor)]
+    : page.nodes;
 }
 
 export function issueState(issue: IssueNode, project: StatusProject): IssueStatusState {
   const item = issue.projectItems.nodes.find((node) => node.project.id === project.id);
-  const statusEvents = issue.timelineItems.nodes.filter((event) => event.createdAt !== undefined && (event.label?.name ?? '') in STATUS_OPTIONS);
+  const statusEvents = issue.timelineItems.nodes.filter(
+    (event) => event.createdAt !== undefined && (event.label?.name ?? '') in STATUS_OPTIONS,
+  );
   return {
     labels: issue.labels.nodes.map((label) => label.name),
     labelChangedAt: statusEvents.at(-1)?.createdAt,

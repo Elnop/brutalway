@@ -18,9 +18,15 @@ function boardTarget(state: IssueStatusState): StatusTarget | undefined {
 }
 
 export function chooseTarget(state: IssueStatusState, trigger: Trigger): StatusTarget {
-  const fromLabel = trigger.kind === 'labeled' && isStatusLabel(trigger.label) ? trigger.label : STATUS_LABELS.find((label) => state.labels.includes(label));
+  const fromLabel =
+    trigger.kind === 'labeled' && isStatusLabel(trigger.label)
+      ? trigger.label
+      : STATUS_LABELS.find((label) => state.labels.includes(label));
   const fromAuthor: StatusTarget = { label: state.external ? 'triage' : 'todo', close: false };
-  const labelTarget: StatusTarget | undefined = fromLabel === undefined ? undefined : { label: fromLabel, close: false };
+  const labelTarget: StatusTarget | undefined =
+    fromLabel === undefined ? undefined : { label: fromLabel, close: false };
   const board = trigger.kind === 'sweep' ? boardTarget(state) : undefined;
-  return board !== undefined && (labelTarget === undefined || boardIsNewer(state)) ? board : (labelTarget ?? fromAuthor);
+  return board !== undefined && (labelTarget === undefined || boardIsNewer(state))
+    ? board
+    : (labelTarget ?? fromAuthor);
 }

@@ -7,7 +7,9 @@ function defaultLabel(option: StackOption): string {
 }
 
 function optionUsage(option: StackOption): string {
-  const form = isChoice(option) ? `--${option.id} ${option.values.map((value) => value.id).join('|')}` : `--[no-]${option.id}`;
+  const form = isChoice(option)
+    ? `--${option.id} ${option.values.map((value) => value.id).join('|')}`
+    : `--[no-]${option.id}`;
   return `  ${form.padEnd(30)} default: ${defaultLabel(option)}`;
 }
 

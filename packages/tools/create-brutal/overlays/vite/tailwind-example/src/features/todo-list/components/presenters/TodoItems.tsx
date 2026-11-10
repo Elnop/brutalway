@@ -16,7 +16,13 @@ export function TodoItems({ todos, onToggle, onRename, onRemove }: TodoItemsProp
   return (
     <ul className="grid gap-3">
       {todos.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} onToggle={onToggle} onRename={onRename} onRemove={onRemove} />
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={onToggle}
+          onRename={onRename}
+          onRemove={onRemove}
+        />
       ))}
     </ul>
   );

@@ -6,11 +6,19 @@ import type { MarkdownFile } from '#src/features/markdown-links/MarkdownLinksTyp
 import type { ExternalLink } from '#src/shared-features/links/LinksTypes.ts';
 
 function urlNodes(node: Nodes): Nodes[] {
-  const own = node.type === 'link' || node.type === 'image' || node.type === 'definition' ? [node] : [];
+  const own =
+    node.type === 'link' || node.type === 'image' || node.type === 'definition' ? [node] : [];
   return 'children' in node ? [...own, ...node.children.flatMap((child) => urlNodes(child))] : own;
 }
 
 export function externalLinks(doc: MarkdownFile): ExternalLink[] {
-  const tree = fromMarkdown(doc.content, { extensions: [gfm()], mdastExtensions: [gfmFromMarkdown()] });
-  return urlNodes(tree).flatMap((node) => ('url' in node && /^https?:\/\//iu.test(node.url) ? [{ doc: doc.path, url: node.url, line: node.position?.start.line ?? 1 }] : []));
+  const tree = fromMarkdown(doc.content, {
+    extensions: [gfm()],
+    mdastExtensions: [gfmFromMarkdown()],
+  });
+  return urlNodes(tree).flatMap((node) =>
+    'url' in node && /^https?:\/\//iu.test(node.url)
+      ? [{ doc: doc.path, url: node.url, line: node.position?.start.line ?? 1 }]
+      : [],
+  );
 }

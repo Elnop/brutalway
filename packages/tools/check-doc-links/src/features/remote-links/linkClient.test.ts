@@ -20,11 +20,17 @@ describe('linkClient', () => {
     await once(server, 'listening');
     const address = server.address();
     assert.ok(typeof address === 'object' && address !== null);
-    assert.deepEqual(await linkClient.requestUrl(`http://127.0.0.1:${address.port}/page`), { verdict: 'alive', reason: 'status 200' });
+    assert.deepEqual(await linkClient.requestUrl(`http://127.0.0.1:${address.port}/page`), {
+      verdict: 'alive',
+      reason: 'status 200',
+    });
     server.close();
   });
 
   it('a domain that does not exist is dead', async () => {
-    assert.deepEqual(await linkClient.requestUrl('https://check-doc-links.invalid/'), { verdict: 'dead', reason: 'the domain does not exist' });
+    assert.deepEqual(await linkClient.requestUrl('https://check-doc-links.invalid/'), {
+      verdict: 'dead',
+      reason: 'the domain does not exist',
+    });
   });
 });

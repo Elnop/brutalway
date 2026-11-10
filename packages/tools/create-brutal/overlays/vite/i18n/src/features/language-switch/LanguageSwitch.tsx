@@ -12,7 +12,14 @@ export function LanguageSwitch() {
   return (
     <div className="language-switch" role="group" aria-label={t('language')}>
       {LANGUAGES.map((language) => (
-        <button key={language} type="button" lang={language} className="button button-small" aria-pressed={i18n.resolvedLanguage === language} onClick={() => choose(language)}>
+        <button
+          key={language}
+          type="button"
+          lang={language}
+          className="button button-small"
+          aria-pressed={i18n.resolvedLanguage === language}
+          onClick={() => choose(language)}
+        >
           {t(`languages.${language}`)}
         </button>
       ))}

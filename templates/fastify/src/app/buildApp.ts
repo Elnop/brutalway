@@ -16,8 +16,14 @@ const SWAGGER_THEME = readFileSync(new URL('../shared/swaggerTheme.css', import.
 export async function buildApp({ databasePath, logLevel }: BuildAppOptions) {
   const app = createServer({ logLevel });
 
-  await app.register(swagger, { openapi: { info: { title: 'Todos API', version: '1.0.0' } }, transform: jsonSchemaTransform });
-  await app.register(swaggerUi, { routePrefix: '/docs', theme: { title: 'Todos API', css: [{ filename: 'theme.css', content: SWAGGER_THEME }] } });
+  await app.register(swagger, {
+    openapi: { info: { title: 'Todos API', version: '1.0.0' } },
+    transform: jsonSchemaTransform,
+  });
+  await app.register(swaggerUi, {
+    routePrefix: '/docs',
+    theme: { title: 'Todos API', css: [{ filename: 'theme.css', content: SWAGGER_THEME }] },
+  });
 
   const database = openDatabase(databasePath);
   app.addHook('onClose', async () => database.close());

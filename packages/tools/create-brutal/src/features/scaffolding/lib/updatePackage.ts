@@ -6,14 +6,21 @@ function sortedRecord(record: Record<string, string>): Record<string, string> {
 }
 
 function changesPackage(change: StackChange): boolean {
-  return [change.removeScripts, change.removeDependencies, change.addDependencies, change.addDevDependencies].some((field) => field !== undefined);
+  return [
+    change.removeScripts,
+    change.removeDependencies,
+    change.addDependencies,
+    change.addDevDependencies,
+  ].some((field) => field !== undefined);
 }
 
 export function updatePackage(dir: string, change: StackChange): void {
   if (!changesPackage(change)) return;
   updatePackageJson(dir, (pkg) => {
     for (const script of change.removeScripts ?? []) {
-      if (pkg.scripts?.[script] === undefined) throw new Error(`package.json has no script ${script}`);
+      if (pkg.scripts?.[script] === undefined) {
+        throw new Error(`package.json has no script ${script}`);
+      }
       delete pkg.scripts[script];
     }
     for (const name of change.removeDependencies ?? []) {
@@ -21,7 +28,11 @@ export function updatePackage(dir: string, change: StackChange): void {
       if (field?.[name] === undefined) throw new Error(`package.json has no dependency ${name}`);
       delete field[name];
     }
-    if (change.addDependencies !== undefined) pkg.dependencies = sortedRecord({ ...pkg.dependencies, ...change.addDependencies });
-    if (change.addDevDependencies !== undefined) pkg.devDependencies = sortedRecord({ ...pkg.devDependencies, ...change.addDevDependencies });
+    if (change.addDependencies !== undefined) {
+      pkg.dependencies = sortedRecord({ ...pkg.dependencies, ...change.addDependencies });
+    }
+    if (change.addDevDependencies !== undefined) {
+      pkg.devDependencies = sortedRecord({ ...pkg.devDependencies, ...change.addDevDependencies });
+    }
   });
 }

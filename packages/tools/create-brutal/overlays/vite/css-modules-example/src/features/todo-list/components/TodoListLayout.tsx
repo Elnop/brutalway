@@ -13,7 +13,12 @@ export function TodoListLayout() {
       <h2 id="todo-list-title">{t('title')}</h2>
       <TodoInput onAdd={list.add} />
       <TodoFilters filter={list.filter} onChange={list.setFilter} />
-      <TodoItems todos={list.todos} onToggle={list.toggle} onRename={list.rename} onRemove={list.remove} />
+      <TodoItems
+        todos={list.todos}
+        onToggle={list.toggle}
+        onRename={list.rename}
+        onRemove={list.remove}
+      />
     </section>
   );
 }

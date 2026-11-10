@@ -20,7 +20,11 @@ export const zustandConfig: OxlintConfig = defineConfig({
       rules: {
         'selector-naming/no-restricted-syntax': [
           'error',
-          { selector: 'ExportNamedDeclaration > FunctionDeclaration > Identifier.id[name!=/^select[A-Z]/]', message: 'An XSelectors.ts file only exports selectors named selectX.' },
+          {
+            selector:
+              'ExportNamedDeclaration > FunctionDeclaration > Identifier.id[name!=/^select[A-Z]/]',
+            message: 'An XSelectors.ts file only exports selectors named selectX.',
+          },
         ],
       },
     },
@@ -30,7 +34,11 @@ export const zustandConfig: OxlintConfig = defineConfig({
         'file-named-after-export/file-named-after-export': 'off',
         'export-placement/no-restricted-syntax': [
           'error',
-          { selector: 'ExportNamedDeclaration > :matches(TSTypeAliasDeclaration, TSInterfaceDeclaration)', message: 'Exported types belong in an XTypes.ts file (types/ folder).' },
+          {
+            selector:
+              'ExportNamedDeclaration > :matches(TSTypeAliasDeclaration, TSInterfaceDeclaration)',
+            message: 'Exported types belong in an XTypes.ts file (types/ folder).',
+          },
         ],
       },
     },

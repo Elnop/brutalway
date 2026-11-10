@@ -18,7 +18,14 @@ function project(): string {
 describe('citations', () => {
   it('files cited in inline code from the root and in links from the doc are found, with their line', () => {
     const root = project();
-    const content = ['# Layout', '', '`src/app/App.tsx` composes the app.', '', 'It starts in [main](../src/main.tsx#L1), see `package.json`.', ''].join('\n');
+    const content = [
+      '# Layout',
+      '',
+      '`src/app/App.tsx` composes the app.',
+      '',
+      'It starts in [main](../src/main.tsx#L1), see `package.json`.',
+      '',
+    ].join('\n');
     assert.deepEqual(citations(root, { path: 'docs/architecture.md', content }), [
       { doc: 'docs/architecture.md', file: 'src/app/App.tsx', line: 3 },
       { doc: 'docs/architecture.md', file: 'src/main.tsx', line: 5 },
@@ -28,7 +35,14 @@ describe('citations', () => {
 
   it('folders, Markdown files, URLs, missing paths and code blocks are not citations', () => {
     const root = project();
-    const content = ['`src/app/`, `README.md`, [site](https://example.com/src/main.tsx), `src/gone.ts`, `npm run check`', '', '```sh', 'cat src/main.tsx', '```', ''].join('\n');
+    const content = [
+      '`src/app/`, `README.md`, [site](https://example.com/src/main.tsx), `src/gone.ts`, `npm run check`',
+      '',
+      '```sh',
+      'cat src/main.tsx',
+      '```',
+      '',
+    ].join('\n');
     assert.deepEqual(citations(root, { path: 'README.md', content }), []);
   });
 
@@ -46,13 +60,17 @@ describe('citations', () => {
   it('a file cited twice in one doc counts once, at its first line', () => {
     const root = project();
     const content = '`src/main.tsx`\n\nAgain `src/main.tsx`.\n';
-    assert.deepEqual(citations(root, { path: 'README.md', content }), [{ doc: 'README.md', file: 'src/main.tsx', line: 1 }]);
+    assert.deepEqual(citations(root, { path: 'README.md', content }), [
+      { doc: 'README.md', file: 'src/main.tsx', line: 1 },
+    ]);
   });
 
   it('a link with a malformed % sequence points to the file named as written', () => {
     const root = project();
     writeFileSync(join(root, 'src/a%zz.ts'), '');
     const content = '[a](src/a%zz.ts) and [b](src/b%zz.ts)\n';
-    assert.deepEqual(citations(root, { path: 'README.md', content }), [{ doc: 'README.md', file: 'src/a%zz.ts', line: 1 }]);
+    assert.deepEqual(citations(root, { path: 'README.md', content }), [
+      { doc: 'README.md', file: 'src/a%zz.ts', line: 1 },
+    ]);
   });
 });

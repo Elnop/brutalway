@@ -22,12 +22,24 @@ const notStarted: string[] = [];
 
 const file = edit.file === '' ? '' : resolve(root, edit.file);
 
-const refusal = edit.before && file !== '' ? vendoredEditMessage(root, file, values.vendored) : undefined;
-for (const check of edit.before ? [] : hookChecks(root, { ...edit, file }, { trees: values.tree, vendored: values.vendored, rootEntries: values['root-entries'] })) {
+const refusal =
+  edit.before && file !== '' ? vendoredEditMessage(root, file, values.vendored) : undefined;
+for (const check of edit.before
+  ? []
+  : hookChecks(
+      root,
+      { ...edit, file },
+      { trees: values.tree, vendored: values.vendored, rootEntries: values['root-entries'] },
+    )) {
   const args = ['--no-install', check.command, ...check.args];
   const result = spawnSync('npx', args, { cwd: check.cwd, encoding: 'utf8' });
-  if (result.error !== undefined) notStarted.push(`Could not start npx ${args.join(' ')} in ${check.cwd}, the project root is ${root}: ${result.error.message}\n`);
-  else if (result.status !== 0) problems.push(`${check.label}:\n${result.stdout}${result.stderr}`);
+  if (result.error !== undefined) {
+    notStarted.push(
+      `Could not start npx ${args.join(' ')} in ${check.cwd}, the project root is ${root}: ${result.error.message}\n`,
+    );
+  } else if (result.status !== 0) {
+    problems.push(`${check.label}:\n${result.stdout}${result.stderr}`);
+  }
 }
 
 if (refusal !== undefined) {

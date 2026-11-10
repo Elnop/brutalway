@@ -1,5 +1,10 @@
 import { defineRule } from '@oxlint/plugins';
-import { classNames, classStrings, isClassAttribute } from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
+import type { ESTree } from '@oxlint/plugins';
+import {
+  classNames,
+  classStrings,
+  isClassAttribute,
+} from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
 import { tailwindClass } from '#src/shared-features/tailwind-classes/lib/tailwindClass.ts';
 
 const ROLES = new Map([
@@ -9,6 +14,22 @@ const ROLES = new Map([
   ['code', 'font-mono'],
   ['pre', 'font-mono'],
 ]);
+
+function classAttribute(element: ESTree.JSXOpeningElement): ESTree.JSXAttribute | undefined {
+  const attribute = element.attributes.find(
+    (candidate) => candidate.type === 'JSXAttribute' && isClassAttribute(candidate),
+  );
+  return attribute?.type === 'JSXAttribute' ? attribute : undefined;
+}
+
+function hasFont(element: ESTree.JSXOpeningElement, font: string): boolean {
+  const attribute = classAttribute(element);
+  const strings = attribute === undefined ? [] : classStrings(attribute);
+  if (attribute?.value?.type === 'JSXExpressionContainer' && strings.length === 0) return true;
+  const spread = element.attributes.some((candidate) => candidate.type === 'JSXSpreadAttribute');
+  if (spread && attribute === undefined) return true;
+  return classNames(strings).some((entry) => tailwindClass(entry.name).utility === font);
+}
 
 export const fontRoles = defineRule({
   meta: {
@@ -24,11 +45,7 @@ export const fontRoles = defineRule({
         const tag = element.name.name;
         const font = ROLES.get(tag);
         if (font === undefined) return;
-        const attribute = element.attributes.find((candidate) => candidate.type === 'JSXAttribute' && isClassAttribute(candidate));
-        const strings = attribute?.type === 'JSXAttribute' ? classStrings(attribute) : [];
-        if (attribute?.type === 'JSXAttribute' && attribute.value?.type === 'JSXExpressionContainer' && strings.length === 0) return;
-        if (element.attributes.some((candidate) => candidate.type === 'JSXSpreadAttribute') && attribute === undefined) return;
-        if (classNames(strings).some((entry) => tailwindClass(entry.name).utility === font)) return;
+        if (hasFont(element, font)) return;
         context.report({ node: element, messageId: 'missingFont', data: { tag, font } });
       },
     };

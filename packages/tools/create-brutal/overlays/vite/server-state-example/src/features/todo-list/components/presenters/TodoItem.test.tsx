@@ -5,7 +5,11 @@ import { TodoItem } from '@/features/todo-list/components/presenters/TodoItem.ts
 const TODO = { id: 7, title: 'Buy milk', completed: false };
 
 function handlers() {
-  return { onToggle: vi.fn<(id: number) => void>(), onRename: vi.fn<(id: number, title: string) => void>(), onRemove: vi.fn<(id: number) => void>() };
+  return {
+    onToggle: vi.fn<(id: number) => void>(),
+    onRename: vi.fn<(id: number, title: string) => void>(),
+    onRemove: vi.fn<(id: number) => void>(),
+  };
 }
 
 describe('TodoItem', () => {

@@ -13,7 +13,11 @@ describe('addTodo', () => {
   it('creates the file, trims the text and gives each todo the next id', () => {
     const file = todosFile();
     assert.deepEqual(addTodo(file, '  Buy milk '), { id: 1, text: 'Buy milk', done: false });
-    assert.deepEqual(addTodo(file, 'Write the README'), { id: 2, text: 'Write the README', done: false });
+    assert.deepEqual(addTodo(file, 'Write the README'), {
+      id: 2,
+      text: 'Write the README',
+      done: false,
+    });
     assert.deepEqual(JSON.parse(readFileSync(file, 'utf8')), [
       { id: 1, text: 'Buy milk', done: false },
       { id: 2, text: 'Write the README', done: false },

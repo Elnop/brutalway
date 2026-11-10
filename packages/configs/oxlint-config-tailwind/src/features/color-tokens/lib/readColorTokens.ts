@@ -6,7 +6,12 @@ import type { ColorToken } from '@brutalway/color-utils/ColorTypes';
 
 function colorVariables(css: string): ColorToken[] {
   const themes = [...css.matchAll(/@theme[^{]*\{([^}]*)\}/gu)].map((match) => match[1] ?? '');
-  return themes.flatMap((theme) => [...theme.matchAll(/--color-([\w-]+)\s*:\s*([^;]+);/gu)].map((match) => ({ name: match[1] ?? '', color: oklab(match[2] ?? '') })));
+  return themes.flatMap((theme) =>
+    [...theme.matchAll(/--color-([\w-]+)\s*:\s*([^;]+);/gu)].map((match) => ({
+      name: match[1] ?? '',
+      color: oklab(match[2] ?? ''),
+    })),
+  );
 }
 
 const readCached = createColorTokenReader(colorVariables);

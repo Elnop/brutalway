@@ -18,21 +18,42 @@ function cancelOnEscape(onCancel: () => void) {
   };
 }
 
-export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
+type TodoEditorActionsProps = {
+  onCancel: () => void;
+};
+
+function TodoEditorActions({ onCancel }: TodoEditorActionsProps) {
   const { t } = useTranslation('todoList');
-  const id = useId();
-  const { field, error, submit } = useTitleForm({ initialTitle: title, clearOnSubmit: false, onSubmit: onSave });
 
   return (
-    <form className={styles.editor} onSubmit={submit}>
-      <TitleInput id={id} label={t('rename', { title })} error={error} autoFocus {...field} onKeyDown={cancelOnEscape(onCancel)} />
+    <>
       <button type="submit" className="button button-small button-blue">
         {t('save')}
       </button>
       <button type="button" className="button button-small" onClick={onCancel}>
         {t('cancel')}
       </button>
-      <TitleError id={id} error={error} />
+    </>
+  );
+}
+
+export function TodoEditor({ title, onSave, onCancel }: TodoEditorProps) {
+  const { t } = useTranslation('todoList');
+  const id = useId();
+  const form = useTitleForm({ initialTitle: title, clearOnSubmit: false, onSubmit: onSave });
+
+  return (
+    <form className={styles.editor} onSubmit={form.submit}>
+      <TitleInput
+        id={id}
+        label={t('rename', { title })}
+        error={form.error}
+        autoFocus
+        {...form.field}
+        onKeyDown={cancelOnEscape(onCancel)}
+      />
+      <TodoEditorActions onCancel={onCancel} />
+      <TitleError id={id} error={form.error} />
     </form>
   );
 }

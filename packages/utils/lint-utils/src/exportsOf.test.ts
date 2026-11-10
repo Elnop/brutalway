@@ -7,7 +7,13 @@ const listExports = defineRule({
   create(context) {
     return {
       Program(program) {
-        for (const { name, node } of exportsOf(program)) context.report({ node, messageId: 'exported', data: { name, type: node.declaration?.type ?? 'specifiers' } });
+        for (const { name, node } of exportsOf(program)) {
+          context.report({
+            node,
+            messageId: 'exported',
+            data: { name, type: node.declaration?.type ?? 'specifiers' },
+          });
+        }
       },
     };
   },
@@ -18,7 +24,11 @@ ruleTester.run('exportsOf', listExports, {
   invalid: [
     {
       code: 'export function hexToRgb() {} export class Palette {} export const [first] = [], second = 2, { third } = {};',
-      errors: [{ message: 'hexToRgb on FunctionDeclaration' }, { message: 'Palette on ClassDeclaration' }, { message: 'second on VariableDeclaration' }],
+      errors: [
+        { message: 'hexToRgb on FunctionDeclaration' },
+        { message: 'Palette on ClassDeclaration' },
+        { message: 'second on VariableDeclaration' },
+      ],
     },
     {
       filename: 'shapes.ts',

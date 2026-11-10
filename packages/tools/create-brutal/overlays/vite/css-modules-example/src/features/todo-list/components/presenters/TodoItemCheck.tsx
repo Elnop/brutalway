@@ -1,16 +1,16 @@
 import styles from '@/features/todo-list/components/presenters/TodoItemCheck.module.css';
+import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
 
 type TodoItemCheckProps = {
-  title: string;
-  completed: boolean;
-  onToggle: () => void;
+  todo: Todo;
+  onToggle: (id: Todo['id']) => void;
 };
 
-export function TodoItemCheck({ title, completed, onToggle }: TodoItemCheckProps) {
+export function TodoItemCheck({ todo, onToggle }: TodoItemCheckProps) {
   return (
-    <label className={completed ? `${styles.check} ${styles.done}` : styles.check}>
-      <input type="checkbox" checked={completed} onChange={onToggle} />
-      <span>{title}</span>
+    <label className={todo.completed ? `${styles.check} ${styles.done}` : styles.check}>
+      <input type="checkbox" checked={todo.completed} onChange={() => onToggle(todo.id)} />
+      <span>{todo.title}</span>
     </label>
   );
 }

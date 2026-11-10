@@ -13,13 +13,20 @@ describe('todosFile', () => {
   it('writes the todos as indented JSON and reads them back', () => {
     const file = todosFile();
     writeTodos(file, [{ id: 1, text: 'Buy milk', done: false }]);
-    assert.equal(readFileSync(file, 'utf8'), '[\n  {\n    "id": 1,\n    "text": "Buy milk",\n    "done": false\n  }\n]\n');
+    assert.equal(
+      readFileSync(file, 'utf8'),
+      '[\n  {\n    "id": 1,\n    "text": "Buy milk",\n    "done": false\n  }\n]\n',
+    );
     assert.deepEqual(readTodos(file), [{ id: 1, text: 'Buy milk', done: false }]);
   });
 
   it('refuses a file that does not hold a list of todos', () => {
     const file = todosFile();
-    for (const content of ['{}', '[{ "id": 1, "text": "Buy milk" }]', '[{ "id": "1", "text": "Buy milk", "done": false }]']) {
+    for (const content of [
+      '{}',
+      '[{ "id": 1, "text": "Buy milk" }]',
+      '[{ "id": "1", "text": "Buy milk", "done": false }]',
+    ]) {
       writeFileSync(file, content);
       assert.throws(() => readTodos(file), { message: `${file} does not hold a list of todos.` });
     }

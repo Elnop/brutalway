@@ -1,4 +1,14 @@
-import { cpSync, existsSync, globSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  globSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { join } from 'node:path';
 import { editFiles } from '#src/features/scaffolding/lib/editFiles.ts';
 import { formatJson } from '#src/features/scaffolding/lib/formatJson.ts';
@@ -6,10 +16,12 @@ import { updatePackage } from '#src/features/scaffolding/lib/updatePackage.ts';
 import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
 import { PROJECT_NAME_TOKEN } from '#src/features/scaffolding/ScaffoldConfig.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
-import type { Answers, StackChange } from '#src/shared-features/stack/StackTypes.ts';
 
-function matches(change: StackChange, answers: Answers): boolean {
-  return Object.entries(change.when).every(([id, value]) => answers[id] === value);
+function formatJsonFiles(dir: string): void {
+  for (const file of ['knip.json', ...globSync('tsconfig*.json', { cwd: dir })]) {
+    const path = join(dir, file);
+    if (existsSync(path)) writeFileSync(path, formatJson(readFileSync(path, 'utf8'), file));
+  }
 }
 
 function removePaths(dir: string, patterns: string[]): void {
@@ -29,7 +41,10 @@ function copyOverlay(from: string, to: string, projectName: string): void {
       copyOverlay(source, target, projectName);
     } else {
       cpSync(source, target);
-      writeFileSync(target, readFileSync(target, 'utf8').replaceAll(PROJECT_NAME_TOKEN, projectName));
+      writeFileSync(
+        target,
+        readFileSync(target, 'utf8').replaceAll(PROJECT_NAME_TOKEN, projectName),
+      );
     }
   }
 }
@@ -42,21 +57,29 @@ function keepFolders(dir: string, folders: string[]): void {
   }
 }
 
-export function applyStackChanges({ dir, stack, answers, projectName }: Pick<ScaffoldPlan, 'dir' | 'stack' | 'answers' | 'projectName'>, overlaysRoot: string): void {
-  for (const change of stack.changes.filter((candidate) => matches(candidate, answers))) {
-    removePaths(dir, change.remove ?? []);
-    editFiles(dir, change.edits ?? [], projectName);
-    updatePackage(dir, change);
-    if (change.overlay !== undefined) copyOverlay(join(overlaysRoot, stack.id, change.overlay), dir, projectName);
-    keepFolders(dir, change.keep ?? []);
+type StackTarget = Pick<ScaffoldPlan, 'dir' | 'stack' | 'answers' | 'projectName'>;
+
+export function applyStackChanges(target: StackTarget, overlaysRoot: string): void {
+  const changes = target.stack.changes.filter((change) =>
+    Object.entries(change.when).every(([id, value]) => target.answers[id] === value),
+  );
+  for (const change of changes) {
+    removePaths(target.dir, change.remove ?? []);
+    editFiles(target.dir, change.edits ?? [], target.projectName);
+    updatePackage(target.dir, change);
+    if (change.overlay !== undefined) {
+      copyOverlay(
+        join(overlaysRoot, target.stack.id, change.overlay),
+        target.dir,
+        target.projectName,
+      );
+    }
+    keepFolders(target.dir, change.keep ?? []);
   }
-  for (const file of ['knip.json', ...globSync('tsconfig*.json', { cwd: dir })]) {
-    const path = join(dir, file);
-    if (existsSync(path)) writeFileSync(path, formatJson(readFileSync(path, 'utf8'), file));
-  }
-  updatePackageJson(dir, (pkg) => {
-    pkg['name'] = projectName;
-    if (stack.projectVersion === undefined) delete pkg['version'];
-    else pkg['version'] = stack.projectVersion;
+  formatJsonFiles(target.dir);
+  updatePackageJson(target.dir, (pkg) => {
+    pkg['name'] = target.projectName;
+    if (target.stack.projectVersion === undefined) delete pkg['version'];
+    else pkg['version'] = target.stack.projectVersion;
   });
 }

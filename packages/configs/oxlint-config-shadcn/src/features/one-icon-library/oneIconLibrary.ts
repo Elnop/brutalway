@@ -7,7 +7,10 @@ export const oneIconLibrary = defineRule({
   meta: {
     type: 'suggestion',
     docs: { description: 'Icons come from lucide-react, the library set in components.json.' },
-    messages: { otherSet: '{{source}} is another icon set: import the icon from lucide-react, the library of components.json, so icons look alike.' },
+    messages: {
+      otherSet:
+        '{{source}} is another icon set: import the icon from lucide-react, the library of components.json, so icons look alike.',
+    },
     schema: [],
   },
   create(context) {

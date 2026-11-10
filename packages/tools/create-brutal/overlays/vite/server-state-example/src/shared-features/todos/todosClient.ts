@@ -1,12 +1,25 @@
 import type { z } from 'zod';
-import { ClearedSchema, TodoListSchema, TodoSchema, TodoStatsSchema } from '@/shared-features/todos/TodosSchemas.ts';
+import {
+  ClearedSchema,
+  TodoListSchema,
+  TodoSchema,
+  TodoStatsSchema,
+} from '@/shared-features/todos/TodosSchemas.ts';
 import type { Todo, TodoFilter, TodoUpdate } from '@/shared-features/todos/TodosTypes.ts';
 
 const API_ROOT = '/api';
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
 
-async function request<T>(schema: z.ZodType<T>, method: string, path: string, body?: unknown): Promise<T> {
-  const response = await fetch(`${API_ROOT}${path}`, body === undefined ? { method } : { method, headers: JSON_HEADERS, body: JSON.stringify(body) });
+async function request<T>(
+  schema: z.ZodType<T>,
+  method: string,
+  path: string,
+  body?: unknown,
+): Promise<T> {
+  const response = await fetch(
+    `${API_ROOT}${path}`,
+    body === undefined ? { method } : { method, headers: JSON_HEADERS, body: JSON.stringify(body) },
+  );
   if (!response.ok) throw new Error(`${method} ${API_ROOT}${path} answered ${response.status}`);
   return schema.parse(await response.json());
 }

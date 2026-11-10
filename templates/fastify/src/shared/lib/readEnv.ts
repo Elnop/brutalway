@@ -10,5 +10,10 @@ const ENV_SCHEMA = z.object({
 
 export function readEnv(source: Record<string, string | undefined> = process.env): Env {
   const env = ENV_SCHEMA.parse(source);
-  return { host: env.HOST, port: env.PORT, databasePath: env.DATABASE_PATH, logLevel: env.LOG_LEVEL };
+  return {
+    host: env.HOST,
+    port: env.PORT,
+    databasePath: env.DATABASE_PATH,
+    logLevel: env.LOG_LEVEL,
+  };
 }

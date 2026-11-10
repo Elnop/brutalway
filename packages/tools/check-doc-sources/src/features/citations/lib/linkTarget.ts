@@ -11,7 +11,9 @@ function decodedPath(path: string): string {
 }
 
 export function linkTarget(doc: string, url: string): string | undefined {
-  if (url === '' || url.startsWith('#') || url.startsWith('/') || URL_SCHEME.test(url)) return undefined;
+  if (url === '' || url.startsWith('#') || url.startsWith('/') || URL_SCHEME.test(url)) {
+    return undefined;
+  }
   const [path = ''] = url.split(/[#?]/u);
   return posix.join(posix.dirname(doc), decodedPath(path));
 }

@@ -27,7 +27,9 @@ export function securityHeaders(): Plugin {
     name: 'security-headers',
     configurePreviewServer(server) {
       server.middlewares.use((_request, response, next) => {
-        for (const [name, value] of Object.entries(SECURITY_HEADERS)) response.setHeader(name, value);
+        for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+          response.setHeader(name, value);
+        }
         next();
       });
     },

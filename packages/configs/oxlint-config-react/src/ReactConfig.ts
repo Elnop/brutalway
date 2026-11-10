@@ -14,10 +14,22 @@ export const reactConfig: OxlintConfig = defineConfig({
   plugins: ['typescript', 'react', 'import', 'oxc', 'unicorn'],
   jsPlugins: [
     { name: 'component-props', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
-    { name: 'hook-naming', specifier: fileURLToPath(new URL('./hookNamingPlugin.js', import.meta.url)) },
-    { name: 'fetch-placement', specifier: fileURLToPath(new URL('./fetchPlugin.js', import.meta.url)) },
-    { name: 'component-roles', specifier: fileURLToPath(new URL('./componentRolesPlugin.js', import.meta.url)) },
-    { name: 'hook-files', specifier: fileURLToPath(new URL('./hookFilesPlugin.js', import.meta.url)) },
+    {
+      name: 'hook-naming',
+      specifier: fileURLToPath(new URL('./hookNamingPlugin.js', import.meta.url)),
+    },
+    {
+      name: 'fetch-placement',
+      specifier: fileURLToPath(new URL('./fetchPlugin.js', import.meta.url)),
+    },
+    {
+      name: 'component-roles',
+      specifier: fileURLToPath(new URL('./componentRolesPlugin.js', import.meta.url)),
+    },
+    {
+      name: 'hook-files',
+      specifier: fileURLToPath(new URL('./hookFilesPlugin.js', import.meta.url)),
+    },
   ],
   env: { browser: true, es2024: true },
   rules: {
@@ -38,6 +50,12 @@ export const reactConfig: OxlintConfig = defineConfig({
     ...storageOverrides,
     ...componentRolesOverrides,
     ...hookFilesOverrides,
-    { files: ['**/*.test.tsx', 'e2e/**'], rules: { 'component-props/no-restricted-syntax': 'off', 'component-roles/no-restricted-syntax': 'off' } },
+    {
+      files: ['**/*.test.tsx', 'e2e/**'],
+      rules: {
+        'component-props/no-restricted-syntax': 'off',
+        'component-roles/no-restricted-syntax': 'off',
+      },
+    },
   ],
 });

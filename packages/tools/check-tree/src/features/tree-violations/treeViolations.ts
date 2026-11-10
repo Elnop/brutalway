@@ -1,93 +1,85 @@
 import { readdirSync } from 'node:fs';
+import type { Dirent } from 'node:fs';
 import { basename, join, relative } from 'node:path';
-import type { TreeOptions } from '#src/features/tree-violations/TreeViolationsTypes.ts';
+import {
+  DEFAULT_CATEGORY_FOLDERS,
+  FILE_GROUPS,
+  TEST_FILE,
+} from '#src/features/tree-violations/TreeViolationsConfig.ts';
+import type {
+  FolderListing,
+  TreeOptions,
+} from '#src/features/tree-violations/TreeViolationsTypes.ts';
 
-const DEFAULT_CATEGORY_FOLDERS = [
-  'components',
-  'orchestrators',
-  'presenters',
-  'hooks',
-  'styles',
-  'types',
-  'configs',
-  'stores',
-  'routes',
-  'services',
-  'queries',
-  'keys',
-  'schemas',
-  'clients',
-  'workers',
-  'lib',
-];
-const TEST_FILE = /\.test\.tsx?$/u;
-const NAMED_FILE = /^use[A-Z]|(?:Types|Config|Store|Routes|Service|Queries|Keys|Schemas|Client|Worker|Env)\.ts$|Content\.tsx?$|\.d\.ts$/u;
-const COMPONENT_FILE = /^[A-Z]\w*\.tsx$/u;
-const ORCHESTRATOR_FILE = /(?:Container|Layout|Page)\.tsx$/u;
-const COMPONENT_FOLDERS = new Set(['components', 'orchestrators', 'presenters']);
-
-type FileGroup = { folder: string; belongs: (fileName: string) => boolean; appliesIn: (folderName: string) => boolean };
-
-function isComponent(fileName: string) {
-  return COMPONENT_FILE.test(fileName) && !NAMED_FILE.test(fileName);
-}
-
-function outsideOwnFolder(folder: string) {
-  return (folderName: string) => folderName !== folder;
-}
-
-const FILE_GROUPS: FileGroup[] = [
-  { folder: 'components', belongs: isComponent, appliesIn: (folderName) => !COMPONENT_FOLDERS.has(folderName) },
-  { folder: 'orchestrators', belongs: (fileName) => isComponent(fileName) && ORCHESTRATOR_FILE.test(fileName), appliesIn: (folderName) => folderName === 'components' },
-  { folder: 'presenters', belongs: (fileName) => isComponent(fileName) && !ORCHESTRATOR_FILE.test(fileName), appliesIn: (folderName) => folderName === 'components' },
-  { folder: 'hooks', belongs: (fileName) => /^use[A-Z]\w*\.tsx?$/u.test(fileName), appliesIn: outsideOwnFolder('hooks') },
-  { folder: 'styles', belongs: (fileName) => fileName.endsWith('.css') && !fileName.endsWith('.module.css'), appliesIn: outsideOwnFolder('styles') },
-  { folder: 'types', belongs: (fileName) => fileName.endsWith('Types.ts'), appliesIn: outsideOwnFolder('types') },
-  { folder: 'configs', belongs: (fileName) => fileName.endsWith('Config.ts'), appliesIn: outsideOwnFolder('configs') },
-  { folder: 'stores', belongs: (fileName) => fileName.endsWith('Store.ts'), appliesIn: outsideOwnFolder('stores') },
-  { folder: 'routes', belongs: (fileName) => fileName.endsWith('Routes.ts'), appliesIn: outsideOwnFolder('routes') },
-  { folder: 'services', belongs: (fileName) => fileName.endsWith('Service.ts'), appliesIn: outsideOwnFolder('services') },
-  { folder: 'queries', belongs: (fileName) => fileName.endsWith('Queries.ts'), appliesIn: outsideOwnFolder('queries') },
-  { folder: 'keys', belongs: (fileName) => fileName.endsWith('Keys.ts'), appliesIn: outsideOwnFolder('keys') },
-  { folder: 'schemas', belongs: (fileName) => fileName.endsWith('Schemas.ts'), appliesIn: outsideOwnFolder('schemas') },
-  { folder: 'clients', belongs: (fileName) => fileName.endsWith('Client.ts'), appliesIn: outsideOwnFolder('clients') },
-  { folder: 'workers', belongs: (fileName) => fileName.endsWith('Worker.ts'), appliesIn: outsideOwnFolder('workers') },
-  { folder: 'lib', belongs: (fileName) => fileName.endsWith('.ts') && !NAMED_FILE.test(fileName), appliesIn: outsideOwnFolder('lib') },
-];
-
-type FolderListing = { files: string[]; folders: ReadonlySet<string> };
-
-function groupViolations(name: string, folderName: string, listing: FolderListing, categoryFolders: ReadonlySet<string>): string[] {
+function groupViolations(
+  name: string,
+  folderName: string,
+  listing: FolderListing,
+  categoryFolders: ReadonlySet<string>,
+): string[] {
   const violations: string[] = [];
   for (const { folder, belongs, appliesIn } of FILE_GROUPS) {
     if (!categoryFolders.has(folder) || !appliesIn(folderName)) continue;
     const loose = listing.files.filter(belongs);
     if (loose.length === 0) continue;
-    if (listing.folders.has(folder)) violations.push(`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`);
-    else if (loose.length > 1) violations.push(`${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`);
+    if (listing.folders.has(folder)) {
+      violations.push(`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`);
+    } else if (loose.length > 1) {
+      violations.push(
+        `${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`,
+      );
+    }
   }
   return violations;
 }
 
-function folderViolations(folder: string, name: string, categoryFolders: ReadonlySet<string>, groupsFiles: boolean): string[] {
-  const entries = readdirSync(folder, { withFileTypes: true });
-  const children = entries.filter((entry) => !TEST_FILE.test(entry.name));
-  const fileNames = children
-    .filter((entry) => entry.isFile())
-    .map((entry) => entry.name)
-    .toSorted();
-  const folderNames = new Set(children.filter((entry) => entry.isDirectory()).map((entry) => entry.name));
-  const violations: string[] = [];
-  if (children.length === 0) violations.push(`${name} is empty: delete it`);
-  if (children.length === 1 && categoryFolders.has(basename(folder))) violations.push(`${name} holds a single child: move it up one level and delete the folder`);
-  return groupsFiles ? [...violations, ...groupViolations(name, basename(folder), { files: fileNames, folders: folderNames }, categoryFolders)] : violations;
+function folderListing(entries: Dirent[]): FolderListing {
+  return {
+    files: entries
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name)
+      .toSorted(),
+    folders: new Set(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)),
+  };
 }
 
-export function treeViolations(root: string, categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS, options: TreeOptions = {}): string[] {
+function shapeViolations(name: string, count: number, isCategory: boolean): string[] {
+  if (count === 0) return [`${name} is empty: delete it`];
+  if (count === 1 && isCategory) {
+    return [`${name} holds a single child: move it up one level and delete the folder`];
+  }
+  return [];
+}
+
+function folderViolations(
+  folder: string,
+  name: string,
+  categoryFolders: ReadonlySet<string>,
+  groupsFiles: boolean,
+): string[] {
+  const children = readdirSync(folder, { withFileTypes: true }).filter(
+    (entry) => !TEST_FILE.test(entry.name),
+  );
+  const violations = shapeViolations(name, children.length, categoryFolders.has(basename(folder)));
+  if (!groupsFiles) return violations;
+  const listing = folderListing(children);
+  return [...violations, ...groupViolations(name, basename(folder), listing, categoryFolders)];
+}
+
+export function treeViolations(
+  root: string,
+  categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS,
+  options: TreeOptions = {},
+): string[] {
   const categories = new Set(categoryFolders);
   function walk(folder: string): string[] {
     return [
-      ...folderViolations(folder, relative(join(root, '..'), folder), categories, folder !== root || options.rootEntries !== true),
+      ...folderViolations(
+        folder,
+        relative(join(root, '..'), folder),
+        categories,
+        folder !== root || options.rootEntries !== true,
+      ),
       ...readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .flatMap((entry) => walk(join(folder, entry.name))),

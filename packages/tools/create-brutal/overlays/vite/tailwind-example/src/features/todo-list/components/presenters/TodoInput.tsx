@@ -9,7 +9,11 @@ type TodoInputProps = {
 
 export function TodoInput({ onAdd }: TodoInputProps) {
   const { t } = useTranslation('todoList');
-  const { field, error, submit } = useTitleForm({ initialTitle: '', clearOnSubmit: true, onSubmit: onAdd });
+  const { field, error, submit } = useTitleForm({
+    initialTitle: '',
+    clearOnSubmit: true,
+    onSubmit: onAdd,
+  });
 
   return (
     <form className="mb-5 flex flex-wrap gap-3" onSubmit={submit}>

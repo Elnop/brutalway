@@ -30,5 +30,9 @@ export function useTitleForm({ initialTitle, clearOnSubmit, onSubmit }: TitleFor
     if (clearOnSubmit) setTitle('');
   }
 
-  return { field: { value: title, onChange: change }, error: blank ? t('errors.blankTitle') : undefined, submit };
+  return {
+    field: { value: title, onChange: change },
+    error: blank ? t('errors.blankTitle') : undefined,
+    submit,
+  };
 }

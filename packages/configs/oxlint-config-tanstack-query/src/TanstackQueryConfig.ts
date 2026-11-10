@@ -4,8 +4,14 @@ import type { OxlintConfig } from 'oxlint';
 
 export const tanstackQueryConfig: OxlintConfig = defineConfig({
   jsPlugins: [
-    { name: 'query-conventions', specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)) },
-    { name: 'tanstack-query', specifier: fileURLToPath(import.meta.resolve('@tanstack/eslint-plugin-query')) },
+    {
+      name: 'query-conventions',
+      specifier: fileURLToPath(new URL('./plugin.js', import.meta.url)),
+    },
+    {
+      name: 'tanstack-query',
+      specifier: fileURLToPath(import.meta.resolve('@tanstack/eslint-plugin-query')),
+    },
   ],
   rules: {
     'query-conventions/query-key-factory': 'error',

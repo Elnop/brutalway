@@ -9,6 +9,10 @@ export async function askOption(option: StackOption, allowed: AnswerValue[]): Pr
     return isCancel(value) ? stopCancelled() : value;
   }
   const values = option.values.filter((value) => allowed.includes(value.id));
-  const value = await select({ message: option.message, initialValue: option.default, options: values.map((candidate) => ({ value: candidate.id, label: candidate.label })) });
+  const value = await select({
+    message: option.message,
+    initialValue: option.default,
+    options: values.map((candidate) => ({ value: candidate.id, label: candidate.label })),
+  });
   return isCancel(value) ? stopCancelled() : value;
 }

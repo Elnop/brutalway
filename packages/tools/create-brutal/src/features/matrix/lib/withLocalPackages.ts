@@ -2,7 +2,12 @@ import { isRecord } from '#src/shared/lib/isRecord.ts';
 
 function pointToTarballs(dependencies: unknown, tarballs: Map<string, string>): unknown {
   if (!isRecord(dependencies)) return dependencies;
-  return Object.fromEntries(Object.entries(dependencies).map(([name, range]) => [name, tarballs.has(name) ? `file:${tarballs.get(name) ?? ''}` : range]));
+  return Object.fromEntries(
+    Object.entries(dependencies).map(([name, range]) => [
+      name,
+      tarballs.has(name) ? `file:${tarballs.get(name) ?? ''}` : range,
+    ]),
+  );
 }
 
 export function withLocalPackages(manifestText: string, tarballs: Map<string, string>): string {

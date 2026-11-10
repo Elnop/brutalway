@@ -24,5 +24,10 @@ function siblingModule(name: string) {
 
 export const nodeTestConfig: OxlintConfig = defineConfig({
   jsPlugins: [{ name: 'node-test', specifier: siblingModule('plugin') }],
-  overrides: [{ files: ['**/*.test.ts'], rules: { 'node-test/no-restricted-syntax': ['error', ...NODE_TEST_STYLE] } }],
+  overrides: [
+    {
+      files: ['**/*.test.ts'],
+      rules: { 'node-test/no-restricted-syntax': ['error', ...NODE_TEST_STYLE] },
+    },
+  ],
 });

@@ -18,13 +18,22 @@ export const zodResolver = defineRule({
   meta: {
     type: 'problem',
     docs: { description: 'Every useForm validates through zodResolver.' },
-    messages: { noSchema: 'useForm takes resolver: zodResolver(XSchema), so the type of the form is the type its schema validates.' },
+    messages: {
+      noSchema:
+        'useForm takes resolver: zodResolver(XSchema), so the type of the form is the type its schema validates.',
+    },
     schema: [],
   },
   create(context) {
     return {
       CallExpression(call) {
-        if (call.callee.type !== 'Identifier' || call.callee.name !== 'useForm' || resolvesWithZod(call.arguments[0])) return;
+        if (
+          call.callee.type !== 'Identifier' ||
+          call.callee.name !== 'useForm' ||
+          resolvesWithZod(call.arguments[0])
+        ) {
+          return;
+        }
         context.report({ node: call, messageId: 'noSchema' });
       },
     };

@@ -18,8 +18,16 @@ const INPUT: Primitive = { component: 'Input', file: 'input' };
 
 function inputType(element: ESTree.JSXOpeningElement): string | undefined {
   for (const attribute of element.attributes) {
-    if (attribute.type !== 'JSXAttribute' || attribute.name.type !== 'JSXIdentifier' || attribute.name.name !== 'type') continue;
-    return attribute.value?.type === 'Literal' && typeof attribute.value.value === 'string' ? attribute.value.value : undefined;
+    if (
+      attribute.type !== 'JSXAttribute' ||
+      attribute.name.type !== 'JSXIdentifier' ||
+      attribute.name.name !== 'type'
+    ) {
+      continue;
+    }
+    return attribute.value?.type === 'Literal' && typeof attribute.value.value === 'string'
+      ? attribute.value.value
+      : undefined;
   }
   return undefined;
 }
@@ -47,7 +55,11 @@ export const primitivesFirst = defineRule({
       JSXOpeningElement(element) {
         const primitive = primitiveFor(element);
         if (primitive === undefined || element.name.type !== 'JSXIdentifier') return;
-        context.report({ node: element, messageId: 'raw', data: { tag: element.name.name, ...primitive } });
+        context.report({
+          node: element,
+          messageId: 'raw',
+          data: { tag: element.name.name, ...primitive },
+        });
       },
     };
   },

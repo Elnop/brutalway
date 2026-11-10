@@ -3,7 +3,7 @@ import { parseArgs } from 'node:util';
 import type { ParseArgsOptionsConfig } from 'node:util';
 import type { CliArgs, Preset } from '#src/features/answers/CliTypes.ts';
 import { isRecord } from '#src/shared/lib/isRecord.ts';
-import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
+import { stackAnswers, stackOptionsConfig } from '#src/features/answers/lib/stackOptionArgs.ts';
 import type { AnswerValue, Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
 
 const BASE_OPTIONS: ParseArgsOptionsConfig = {
@@ -18,7 +18,12 @@ const BASE_OPTIONS: ParseArgsOptionsConfig = {
 
 function answerEntries(value: unknown): Answers {
   if (!isRecord(value)) return {};
-  return Object.fromEntries(Object.entries(value).filter((entry): entry is [string, AnswerValue] => typeof entry[1] === 'boolean' || typeof entry[1] === 'string'));
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      (entry): entry is [string, AnswerValue] =>
+        typeof entry[1] === 'boolean' || typeof entry[1] === 'string',
+    ),
+  );
 }
 
 function readPreset(path: unknown): Preset {
@@ -38,18 +43,14 @@ function optionalBoolean(value: unknown, fallback: boolean | undefined): boolean
   return typeof value === 'boolean' ? value : fallback;
 }
 
-function stackAnswers(values: Record<string, unknown>, stack: Stack | undefined, presetOptions: Answers): Answers {
-  const options: Answers = { ...presetOptions };
-  for (const option of stack?.options ?? []) {
-    const value = values[option.id];
-    if (typeof value === 'boolean' || typeof value === 'string') options[option.id] = value;
-  }
-  return options;
-}
-
 export function readArgs(argv: string[], stack: Stack | undefined): CliArgs {
-  const stackOptions: ParseArgsOptionsConfig = Object.fromEntries((stack?.options ?? []).map((option) => [option.id, { type: isChoice(option) ? 'string' : 'boolean' }]));
-  const { values, positionals } = parseArgs({ args: argv, options: { ...BASE_OPTIONS, ...stackOptions }, allowPositionals: true, allowNegative: true, strict: stack !== undefined });
+  const { values, positionals } = parseArgs({
+    args: argv,
+    options: { ...BASE_OPTIONS, ...stackOptionsConfig(stack) },
+    allowPositionals: true,
+    allowNegative: true,
+    strict: stack !== undefined,
+  });
   const preset = readPreset(values['preset']);
   const stackId = values['stack'];
   return {

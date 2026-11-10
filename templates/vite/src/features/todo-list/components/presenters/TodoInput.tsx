@@ -9,11 +9,22 @@ type TodoInputProps = {
 
 export function TodoInput({ onAdd }: TodoInputProps) {
   const { t } = useTranslation('todoList');
-  const { field, error, submit } = useTitleForm({ initialTitle: '', clearOnSubmit: true, onSubmit: onAdd });
+  const { field, error, submit } = useTitleForm({
+    initialTitle: '',
+    clearOnSubmit: true,
+    onSubmit: onAdd,
+  });
 
   return (
     <form className="todo-input" onSubmit={submit}>
-      <TitleInput id="new-todo" label={t('newTask')} error={error} placeholder={t('placeholder')} autoComplete="off" {...field} />
+      <TitleInput
+        id="new-todo"
+        label={t('newTask')}
+        error={error}
+        placeholder={t('placeholder')}
+        autoComplete="off"
+        {...field}
+      />
       <button type="submit" className="button button-yellow">
         {t('add')}
       </button>

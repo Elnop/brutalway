@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { longDocs } from '#src/features/length-check/longDocs.ts';
 import { splitDoc } from '#src/features/split/lib/splitDoc.ts';
+import type { SplitPlan } from '#src/features/split/SplitTypes.ts';
 import type { DocLengthSettings } from '#src/shared-features/docs/DocLengthTypes.ts';
 import { markdownFiles } from '#src/shared-features/docs/lib/markdownFiles.ts';
 import { readSettings } from '#src/shared-features/docs/lib/readSettings.ts';
@@ -42,25 +43,35 @@ function check(): void {
   process.exitCode = long.length === 0 ? 0 : 1;
 }
 
+function writePlan(plan: SplitPlan): void {
+  rmSync(join(cwd, plan.removed));
+  for (const file of plan.written) {
+    mkdirSync(dirname(join(cwd, file.path)), { recursive: true });
+    writeFileSync(join(cwd, file.path), file.content);
+  }
+}
+
 function split(path: string): void {
   const doc = files.find((file) => file.path === path);
-  if (doc === undefined) throw new Error(`${path} is not one of the Markdown files of this project`);
+  if (doc === undefined) {
+    throw new Error(`${path} is not one of the Markdown files of this project`);
+  }
   const plan = splitDoc(
     path,
     doc.content,
     files.filter((file) => file !== doc),
     settings,
   );
-  for (const file of plan.written) process.stdout.write(`${file.path} (${file.content.split('\n').length - 1} lines)\n`);
+  for (const file of plan.written) {
+    process.stdout.write(`${file.path} (${file.content.split('\n').length - 1} lines)\n`);
+  }
   if (values.write !== true) {
-    process.stdout.write(`\nNothing written. Run it again with --write to replace ${path} with these files.\n`);
+    process.stdout.write(
+      `\nNothing written. Run it again with --write to replace ${path} with these files.\n`,
+    );
     return;
   }
-  rmSync(join(cwd, plan.removed));
-  for (const file of plan.written) {
-    mkdirSync(dirname(join(cwd, file.path)), { recursive: true });
-    writeFileSync(join(cwd, file.path), file.content);
-  }
+  writePlan(plan);
 }
 
 if (positionals[0] === 'split') split(positionals[1] ?? '');

@@ -16,11 +16,20 @@ describe('formatJson', () => {
   it('puts one entry per line in an array longer than 200 columns', () => {
     const names = Array.from({ length: 12 }, (_, index) => `@scope/package-number-${index}`);
     const formatted = formatJson(JSON.stringify({ ignoreDependencies: names }), 'knip.json');
-    assert.equal(formatted, `{\n  "ignoreDependencies": [\n${names.map((name, index) => `    "${name}"${index === names.length - 1 ? '' : ','}`).join('\n')}\n  ]\n}\n`);
+    assert.equal(
+      formatted,
+      `{\n  "ignoreDependencies": [\n${names.map((name, index) => `    "${name}"${index === names.length - 1 ? '' : ','}`).join('\n')}\n  ]\n}\n`,
+    );
   });
 
   it('puts an array that fits back on one line, with objects written inline', () => {
-    const formatted = formatJson('{"include":[\n"src",\n"e2e"\n],"references":[{"path":"./a.json"},{"path":"./b.json"}],"exclude":[]}', 'tsconfig.json');
-    assert.equal(formatted, '{\n  "include": ["src", "e2e"],\n  "references": [{ "path": "./a.json" }, { "path": "./b.json" }],\n  "exclude": []\n}\n');
+    const formatted = formatJson(
+      '{"include":[\n"src",\n"e2e"\n],"references":[{"path":"./a.json"},{"path":"./b.json"}],"exclude":[]}',
+      'tsconfig.json',
+    );
+    assert.equal(
+      formatted,
+      '{\n  "include": ["src", "e2e"],\n  "references": [{ "path": "./a.json" }, { "path": "./b.json" }],\n  "exclude": []\n}\n',
+    );
   });
 });

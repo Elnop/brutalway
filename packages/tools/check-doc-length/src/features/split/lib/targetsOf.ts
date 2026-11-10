@@ -2,11 +2,18 @@ import GithubSlugger from 'github-slugger';
 import { pieceAt } from '#src/features/split/lib/pieceAt.ts';
 import type { Piece, Section, Target } from '#src/features/split/SplitTypes.ts';
 
-function targetOf(section: Section, piece: Piece, pieceSluggers: Map<string, GithubSlugger>): Target {
+function targetOf(
+  section: Section,
+  piece: Piece,
+  pieceSluggers: Map<string, GithubSlugger>,
+): Target {
   const slugger = pieceSluggers.get(piece.path) ?? new GithubSlugger();
   pieceSluggers.set(piece.path, slugger);
   const slug = slugger.slug(section.text);
-  return { path: piece.path, slug: section.start === piece.start && piece.shift > 0 ? undefined : slug };
+  return {
+    path: piece.path,
+    slug: section.start === piece.start && piece.shift > 0 ? undefined : slug,
+  };
 }
 
 export function targetsOf(sections: Section[], pieces: Piece[]): Map<string, Target> {

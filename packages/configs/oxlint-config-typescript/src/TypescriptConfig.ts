@@ -37,7 +37,10 @@ export const typescriptConfig: OxlintConfig = defineConfig({
   jsPlugins: [
     { name: 'export-placement', specifier: siblingModule('plugin') },
     { name: 'type-definitions', specifier: siblingModule('typeDefinitionsPlugin') },
-    { name: 'file-named-after-export', specifier: resolveFromHere('@brutalway/eslint-plugin-file-named-after-export') },
+    {
+      name: 'file-named-after-export',
+      specifier: resolveFromHere('@brutalway/eslint-plugin-file-named-after-export'),
+    },
     { name: 'no-comments', specifier: resolveFromHere('eslint-plugin-no-comments') },
     { name: 'check-file', specifier: resolveFromHere('eslint-plugin-check-file') },
     { name: 'sonarjs', specifier: siblingModule('cognitiveComplexityPlugin') },
@@ -61,8 +64,10 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'type-definitions/no-restricted-syntax': [
       'error',
       {
-        selector: "TSInterfaceDeclaration:not(TSModuleDeclaration[global=true] TSInterfaceDeclaration, TSModuleDeclaration[id.type='Literal'] TSInterfaceDeclaration)",
-        message: 'Declare object shapes with type, not interface: interface is only for augmenting a global such as Window or a module such as fastify.',
+        selector:
+          "TSInterfaceDeclaration:not(TSModuleDeclaration[global=true] TSInterfaceDeclaration, TSModuleDeclaration[id.type='Literal'] TSInterfaceDeclaration)",
+        message:
+          'Declare object shapes with type, not interface: interface is only for augmenting a global such as Window or a module such as fastify.',
       },
     ],
     'no-shadow': 'off',
@@ -70,8 +75,27 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'typescript/consistent-return': 'off',
     'oxc/no-barrel-file': ['error', { threshold: 0 }],
     'unicorn/filename-case': ['error', { cases: { camelCase: true, pascalCase: true } }],
-    'no-comments/disallowComments': ['error', { allow: ['oxlint-', 'eslint-', '@ts-expect-error', '@ts-ignore', '@ts-nocheck', '/ <reference ', '/usr/bin/env '] }],
-    'check-file/no-index': ['error', { errorMessage: 'Barrel files ({{ target }}) are not allowed: import each module by its own path' }],
+    'no-comments/disallowComments': [
+      'error',
+      {
+        allow: [
+          'oxlint-',
+          'eslint-',
+          '@ts-expect-error',
+          '@ts-ignore',
+          '@ts-nocheck',
+          '/ <reference ',
+          '/usr/bin/env ',
+        ],
+      },
+    ],
+    'check-file/no-index': [
+      'error',
+      {
+        errorMessage:
+          'Barrel files ({{ target }}) are not allowed: import each module by its own path',
+      },
+    ],
     'check-file/filename-blocklist': [
       'error',
       {
@@ -107,13 +131,20 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'function-size/max-functions': ['error', { max: 5 }],
   },
   overrides: [
-    { files: ['**/*.ts', '**/*.tsx'], rules: { 'export-placement/no-restricted-syntax': ['error', ...EXPORT_PLACEMENT] } },
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: { 'export-placement/no-restricted-syntax': ['error', ...EXPORT_PLACEMENT] },
+    },
     {
       files: ['**/*Types.ts'],
       rules: {
         'export-placement/no-restricted-syntax': [
           'error',
-          { selector: 'ExportNamedDeclaration[declaration][declaration.type!=/^TS(TypeAlias|Interface)Declaration$/]', message: 'An XTypes.ts file only exports types: move this export out of it.' },
+          {
+            selector:
+              'ExportNamedDeclaration[declaration][declaration.type!=/^TS(TypeAlias|Interface)Declaration$/]',
+            message: 'An XTypes.ts file only exports types: move this export out of it.',
+          },
         ],
       },
     },
@@ -123,12 +154,16 @@ export const typescriptConfig: OxlintConfig = defineConfig({
         'export-placement/no-restricted-syntax': [
           'error',
           {
-            selector: 'ExportNamedDeclaration > :matches(FunctionDeclaration, ClassDeclaration, TSTypeAliasDeclaration, TSInterfaceDeclaration)',
-            message: 'An XConfig.ts or XContent.ts file only exports constants: move this export out of it.',
+            selector:
+              'ExportNamedDeclaration > :matches(FunctionDeclaration, ClassDeclaration, TSTypeAliasDeclaration, TSInterfaceDeclaration)',
+            message:
+              'An XConfig.ts or XContent.ts file only exports constants: move this export out of it.',
           },
           {
-            selector: 'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > :matches(ArrowFunctionExpression, FunctionExpression).init',
-            message: 'An XConfig.ts or XContent.ts file only exports constants: move this export out of it.',
+            selector:
+              'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > :matches(ArrowFunctionExpression, FunctionExpression).init',
+            message:
+              'An XConfig.ts or XContent.ts file only exports constants: move this export out of it.',
           },
         ],
       },
@@ -140,16 +175,26 @@ export const typescriptConfig: OxlintConfig = defineConfig({
         'export-placement/no-restricted-syntax': [
           'error',
           {
-            selector: 'ExportNamedDeclaration > :matches(FunctionDeclaration, ClassDeclaration, TSTypeAliasDeclaration, TSInterfaceDeclaration, TSEnumDeclaration)',
-            message: 'An XSchemas.ts file only exports Zod schemas: move this export out of it, and infer types in an XTypes.ts file.',
+            selector:
+              'ExportNamedDeclaration > :matches(FunctionDeclaration, ClassDeclaration, TSTypeAliasDeclaration, TSInterfaceDeclaration, TSEnumDeclaration)',
+            message:
+              'An XSchemas.ts file only exports Zod schemas: move this export out of it, and infer types in an XTypes.ts file.',
           },
         ],
       },
     },
-    { files: ['**/*.test.ts', '**/*.test.tsx'], rules: { 'typescript/no-floating-promises': 'off' } },
+    {
+      files: ['**/*.test.ts', '**/*.test.tsx'],
+      rules: { 'typescript/no-floating-promises': 'off' },
+    },
     {
       files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', 'e2e/**'],
-      rules: { 'export-placement/no-restricted-syntax': 'off', 'file-named-after-export/file-named-after-export': 'off', 'max-lines-per-function': 'off', 'function-size/max-variables': 'off' },
+      rules: {
+        'export-placement/no-restricted-syntax': 'off',
+        'file-named-after-export/file-named-after-export': 'off',
+        'max-lines-per-function': 'off',
+        'function-size/max-variables': 'off',
+      },
     },
   ],
 });
