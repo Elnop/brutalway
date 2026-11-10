@@ -43,7 +43,7 @@ jobs:
       - run: npx --no-install playwright install --with-deps --only-shell chromium
         working-directory: packages/tools/playwright-fixtures
       - run: npm run build
-      - run: npm run matrix -- --jobs 1 --e2e --local-packages ${{ startsWith(github.head_ref, 'renovate/') && '--all' || '' }}
+      - run: npm run matrix -- --jobs 1 --e2e --local-packages
 
   site:
     runs-on: ubuntu-latest
