@@ -2,7 +2,7 @@
 
 None of the ideas in these templates is new. This page lists where each one comes from, what we take, what we leave out and which check enforces it. The principles that only apply to one stack are in that template's `docs/concepts/architecture.md`: [template-vite](../../templates/vite/docs/concepts/architecture.md) and [template-fastify](../../templates/fastify/docs/concepts/architecture.md).
 
-The first four justify the axioms of [intent.md](intent.md). The others justify the folder layout.
+The first five justify the axioms of [intent.md](intent.md). The others justify the folder layout.
 
 ## Fitness functions
 
@@ -33,6 +33,16 @@ We take it beyond formatting, to code constructs: function declarations, `type` 
 We leave out the "obvious" part. A rule here can be arbitrary, as long as it is the only one.
 
 Enforced by Prettier and `@brutalway/oxlint-config-typescript`.
+
+## The Norminette
+
+From [42](https://42.fr/), the coding school: every C project is checked by the Norminette before any student reads it, and one error gives 0 to the whole project. The norm is written in a PDF, but the tool decides. It also makes every project look the same, so any student can review any other.
+
+We take the verdict without appeal (the Reproducible axiom) and the hard limits on size: a function holds 25 lines at most, takes 4 parameters and declares 5 variables, and a file declares 5 functions. Small units are easier to name and to review, by a peer or by an agent.
+
+We leave out what only makes sense in C or what Prettier already decides: the 42 header (git records the author), tabs, `return (x);`, the blank line after the declarations, the `s_`, `t_` and `g_` prefixes and snake_case, since our names follow the export. Lines wrap at 100 columns instead of 80, because at 80 Prettier leaves long import paths and Tailwind classes over the limit ([#82](https://github.com/Elnop/brutalway/issues/82)). The constructs the Norminette forbids (`for`, `switch`, `do...while`, globals) are not decided yet ([#71](https://github.com/Elnop/brutalway/issues/71)).
+
+Enforced by `@brutalway/oxlint-config-typescript` (`max-lines-per-function`, `max-depth`, `max-nested-callbacks`, `max-params`, and its own `function-size/max-variables` and `function-size/max-functions`) and `@brutalway/prettier-config` (`printWidth: 100`).
 
 ## Convention over configuration
 
