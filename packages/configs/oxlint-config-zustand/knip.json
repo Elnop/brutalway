@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": ["fixtures/**"],
+  "ignoreDependencies": [
+    "@brutalway/eslint-plugin-store-layout",
+    "@brutalway/dependency-cruiser-config",
+    "@swc/core"
+  ]
+}

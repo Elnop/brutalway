@@ -3,16 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
-const PLAYWRIGHT = join(
-  import.meta.dirname,
-  '..',
-  '..',
-  '..',
-  '..',
-  'node_modules',
-  '.bin',
-  'playwright',
-);
+const PLAYWRIGHT = join(import.meta.dirname, '..', 'node_modules', '.bin', 'playwright');
 const FIXTURES = join(import.meta.dirname, '..', 'fixtures');
 
 function runSpec(spec: string) {

@@ -17,8 +17,13 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps --only-shell chromium
+          cache-dependency-path: |
+            package-lock.json
+            packages/package-lock.json
+            packages/*/*/package-lock.json
+      - run: npm run bootstrap
+      - run: npx --no-install playwright install --with-deps --only-shell chromium
+        working-directory: packages/tools/playwright-fixtures
       - run: npm run build
       - run: npm run check
 
@@ -30,7 +35,12 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps --only-shell chromium
+          cache-dependency-path: |
+            package-lock.json
+            packages/package-lock.json
+            packages/*/*/package-lock.json
+      - run: npm run bootstrap
+      - run: npx --no-install playwright install --with-deps --only-shell chromium
+        working-directory: packages/tools/playwright-fixtures
       - run: npm run build
       - run: npm run matrix -- --jobs 1 --e2e --local-packages

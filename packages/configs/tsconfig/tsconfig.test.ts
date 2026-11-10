@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
-const TSC = join(import.meta.dirname, '..', '..', '..', 'node_modules', '.bin', 'tsc');
+const TSC = join(import.meta.dirname, 'node_modules', '.bin', 'tsc');
 
 type Files = Record<string, string>;
 

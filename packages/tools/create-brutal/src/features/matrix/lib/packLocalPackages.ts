@@ -1,18 +1,19 @@
 import { globSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { runProcess } from '#src/features/matrix/lib/runProcess.ts';
 import { isRecord } from '#src/shared/lib/isRecord.ts';
 
-function brutalwayPackageNames(root: string): string[] {
-  return globSync('packages/*/*/package.json', { cwd: root })
-    .map((path): unknown => JSON.parse(readFileSync(join(root, path), 'utf8')))
-    .flatMap((manifest) =>
-      isRecord(manifest) &&
-      typeof manifest['name'] === 'string' &&
-      manifest['name'].startsWith('@brutalway/')
-        ? [manifest['name']]
-        : [],
-    );
+function brutalwayPackageFolders(root: string): string[] {
+  return globSync('packages/{configs,plugins,tools,utils}/*/package.json', { cwd: root }).flatMap(
+    (path) => {
+      const manifest: unknown = JSON.parse(readFileSync(join(root, path), 'utf8'));
+      return isRecord(manifest) &&
+        typeof manifest['name'] === 'string' &&
+        manifest['name'].startsWith('@brutalway/')
+        ? [join(root, dirname(path))]
+        : [];
+    },
+  );
 }
 
 function tarballPaths(packOutput: string, destination: string): Map<string, string> {
@@ -33,9 +34,8 @@ export async function packLocalPackages(
 ): Promise<Map<string, string>> {
   rmSync(destination, { recursive: true, force: true });
   mkdirSync(destination, { recursive: true });
-  const workspaces = brutalwayPackageNames(root).map((name) => `--workspace=${name}`);
   const packArgs = ['pack', '--ignore-scripts', '--json', '--pack-destination', destination];
-  const result = await runProcess('npm', [...packArgs, ...workspaces], root);
+  const result = await runProcess('npm', [...packArgs, ...brutalwayPackageFolders(root)], root);
   if (!result.ok) throw new Error(`npm pack failed\n${result.output.slice(-4000)}`);
   return tarballPaths(result.stdout, destination);
 }

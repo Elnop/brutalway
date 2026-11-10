@@ -29,7 +29,10 @@
     "./tailwind": "./prettierConfigTailwind.json"
   },
   "scripts": {
-    "test": "node --test '**/*.test.ts'"
+    "test": "node --test '**/*.test.ts'",
+    "format": "prettier --write .",
+    "unused": "knip",
+    "check": "prettier --check . && npm run unused"
   },
   "peerDependencies": {
     "prettier": "^3.9.10",
@@ -41,8 +44,10 @@
     }
   },
   "devDependencies": {
+    "knip": "6.44.1",
     "prettier": "3.9.10",
     "prettier-plugin-tailwindcss": "0.8.1",
     "tailwindcss": "4.3.3"
-  }
+  },
+  "prettier": "./prettierConfig.json"
 }

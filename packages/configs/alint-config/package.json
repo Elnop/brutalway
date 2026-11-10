@@ -25,12 +25,22 @@
     "library.yml"
   ],
   "scripts": {
-    "test": "node --test '**/*.test.ts'"
+    "test": "node --test '**/*.test.ts'",
+    "format": "prettier --write .",
+    "unused": "knip",
+    "check": "prettier --check . && npm run unused"
   },
   "peerDependencies": {
     "@asamarts/alint": "0.21.0"
   },
   "devDependencies": {
-    "@asamarts/alint": "0.21.0"
+    "@asamarts/alint": "0.21.0",
+    "@brutalway/prettier-config": "0.3.0",
+    "knip": "6.44.1",
+    "prettier": "3.9.10"
+  },
+  "prettier": "@brutalway/prettier-config",
+  "allowScripts": {
+    "@asamarts/alint@0.21.0": true
   }
 }

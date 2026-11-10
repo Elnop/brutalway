@@ -1,4 +1,12 @@
 {
   "name": "brutalway-templates",
-  "private": true
+  "private": true,
+  "scripts": {
+    "changeset": "changeset",
+    "version": "changeset version",
+    "tag": "changeset git-tag"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3"
+  }
 }

@@ -6,23 +6,27 @@ How to build, check and release this repository. To use brutalway in a project, 
 
 | Folder | |
 |---|---|
-| `packages/` | the published packages, one npm workspace each |
+| `packages/` | the published packages, each with its own `package.json`, lockfile and `npm run check`. A package installs the other `@brutalway/*` packages from npm, like any other dependency |
 | `templates/` | template-vite, template-fastify and template-package, each with its own `package.json`, lockfile, version and changelog |
 | `site/` | the landing page and the docs, made from template-vite and deployed to GitHub Pages at [brutalway.elnop.dev](https://brutalway.elnop.dev/) |
 | `docs/` | the guides, the reference and the concepts, also shown on the site |
 | `plugins/`, `.claude-plugin/` | the Claude Code plugin and its marketplace |
-| `scripts/` | the script that creates a GitHub release for each published version and each template version |
+| `scripts/` | the scripts run from the root: one runs an npm command in every package, one creates a GitHub release for each published version and each template version, and one keeps the issue labels and the project board in sync |
 
 ## Build and check
 
 ```sh
 nvm use
-npm install
+npm run bootstrap
 npm run build
 npm run check
 ```
 
-The root lints itself with the packages of the workspace, and the tests load the packages through their built `exports`, so `npm run build` comes first. `npm run check` runs Prettier, both tsc projects, oxlint, knip and every test.
+`npm run bootstrap` runs `npm ci` at the root, in `packages/`, in `templates/` and in each package. Some tests load their package through its built `exports`, so `npm run build` comes first. `npm run check` runs Prettier, tsc and oxlint on the root scripts, then `npm run check` in each package, the doc checks, knip and every test.
+
+To work on a single package, run the same commands from its folder: `npm ci`, `npm run build`, `npm run check`, `npm test`.
+
+A package is checked with the `@brutalway/*` versions published on npm, not with the code next to it. A change to `oxlint-config-typescript` reaches `oxlint-config-node` once it is published and `oxlint-config-node` raises its range.
 
 `npm run matrix` creates projects covering every pair of CLI option values and runs their `npm run check` and `npm test` (`--all` for every combination). With `--local-packages`, the projects install the `@brutalway/*` packages packed from this checkout instead of the versions on npm, so a rule can be tried on both templates before it is published. CI runs it that way, with `--e2e`.
 
@@ -32,13 +36,13 @@ Versions are managed with [changesets](https://github.com/changesets/changesets)
 
 With each change:
 
-- to a published package, add a changeset with `npx changeset`
+- to a published package, add a changeset with `npm run changeset`
 - to a template, when it matters to someone starting a project, add one with `npm run templates:changeset`
 
 To release:
 
 1. Commit the template changes first: the CLI records the last commit that changed each template when it is built.
-2. `npx changeset version` bumps the package versions and writes their changelogs.
+2. `npm run version` bumps the versions of the packages named in the changesets, writes their changelogs and refreshes the lockfiles. The packages that depend on them keep their ranges, and get a bump only when someone raises it.
 3. `npm run templates:version` bumps the template versions and writes their `CHANGELOG.md`.
 4. `npm run release` builds, checks, publishes what changed, tags the templates as `template-vite@x.y.z` and so on, and creates every GitHub release.
 

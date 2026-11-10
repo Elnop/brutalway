@@ -7,9 +7,6 @@ import { describe, it } from 'node:test';
 
 const ALINT = join(
   import.meta.dirname,
-  '..',
-  '..',
-  '..',
   'node_modules',
   '@asamarts',
   'alint',

@@ -47,7 +47,10 @@ async function servedByNpm(candidates: Tag[]): Promise<Tag[]> {
 type Manifest = { name: string; private?: boolean };
 
 const manifests = new Map(
-  globSync(['packages/*/*/package.json', 'templates/*/package.json']).map((manifestPath) => {
+  globSync([
+    'packages/{configs,plugins,tools,utils}/*/package.json',
+    'templates/*/package.json',
+  ]).map((manifestPath) => {
     const manifest: Manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
     return [
       manifest.name,

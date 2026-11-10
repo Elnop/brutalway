@@ -33,13 +33,23 @@
     "./library": "./library.cjs"
   },
   "scripts": {
-    "test": "node --test '**/*.test.ts'"
+    "test": "node --test '**/*.test.ts'",
+    "format": "prettier --write .",
+    "unused": "knip",
+    "check": "prettier --check . && npm run unused"
   },
   "peerDependencies": {
     "dependency-cruiser": "^18.7.2"
   },
   "devDependencies": {
+    "@brutalway/prettier-config": "0.3.0",
     "@swc/core": "1.16.21",
-    "dependency-cruiser": "18.7.2"
+    "dependency-cruiser": "18.7.2",
+    "knip": "6.44.1",
+    "prettier": "3.9.10"
+  },
+  "prettier": "@brutalway/prettier-config",
+  "allowScripts": {
+    "@swc/core": false
   }
 }

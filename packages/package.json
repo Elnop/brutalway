@@ -1,0 +1,12 @@
+{
+  "name": "brutalway-packages",
+  "private": true,
+  "scripts": {
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3"
+  }
+}

@@ -36,8 +36,10 @@
     "deps": "depcruise --output-type err-long src",
     "tree": "check-tree src --root-entries",
     "duplicates": "jscpd src",
-    "check": "npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates",
-    "test": "node --test 'src/**/*.test.ts'"
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
+    "test": "node --test 'src/**/*.test.ts'",
+    "format": "prettier --write .",
+    "unused": "knip"
   },
   "dependencies": {
     "@brutalway/oxlint-config-typescript": "^0.6.0",
@@ -52,12 +54,26 @@
     "@brutalway/lint-utils": "0.2.0",
     "@brutalway/oxlint-config-node": "0.2.1",
     "@brutalway/oxlint-config-node-test": "0.1.0",
+    "@brutalway/prettier-config": "0.3.0",
     "@brutalway/tsconfig": "0.4.0",
+    "@swc/core": "1.16.21",
+    "@types/node": "26.6.6",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",
+    "knip": "6.44.1",
     "oxlint": "1.91.0",
     "oxlint-tsgolint": "7.0.2005",
+    "prettier": "3.9.10",
     "tsdown": "0.23.5",
     "typescript": "7.0.2"
+  },
+  "prettier": "@brutalway/prettier-config",
+  "allowScripts": {
+    "@swc/core": false
+  },
+  "overrides": {
+    "eslint-plugin-no-comments": {
+      "minimatch": "^11.0.1"
+    }
   }
 }

@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
-const DEPCRUISE = join(import.meta.dirname, '..', '..', '..', 'node_modules', '.bin', 'depcruise');
+const DEPCRUISE = join(import.meta.dirname, 'node_modules', '.bin', 'depcruise');
 
 function project(files: Record<string, string>, config = 'layers.cjs'): string {
   const root = mkdtempSync(join(tmpdir(), 'layers-'));

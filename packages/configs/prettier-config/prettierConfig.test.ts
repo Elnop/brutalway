@@ -1,16 +1,26 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
-const ROOT_NODE_MODULES = join(import.meta.dirname, '..', '..', '..', 'node_modules');
-const PRETTIER = join(ROOT_NODE_MODULES, '.bin', 'prettier');
+const PACKAGE_ROOT = import.meta.dirname;
+const NODE_MODULES = join(PACKAGE_ROOT, 'node_modules');
+const PRETTIER = join(NODE_MODULES, '.bin', 'prettier');
+
+function linkDependencies(root: string): void {
+  const modules = join(root, 'node_modules');
+  mkdirSync(join(modules, '@brutalway'), { recursive: true });
+  for (const entry of readdirSync(NODE_MODULES)) {
+    symlinkSync(join(NODE_MODULES, entry), join(modules, entry));
+  }
+  symlinkSync(PACKAGE_ROOT, join(modules, '@brutalway', 'prettier-config'));
+}
 
 function project(config: string, files: Record<string, string>): string {
   const root = mkdtempSync(join(tmpdir(), 'prettier-config-'));
-  symlinkSync(ROOT_NODE_MODULES, join(root, 'node_modules'));
+  linkDependencies(root);
   const all: Record<string, string> = {
     'package.json': JSON.stringify({ name: 'fixture', prettier: config }),
     ...files,

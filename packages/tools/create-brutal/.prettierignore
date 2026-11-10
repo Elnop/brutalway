@@ -1,0 +1,7 @@
+**/*.md
+fixtures
+dist
+package-lock.json
+test-results
+playwright-report
+**/third-party

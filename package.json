@@ -5,22 +5,22 @@
   "engines": {
     "node": ">=26"
   },
-  "workspaces": [
-    "packages/*/*"
-  ],
   "prettier": "@brutalway/prettier-config",
   "scripts": {
-    "build": "node scripts/buildPackages.ts",
+    "bootstrap": "npm ci && npm ci --prefix packages && npm ci --prefix templates && node scripts/eachPackage.ts ci",
+    "build": "node scripts/eachPackage.ts run build --if-present",
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware --disable-nested-config",
     "format": "prettier --write .",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
-    "check": "prettier --check . && npm run typecheck && npm run lint && npm run check --workspaces --if-present && npm run docs && knip && npm test",
-    "test": "npm test --workspaces --if-present && node --test 'scripts/**/*.test.ts'",
+    "check": "prettier --check . && npm run typecheck && npm run lint && node scripts/eachPackage.ts run check --if-present && npm run docs && knip && npm test",
+    "test": "node scripts/eachPackage.ts test --if-present && node --test 'scripts/**/*.test.ts'",
     "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
-    "templates:changeset": "cd templates && changeset",
-    "templates:version": "cd templates && changeset version",
-    "release": "npm run build && npm run check && changeset publish && (cd templates && changeset git-tag) && git push --follow-tags && node scripts/createReleases.ts"
+    "changeset": "npm run changeset --prefix packages",
+    "version": "npm run version --prefix packages && node scripts/eachPackage.ts install --package-lock-only --ignore-scripts",
+    "templates:changeset": "npm run changeset --prefix templates",
+    "templates:version": "npm run version --prefix templates",
+    "release": "npm run build && npm run check && npm run release --prefix packages && npm run tag --prefix templates && git push --follow-tags && node scripts/createReleases.ts"
   },
   "devDependencies": {
     "@brutalway/check-doc-length": "0.2.1",
@@ -28,7 +28,6 @@
     "@brutalway/check-doc-sources": "0.2.1",
     "@brutalway/oxlint-config-typescript": "0.6.0",
     "@brutalway/prettier-config": "0.3.0",
-    "@changesets/cli": "3.0.3",
     "@types/node": "26.6.6",
     "knip": "6.44.1",
     "oxlint": "1.91.0",

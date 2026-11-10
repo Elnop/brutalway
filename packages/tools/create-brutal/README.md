@@ -174,7 +174,8 @@ The project gets no `version` in `package.json`, unless the stack sets `projectV
 From the root of the repository:
 
 ```sh
-npm install
+npm run bootstrap
+npm run build
 node packages/tools/create-brutal/src/cli.ts ../my-app --local
 npm run matrix
 ```
