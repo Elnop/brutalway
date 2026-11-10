@@ -37,7 +37,7 @@ describe('docList', () => {
     const fetchMock = vi.fn<() => Promise<Response>>(async () => treeAnswer());
     vi.stubGlobal('fetch', fetchMock);
     const entries = await loadDocList(new AbortController().signal);
-    expect(paths(entries, 'brutalway')).toStrictEqual(['README.md', 'packages/tools/create-brutal/README.md', 'docs/intent.md', 'docs/roadmap.md']);
+    expect(paths(entries, 'brutalway')).toStrictEqual(['README.md', 'packages/tools/create-brutal/README.md', 'CONTRIBUTING.md', 'docs/intent.md', 'docs/roadmap.md']);
     expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/architecture.md', 'docs/guides/setup.md', 'CHANGELOG.md']);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
