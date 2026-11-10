@@ -5,7 +5,6 @@ const REPOSITORY_FILES = [
   'README.md',
   'docs/concepts/intent.md',
   'docs/getting-started.md',
-  'docs/roadmap.md',
   'docs/notes.txt',
   'packages/tools/create-brutal/README.md',
   'templates/vite/README.md',
@@ -38,16 +37,13 @@ describe('docList', () => {
     const fetchMock = vi.fn<() => Promise<Response>>(async () => treeAnswer());
     vi.stubGlobal('fetch', fetchMock);
     const entries = await loadDocList(new AbortController().signal);
-    expect(paths(entries, 'brutalway')).toStrictEqual([
-      'README.md',
-      'docs/getting-started.md',
-      'packages/tools/create-brutal/README.md',
-      'docs/concepts/intent.md',
-      'CONTRIBUTING.md',
-      'docs/roadmap.md',
-    ]);
+    expect(paths(entries, 'brutalway')).toStrictEqual(['README.md', 'docs/getting-started.md', 'packages/tools/create-brutal/README.md', 'docs/concepts/intent.md', 'CONTRIBUTING.md', 'roadmap']);
     expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/guides/setup.md', 'docs/architecture.md', 'CHANGELOG.md']);
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('lists the roadmap of a source among its pages, without a file behind it', () => {
+    expect(paths(fixedEntries(), 'brutalway')).toContain('roadmap');
   });
 
   it('keeps the named files when GitHub does not answer', async () => {

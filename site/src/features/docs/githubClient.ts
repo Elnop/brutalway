@@ -1,4 +1,5 @@
-import { repositoryTreeUrl } from '@/features/docs/lib/docsUrls.ts';
+import type { RoadmapIssue } from '@/features/docs/DocsTypes.ts';
+import { issuesUrl, repositoryTreeUrl } from '@/features/docs/lib/docsUrls.ts';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -26,4 +27,37 @@ export async function fetchDocText(url: string, signal: AbortSignal): Promise<st
   });
   if (!response.ok) throw new Error(`GitHub answered ${String(response.status)}.`);
   return response.text();
+}
+
+const ISSUES_PER_PAGE = 100;
+
+function labelName(value: unknown): string[] {
+  return isRecord(value) && typeof value['name'] === 'string' ? [value['name']] : [];
+}
+
+function parentNumber(value: unknown): number | undefined {
+  if (typeof value !== 'string') return undefined;
+  const number = Number(value.slice(value.lastIndexOf('/') + 1));
+  return Number.isInteger(number) ? number : undefined;
+}
+
+function roadmapIssue(value: unknown): RoadmapIssue[] {
+  if (!isRecord(value) || value['pull_request'] !== undefined) return [];
+  const { number, title, html_url: url, state, state_reason: reason, labels, parent_issue_url: parent } = value;
+  if (typeof number !== 'number' || typeof title !== 'string' || typeof url !== 'string') return [];
+  return [{ number, title, url, closed: state === 'closed', completed: reason === 'completed', labels: Array.isArray(labels) ? labels.flatMap(labelName) : [], parent: parentNumber(parent) }];
+}
+
+async function issuePage(repo: string, page: number, signal: AbortSignal): Promise<unknown[]> {
+  const response = await fetch(issuesUrl(repo, page), { signal }).catch(() => {
+    throw new Error('The issues could not be loaded from GitHub.');
+  });
+  if (!response.ok) throw new Error(`GitHub answered ${String(response.status)}.`);
+  const items: unknown = await response.json();
+  if (!Array.isArray(items)) throw new Error('GitHub answered with something other than a list of issues.');
+  return items.length < ISSUES_PER_PAGE ? items : [...items, ...(await issuePage(repo, page + 1, signal))];
+}
+
+export async function listIssues(repo: string, signal: AbortSignal): Promise<RoadmapIssue[]> {
+  return (await issuePage(repo, 1, signal)).flatMap(roadmapIssue);
 }

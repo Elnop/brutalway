@@ -9,6 +9,7 @@ export type DocSource = {
   changelog?: string;
   order?: string[];
   moved?: Record<string, string>;
+  roadmap?: string;
 };
 
 export type DocEntry = {
@@ -54,4 +55,14 @@ export type PackageCategory = {
   depth: number;
   packages: string[];
   children: PackageCategory[];
+};
+
+export type RoadmapIssue = {
+  number: number;
+  title: string;
+  url: string;
+  closed: boolean;
+  completed: boolean;
+  labels: string[];
+  parent: number | undefined;
 };

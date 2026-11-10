@@ -1,0 +1,50 @@
+name: Issue status
+
+on:
+  issues:
+    types: [opened, reopened, labeled]
+
+permissions:
+  issues: write
+
+concurrency:
+  group: issue-status-${{ github.event.issue.number }}
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          ACTION: ${{ github.event.action }}
+          ADDED: ${{ github.event.label.name }}
+          AUTHOR: ${{ github.event.issue.author_association }}
+          LABELS: ${{ toJSON(github.event.issue.labels.*.name) }}
+        run: |
+          statuses=("triage" "todo" "in progress")
+          is_status() {
+            local status
+            for status in "${statuses[@]}"; do
+              [[ "$1" == "$status" ]] && return 0
+            done
+            return 1
+          }
+          mapfile -t current < <(jq -r '.[]' <<< "$LABELS")
+          if [[ "$ACTION" == labeled ]]; then
+            is_status "$ADDED" || exit 0
+            for label in "${current[@]}"; do
+              if is_status "$label" && [[ "$label" != "$ADDED" ]]; then
+                gh issue edit "$NUMBER" --remove-label "$label"
+              fi
+            done
+            exit 0
+          fi
+          for label in "${current[@]}"; do
+            is_status "$label" && exit 0
+          done
+          case "$AUTHOR" in
+            OWNER | MEMBER | COLLABORATOR) gh issue edit "$NUMBER" --add-label todo ;;
+            *) gh issue edit "$NUMBER" --add-label triage ;;
+          esac

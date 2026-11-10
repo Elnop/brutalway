@@ -10,7 +10,7 @@ function orderRank(order: string[], path: string): number {
 }
 
 function sourceEntries(source: DocSource, folderPaths: string[]): DocEntry[] {
-  const paths = [...source.files, ...folderPaths, ...(source.changelog === undefined ? [] : [source.changelog])];
+  const paths = [...source.files, ...folderPaths, ...(source.roadmap === undefined ? [] : [source.roadmap]), ...(source.changelog === undefined ? [] : [source.changelog])];
   const { order } = source;
   const ordered = order === undefined ? paths : Array.from({ length: order.length + 1 }, (_, rank) => paths.filter((path) => orderRank(order, path) === rank)).flat();
   return ordered.map((path) => ({ sourceKey: source.key, path, title: docTitle(path) }));

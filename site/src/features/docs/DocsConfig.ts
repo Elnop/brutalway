@@ -55,9 +55,10 @@ export const DOC_SOURCES: DocSource[] = [
     repo: 'Elnop/brutalway',
     directory: '',
     files: ['README.md', 'packages/tools/create-brutal/README.md', 'CONTRIBUTING.md'],
-    order: ['README.md', 'docs/getting-started.md', 'docs/guides/', 'docs/reference/', 'packages/tools/create-brutal/README.md', 'docs/concepts/', 'CONTRIBUTING.md', 'docs/roadmap.md'],
+    order: ['README.md', 'docs/getting-started.md', 'docs/guides/', 'docs/reference/', 'packages/tools/create-brutal/README.md', 'docs/concepts/', 'CONTRIBUTING.md', 'roadmap'],
     folder: 'docs',
-    moved: { 'docs/intent.md': 'docs/concepts/intent.md', 'docs/inspirations.md': 'docs/concepts/inspirations.md' },
+    moved: { 'docs/intent.md': 'docs/concepts/intent.md', 'docs/inspirations.md': 'docs/concepts/inspirations.md', 'docs/roadmap.md': 'roadmap' },
+    roadmap: 'roadmap',
   },
   { key: 'all', label: 'templates', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates', files: ['README.md'] },
   {

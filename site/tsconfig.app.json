@@ -1,6 +1,7 @@
 {
   "extends": "@brutalway/tsconfig/react-vite.json",
   "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "paths": {
       "@/*": ["./src/*"]
     }

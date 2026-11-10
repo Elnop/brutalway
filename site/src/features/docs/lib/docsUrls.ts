@@ -25,3 +25,11 @@ export function githubFileUrl(source: DocSource, path: string): string {
 export function repositoryTreeUrl(repo: string): string {
   return `https://api.github.com/repos/${repo}/git/trees/${DOCS_BRANCH}?recursive=1`;
 }
+
+export function issuesUrl(repo: string, page: number): string {
+  return `https://api.github.com/repos/${repo}/issues?state=all&per_page=100&page=${String(page)}`;
+}
+
+export function docSourceUrl(source: DocSource, path: string): string {
+  return path === source.roadmap ? `https://github.com/${source.repo}/issues` : githubFileUrl(source, path);
+}

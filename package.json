@@ -69,8 +69,7 @@
       "**/dist/**",
       "**/CHANGELOG.md",
       "**/fixtures/**",
-      "**/test-results/**",
-      "docs/roadmap.md"
+      "**/test-results/**"
     ]
   }
 }

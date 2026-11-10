@@ -3,7 +3,7 @@ import type { Components } from 'react-markdown';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
-import { githubFileUrl, repositoryPath } from '@/features/docs/lib/docsUrls.ts';
+import { docSourceUrl, repositoryPath } from '@/features/docs/lib/docsUrls.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
@@ -19,7 +19,8 @@ type DocsArticleProps = {
 };
 
 export function DocsArticle({ content, source, path, knownPaths }: DocsArticleProps) {
-  const sourceUrl = githubFileUrl(source, path);
+  const sourceUrl = docSourceUrl(source, path);
+  const sourceLabel = path === source.roadmap ? `${source.repo} issues` : `${source.repo}/${repositoryPath(source, path)}`;
   return (
     <article className="docs-article">
       {content.status === 'loading' && <p className="docs-status">Loading {path}…</p>}
@@ -39,9 +40,7 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
         </Markdown>
       )}
       <p className="docs-source">
-        <SiteLink href={sourceUrl}>
-          {source.repo}/{repositoryPath(source, path)} on GitHub
-        </SiteLink>
+        <SiteLink href={sourceUrl}>{sourceLabel} on GitHub</SiteLink>
       </p>
     </article>
   );

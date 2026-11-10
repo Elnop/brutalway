@@ -48,4 +48,12 @@ The site shows each template changelog on the template's page.
 
 `site/` has its own `package.json` and its own `npm run check`. The Pages workflow deploys it on each push that changes it.
 
-The work left is in [docs/roadmap.md](docs/roadmap.md).
+## The roadmap
+
+The [roadmap](https://brutalway.elnop.dev/#/docs/brutalway/roadmap) is read from the issues each time the page opens, so the issues are the only thing to keep up to date. An open issue shows up once it carries one of these labels:
+
+- `triage`: opened by someone outside the project and not read yet, listed apart from the rest
+- `todo`: accepted, not started
+- `in progress`
+
+The Issue status workflow gives `todo` to an issue opened by a collaborator and `triage` to any other, and when a status label is added it removes the previous one. Accepting an issue from triage means giving it `todo`. A closed issue shows up under Done, unless it was closed as not planned or carries `duplicate`, `invalid` or `wontfix`. Sub-issues are listed under their parent.

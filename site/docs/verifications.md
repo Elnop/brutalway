@@ -4,7 +4,7 @@ Everything below runs locally and in the pre-commit hook.
 
 ## TypeScript
 
-`tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/react-vite.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`.
+`tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/react-vite.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`. `tsconfig.app.json` sets `lib` to ES2024 itself, for `toSorted` and `toReversed`, until the site moves to the release of `@brutalway/tsconfig` that does it.
 
 ## Lint
 
