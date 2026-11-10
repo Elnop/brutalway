@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/lint-utils",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Helpers shared by the @brutalway lint configs and plugins: export listing, file base name, oxlint rule and fixture testers, oklab colors and color token reading.",
   "keywords": [
     "oxlint",
