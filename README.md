@@ -18,13 +18,7 @@ Every template builds the same todo list, so the stacks can be compared side by 
 
 ## The common rules
 
-- the code is split into layers (`app`, `features`, `shared-features`, `shared`), each importing only the ones below, and features never import each other
-- on the front end, components are orchestrators, which read stores, or presenters, which only get props
-- on the API, a route calls its service, and only queries files run SQL
-- one way to write each construct, no comments, no relative imports, no barrel files
-- files are named after what they export and placed by kind: one file stays at the root of its folder, two or more move into `components/`, `hooks/`, `routes/`, `lib/` and so on
-- every dependency is pinned, every path cited in the docs exists, no export goes unused
-- a Claude Code hook lints each file the agent edits and sends the errors back to it
+The code is split into layers that only import downwards, every file is named after what it exports and placed by kind, and there is one way to write each construct. [docs/reference/rules.md](docs/reference/rules.md) lists each rule, the tool that checks it and the message it prints.
 
 ## Packages
 

@@ -1,6 +1,6 @@
 # Templates
 
-Each template is a starter repository where the conventions are checked by tools. They all build the same todo list, so you can compare the stacks side by side, and they share the [common rules](../README.md#the-common-rules) of brutalway.
+Each template is a starter repository where the conventions are checked by tools. They all build the same todo list, so you can compare the stacks side by side, and they share the [common rules](../docs/reference/rules.md) of brutalway.
 
 | Template | Stack | Status |
 |---|---|---|

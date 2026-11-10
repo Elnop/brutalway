@@ -1,6 +1,6 @@
 # Packages
 
-The rules and every shared config are published from this folder as `@brutalway/*`, next to `create-brutal`, the CLI behind `npm create brutal`. Each package has its own README. The templates use them through their configs, and each template README lists the tools it uses and how they map to the [common rules](../README.md#the-common-rules).
+The rules and every shared config are published from this folder as `@brutalway/*`, next to `create-brutal`, the CLI behind `npm create brutal`. Each package has its own README. The templates use them through their configs, and each template README lists the tools it uses and how they map to the [common rules](../docs/reference/rules.md).
 
 ## Tools
 
