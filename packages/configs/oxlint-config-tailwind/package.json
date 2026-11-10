@@ -64,7 +64,7 @@
     "oxlint": "1.91.0",
     "oxlint-tsgolint": "7.0.2005",
     "prettier": "3.9.10",
-    "tailwindcss": "4.3.3",
+    "tailwindcss": "4.3.5",
     "tsdown": "0.23.5",
     "typescript": "7.0.2"
   },
