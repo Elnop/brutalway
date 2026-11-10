@@ -3,43 +3,33 @@ name: Issue status
 on:
   issues:
     types: [opened, reopened, labeled]
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 permissions:
+  contents: read
   issues: write
 
 jobs:
-  status:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - env:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: |
+            scripts
+            .nvmrc
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: node scripts/syncIssueStatus.ts
+        env:
           GH_TOKEN: ${{ github.token }}
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ github.event.issue.number }}
+          EVENT_NAME: ${{ github.event_name }}
           ACTION: ${{ github.event.action }}
+          NUMBER: ${{ github.event.issue.number }}
           ADDED: ${{ github.event.label.name }}
-          AUTHOR: ${{ github.event.issue.author_association }}
-        run: |
-          statuses=("triage" "todo" "in progress")
-          is_status() {
-            local status
-            for status in "${statuses[@]}"; do
-              [[ "$1" == "$status" ]] && return 0
-            done
-            return 1
-          }
-          mapfile -t current < <(gh issue view "$NUMBER" --json labels --jq '.labels[].name')
-          if [[ "$ACTION" == labeled ]] && is_status "$ADDED" && [[ " ${current[*]} " == *" $ADDED "* ]]; then
-            for label in "${current[@]}"; do
-              if is_status "$label" && [[ "$label" != "$ADDED" ]]; then
-                gh issue edit "$NUMBER" --remove-label "$label"
-              fi
-            done
-            exit 0
-          fi
-          for label in "${current[@]}"; do
-            is_status "$label" && exit 0
-          done
-          case "$AUTHOR" in
-            OWNER | MEMBER | COLLABORATOR) gh issue edit "$NUMBER" --add-label todo ;;
-            *) gh issue edit "$NUMBER" --add-label triage ;;
-          esac
