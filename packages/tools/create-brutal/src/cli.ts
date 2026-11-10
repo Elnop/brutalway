@@ -9,7 +9,7 @@ import { readStackRefs } from '#src/features/scaffolding/lib/readStackRefs.ts';
 import { resolveAnswers } from '#src/features/answers/lib/resolveAnswers.ts';
 import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.ts';
 import { LOCAL_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
-import type { TemplateSource } from '#src/features/scaffolding/ScaffoldTypes.ts';
+import type { ScaffoldPlan, TemplateSource } from '#src/features/scaffolding/ScaffoldTypes.ts';
 import type { AnswerValue, Stack, StackOption } from '#src/shared-features/stack/StackTypes.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
 
@@ -95,6 +95,21 @@ function templateSource(stack: Stack, local: boolean): TemplateSource {
   return { kind: 'github', ref };
 }
 
+async function createProject(dir: string, plan: () => ScaffoldPlan): Promise<void> {
+  const existed = existsSync(dir);
+  const progress = spinner();
+  progress.start('Creating the project');
+  try {
+    await scaffoldProject(plan(), (message) => progress.message(message));
+  } catch (error) {
+    progress.error('Failed');
+    if (existed) for (const entry of readdirSync(dir)) rmSync(resolve(dir, entry), { recursive: true, force: true });
+    else rmSync(dir, { recursive: true, force: true });
+    throw error;
+  }
+  progress.stop(`Created ${dir}`);
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   const first = readArgs(argv, undefined);
@@ -109,18 +124,7 @@ async function main(): Promise<void> {
   const answers = await resolveAnswers(stack.options, args.options, args.yes ? undefined : askOption);
   const git = await askYesNo(args.git, args.yes, 'Run git init?');
   const install = await askYesNo(args.install, args.yes, 'Run npm install?');
-  const existed = existsSync(dir);
-  const progress = spinner();
-  progress.start('Creating the project');
-  try {
-    await scaffoldProject({ dir: resolve(dir), projectName: basename(resolve(dir)), stack, answers, source: templateSource(stack, args.local), git, install }, (message) => progress.message(message));
-  } catch (error) {
-    progress.error('Failed');
-    if (existed) for (const entry of readdirSync(dir)) rmSync(resolve(dir, entry), { recursive: true, force: true });
-    else rmSync(dir, { recursive: true, force: true });
-    throw error;
-  }
-  progress.stop(`Created ${dir}`);
+  await createProject(dir, () => ({ dir: resolve(dir), projectName: basename(resolve(dir)), stack, answers, source: templateSource(stack, args.local), git, install }));
   note([`cd ${dir}`, ...(install ? [] : ['npm install']), ...(git ? [] : ['git init && git config core.hooksPath .githooks']), ...stack.nextSteps(answers)].join('\n'), 'Next steps');
   outro('Run npm run check before each commit.');
 }

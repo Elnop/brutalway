@@ -33,11 +33,9 @@ function issueLine(placed: Placed, parentStatus: Status | undefined): string {
   return [`[#${String(placed.issue.number)}](${placed.issue.url}) ${escapeTitle(placed.issue.title)}`, ...status, ...tags].join(' · ');
 }
 
-export function roadmapMarkdown(repo: string, issues: RoadmapIssue[]): string {
-  const placed = issues.flatMap((issue) => {
-    const status = issueStatus(issue);
-    return status === undefined ? [] : [{ issue, status }];
-  });
+type IssueTree = { roots: Placed[]; childrenOf: Map<number, Placed[]> };
+
+function issueTree(placed: Placed[]): IssueTree {
   const byNumber = new Map(placed.map((item) => [item.issue.number, item]));
   const childrenOf = new Map<number, Placed[]>();
   const roots: Placed[] = [];
@@ -46,19 +44,31 @@ export function roadmapMarkdown(repo: string, issues: RoadmapIssue[]): string {
     if (parent === undefined) roots.push(item);
     else childrenOf.set(parent.issue.number, [...(childrenOf.get(parent.issue.number) ?? []), item]);
   }
-  function lines(item: Placed, depth: number, parentStatus: Status | undefined): string[] {
-    const children = childrenOf.get(item.issue.number) ?? [];
-    return [`${'  '.repeat(depth)}- ${issueLine(item, parentStatus)}`, ...children.flatMap((child) => lines(child, depth + 1, item.status))];
-  }
-  const sections = SECTIONS.flatMap(({ status, heading, intro, newestFirst }) => {
-    const items = roots.filter((item) => item.status === status);
+  return { roots, childrenOf };
+}
+
+function treeLines(tree: IssueTree, item: Placed, depth: number, parentStatus: Status | undefined): string[] {
+  const children = tree.childrenOf.get(item.issue.number) ?? [];
+  return [`${'  '.repeat(depth)}- ${issueLine(item, parentStatus)}`, ...children.flatMap((child) => treeLines(tree, child, depth + 1, item.status))];
+}
+
+function sectionBlocks(tree: IssueTree): string[] {
+  return SECTIONS.flatMap(({ status, heading, intro, newestFirst }) => {
+    const items = tree.roots.filter((item) => item.status === status);
     if (items.length === 0) return [];
     const ordered = newestFirst ? items.toReversed() : items;
-    return [[`## ${heading}`, ...(intro === '' ? [] : [intro]), ordered.flatMap((item) => lines(item, 0, undefined)).join('\n')].join('\n\n')];
+    return [[`## ${heading}`, ...(intro === '' ? [] : [intro]), ordered.flatMap((item) => treeLines(tree, item, 0, undefined)).join('\n')].join('\n\n')];
+  });
+}
+
+export function roadmapMarkdown(repo: string, issues: RoadmapIssue[]): string {
+  const placed = issues.flatMap((issue) => {
+    const status = issueStatus(issue);
+    return status === undefined ? [] : [{ issue, status }];
   });
   const header = [
     '# Roadmap',
     `This page is read from the [issues of ${repo}](https://github.com/${repo}/issues) each time it opens. An open issue shows up once it carries a status label: \`todo\`, \`in progress\`, or \`triage\`, which an issue opened by someone outside the project gets until it is read. A closed issue shows up under Done, unless it was closed as not planned.`,
   ];
-  return [...header, ...sections].join('\n\n');
+  return [...header, ...sectionBlocks(issueTree(placed))].join('\n\n');
 }

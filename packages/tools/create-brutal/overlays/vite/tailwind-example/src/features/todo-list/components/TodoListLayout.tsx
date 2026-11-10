@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { TodoFilters } from '@/features/todo-list/components/presenters/TodoFilters.tsx';
 import { TodoInput } from '@/features/todo-list/components/presenters/TodoInput.tsx';
-import { TodoItem } from '@/features/todo-list/components/presenters/TodoItem.tsx';
+import { TodoItems } from '@/features/todo-list/components/presenters/TodoItems.tsx';
 import { useTodoList } from '@/features/todo-list/useTodoList.ts';
 
 export function TodoListLayout() {
@@ -14,15 +14,7 @@ export function TodoListLayout() {
       </h2>
       <TodoInput onAdd={add} />
       <TodoFilters filter={filter} onChange={setFilter} />
-      {todos.length === 0 ? (
-        <p className="font-bold">{t('empty')}</p>
-      ) : (
-        <ul className="grid gap-3">
-          {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} onToggle={toggle} onRename={rename} onRemove={remove} />
-          ))}
-        </ul>
-      )}
+      <TodoItems todos={todos} onToggle={toggle} onRename={rename} onRemove={remove} />
     </section>
   );
 }

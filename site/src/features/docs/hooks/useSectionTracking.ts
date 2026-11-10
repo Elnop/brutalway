@@ -39,6 +39,22 @@ function scrollToSection(section: string | undefined): void {
   else document.getElementById(section)?.scrollIntoView();
 }
 
+function trackVisibleSection(slugs: string[], setVisible: (section: string | undefined) => void): () => void {
+  let frame = 0;
+  function update() {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => setVisible(sectionAtTop(slugs)));
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  return () => {
+    cancelAnimationFrame(frame);
+    window.removeEventListener('scroll', update);
+    window.removeEventListener('resize', update);
+  };
+}
+
 export function useSectionTracking(route: DocsRoute, slugs: string[], ready: boolean): string | undefined | null {
   const [visible, setVisible] = useState<string | undefined | null>(null);
   const written = useRef<WrittenSection>(undefined);
@@ -49,22 +65,7 @@ export function useSectionTracking(route: DocsRoute, slugs: string[], ready: boo
     if (section === undefined || ready) scrollToSection(section);
   }, [section, ready]);
 
-  useEffect(() => {
-    if (!ready) return undefined;
-    let frame = 0;
-    function update() {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => setVisible(sectionAtTop(slugs)));
-    }
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-    };
-  }, [slugs, ready]);
+  useEffect(() => (ready ? trackVisibleSection(slugs, setVisible) : undefined), [slugs, ready]);
 
   useEffect(() => {
     if (!ready || visible === null) return;

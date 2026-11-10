@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@third-party/shadcn/button';
-import { Input } from '@third-party/shadcn/input';
+import { TitleError } from '@/features/todo-list/shared/presenters/TitleError.tsx';
+import { TitleInput } from '@/features/todo-list/shared/presenters/TitleInput.tsx';
 import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
 
 type TodoInputProps = {
@@ -13,26 +14,11 @@ export function TodoInput({ onAdd }: TodoInputProps) {
 
   return (
     <form className="mb-5 flex flex-wrap gap-3" onSubmit={submit}>
-      <label htmlFor="new-todo" className="sr-only">
-        {t('newTask')}
-      </label>
-      <Input
-        id="new-todo"
-        className="h-auto flex-1 bg-paper py-[0.55rem] text-base text-ink"
-        placeholder={t('placeholder')}
-        autoComplete="off"
-        aria-invalid={error !== undefined}
-        aria-describedby={error === undefined ? undefined : 'new-todo-error'}
-        {...field}
-      />
+      <TitleInput id="new-todo" className="h-auto flex-1 bg-paper py-[0.55rem] text-base text-ink" label={t('newTask')} error={error} placeholder={t('placeholder')} autoComplete="off" {...field} />
       <Button type="submit" className="h-auto">
         {t('add')}
       </Button>
-      {error === undefined ? null : (
-        <p id="new-todo-error" role="alert" className="basis-full border-3 border-ink bg-pink px-[0.6rem] py-[0.2rem] font-bold text-on-accent">
-          {error}
-        </p>
-      )}
+      <TitleError id="new-todo" error={error} />
     </form>
   );
 }

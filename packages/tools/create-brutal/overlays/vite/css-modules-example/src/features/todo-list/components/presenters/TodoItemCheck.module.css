@@ -1,0 +1,40 @@
+.check {
+  display: flex;
+  flex: 1;
+  gap: 0.75rem;
+  align-items: center;
+  min-width: 10rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.check input {
+  display: grid;
+  flex: none;
+  place-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+  border: var(--border);
+  background: var(--paper);
+  appearance: none;
+  cursor: pointer;
+}
+
+.check input:checked {
+  background: var(--yellow);
+}
+
+.check input:checked::before {
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--on-accent);
+  content: '';
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3 3 7-7' fill='none' stroke='black' stroke-width='2.5'/%3E%3C/svg%3E") center / contain
+    no-repeat;
+}
+
+.done span {
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+}

@@ -106,6 +106,26 @@ function pieceContent(source: string, piece: Piece, edits: TextEdit[]): string {
   return piece.children.length === 0 ? `${text}\n` : `${text}\n\n${childList(piece)}\n`;
 }
 
+function headingEdits(source: string, sections: Section[], pieces: Piece[]): TextEdit[] {
+  return sections.flatMap((section) => {
+    const edit = headingEdit(source, section, pieceAt(pieces, section.start)?.shift ?? 0);
+    return edit === undefined ? [] : [edit];
+  });
+}
+
+type MovedDoc = { docPath: string; targets: Map<string, Target>; indexPath: string };
+
+function rewrittenLinks(other: WrittenFile, moved: MovedDoc): WrittenFile[] {
+  const otherEdits = linkEdits(other.content, markdownTree(other.content), (url) => {
+    if (isExternal(url)) return undefined;
+    const [pathPart = '', anchor] = url.split('#');
+    if (pathPart === '' || posix.normalize(posix.join(posix.dirname(other.path), pathPart)) !== moved.docPath) return undefined;
+    const target = anchor === undefined ? undefined : moved.targets.get(anchor);
+    return linkTo(other.path, target ?? { path: moved.indexPath, slug: anchor });
+  });
+  return otherEdits.length === 0 ? [] : [{ path: other.path, content: applyEdits(other.content, otherEdits) }];
+}
+
 export function splitDoc(docPath: string, source: string, others: WrittenFile[], settings: DocLengthSettings): SplitPlan {
   const tree = markdownTree(source);
   const sections = sectionsOf(tree);
@@ -114,23 +134,8 @@ export function splitDoc(docPath: string, source: string, others: WrittenFile[],
   const pieces = plan(sections, 0, source.length, 2, dir, settings);
   const indexPath = pieces[0]?.path ?? dir;
   const targets = targetsOf(sections, pieces);
-  const edits = [
-    ...sections.flatMap((section) => {
-      const edit = headingEdit(source, section, pieceAt(pieces, section.start)?.shift ?? 0);
-      return edit === undefined ? [] : [edit];
-    }),
-    ...linkEdits(source, tree, (url, offset) => movedUrl(url, pieceAt(pieces, offset)?.path ?? indexPath, docPath, targets, indexPath)),
-  ];
+  const edits = [...headingEdits(source, sections, pieces), ...linkEdits(source, tree, (url, offset) => movedUrl(url, pieceAt(pieces, offset)?.path ?? indexPath, docPath, targets, indexPath))];
   const written = pieces.map((piece) => ({ path: piece.path, content: pieceContent(source, piece, edits) }));
-  const rewritten = others.flatMap((other) => {
-    const otherEdits = linkEdits(other.content, markdownTree(other.content), (url) => {
-      if (isExternal(url)) return undefined;
-      const [pathPart = '', anchor] = url.split('#');
-      if (pathPart === '' || posix.normalize(posix.join(posix.dirname(other.path), pathPart)) !== docPath) return undefined;
-      const target = anchor === undefined ? undefined : targets.get(anchor);
-      return linkTo(other.path, target ?? { path: indexPath, slug: anchor });
-    });
-    return otherEdits.length === 0 ? [] : [{ path: other.path, content: applyEdits(other.content, otherEdits) }];
-  });
+  const rewritten = others.flatMap((other) => rewrittenLinks(other, { docPath, targets, indexPath }));
   return { removed: docPath, written: [...written, ...rewritten] };
 }

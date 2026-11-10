@@ -105,6 +105,23 @@ function projectItemId(issue: IssueNode, project: Project): string {
   return answer.data.addProjectV2ItemById.item.id;
 }
 
+function setBoardStatus(issue: IssueNode, project: Project, boardStatus: string): void {
+  const option = project.options.get(boardStatus);
+  if (option === undefined) throw new Error(`The ${STATUS_FIELD} field of the project has no option named ${boardStatus}.`);
+  graphql(
+    `
+      mutation ($project: ID!, $item: ID!, $field: ID!, $option: String!) {
+        updateProjectV2ItemFieldValue(input: { projectId: $project, itemId: $item, fieldId: $field, value: { singleSelectOptionId: $option } }) {
+          projectV2Item {
+            id
+          }
+        }
+      }
+    `,
+    { project: project.id, item: projectItemId(issue, project), field: project.fieldId, option },
+  );
+}
+
 function sync(issue: IssueNode, project: Project, trigger: Trigger): void {
   if (issue.state !== 'OPEN') return;
   const plan = planStatusSync(issueState(issue, project), trigger);
@@ -112,22 +129,7 @@ function sync(issue: IssueNode, project: Project, trigger: Trigger): void {
   const number = String(issue.number);
   const labelArgs = [...(plan.addLabel === undefined ? [] : ['--add-label', plan.addLabel]), ...plan.removeLabels.flatMap((label) => ['--remove-label', label])];
   if (labelArgs.length > 0) gh(['issue', 'edit', number, ...labelArgs]);
-  if (plan.boardStatus !== undefined) {
-    const option = project.options.get(plan.boardStatus);
-    if (option === undefined) throw new Error(`The ${STATUS_FIELD} field of the project has no option named ${plan.boardStatus}.`);
-    graphql(
-      `
-        mutation ($project: ID!, $item: ID!, $field: ID!, $option: String!) {
-          updateProjectV2ItemFieldValue(input: { projectId: $project, itemId: $item, fieldId: $field, value: { singleSelectOptionId: $option } }) {
-            projectV2Item {
-              id
-            }
-          }
-        }
-      `,
-      { project: project.id, item: projectItemId(issue, project), field: project.fieldId, option },
-    );
-  }
+  if (plan.boardStatus !== undefined) setBoardStatus(issue, project, plan.boardStatus);
   if (plan.close) gh(['issue', 'close', number, '--reason', 'completed']);
   process.stdout.write(`#${number}: ${JSON.stringify(plan)}\n`);
 }

@@ -5,16 +5,3 @@
   box-shadow: var(--shadow);
   color: var(--on-accent);
 }
-
-.items {
-  display: grid;
-  gap: 0.75rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.empty {
-  margin: 0;
-  font-weight: 700;
-}

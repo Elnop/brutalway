@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { lintFixture } from '@brutalway/lint-utils/lintFixture';
 
 describe('typescriptConfig', () => {
-  it('reports each convention once, with the per-file overrides for XTypes.ts, XConfig.ts, XSchemas.ts and tests', () => {
+  it('reports each convention once, with the per-file overrides for XTypes.ts, XConfig.ts, XSchemas.ts and tests, where functions have no length limit', () => {
     assert.deepEqual(lintFixture(fileURLToPath(new URL('../fixtures', import.meta.url))), [
       'area.ts:2 type-definitions(no-restricted-syntax)',
       'area.ts:6 eslint(func-style)',
@@ -22,7 +22,9 @@ describe('typescriptConfig', () => {
       'helpers.ts:18 no-comments(disallowComments)',
       'index.ts:1 check-file(no-index)',
       'measure.ts:1 import(no-duplicates)',
+      'nest.ts:2 eslint(max-nested-callbacks)',
       'settle.ts:1 sonarjs(cognitive-complexity)',
+      'settle.ts:6 eslint(max-depth)',
       'shapeConfig.ts:2 export-placement(no-restricted-syntax)',
       'ShapeConfig.tsx:1 check-file(filename-blocklist)',
       'ShapeConfig.tsx:1 export-placement(no-restricted-syntax)',
@@ -30,6 +32,7 @@ describe('typescriptConfig', () => {
       'shapeTypes.ts:2 export-placement(no-restricted-syntax)',
       'shared-features/todos/todosRoutes.ts:1 check-file(filename-blocklist)',
       'squareSchemas.ts:2 export-placement(no-restricted-syntax)',
+      'tally.ts:1 eslint(max-lines-per-function)',
       'types.ts:1 check-file(filename-blocklist)',
       'types.ts:1 export-placement(no-restricted-syntax)',
       'types.ts:2 export-placement(no-restricted-syntax)',

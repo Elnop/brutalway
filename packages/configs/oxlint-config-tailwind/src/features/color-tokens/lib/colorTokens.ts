@@ -72,6 +72,23 @@ function stylesheetOption(option: unknown): string {
   return typeof option === 'object' && option !== null && 'stylesheet' in option && typeof option.stylesheet === 'string' ? option.stylesheet : DEFAULT_STYLESHEET;
 }
 
+type Report = (node: ESTree.Node, offense: Offense) => void;
+
+function reportClassOffenses(attribute: ESTree.JSXAttribute, palette: ColorToken[], report: Report): void {
+  for (const entry of classNames(classStrings(attribute))) {
+    const offense = classOffense(entry.name, palette);
+    if (offense !== undefined) report(entry.node, offense);
+  }
+}
+
+function reportLiteralOffenses(attribute: ESTree.JSXAttribute, name: string, report: Report): void {
+  for (const value of colorValues(attribute, name)) {
+    const text = staticText(value);
+    const offense = text === undefined ? undefined : literalOffense(text);
+    if (offense !== undefined) report(value, offense);
+  }
+}
+
 export const colorTokens = defineRule({
   meta: {
     type: 'problem',
@@ -93,20 +110,8 @@ export const colorTokens = defineRule({
     return {
       JSXAttribute(attribute) {
         if (attribute.name.type !== 'JSXIdentifier') return;
-        const name = attribute.name.name;
-        if (isClassAttribute(attribute)) {
-          const palette = readPalette(context.cwd);
-          for (const entry of classNames(classStrings(attribute))) {
-            const offense = classOffense(entry.name, palette);
-            if (offense !== undefined) report(entry.node, offense);
-          }
-          return;
-        }
-        for (const value of colorValues(attribute, name)) {
-          const text = staticText(value);
-          const offense = text === undefined ? undefined : literalOffense(text);
-          if (offense !== undefined) report(value, offense);
-        }
+        if (isClassAttribute(attribute)) reportClassOffenses(attribute, readPalette(context.cwd), report);
+        else reportLiteralOffenses(attribute, attribute.name.name, report);
       },
     };
   },

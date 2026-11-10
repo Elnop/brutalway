@@ -15,6 +15,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 - `console` only for `console.error`: a command writes to `process.stdout` and `process.stderr`
 - `fetch` is called only in an `xClient.ts` file (or a test)
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`
+- a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - in tests, `describe` and `it` from `node:test` (never `test`), and `node:assert/strict`
 
 ## Dependencies

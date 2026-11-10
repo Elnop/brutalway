@@ -98,6 +98,9 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'unicorn/prefer-string-replace-all': 'error',
     'unicorn/prefer-number-properties': 'error',
     'sonarjs/cognitive-complexity': ['error', 15],
+    'max-lines-per-function': ['error', { max: 25, skipBlankLines: true, skipComments: true }],
+    'max-depth': ['error', 3],
+    'max-nested-callbacks': ['error', 3],
   },
   overrides: [
     { files: ['**/*.ts', '**/*.tsx'], rules: { 'export-placement/no-restricted-syntax': ['error', ...EXPORT_PLACEMENT] } },
@@ -142,7 +145,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     { files: ['**/*.test.ts', '**/*.test.tsx'], rules: { 'typescript/no-floating-promises': 'off' } },
     {
       files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', 'e2e/**'],
-      rules: { 'export-placement/no-restricted-syntax': 'off', 'file-named-after-export/file-named-after-export': 'off' },
+      rules: { 'export-placement/no-restricted-syntax': 'off', 'file-named-after-export/file-named-after-export': 'off', 'max-lines-per-function': 'off' },
     },
   ],
 });

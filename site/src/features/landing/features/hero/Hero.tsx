@@ -2,20 +2,26 @@ import { AXIOMS } from '@/features/landing/shared/AxiomsConfig.ts';
 import { CommandLine } from '@/shared/presenters/CommandLine.tsx';
 import '@/features/landing/features/hero/hero.css';
 
+function HeroLetters() {
+  return (
+    <ol className="hero-letters" aria-label="The six axioms">
+      {AXIOMS.map((axiom) => (
+        <li key={axiom.letter} className={`hero-letter reveal reveal-drop tone-${axiom.tone}`}>
+          <span className="hero-letter-glyph" aria-hidden="true">
+            {axiom.letter}
+          </span>
+          <span className="hero-letter-name">{axiom.name}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export function Hero() {
   return (
     <section id="top" className="hero container">
       <p className="hero-eyebrow reveal reveal-wipe">Project templates for humans and AI agents</p>
-      <ol className="hero-letters" aria-label="The six axioms">
-        {AXIOMS.map((axiom) => (
-          <li key={axiom.letter} className={`hero-letter reveal reveal-drop tone-${axiom.tone}`}>
-            <span className="hero-letter-glyph" aria-hidden="true">
-              {axiom.letter}
-            </span>
-            <span className="hero-letter-name">{axiom.name}</span>
-          </li>
-        ))}
-      </ol>
+      <HeroLetters />
       <div className="hero-pitch reveal">
         <div className="hero-pitch-text">
           <h1>Every convention is a check.</h1>

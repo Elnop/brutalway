@@ -39,6 +39,12 @@ error no-comments(disallowComments): Comments are forbidden
 
 Directives like `oxlint-` and `@ts-expect-error` are allowed. Anything else a comment would say goes in a name.
 
+A function holds 25 lines at most, blank lines not counted, and nests blocks and callbacks 3 levels deep at most. Tests have no length limit.
+
+```
+error eslint(max-lines-per-function): The function `TodoItem` has too many lines (32). Maximum allowed is 25.
+```
+
 ## Names and places
 
 A file with a single export is named after it. An exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`, a hook in a `useX.ts`.

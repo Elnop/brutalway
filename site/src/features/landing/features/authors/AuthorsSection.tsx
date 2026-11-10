@@ -16,6 +16,38 @@ const steps = [
   { number: '04', title: 'The author fixes it', detail: 'Right away, while the change is still in mind or in context.', tone: 'paper' },
 ];
 
+function AuthorsFunnel() {
+  return (
+    <div className="authors-funnel reveal reveal-stamp" aria-hidden="true">
+      <div className="authors-crowd">
+        {authors.map((author) => (
+          <div key={author.id} className={author.isAgent ? 'authors-tile tone-yellow' : 'authors-tile tone-paper'} style={{ opacity: author.opacity }}>
+            <span className="authors-icon" style={{ maskImage: `url(${import.meta.env.BASE_URL}${author.isAgent ? 'agent' : 'human'}.svg)` }} />
+          </div>
+        ))}
+      </div>
+      <svg className="authors-arrow" width="40" height="56" viewBox="0 0 40 56">
+        <path d="M20 0 V48 M6 34 L20 50 L34 34" fill="none" strokeWidth="5" strokeLinecap="square" />
+      </svg>
+      <code className="authors-check">npm run check</code>
+    </div>
+  );
+}
+
+function AuthorsSteps() {
+  return (
+    <ol className="authors-steps">
+      {steps.map((step) => (
+        <li key={step.number} className={`authors-step reveal reveal-from-left tone-${step.tone}`}>
+          <span className="authors-step-number">{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.detail}</p>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export function AuthorsSection() {
   return (
     <section id="authors" className="authors">
@@ -27,28 +59,8 @@ export function AuthorsSection() {
             start each session with no memory of the last one, and it does not matter: the error teaches the convention again.
           </p>
         </div>
-        <div className="authors-funnel reveal reveal-stamp" aria-hidden="true">
-          <div className="authors-crowd">
-            {authors.map((author) => (
-              <div key={author.id} className={author.isAgent ? 'authors-tile tone-yellow' : 'authors-tile tone-paper'} style={{ opacity: author.opacity }}>
-                <span className="authors-icon" style={{ maskImage: `url(${import.meta.env.BASE_URL}${author.isAgent ? 'agent' : 'human'}.svg)` }} />
-              </div>
-            ))}
-          </div>
-          <svg className="authors-arrow" width="40" height="56" viewBox="0 0 40 56">
-            <path d="M20 0 V48 M6 34 L20 50 L34 34" fill="none" strokeWidth="5" strokeLinecap="square" />
-          </svg>
-          <code className="authors-check">npm run check</code>
-        </div>
-        <ol className="authors-steps">
-          {steps.map((step) => (
-            <li key={step.number} className={`authors-step reveal reveal-from-left tone-${step.tone}`}>
-              <span className="authors-step-number">{step.number}</span>
-              <h3>{step.title}</h3>
-              <p>{step.detail}</p>
-            </li>
-          ))}
-        </ol>
+        <AuthorsFunnel />
+        <AuthorsSteps />
       </div>
     </section>
   );

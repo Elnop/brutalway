@@ -60,8 +60,9 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - `console` only for `console.error`
 - class members never reassigned are `readonly`, deprecated APIs are reported, and a `void` expression is only accepted as the body of an arrow (`() => save()`). These three need `--type-aware`.
 - a function whose cognitive complexity is above 15 is reported, with Sonar's own rule: `sonarjs/cognitive-complexity`, the S3776 rule of `eslint-plugin-sonarjs`
+- a function holds 25 lines at most, blank lines and comments not counted (`max-lines-per-function`), and blocks and callbacks nest 3 levels deep at most (`max-depth`, `max-nested-callbacks`). The limits come from the Norminette of 42, which caps a function at 25 lines. Tests have no length limit, since a `describe` block holds all of its cases
 
-Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules.
+Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules and the length limit.
 
 ## Why
 

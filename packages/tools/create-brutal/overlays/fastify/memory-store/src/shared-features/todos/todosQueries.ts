@@ -1,7 +1,37 @@
-import type { Todo, TodosQueries } from '#src/shared-features/todos/TodosTypes.ts';
+import type { Todo, TodoPatch, TodosQueries } from '#src/shared-features/todos/TodosTypes.ts';
+
+type TodoMap = Map<number, Todo>;
+
+function copyOrNull(todo: Todo | undefined): Todo | null {
+  return todo === undefined ? null : { ...todo };
+}
+
+function updateTodo(todos: TodoMap, id: number, { title, completed }: TodoPatch): Todo | null {
+  const todo = todos.get(id);
+  if (todo === undefined) return null;
+  const updated = { id, title: title ?? todo.title, completed: completed ?? todo.completed };
+  todos.set(id, updated);
+  return { ...updated };
+}
+
+function removeTodo(todos: TodoMap, id: number): Todo | null {
+  const todo = todos.get(id);
+  todos.delete(id);
+  return copyOrNull(todo);
+}
+
+function completedTodos(todos: TodoMap): Todo[] {
+  return [...todos.values()].filter((todo) => todo.completed);
+}
+
+function removeCompletedTodos(todos: TodoMap): number {
+  const completed = completedTodos(todos);
+  for (const todo of completed) todos.delete(todo.id);
+  return completed.length;
+}
 
 export function createTodosQueries(): TodosQueries {
-  const todos = new Map<number, Todo>();
+  const todos: TodoMap = new Map();
   let lastId = 0;
 
   function all(): Todo[] {
@@ -11,37 +41,16 @@ export function createTodosQueries(): TodosQueries {
   return {
     list: all,
     listByCompleted: (completed) => all().filter((todo) => todo.completed === completed),
-    find: (id) => {
-      const todo = todos.get(id);
-      return todo === undefined ? null : { ...todo };
-    },
+    find: (id) => copyOrNull(todos.get(id)),
     insert: ({ title }) => {
       lastId += 1;
       const todo = { id: lastId, title, completed: false };
       todos.set(todo.id, todo);
       return { ...todo };
     },
-    update: (id, { title, completed }) => {
-      const todo = todos.get(id);
-      if (todo === undefined) return null;
-      const updated = { id, title: title ?? todo.title, completed: completed ?? todo.completed };
-      todos.set(id, updated);
-      return { ...updated };
-    },
-    remove: (id) => {
-      const todo = todos.get(id);
-      if (todo === undefined) return null;
-      todos.delete(id);
-      return todo;
-    },
-    removeCompleted: () => {
-      const completed = all().filter((todo) => todo.completed);
-      for (const todo of completed) todos.delete(todo.id);
-      return completed.length;
-    },
-    count: () => {
-      const list = all();
-      return { total: list.length, completed: list.filter((todo) => todo.completed).length };
-    },
+    update: (id, patch) => updateTodo(todos, id, patch),
+    remove: (id) => removeTodo(todos, id),
+    removeCompleted: () => removeCompletedTodos(todos),
+    count: () => ({ total: todos.size, completed: completedTodos(todos).length }),
   };
 }

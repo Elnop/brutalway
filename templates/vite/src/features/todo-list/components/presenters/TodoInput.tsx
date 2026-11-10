@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import { TitleError } from '@/features/todo-list/shared/presenters/TitleError.tsx';
+import { TitleInput } from '@/features/todo-list/shared/presenters/TitleInput.tsx';
 import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
 
 type TodoInputProps = {
@@ -11,18 +13,11 @@ export function TodoInput({ onAdd }: TodoInputProps) {
 
   return (
     <form className="todo-input" onSubmit={submit}>
-      <label htmlFor="new-todo" className="visually-hidden">
-        {t('newTask')}
-      </label>
-      <input id="new-todo" placeholder={t('placeholder')} autoComplete="off" aria-invalid={error !== undefined} aria-describedby={error === undefined ? undefined : 'new-todo-error'} {...field} />
+      <TitleInput id="new-todo" label={t('newTask')} error={error} placeholder={t('placeholder')} autoComplete="off" {...field} />
       <button type="submit" className="button button-yellow">
         {t('add')}
       </button>
-      {error === undefined ? null : (
-        <p id="new-todo-error" role="alert" className="field-error">
-          {error}
-        </p>
-      )}
+      <TitleError id="new-todo" error={error} />
     </form>
   );
 }

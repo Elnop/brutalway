@@ -59,30 +59,38 @@ function answerTodo(list: MockList, method: string, id: number, body: Record<str
   return { status: 200, body: todo };
 }
 
+function listTodos(list: MockList, url: URL): MockAnswer {
+  const filter = url.searchParams.get('filter') ?? 'all';
+  return { status: 200, body: list.todos.filter((todo) => filter === 'all' || todo.completed === (filter === 'completed')) };
+}
+
+function createTodo(list: MockList, body: Record<string, unknown>): MockAnswer {
+  const title = normalizedTitle(body['title']);
+  if (title === undefined) return BLANK_TITLE;
+  const todo = { id: list.nextId, title, completed: false };
+  list.nextId += 1;
+  list.todos.push(todo);
+  return { status: 201, body: todo };
+}
+
+function clearCompleted(list: MockList): MockAnswer {
+  const remaining = list.todos.filter((todo) => !todo.completed);
+  const deleted = list.todos.length - remaining.length;
+  list.todos = remaining;
+  return { status: 200, body: { deleted } };
+}
+
+function stats(list: MockList): MockAnswer {
+  const completed = list.todos.filter((todo) => todo.completed).length;
+  return { status: 200, body: { total: list.todos.length, completed, remaining: list.todos.length - completed } };
+}
+
 function answer(list: MockList, method: string, url: URL, body: Record<string, unknown>): MockAnswer {
   const route = `${method} ${url.pathname}`;
-  if (route === 'GET /todos') {
-    const filter = url.searchParams.get('filter') ?? 'all';
-    return { status: 200, body: list.todos.filter((todo) => filter === 'all' || todo.completed === (filter === 'completed')) };
-  }
-  if (route === 'POST /todos') {
-    const title = normalizedTitle(body['title']);
-    if (title === undefined) return BLANK_TITLE;
-    const todo = { id: list.nextId, title, completed: false };
-    list.nextId += 1;
-    list.todos.push(todo);
-    return { status: 201, body: todo };
-  }
-  if (route === 'DELETE /todos/completed') {
-    const remaining = list.todos.filter((todo) => !todo.completed);
-    const deleted = list.todos.length - remaining.length;
-    list.todos = remaining;
-    return { status: 200, body: { deleted } };
-  }
-  if (route === 'GET /stats') {
-    const completed = list.todos.filter((todo) => todo.completed).length;
-    return { status: 200, body: { total: list.todos.length, completed, remaining: list.todos.length - completed } };
-  }
+  if (route === 'GET /todos') return listTodos(list, url);
+  if (route === 'POST /todos') return createTodo(list, body);
+  if (route === 'DELETE /todos/completed') return clearCompleted(list);
+  if (route === 'GET /stats') return stats(list);
   const todoRoute = /^(PATCH|DELETE) \/todos\/(\d+)$/u.exec(route);
   if (todoRoute !== null) return answerTodo(list, todoRoute[1] ?? '', Number(todoRoute[2]), body);
   return { status: 404, body: { message: `No route for ${route}` } };
