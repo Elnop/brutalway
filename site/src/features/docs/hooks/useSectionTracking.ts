@@ -1,18 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { DocsRoute } from '@/features/docs/DocsTypes.ts';
+import { docHref } from '@/features/docs/lib/docsUrls.ts';
 
-const SECTION_TOP_OFFSET = 120;
+const SECTION_LINE_RATIO = 0.3;
 const NAV_MARGIN = 16;
 
+type WrittenSection = { section: string | undefined } | undefined;
+
 function isScrolledToBottom(): boolean {
-  return window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
 }
 
 function sectionAtTop(slugs: string[]): string | undefined {
+  if (window.scrollY === 0) return undefined;
   if (isScrolledToBottom()) return slugs.at(-1);
+  const line = window.innerHeight * SECTION_LINE_RATIO;
   let current: string | undefined;
   for (const slug of slugs) {
     const top = document.getElementById(slug)?.getBoundingClientRect().top;
-    if (top === undefined || top > SECTION_TOP_OFFSET) break;
+    if (top === undefined || top > line) break;
     current = slug;
   }
   return current;
@@ -28,8 +34,21 @@ function revealCurrentNavItem(): void {
   else if (itemBox.bottom > navBox.bottom) nav.scrollBy({ top: itemBox.bottom - navBox.bottom + NAV_MARGIN });
 }
 
-export function useVisibleSection(slugs: string[], ready: boolean): string | undefined {
-  const [visible, setVisible] = useState<string>();
+function scrollToSection(section: string | undefined): void {
+  if (section === undefined) window.scrollTo(0, 0);
+  else document.getElementById(section)?.scrollIntoView();
+}
+
+export function useSectionTracking(route: DocsRoute, slugs: string[], ready: boolean): string | undefined | null {
+  const [visible, setVisible] = useState<string | undefined | null>(null);
+  const written = useRef<WrittenSection>(undefined);
+  const { source, path, section } = route;
+
+  useEffect(() => {
+    if (written.current !== undefined && written.current.section === section) return;
+    if (section === undefined || ready) scrollToSection(section);
+  }, [section, ready]);
+
   useEffect(() => {
     if (!ready) return undefined;
     let frame = 0;
@@ -46,8 +65,14 @@ export function useVisibleSection(slugs: string[], ready: boolean): string | und
       window.removeEventListener('resize', update);
     };
   }, [slugs, ready]);
+
   useEffect(() => {
+    if (!ready || visible === null) return;
+    const hash = visible === undefined ? docHref(source, path) : `${docHref(source, path)}#${visible}`;
+    written.current = { section: visible };
+    if (window.location.hash !== hash) window.history.replaceState(window.history.state, '', hash);
     if (visible !== undefined) revealCurrentNavItem();
-  }, [visible]);
+  }, [visible, ready, source, path]);
+
   return visible;
 }
