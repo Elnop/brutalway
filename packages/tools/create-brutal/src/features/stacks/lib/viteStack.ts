@@ -169,7 +169,11 @@ const THIRD_PARTY_ALINT = `  - id: third-party-only-registries
 
 const THIRD_PARTY_REFERENCES = '  "references": [{ "path": "./tsconfig.third-party.json" }],\n';
 
-const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitch.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languageStorage.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it. To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitch.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languageStorage.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it.
+
+## Add a language
+
+To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
 
 const COVERAGE_CONFIG = `      coverage: {
         provider: 'v8',
@@ -335,7 +339,7 @@ export const viteStack: Stack = {
         {
           file: 'docs/reference/layout.md',
           replace:
-            'In the example, `src/shared-features/todos/` holds the tasks and the current filter, used by both `src/features/todo-list/` (add, check, rename, delete, filter) and `src/features/todo-stats/` (counters, clear done). Renaming a task is a sub-feature: `src/features/todo-list/features/todo-editor/`. ',
+            'In the example, `src/shared-features/todos/` holds the tasks and the current filter, used by both `src/features/todo-list/` (add, check, rename, delete, filter) and `src/features/todo-stats/` (counters, clear done). Renaming a task is a sub-feature: `src/features/todo-list/features/todo-editor/`.\n\n',
           with: '',
         },
         { file: 'docs/guides/start-your-own-app.md', dropLines: '1. Delete `src/features/`' },
@@ -641,7 +645,8 @@ export const viteStack: Stack = {
         { file: 'src/app/App.tsx', before: '      </header>', insert: '        <LanguageSwitch />\n' },
         {
           file: 'docs/guides/translations.md',
-          replace: 'To add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+          replace:
+            '## Add a language\n\nTo add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
           with: I18N_README,
         },
       ],

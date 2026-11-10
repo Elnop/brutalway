@@ -28,9 +28,21 @@ The root lints itself with the packages of the workspace, and the tests load the
 
 ## Release
 
-Versions are managed with [changesets](https://github.com/changesets/changesets): add one with `npx changeset` for each change to a published package, `create-brutal` included. `npx changeset version` bumps the versions and writes the changelogs, then `npm run release` builds, checks, publishes what changed and creates the GitHub releases. The CLI records the last commit that changed each template when it is built, so commit the template changes before releasing.
+Versions are managed with [changesets](https://github.com/changesets/changesets), with two setups: one for the published packages, `create-brutal` included, and one in `templates/` for the templates, which are versioned on their own.
 
-The templates are versioned on their own, with a second changesets setup in `templates/`: `npm run templates:changeset` adds a changeset for a change that matters to someone starting a project, and `npm run templates:version` bumps the template versions and writes their `CHANGELOG.md`. `npm run release` then tags them as `template-vite@x.y.z` and `template-fastify@x.y.z` and creates their GitHub releases. The site shows each changelog on the template's page.
+With each change:
+
+- to a published package, add a changeset with `npx changeset`
+- to a template, when it matters to someone starting a project, add one with `npm run templates:changeset`
+
+To release:
+
+1. Commit the template changes first: the CLI records the last commit that changed each template when it is built.
+2. `npx changeset version` bumps the package versions and writes their changelogs.
+3. `npm run templates:version` bumps the template versions and writes their `CHANGELOG.md`.
+4. `npm run release` builds, checks, publishes what changed, tags the templates as `template-vite@x.y.z` and so on, and creates every GitHub release.
+
+The site shows each template changelog on the template's page.
 
 ## The site
 

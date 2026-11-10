@@ -39,7 +39,13 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 
 ## Repository
 
-alint checks that every path in backticks, link and anchor in the README and in `docs/` still exists, that `styles/`, `types/` and `configs/` only hold what their name says, and that every dependency in `package.json` is pinned to an exact version. The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
+alint checks that:
+
+- every path in backticks, link and anchor in the README and in `docs/` still exists
+- `styles/`, `types/` and `configs/` only hold what their name says
+- every dependency in `package.json` is pinned to an exact version
+
+The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
 
 knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name.
 
