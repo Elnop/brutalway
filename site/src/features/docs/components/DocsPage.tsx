@@ -3,7 +3,7 @@ import type { DocsRoute } from '@/features/docs/DocsTypes.ts';
 import { DocsArticle } from '@/features/docs/components/presenters/DocsArticle.tsx';
 import { DocsNav } from '@/features/docs/components/presenters/DocsNav.tsx';
 import { PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
-import { useDocContent, useDocList, usePackageCategories } from '@/features/docs/hooks/useDocs.ts';
+import { useDocContent, useDocList, useDocTitles, usePackageCategories } from '@/features/docs/hooks/useDocs.ts';
 import { useSectionTracking } from '@/features/docs/hooks/useSectionTracking.ts';
 import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
 import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
@@ -16,7 +16,7 @@ type DocsViewProps = {
 };
 
 function DocsView({ route }: DocsViewProps) {
-  const entries = useDocList();
+  const entries = useDocTitles(useDocList(), route.source.route);
   const content = useDocContent(route.source, route.path);
   const markdown = content.status === 'ready' ? content.value : undefined;
   const headings = useMemo(() => (markdown === undefined ? [] : docHeadings(markdown)), [markdown]);

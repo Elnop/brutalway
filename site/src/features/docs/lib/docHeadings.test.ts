@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
+import { docHeadings, docMainTitle } from '@/features/docs/lib/docHeadings.ts';
 
 describe('docHeadings', () => {
   it('lists the level 2 to 4 headings with the anchors GitHub gives them', () => {
@@ -14,5 +14,10 @@ describe('docHeadings', () => {
 
   it('reads the text of links and emphasis in a heading', () => {
     expect(docHeadings('## See [the roadmap](roadmap/README.md) **now**')).toStrictEqual([{ depth: 2, text: 'See the roadmap now', slug: 'see-the-roadmap-now' }]);
+  });
+
+  it('reads the level 1 heading as the title of the page, outside code blocks', () => {
+    expect(docMainTitle(['```md', '# not a title', '```', '# Work with `Claude Code`', '## Install'].join('\n'))).toBe('Work with Claude Code');
+    expect(docMainTitle('## Only sections')).toBeUndefined();
   });
 });

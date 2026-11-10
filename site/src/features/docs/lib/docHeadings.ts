@@ -17,3 +17,10 @@ export function docHeadings(markdown: string): DocHeading[] {
     return SECTION_DEPTHS.has(node.depth) ? [{ depth: node.depth, text, slug }] : [];
   });
 }
+
+export function docMainTitle(markdown: string): string | undefined {
+  const tree = unified().use(remarkParse).use(remarkGfm).parse(markdown);
+  const heading = tree.children.find((node) => node.type === 'heading' && node.depth === 1);
+  const text = heading === undefined ? '' : toString(heading, { includeImageAlt: false }).trim();
+  return text === '' ? undefined : text;
+}
