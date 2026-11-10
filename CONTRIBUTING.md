@@ -50,7 +50,7 @@ The site shows each template changelog on the template's page.
 
 ## Dependencies
 
-[Renovate](https://docs.renovatebot.com/) opens the update pull requests, configured in `renovate.json`, and nothing merges on its own. It groups them:
+[Renovate](https://docs.renovatebot.com/) opens the update pull requests, configured in `renovate.json`, and nothing merges on its own. It proposes a version only once it has been on npm for 3 days, long enough for a malicious release to be spotted and pulled. It groups them:
 
 - `brutalway packages`: every `@brutalway/*` range in the packages and the root, in one pull request
 - `tooling`: oxlint, TypeScript, Prettier, knip, tsdown and the other checkers
