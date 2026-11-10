@@ -37,7 +37,7 @@
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "react-i18next": "18.0.0",
-    "zustand": "5.0.16"
+    "zustand": "5.1.0"
   },
   "devDependencies": {
     "@asamarts/alint": "0.21.0",
@@ -56,7 +56,7 @@
     "@brutalway/stylelint-config": "0.2.1",
     "@brutalway/tsconfig": "0.4.0",
     "@playwright/test": "1.64.1",
-    "@swc/core": "1.16.21",
+    "@swc/core": "1.16.22",
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
@@ -65,13 +65,13 @@
     "dependency-cruiser": "18.7.2",
     "i18next-cli": "1.87.0",
     "jscpd": "5.4.2",
-    "knip": "6.42.1",
-    "oxlint": "1.91.0",
-    "oxlint-tsgolint": "7.0.2005",
+    "knip": "6.44.2",
+    "oxlint": "1.92.0",
+    "oxlint-tsgolint": "7.0.2006",
     "prettier": "3.9.10",
     "stylelint": "17.16.0",
     "typescript": "7.0.2",
-    "vite": "8.3.5",
+    "vite": "8.3.6",
     "vitest": "5.1.0",
     "vitest-browser-react": "2.3.0"
   },

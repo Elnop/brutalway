@@ -500,9 +500,9 @@ export const viteStack: Stack = {
       addDevDependencies: {
         '@brutalway/oxlint-config-tailwind': '0.1.3',
         '@brutalway/prettier-config': '0.3.0',
-        '@tailwindcss/vite': '4.3.3',
+        '@tailwindcss/vite': '4.3.5',
         'prettier-plugin-tailwindcss': '0.8.1',
-        tailwindcss: '4.3.3',
+        tailwindcss: '4.3.5',
       },
     },
     {
