@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
-import { hookChecks } from '#src/features/edit-checks/hookChecks.ts';
+import { hookChecks } from '#src/features/edit-checks/lib/hookChecks.ts';
 
 function project(files: string[]): string {
   const root = mkdtempSync(join(tmpdir(), 'hook-'));

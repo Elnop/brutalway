@@ -1,38 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import type { DocsRoute } from '@/features/docs/DocsTypes.ts';
 import { docHref } from '@/features/docs/lib/docsUrls.ts';
-
-const SECTION_LINE_RATIO = 0.3;
-const NAV_MARGIN = 16;
+import { revealCurrentNavItem } from '@/features/docs/lib/revealCurrentNavItem.ts';
+import { sectionAtTop } from '@/features/docs/lib/sectionAtTop.ts';
 
 type WrittenSection = { section: string | undefined } | undefined;
-
-function isScrolledToBottom(): boolean {
-  return window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-}
-
-function sectionAtTop(slugs: string[]): string | undefined {
-  if (window.scrollY === 0) return undefined;
-  if (isScrolledToBottom()) return slugs.at(-1);
-  const line = window.innerHeight * SECTION_LINE_RATIO;
-  let current: string | undefined;
-  for (const slug of slugs) {
-    const top = document.getElementById(slug)?.getBoundingClientRect().top;
-    if (top === undefined || top > line) break;
-    current = slug;
-  }
-  return current;
-}
-
-function revealCurrentNavItem(): void {
-  const nav = document.querySelector('.docs-nav');
-  const item = nav?.querySelector('[aria-current="location"]');
-  if (nav === null || nav === undefined || item === null || item === undefined) return;
-  const navBox = nav.getBoundingClientRect();
-  const itemBox = item.getBoundingClientRect();
-  if (itemBox.top < navBox.top) nav.scrollBy({ top: itemBox.top - navBox.top - NAV_MARGIN });
-  else if (itemBox.bottom > navBox.bottom) nav.scrollBy({ top: itemBox.bottom - navBox.bottom + NAV_MARGIN });
-}
 
 function scrollToSection(section: string | undefined): void {
   if (section === undefined) window.scrollTo(0, 0);

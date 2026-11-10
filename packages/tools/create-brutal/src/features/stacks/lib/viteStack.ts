@@ -863,8 +863,9 @@ export const viteStack: Stack = {
     {
       when: { 'server-state': true, example: true },
       edits: [
-        { file: 'package.json', replace: 'oxlint.config.ts vite.config.ts', with: 'oxlint.config.ts vite.config.ts devApi.ts' },
-        { file: 'tsconfig.test.json', replace: '"vite.config.ts",', with: '"vite.config.ts", "devApi.ts",' },
+        { file: 'package.json', replace: 'oxlint.config.ts vite.config.ts', with: 'oxlint.config.ts vite.config.ts devApi.ts devApiRoutes.ts' },
+        { file: 'tsconfig.test.json', replace: '"vite.config.ts",', with: '"vite.config.ts", "devApi.ts", "devApiRoutes.ts",' },
+        { file: 'oxlint.config.ts', replace: "files: ['*.config.ts']", with: "files: ['*.config.ts', 'devApi.ts']" },
       ],
     },
     {

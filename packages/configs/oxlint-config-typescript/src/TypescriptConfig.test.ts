@@ -36,6 +36,7 @@ describe('typescriptConfig', () => {
       'squareSchemas.ts:2 export-placement(no-restricted-syntax)',
       'tally.ts:1 eslint(max-lines-per-function)',
       'tally.ts:1 function-size(max-variables)',
+      'toolbox.ts:21 function-size(max-functions)',
       'types.ts:1 check-file(filename-blocklist)',
       'types.ts:1 export-placement(no-restricted-syntax)',
       'types.ts:2 export-placement(no-restricted-syntax)',

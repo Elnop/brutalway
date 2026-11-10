@@ -20,12 +20,8 @@ function removeTodo(todos: TodoMap, id: number): Todo | null {
   return copyOrNull(todo);
 }
 
-function completedTodos(todos: TodoMap): Todo[] {
-  return [...todos.values()].filter((todo) => todo.completed);
-}
-
 function removeCompletedTodos(todos: TodoMap): number {
-  const completed = completedTodos(todos);
+  const completed = [...todos.values()].filter((todo) => todo.completed);
   for (const todo of completed) todos.delete(todo.id);
   return completed.length;
 }
@@ -51,6 +47,6 @@ export function createTodosQueries(): TodosQueries {
     update: (id, patch) => updateTodo(todos, id, patch),
     remove: (id) => removeTodo(todos, id),
     removeCompleted: () => removeCompletedTodos(todos),
-    count: () => ({ total: todos.size, completed: completedTodos(todos).length }),
+    count: () => ({ total: todos.size, completed: all().filter((todo) => todo.completed).length }),
   };
 }

@@ -1,26 +1,18 @@
-import { queryOptions, useQueries, useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { DOC_SOURCES, PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
 import type { DocEntry, DocSource, LoadState, PackageCategory } from '@/features/docs/DocsTypes.ts';
 import { docsKeys } from '@/features/docs/docsKeys.ts';
-import { fetchDocText, listIssues } from '@/features/docs/githubClient.ts';
+import { contentQuery, roadmapQuery } from '@/features/docs/docsQueries.ts';
+import { fetchDocText } from '@/features/docs/githubClient.ts';
 import { docMainTitle } from '@/features/docs/lib/docHeadings.ts';
 import { fixedEntries, loadDocList } from '@/features/docs/lib/docList.ts';
 import { packageCategories } from '@/features/docs/lib/packageCategories.ts';
-import { roadmapMarkdown } from '@/features/docs/lib/roadmapMarkdown.ts';
-import { rawFileUrl } from '@/features/docs/lib/docsUrls.ts';
+import { rawFileUrl } from '@/features/docs/lib/githubUrls.ts';
 import { QUERY_CACHE } from '@/shared/configs/QueryConfig.ts';
 
 export function useDocList(): DocEntry[] {
   const query = useQuery({ queryKey: docsKeys.list(), queryFn: async ({ signal }) => loadDocList(signal), ...QUERY_CACHE.session });
   return query.data ?? fixedEntries();
-}
-
-function roadmapQuery(repo: string) {
-  return queryOptions({ queryKey: docsKeys.roadmap(repo), queryFn: async ({ signal }) => roadmapMarkdown(repo, await listIssues(repo, signal)), ...QUERY_CACHE.session });
-}
-
-function contentQuery(url: string) {
-  return queryOptions({ queryKey: docsKeys.content(url), queryFn: async ({ signal }) => fetchDocText(url, signal), ...QUERY_CACHE.session });
 }
 
 export function useDocContent(source: DocSource, path: string): LoadState<string> {

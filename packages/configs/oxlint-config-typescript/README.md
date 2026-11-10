@@ -62,6 +62,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - a function whose cognitive complexity is above 15 is reported, with Sonar's own rule: `sonarjs/cognitive-complexity`, the S3776 rule of `eslint-plugin-sonarjs`
 - a function holds 25 lines at most, blank lines and comments not counted (`max-lines-per-function`), and blocks and callbacks nest 3 levels deep at most (`max-depth`, `max-nested-callbacks`). The limits come from the Norminette of 42, which caps a function at 25 lines. Tests have no length limit, since a `describe` block holds all of its cases
 - a function takes 4 parameters at most (`max-params`) and declares 5 local variables at most (`function-size/max-variables`, a rule of this package). Each name bound by a destructuring counts, a nested function is counted on its own, and tests are exempt. Both limits come from the Norminette
+- a file declares 5 top-level functions at most (`function-size/max-functions`): function declarations and functions assigned to a top-level `const`, exported or not. A function nested in another one, a callback and an object method do not count. The limit comes from the Norminette, which caps a `.c` file at 5 functions
 
 Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules, the length limit and the variable limit.
 

@@ -1,4 +1,6 @@
-import { candidateValues, isChoice, satisfiesRules } from '#src/shared-features/stack/optionRules.ts';
+import { coveringRows } from '#src/features/matrix/lib/coveringRows.ts';
+import { satisfiesRules } from '#src/shared-features/stack/lib/optionRules.ts';
+import { candidateValues } from '#src/shared-features/stack/lib/optionValues.ts';
 import type { Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
 
 function crossAll(options: StackOption[]): Answers[] {
@@ -7,50 +9,8 @@ function crossAll(options: StackOption[]): Answers[] {
   return combinations;
 }
 
-function targetKey(answers: Answers, ids: string[]): string {
-  return ids.map((id) => `${id}=${String(answers[id])}`).join(' ');
-}
-
-function targetGroups(options: StackOption[]): string[][] {
-  const ids = options.map((option) => option.id);
-  const pairs = ids.flatMap((id, index) => ids.slice(index + 1).map((other) => [id, other]));
-  const choices = options.filter(isChoice).map((option) => option.id);
-  return choices.length > 2 ? [...pairs, choices] : pairs;
-}
-
-function targetsOf(answers: Answers, groups: string[][]): string[] {
-  return groups.map((ids) => targetKey(answers, ids));
-}
-
-function defaults(options: StackOption[]): Answers {
-  return Object.fromEntries(options.map((option) => [option.id, option.default]));
-}
-
 function matchesFixed(answers: Answers, fixed: Answers): boolean {
   return Object.entries(fixed).every(([id, value]) => answers[id] === value);
-}
-
-function removeCovered(uncovered: Set<string>, rows: Answers[], groups: string[][]): void {
-  for (const target of rows.flatMap((answers) => targetsOf(answers, groups))) uncovered.delete(target);
-}
-
-function bestRow(valid: Answers[], groups: string[][], uncovered: Set<string>): Answers {
-  const gains = valid.map((answers) => targetsOf(answers, groups).filter((target) => uncovered.has(target)).length);
-  return valid[gains.indexOf(Math.max(...gains))] ?? {};
-}
-
-function coveringRows(options: StackOption[], valid: Answers[], fixed: Answers): Answers[] {
-  const groups = targetGroups(options);
-  const uncovered = new Set(valid.flatMap((answers) => targetsOf(answers, groups)));
-  const start = { ...defaults(options), ...fixed };
-  const rows = satisfiesRules(options, start) && valid.length > 0 ? [start] : [];
-  removeCovered(uncovered, rows, groups);
-  while (uncovered.size > 0) {
-    const best = bestRow(valid, groups, uncovered);
-    rows.push(best);
-    removeCovered(uncovered, [best], groups);
-  }
-  return rows;
 }
 
 export function matrixCombinations(options: StackOption[], everyCombination = false, fixed: Answers = {}): Answers[] {

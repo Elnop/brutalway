@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { hookChecks } from '#src/features/edit-checks/hookChecks.ts';
+import { hookChecks } from '#src/features/edit-checks/lib/hookChecks.ts';
 import { readHookEdit } from '#src/shared-features/hook-edit/readHookEdit.ts';
 import { vendoredEditMessage } from '#src/features/vendored-refusal/vendoredEditMessage.ts';
 

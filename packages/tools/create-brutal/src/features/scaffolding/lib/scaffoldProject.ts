@@ -1,4 +1,5 @@
-import { applyStackChanges, updatePackageJson } from '#src/features/scaffolding/lib/applyStackChanges.ts';
+import { applyStackChanges } from '#src/features/scaffolding/lib/applyStackChanges.ts';
+import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
 import { fetchTemplate } from '#src/features/scaffolding/lib/fetchTemplate.ts';
 import { runCommand } from '#src/shared/lib/runCommand.ts';
 import { OVERLAYS_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';

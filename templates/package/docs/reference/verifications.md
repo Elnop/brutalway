@@ -17,6 +17,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - a function takes 4 parameters at most, and declares 5 local variables at most, each name of a destructuring counted. Tests have no variable limit
+- a file declares 5 top-level functions at most, exported or not: the helpers move into files of their own
 - in tests, `describe` and `it` from `node:test` (never `test`), and `node:assert/strict`
 
 ## Dependencies

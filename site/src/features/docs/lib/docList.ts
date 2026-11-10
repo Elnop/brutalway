@@ -2,7 +2,8 @@ import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
 import type { DocEntry, DocSource } from '@/features/docs/DocsTypes.ts';
 import { listRepositoryFiles } from '@/features/docs/githubClient.ts';
 import { docTitle } from '@/features/docs/lib/docTitle.ts';
-import { repositoryPath, sourcePath } from '@/features/docs/lib/docsUrls.ts';
+import { sourcePath } from '@/features/docs/lib/docsUrls.ts';
+import { repositoryPath } from '@/features/docs/lib/githubUrls.ts';
 
 function orderRank(order: string[], path: string): number {
   const rank = order.findIndex((prefix) => path.startsWith(prefix));

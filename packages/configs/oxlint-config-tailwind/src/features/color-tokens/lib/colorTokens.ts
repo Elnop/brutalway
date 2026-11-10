@@ -1,21 +1,15 @@
 import { defineRule } from '@oxlint/plugins';
 import type { ESTree } from '@oxlint/plugins';
-import { classNames, classStrings, isClassAttribute } from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
-import { oklab, oklabDistance } from '@brutalway/color-utils/oklab';
+import { isClassAttribute } from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
+import { oklabDistance } from '@brutalway/color-utils/oklab';
 import { readColorTokens, readPalette } from '#src/features/color-tokens/lib/readColorTokens.ts';
-import { tailwindClass } from '#src/shared-features/tailwind-classes/lib/tailwindClass.ts';
+import { reportClassOffenses } from '#src/features/color-tokens/lib/reportClassOffenses.ts';
+import { reportLiteralOffenses } from '#src/features/color-tokens/lib/reportLiteralOffenses.ts';
 import type { ColorToken, Oklab } from '@brutalway/color-utils/ColorTypes';
+import type { Offense } from '#src/features/color-tokens/ColorTokensTypes.ts';
 
 const DEFAULT_STYLESHEET = 'src/app/globals.css';
-const COLOR_UTILITY =
-  /^-?(bg|text|border(?:-[xytrblse])?|outline|ring(?:-offset)?|inset-ring|shadow|inset-shadow|drop-shadow|text-shadow|fill|stroke|accent|caret|decoration|placeholder|divide|from|via|to)-(.+)$/u;
-const PALETTE_COLOR =
-  /^((?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|mauve|olive|mist|taupe)-(?:50|[1-9]00|950)|black|white)(?:\/.+)?$/u;
-const COLOR_LITERAL = /#[0-9a-f]{3,8}(?![0-9a-z])|\b(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch|color)\([^)]*\)/iu;
-const COLOR_ATTRIBUTES = new Set(['fill', 'stroke', 'color', 'stopColor', 'floodColor', 'lightingColor']);
 const SUGGESTIONS = 3;
-
-type Offense = { text: string; color: Oklab | undefined; format: (token: string) => string };
 
 function closestTokens(tokens: ColorToken[], color: Oklab | undefined): ColorToken[] {
   if (color === undefined) return tokens.slice(0, SUGGESTIONS);
@@ -25,72 +19,8 @@ function closestTokens(tokens: ColorToken[], color: Oklab | undefined): ColorTok
     .slice(0, SUGGESTIONS);
 }
 
-function literalClassOffense(name: string, text: string, format: (token: string) => string): Offense | undefined {
-  const literal = COLOR_LITERAL.exec(text)?.[0];
-  return literal === undefined ? undefined : { text: name, color: oklab(literal), format };
-}
-
-function colorUtilityOffense(name: string, match: RegExpExecArray, palette: ColorToken[]): Offense | undefined {
-  const [, prefix = '', value = ''] = match;
-  function format(token: string) {
-    return `${prefix}-${token}`;
-  }
-  const paletteColor = PALETTE_COLOR.exec(value)?.[1];
-  if (paletteColor !== undefined) return { text: name, color: palette.find((token) => token.name === paletteColor)?.color, format };
-  const arbitrary = /^\[(.+)\](?:\/.+)?$/u.exec(value)?.[1];
-  return arbitrary === undefined ? undefined : literalClassOffense(name, arbitrary, format);
-}
-
-function classOffense(name: string, palette: ColorToken[]): Offense | undefined {
-  const { utility } = tailwindClass(name);
-  const arbitraryProperty = /^\[[a-z-]+:(.+)\]$/u.exec(utility);
-  if (arbitraryProperty !== null) return literalClassOffense(name, arbitraryProperty[1] ?? '', (token) => `var(--color-${token})`);
-  const match = COLOR_UTILITY.exec(utility);
-  return match === null ? undefined : colorUtilityOffense(name, match, palette);
-}
-
-function literalOffense(text: string): Offense | undefined {
-  const literal = COLOR_LITERAL.exec(text)?.[0];
-  return literal === undefined ? undefined : { text: literal, color: oklab(literal), format: (token) => `var(--color-${token})` };
-}
-
-function styleValues(attribute: ESTree.JSXAttribute): ESTree.Node[] {
-  const value = attribute.value;
-  if (value?.type !== 'JSXExpressionContainer' || value.expression.type !== 'ObjectExpression') return [];
-  return value.expression.properties.flatMap((property) => (property.type === 'Property' ? [property.value] : []));
-}
-
-function colorValues(attribute: ESTree.JSXAttribute, name: string): ESTree.Node[] {
-  if (name === 'style') return styleValues(attribute);
-  return COLOR_ATTRIBUTES.has(name) && attribute.value !== null ? [attribute.value] : [];
-}
-
-function staticText(node: ESTree.Node): string | undefined {
-  if (node.type === 'Literal' && typeof node.value === 'string') return node.value;
-  if (node.type === 'TemplateLiteral') return node.quasis.map((quasi) => quasi.value.cooked ?? quasi.value.raw).join(' ');
-  if (node.type === 'JSXExpressionContainer' && node.expression.type !== 'JSXEmptyExpression') return staticText(node.expression);
-  return undefined;
-}
-
 function stylesheetOption(option: unknown): string {
   return typeof option === 'object' && option !== null && 'stylesheet' in option && typeof option.stylesheet === 'string' ? option.stylesheet : DEFAULT_STYLESHEET;
-}
-
-type Report = (node: ESTree.Node, offense: Offense) => void;
-
-function reportClassOffenses(attribute: ESTree.JSXAttribute, palette: ColorToken[], report: Report): void {
-  for (const entry of classNames(classStrings(attribute))) {
-    const offense = classOffense(entry.name, palette);
-    if (offense !== undefined) report(entry.node, offense);
-  }
-}
-
-function reportLiteralOffenses(attribute: ESTree.JSXAttribute, name: string, report: Report): void {
-  for (const value of colorValues(attribute, name)) {
-    const text = staticText(value);
-    const offense = text === undefined ? undefined : literalOffense(text);
-    if (offense !== undefined) report(value, offense);
-  }
 }
 
 export const colorTokens = defineRule({

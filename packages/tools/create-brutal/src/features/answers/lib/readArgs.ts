@@ -3,7 +3,7 @@ import { parseArgs } from 'node:util';
 import type { ParseArgsOptionsConfig } from 'node:util';
 import type { CliArgs, Preset } from '#src/features/answers/CliTypes.ts';
 import { isRecord } from '#src/shared/lib/isRecord.ts';
-import { isChoice } from '#src/shared-features/stack/optionRules.ts';
+import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
 import type { AnswerValue, Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
 
 const BASE_OPTIONS: ParseArgsOptionsConfig = {

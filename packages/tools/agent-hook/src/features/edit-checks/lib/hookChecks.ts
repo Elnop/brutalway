@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { join, relative } from 'node:path';
 import type { HookCheck, HookScope } from '#src/features/edit-checks/EditChecksTypes.ts';
+import { insideProject } from '#src/features/edit-checks/lib/insideProject.ts';
+import { oxlintCheck } from '#src/features/edit-checks/lib/oxlintCheck.ts';
 import type { HookEdit } from '#src/shared-features/hook-edit/HookEditTypes.ts';
 import { vendoredFolder } from '#src/shared-features/vendored/vendoredFolder.ts';
 
-const OXLINT_CONFIGS = ['oxlint.config.ts', '.oxlintrc.json'];
 const STYLELINT_CONFIGS = [
   '.stylelintrc',
   '.stylelintrc.json',
@@ -27,26 +28,8 @@ function isVendored(root: string, file: string, vendored: string[]) {
   return vendoredFolder(relative(root, file), vendored) !== undefined;
 }
 
-function inside(root: string, path: string) {
-  const fromRoot = relative(root, path);
-  return !fromRoot.startsWith('..') && !fromRoot.split('/').includes('node_modules');
-}
-
-function oxlintFolder(root: string, file: string) {
-  for (let folder = dirname(file); inside(root, folder); folder = dirname(folder)) {
-    if (OXLINT_CONFIGS.some((config) => existsSync(join(folder, config)))) return folder;
-    if (folder === root) break;
-  }
-  return root;
-}
-
-function oxlintCheck(root: string, file: string): HookCheck {
-  const cwd = oxlintFolder(root, file);
-  return { label: `oxlint found problems in ${relative(root, file)}`, command: 'oxlint', args: ['--type-aware', relative(cwd, file)], cwd };
-}
-
 export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file' | 'created'>, { trees, vendored = [], rootEntries = false }: HookScope): HookCheck[] {
-  if (file === '' || !inside(root, file) || isVendored(root, file, vendored)) return [];
+  if (file === '' || !insideProject(root, file) || isVendored(root, file, vendored)) return [];
   const fromRoot = relative(root, file);
   const checks: HookCheck[] = [];
   if (/\.tsx?$/u.test(file)) checks.push(oxlintCheck(root, file));

@@ -104,6 +104,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'max-nested-callbacks': ['error', 3],
     'max-params': ['error', 4],
     'function-size/max-variables': ['error', { max: 5 }],
+    'function-size/max-functions': ['error', { max: 5 }],
   },
   overrides: [
     { files: ['**/*.ts', '**/*.tsx'], rules: { 'export-placement/no-restricted-syntax': ['error', ...EXPORT_PLACEMENT] } },

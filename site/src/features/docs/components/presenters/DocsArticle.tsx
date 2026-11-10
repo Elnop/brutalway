@@ -3,7 +3,8 @@ import type { Components } from 'react-markdown';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
-import { docSourceUrl, repositoryPath } from '@/features/docs/lib/docsUrls.ts';
+import { docSourceUrl } from '@/features/docs/lib/docsUrls.ts';
+import { repositoryPath } from '@/features/docs/lib/githubUrls.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 

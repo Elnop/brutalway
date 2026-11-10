@@ -1,7 +1,9 @@
-import type { DocSource } from '@/features/docs/DocsTypes.ts';
+import type { DocSource, RoadmapStatus } from '@/features/docs/DocsTypes.ts';
 import { DOCS_ROUTE, PACKAGES_ROUTE, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
 
 export const DOCS_BRANCH = 'main';
+
+export const README_FILE = 'README.md';
 
 const TEMPLATE_DOC_ORDER = ['README.md', 'docs/guides/start-', 'docs/guides/', 'docs/reference/', 'docs/concepts/'];
 
@@ -101,3 +103,7 @@ export const DOC_SOURCES: DocSource[] = [
   ...PUBLISHED_PACKAGES.map((folder) => packageSource(folder, true)),
   ...PRIVATE_PACKAGES.map((folder) => packageSource(folder, false)),
 ];
+
+export const OPEN_STATUSES: RoadmapStatus[] = ['triage', 'in progress', 'todo'];
+
+export const REJECTED_LABELS = new Set(['duplicate', 'invalid', 'wontfix']);

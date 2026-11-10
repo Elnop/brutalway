@@ -214,7 +214,15 @@ describe('create-brutal', () => {
     const result = run(['app', '--stack', 'vite', '-y', ...OFFLINE, ...options]);
     assert.deepEqual(outcome(result), { status: 0, stdout: CREATED_WITHOUT_GIT, stderr: '' });
     const project = join(result.cwd, 'app');
-    for (const file of ['third-party/shadcn/button.tsx', 'components.json', 'devApi.ts', 'src/app/locales/fr/app.json', 'src/shared/analyticsClient.ts', 'tsconfig.third-party.json']) {
+    for (const file of [
+      'third-party/shadcn/button.tsx',
+      'components.json',
+      'devApi.ts',
+      'devApiRoutes.ts',
+      'src/app/locales/fr/app.json',
+      'src/shared/analyticsClient.ts',
+      'tsconfig.third-party.json',
+    ]) {
       assert.equal(existsSync(join(project, file)), true, file);
     }
     for (const file of ['playwright.config.ts', 'e2e/app.spec.ts', 'src/features/todo-list/todo-list.css']) {

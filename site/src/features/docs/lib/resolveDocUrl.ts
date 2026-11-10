@@ -1,6 +1,7 @@
 import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
 import type { DocSource } from '@/features/docs/DocsTypes.ts';
-import { docHref, githubFileUrl, rawFileUrl, repositoryPath } from '@/features/docs/lib/docsUrls.ts';
+import { docHref } from '@/features/docs/lib/docsUrls.ts';
+import { githubFileUrl, rawFileUrl, repositoryPath } from '@/features/docs/lib/githubUrls.ts';
 
 type DocLink = {
   url: string;

@@ -1,4 +1,6 @@
-import { blockerOf, candidateValues, flag, isChoice } from '#src/shared-features/stack/optionRules.ts';
+import { flag } from '#src/features/answers/lib/flag.ts';
+import { blockerOf } from '#src/shared-features/stack/lib/optionRules.ts';
+import { candidateValues, isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
 import type { AnswerValue, Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
 
 type AskOption = (option: StackOption, allowed: AnswerValue[]) => Promise<AnswerValue>;

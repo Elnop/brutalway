@@ -66,3 +66,15 @@ export type RoadmapIssue = {
   labels: string[];
   parent: number | undefined;
 };
+
+export type RoadmapStatus = 'in progress' | 'todo' | 'triage' | 'done';
+
+export type PlacedIssue = { issue: RoadmapIssue; status: RoadmapStatus };
+
+export type IssueTree = { roots: PlacedIssue[]; childrenOf: Map<number, PlacedIssue[]> };
+
+export type NavContext = {
+  entries: DocEntry[];
+  route: DocsRoute;
+  headings: DocHeading[];
+};

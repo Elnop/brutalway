@@ -1,12 +1,5 @@
-import type { AnswerValue, Answers, Blocker, ChoiceOption, OptionRules, StackOption } from '#src/shared-features/stack/StackTypes.ts';
-
-export function isChoice(option: StackOption): option is ChoiceOption {
-  return 'values' in option;
-}
-
-export function candidateValues(option: StackOption): AnswerValue[] {
-  return isChoice(option) ? option.values.map((value) => value.id) : [true, false];
-}
+import type { AnswerValue, Answers, Blocker, OptionRules, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
 
 function rulesFor(option: StackOption, value: AnswerValue | undefined): OptionRules {
   if (isChoice(option)) return option.values.find((candidate) => candidate.id === value) ?? {};
@@ -38,9 +31,4 @@ export function blockerOf(option: StackOption, value: AnswerValue, options: Stac
 
 export function satisfiesRules(options: StackOption[], answers: Answers): boolean {
   return options.every((option) => brokenRule(rulesFor(option, answers[option.id]), answers) === undefined);
-}
-
-export function flag(id: string, value: AnswerValue): string {
-  if (typeof value === 'string') return `--${id} ${value}`;
-  return value ? `--${id}` : `--no-${id}`;
 }

@@ -1,38 +1,6 @@
 import type { Oklab } from '#src/shared/types/OklabTypes.ts';
-
-function toLinear(channel: number): number {
-  return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
-}
-
-function cubeRootLms(red: number, green: number, blue: number): [number, number, number] {
-  const [r, g, b] = [toLinear(red), toLinear(green), toLinear(blue)];
-  return [
-    Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b),
-    Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b),
-    Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b),
-  ];
-}
-
-function fromRgb(red: number, green: number, blue: number): Oklab {
-  const [l, m, s] = cubeRootLms(red, green, blue);
-  return {
-    l: 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
-    a: 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
-    b: 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
-  };
-}
-
-function fromHex(hex: string): Oklab | undefined {
-  const short = hex.length <= 5;
-  const digits = [1, 2, 3].map((index) => (short ? hex.charAt(index).repeat(2) : hex.slice(index * 2 - 1, index * 2 + 1)));
-  const [red, green, blue] = digits.map((pair) => Number.parseInt(pair, 16) / 255);
-  if (red === undefined || green === undefined || blue === undefined || [red, green, blue].some(Number.isNaN)) return undefined;
-  return fromRgb(red, green, blue);
-}
-
-function scale(channel: number, raw: string | undefined): number {
-  return raw?.endsWith('%') === true ? channel : channel / 255;
-}
+import { fromHex } from '#src/shared/lib/fromHex.ts';
+import { fromRgbChannels } from '#src/shared/lib/fromRgbChannels.ts';
 
 function channels(body: string): number[] {
   return body
@@ -44,11 +12,6 @@ function channels(body: string): number[] {
 function fromOklch(lightness: number, chroma: number, hueDegrees: number): Oklab {
   const hue = (hueDegrees * Math.PI) / 180;
   return { l: lightness, a: chroma * Math.cos(hue), b: chroma * Math.sin(hue) };
-}
-
-function fromRgbChannels(body: string, red: number, green: number, blue: number): Oklab {
-  const raws = body.split(/[\s,/]+/u).filter(Boolean);
-  return fromRgb(scale(red, raws[0]), scale(green, raws[1]), scale(blue, raws[2]));
 }
 
 export function oklab(value: string): Oklab | undefined {

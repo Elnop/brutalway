@@ -18,3 +18,17 @@ export type StatusPlan = {
   boardStatus: string | undefined;
   close: boolean;
 };
+
+export type StatusTarget = { label: StatusLabel; close: false } | { label: undefined; close: true };
+
+export type StatusProject = { id: string; fieldId: string; options: Map<string, string> };
+
+export type IssueNode = {
+  id: string;
+  number: number;
+  state: string;
+  authorAssociation: string;
+  labels: { nodes: { name: string }[] };
+  timelineItems: { nodes: { createdAt?: string; label?: { name: string } | null }[] };
+  projectItems: { nodes: { id: string; project: { id: string }; fieldValueByName: { name: string; updatedAt: string } | null }[] };
+};
