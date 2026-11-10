@@ -83,22 +83,39 @@ function categoryNode(category: PackageCategory, context: NavContext): DocNavNod
 }
 
 function packageGroups(categories: PackageCategory[], context: NavContext): DocNavGroup[] {
-  const index = { key: PACKAGES_INDEX.key, label: PACKAGES_INDEX.label, href: docHref(PACKAGES_INDEX, README), isTitle: true, nodes: [] };
-  return [index, ...categories.map((category) => ({ key: category.slug, label: category.title, href: categoryHref(category.slug), isTitle: false, nodes: categoryContents(category, context) }))];
+  const isIndex = context.route.source.key === PACKAGES_INDEX.key;
+  const index: DocNavGroup = {
+    key: PACKAGES_INDEX.key,
+    label: PACKAGES_INDEX.label,
+    href: docHref(PACKAGES_INDEX, README),
+    isTitle: true,
+    current: isIndex && context.route.section === undefined ? 'page' : undefined,
+    nodes: [],
+  };
+  return [
+    index,
+    ...categories.map((category) => ({ key: category.slug, label: category.title, href: categoryHref(category.slug), isTitle: false, current: undefined, nodes: categoryContents(category, context) })),
+  ];
 }
 
 export function docNavGroups(entries: DocEntry[], route: DocsRoute, headings: DocHeading[], categories: PackageCategory[] = []): DocNavGroup[] {
   if (route.source.route === PACKAGES_INDEX.route && categories.length > 0) return packageGroups(categories, { entries, route, headings });
-  return DOC_SOURCES.filter((source) => source.route === route.source.route).map((source) => ({
-    key: source.key,
-    label: source.label,
-    href: docHref(source, source.files[0] ?? ''),
-    isTitle: false,
-    nodes: sourceNodes(
+  return DOC_SOURCES.filter((source) => source.route === route.source.route).map((source) => {
+    const href = docHref(source, source.files[0] ?? '');
+    const nodes = sourceNodes(
       source,
       entries.filter((entry) => entry.sourceKey === source.key),
       route,
       headings,
-    ),
-  }));
+    );
+    const landing = nodes.find((node) => node.href === href);
+    return {
+      key: source.key,
+      label: source.label,
+      href,
+      isTitle: false,
+      current: landing?.current,
+      nodes: nodes.flatMap((node) => (node === landing ? node.children : [node])),
+    };
+  });
 }

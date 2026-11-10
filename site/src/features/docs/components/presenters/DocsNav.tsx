@@ -30,7 +30,7 @@ export function DocsNav({ groups }: DocsNavProps) {
     <nav aria-label="Documentation" className="docs-nav">
       {groups.map((group) => (
         <div key={group.key} className="docs-nav-group">
-          <a href={group.href} className={group.isTitle ? 'docs-nav-label docs-nav-title' : 'docs-nav-label'}>
+          <a href={group.href} aria-current={group.current} className={group.isTitle ? 'docs-nav-label docs-nav-title' : 'docs-nav-label'}>
             {group.label}
           </a>
           {group.nodes.length > 0 && <DocsNavList nodes={group.nodes} />}

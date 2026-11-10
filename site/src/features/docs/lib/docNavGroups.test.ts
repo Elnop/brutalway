@@ -13,12 +13,12 @@ function outline(nodes: DocNavNode[]): unknown[] {
 }
 
 describe('docNavGroups', () => {
-  it('nests the pages of a folder under its README', () => {
+  it('nests the pages of a folder under its README, and leaves the landing page to the group label', () => {
     const [group] = docNavGroups(entries, { source: brutalway, path: 'README.md' }, []);
     expect(group?.label).toBe('brutalway');
     expect(group?.href).toBe('#/docs/brutalway/README.md');
+    expect(group?.current).toBe('page');
     expect(outline(group?.nodes ?? [])).toStrictEqual([
-      'README.md',
       'packages/tools/create-brutal/README.md',
       'docs/intent.md',
       { 'docs/roadmap/README.md': ['docs/roadmap/e1-tailwind-css.md', 'docs/roadmap/order.md'] },
@@ -36,13 +36,14 @@ describe('docNavGroups', () => {
     expect(outline(roadmap?.children ?? [])).toStrictEqual([{ Why: ['Detail'] }, 'Steps', 'docs/roadmap/e1-tailwind-css.md', 'docs/roadmap/order.md']);
     expect(roadmap?.current).toBe('page');
     expect(roadmap?.children[0]?.children[0]).toMatchObject({ kind: 'section', href: '#/docs/brutalway/docs/roadmap/README.md#detail', current: 'location' });
-    expect(group?.nodes[0]?.current).toBeUndefined();
+    expect(group?.current).toBeUndefined();
   });
 
-  it('shows the templates together and nests level 3 sections at the top when a page has no level 2', () => {
+  it('shows the templates together, and puts the sections of a landing page under the group label, level 3 at the top when it has no level 2', () => {
     const groups = docNavGroups([{ sourceKey: 'vite', path: 'README.md', title: 'Overview' }], { source: vite, path: 'README.md' }, [{ depth: 3, text: 'Only', slug: 'only' }]);
     expect(groups.map((group) => group.key)).toStrictEqual(['all', 'vite', 'fastify', 'package']);
-    expect(outline(groups[1]?.nodes ?? [])).toStrictEqual([{ Overview: ['Only'] }]);
+    expect(outline(groups[1]?.nodes ?? [])).toStrictEqual(['Only']);
+    expect(groups[1]?.current).toBe('page');
   });
 
   it('groups the packages by the categories of the package index, and only opens the package being read', () => {
@@ -62,6 +63,7 @@ describe('docNavGroups', () => {
       ['Configs', '#/packages/packages/README.md#configs'],
       ['Checks', '#/packages/packages/README.md#checks'],
     ]);
+    expect(groups[0]?.current).toBeUndefined();
     expect(outline(groups[1]?.nodes ?? [])).toStrictEqual([{ Oxlint: ['react'] }]);
     expect(outline(groups[2]?.nodes ?? [])).toStrictEqual([{ 'check-tree': ['Usage', 'Changelog'] }]);
     expect(groups[2]?.nodes[0]).toMatchObject({ kind: 'page', current: 'page', children: [{ kind: 'section' }, { kind: 'detail', href: '#/packages/check-tree/CHANGELOG.md' }] });
