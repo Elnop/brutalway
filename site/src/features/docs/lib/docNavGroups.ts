@@ -29,7 +29,7 @@ function sectionNodes(pageHref: string, headings: DocHeading[], section: string 
     if (heading.depth > topDepth && parent !== undefined) parent.children.push(node);
     else nodes.push(node);
   }
-  return nodes;
+  return nodes.map((node) => (node.current === 'location' || node.children.some((child) => child.current === 'location') ? node : { ...node, children: [] }));
 }
 
 function sourceNodes(source: DocSource, entries: DocEntry[], route: DocsRoute, headings: DocHeading[]): DocNavNode[] {

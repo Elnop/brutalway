@@ -5,6 +5,7 @@ import { DocsNav } from '@/features/docs/components/presenters/DocsNav.tsx';
 import { PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
 import { useDocContent, useDocList, usePackageCategories } from '@/features/docs/hooks/useDocs.ts';
 import { useScrollToSection } from '@/features/docs/hooks/useScrollToSection.ts';
+import { useVisibleSection } from '@/features/docs/hooks/useVisibleSection.ts';
 import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
 import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
 import { parseDocsRoute } from '@/features/docs/lib/parseDocsRoute.ts';
@@ -20,9 +21,12 @@ function DocsView({ route }: DocsViewProps) {
   const content = useDocContent(route.source, route.path);
   const markdown = content.status === 'ready' ? content.value : undefined;
   const headings = useMemo(() => (markdown === undefined ? [] : docHeadings(markdown)), [markdown]);
+  const slugs = useMemo(() => headings.map((heading) => heading.slug), [headings]);
   useScrollToSection(route.section, markdown !== undefined);
+  const visibleSection = useVisibleSection(slugs, markdown !== undefined);
   const categories = usePackageCategories(route.source.route === PACKAGES_INDEX.route);
-  const groups = docNavGroups(entries, route, headings, categories);
+  const section = visibleSection ?? route.section;
+  const groups = docNavGroups(entries, section === undefined ? { source: route.source, path: route.path } : { ...route, section }, headings, categories);
   const knownPaths = entries.filter((entry) => entry.sourceKey === route.source.key).map((entry) => entry.path);
   return (
     <div className="docs">

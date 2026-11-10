@@ -39,6 +39,23 @@ describe('docNavGroups', () => {
     expect(group?.current).toBeUndefined();
   });
 
+  it('only unfolds the level 3 sections of the level 2 section being read', () => {
+    const headings = [
+      { depth: 2, text: 'Why', slug: 'why' },
+      { depth: 3, text: 'Detail', slug: 'detail' },
+      { depth: 2, text: 'Steps', slug: 'steps' },
+      { depth: 3, text: 'First', slug: 'first' },
+    ];
+    function roadmapOutline(section?: string) {
+      const route = section === undefined ? { source: brutalway, path: 'docs/roadmap/README.md' } : { source: brutalway, path: 'docs/roadmap/README.md', section };
+      const [group] = docNavGroups(entries, route, headings);
+      return outline((group?.nodes.at(-1)?.children ?? []).filter((node) => node.kind === 'section'));
+    }
+    expect(roadmapOutline()).toStrictEqual(['Why', 'Steps']);
+    expect(roadmapOutline('steps')).toStrictEqual(['Why', { Steps: ['First'] }]);
+    expect(roadmapOutline('detail')).toStrictEqual([{ Why: ['Detail'] }, 'Steps']);
+  });
+
   it('shows the templates together, and puts the sections of a landing page under the group label, level 3 at the top when it has no level 2', () => {
     const groups = docNavGroups([{ sourceKey: 'vite', path: 'README.md', title: 'Overview' }], { source: vite, path: 'README.md' }, [{ depth: 3, text: 'Only', slug: 'only' }]);
     expect(groups.map((group) => group.key)).toStrictEqual(['all', 'vite', 'fastify', 'package']);
