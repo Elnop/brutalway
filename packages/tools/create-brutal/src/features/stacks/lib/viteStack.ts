@@ -440,7 +440,7 @@ export const viteStack: Stack = {
         { file: 'docs/reference/verifications.md', before: '## Lint', insert: SHADCN_TYPESCRIPT_DOC },
         { file: 'docs/reference/verifications.md', before: '## Tests', insert: SHADCN_VERIFICATIONS_DOC },
         { file: '.dependency-cruiser.cjs', replace: "extends: '@brutalway/dependency-cruiser-config/layers'", with: "extends: '@brutalway/dependency-cruiser-config/shadcn'" },
-        { file: 'package.json', replace: '"deps": "depcruise src"', with: '"deps": "depcruise src third-party"' },
+        { file: 'package.json', replace: '"deps": "depcruise --output-type err-long src"', with: '"deps": "depcruise --output-type err-long src third-party"' },
         {
           file: 'oxlint.config.ts',
           after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",

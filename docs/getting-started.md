@@ -88,6 +88,8 @@ npm run deps
 
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
+  A feature never imports another feature: move what they share down to
+  shared-features/ (business code) or src/shared/ (no domain).
 ```
 
 Two features never import each other, so that deleting one never breaks the other. What they share lives one layer down, in `src/shared-features/todos/`, which is where the first version read the tasks. Put it back.

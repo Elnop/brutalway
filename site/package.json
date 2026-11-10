@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
     "lint": "oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts",
-    "deps": "depcruise src",
+    "deps": "depcruise --output-type err-long src",
     "tree": "check-tree src",
     "format": "prettier --write .",
     "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && alint check && knip",

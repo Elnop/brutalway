@@ -14,6 +14,8 @@ The same hook importing from another feature:
 
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
+  A feature never imports another feature: move what they share down to
+  shared-features/ (business code) or src/shared/ (no domain).
 ```
 
 A text written straight in a component:

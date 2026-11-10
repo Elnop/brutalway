@@ -12,9 +12,11 @@ Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../
 
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
+  A feature never imports another feature: move what they share down to
+  shared-features/ (business code) or src/shared/ (no domain).
 ```
 
-What two features have in common moves down to `shared-features/` or `shared/`.
+The templates run it with `--output-type err-long`, so each error comes with the comment of its rule.
 
 ## Roles
 

@@ -32,9 +32,11 @@ module.exports = {
 
 `tsPreCompilationDeps: false` means type-only imports do not count.
 
+Run it with `npx depcruise --output-type err-long src`. The default output only prints the name of the rule, `err-long` adds its comment, which says what to change.
+
 ### shadcn/ui
 
-For a project that keeps the shadcn/ui primitives in `third-party/shadcn/`, outside `src/`, as the registry wrote them, extend `@brutalway/dependency-cruiser-config/shadcn`. Run it on both folders, `depcruise src third-party`.
+For a project that keeps the shadcn/ui primitives in `third-party/shadcn/`, outside `src/`, as the registry wrote them, extend `@brutalway/dependency-cruiser-config/shadcn`. Run it on both folders, `depcruise --output-type err-long src third-party`.
 
 ### Library
 

@@ -64,8 +64,10 @@ module.exports = {
 An API extends `@brutalway/dependency-cruiser-config/server` instead, a library `@brutalway/dependency-cruiser-config/library`.
 
 ```sh
-npx depcruise src
+npx depcruise --output-type err-long src
 ```
+
+`--output-type err-long` prints, under each error, the comment of the rule, which says what to change.
 
 ## 4. Repository
 
@@ -98,7 +100,7 @@ npx alint check
 Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing:
 
 ```json
-"check": "tsc --noEmit && oxlint --type-aware && depcruise src && check-tree src && alint check"
+"check": "tsc --noEmit && oxlint --type-aware && depcruise --output-type err-long src && check-tree src && alint check"
 ```
 
 Then [work with Claude Code](claude-code.md) to get the same messages while the agent writes.
