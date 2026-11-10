@@ -45,6 +45,7 @@ The CLI asks for a stack, then for the parts to keep. Every combination passes `
 ## Documentation
 
 - [Getting started](docs/getting-started.md): create a project, add a feature, and see what each check answers
+- [Guides](docs/guides/README.md): add the checks to an existing project, set up the Claude Code hook
 - [Common rules](docs/reference/rules.md): every rule, the tool that checks it and the message it prints
 - [create-brutal](packages/tools/create-brutal/README.md): the options of the CLI and the flags to run it without questions
 - [Packages](packages/README.md): the `@brutalway/*` lint configs, plugins and checks, usable without a template

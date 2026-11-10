@@ -162,6 +162,7 @@ Ask Claude Code for the same feature in a fresh project. The hook installed by t
 
 ## Next
 
+- [Guides](guides/README.md): the checks in an existing project, the Claude Code hook
 - [Common rules](reference/rules.md): every rule, its tool and its message
 - [Concepts](concepts/README.md): why the conventions are checked by tools
 - [template-vite](../templates/vite/README.md): the commands, the layout and the checks specific to the front end
