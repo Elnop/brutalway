@@ -51,7 +51,7 @@ The app lists it under `references` and is checked with `tsc -b`.
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `base.json`                   | the flags above, `target` ES2022                                                                                                                                  |
 | `node.json`                   | `target` and `lib` ES2024 (what Node 26 runs), `module` and `moduleResolution` nodenext, Node types                                                               |
-| `react-vite.json`             | DOM libs, `moduleResolution` bundler, `jsx` react-jsx, `vite/client` types                                                                                        |
+| `react-vite.json`             | `lib` ES2024 with the DOM libs, `moduleResolution` bundler, `jsx` react-jsx, `vite/client` types                                                                  |
 | `react-vite-third-party.json` | `react-vite.json` without `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature`, for code copied from a registry (shadcn/ui) that you do not edit |
 
 ## Why

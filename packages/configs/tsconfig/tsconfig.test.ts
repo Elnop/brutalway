@@ -107,12 +107,13 @@ describe('@brutalway/tsconfig', () => {
     assert.match(compile('base.json', recent).output, /TS2550/u);
   });
 
-  it('adds the DOM libs, bundler resolution, react-jsx and the vite/client types in react-vite.json', () => {
+  it('adds lib ES2024 with the DOM libs, bundler resolution, react-jsx and the vite/client types in react-vite.json', () => {
     const options = resolvedOptions('react-vite.json');
     assert.deepEqual(
       { lib: options['lib'], module: options['module'], moduleResolution: options['moduleResolution'], jsx: options['jsx'], types: options['types'] },
-      { lib: ['es2022', 'dom', 'dom.iterable'], module: 'esnext', moduleResolution: 'bundler', jsx: 'react-jsx', types: ['vite/client'] },
+      { lib: ['es2024', 'dom', 'dom.iterable'], module: 'esnext', moduleResolution: 'bundler', jsx: 'react-jsx', types: ['vite/client'] },
     );
+    assert.equal(compile('react-vite.json', 'export const sorted = [3, 1, 2].toSorted();\nexport const last = [1, 2].findLast((value) => value > 1);\n', { types: [] }).status, 0);
   });
 
   it('keeps the base flags in the Node and React + Vite variants', () => {
