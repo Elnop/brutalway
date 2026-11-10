@@ -14,7 +14,7 @@ Every template builds the same todo list, so the stacks can be compared side by 
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 
-[docs/intent.md](docs/intent.md) explains why the conventions are checked by tools and the six axioms behind them, which spell BRUTAL. [docs/inspirations.md](docs/inspirations.md) lists the architecture principles the templates borrow from, with what they take and what they leave out.
+[docs/concepts/intent.md](docs/concepts/intent.md) explains why the conventions are checked by tools and the six axioms behind them, which spell BRUTAL. [docs/concepts/inspirations.md](docs/concepts/inspirations.md) lists the architecture principles the templates borrow from, with what they take and what they leave out.
 
 ## The common rules
 
