@@ -2,9 +2,9 @@ import { isAbsolute, join, resolve } from 'node:path';
 import stylelint from 'stylelint';
 import type { Rule } from 'stylelint';
 import { colorLiterals } from '#src/features/color-tokens/lib/colorLiterals.ts';
-import { oklab, oklabDistance } from '@brutalway/color-utils/oklab';
+import { oklab, oklabDistance } from '@brutalway/lint-utils/oklab';
 import { readColorTokens } from '#src/features/color-tokens/lib/readColorTokens.ts';
-import type { ColorToken, Oklab } from '@brutalway/color-utils/ColorTypes';
+import type { ColorToken, Oklab } from '@brutalway/lint-utils/ColorTypes';
 import type { ColorTokensOptions } from '#src/features/color-tokens/ColorTokensTypes.ts';
 
 const { utils } = stylelint;

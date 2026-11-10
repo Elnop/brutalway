@@ -1,5 +1,5 @@
 import type { ESTree } from '@oxlint/plugins';
-import { oklab } from '@brutalway/color-utils/oklab';
+import { oklab } from '@brutalway/lint-utils/oklab';
 import { COLOR_LITERAL } from '#src/features/color-tokens/ColorTokensConfig.ts';
 import type { Offense, Report } from '#src/features/color-tokens/ColorTokensTypes.ts';
 

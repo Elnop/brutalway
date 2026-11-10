@@ -46,21 +46,20 @@ const PUBLISHED_PACKAGES = [
   'tools/playwright-fixtures',
   'tools/agent-hook',
   'tools/create-brutal',
+  'utils/lint-utils',
 ];
 
-const PRIVATE_PACKAGES = ['utils/lint-utils', 'utils/color-utils'];
-
-function packageSource(folder: string, changelog: boolean): DocSource {
+function packageSource(folder: string): DocSource {
   const key = folder.slice(folder.indexOf('/') + 1);
-  const source = {
+  return {
     key,
     label: key === 'create-brutal' ? key : `@brutalway/${key}`,
     route: PACKAGES_ROUTE,
     repo: 'Elnop/brutalway',
     directory: `packages/${folder}`,
     files: ['README.md'],
+    changelog: 'CHANGELOG.md',
   };
-  return changelog ? { ...source, changelog: 'CHANGELOG.md' } : source;
 }
 
 export const PACKAGES_INDEX: DocSource = {
@@ -143,8 +142,7 @@ export const DOC_SOURCES: DocSource[] = [
     moved: TEMPLATE_MOVED_DOCS,
   },
   PACKAGES_INDEX,
-  ...PUBLISHED_PACKAGES.map((folder) => packageSource(folder, true)),
-  ...PRIVATE_PACKAGES.map((folder) => packageSource(folder, false)),
+  ...PUBLISHED_PACKAGES.map((folder) => packageSource(folder)),
 ];
 
 export const OPEN_STATUSES: RoadmapStatus[] = ['triage', 'in progress', 'todo'];

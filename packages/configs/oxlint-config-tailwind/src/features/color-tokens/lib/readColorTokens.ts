@@ -1,8 +1,8 @@
 import { createRequire } from 'node:module';
 import { isAbsolute, join } from 'node:path';
-import { createColorTokenReader } from '@brutalway/color-utils/createColorTokenReader';
-import { oklab } from '@brutalway/color-utils/oklab';
-import type { ColorToken } from '@brutalway/color-utils/ColorTypes';
+import { createColorTokenReader } from '@brutalway/lint-utils/createColorTokenReader';
+import { oklab } from '@brutalway/lint-utils/oklab';
+import type { ColorToken } from '@brutalway/lint-utils/ColorTypes';
 
 function colorVariables(css: string): ColorToken[] {
   const themes = [...css.matchAll(/@theme[^{]*\{([^}]*)\}/gu)].map((match) => match[1] ?? '');

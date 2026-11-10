@@ -97,11 +97,10 @@ The rules these plugins hold run in both Oxlint and ESLint.
 | [`@brutalway/dependency-cruiser-config`](configs/dependency-cruiser-config) | the four layers, route, service and query rules for servers, no import between features, pure presenters, stores in their folder and holding no server data |
 | [`@brutalway/alint-config`](configs/alint-config) | category folders hold only their kind, pinned dependencies, doc links and anchors resolve |
 
-## Internal
+## Shared helpers
 
-These two are private: tsdown bundles them into the packages that use them.
+The lint packages install it as a dev dependency, and tsdown bundles it into their `dist`.
 
 | Package | What it does |
 |---|---|
-| [`@brutalway/lint-utils`](utils/lint-utils) | helpers shared by the plugins |
-| [`@brutalway/color-utils`](utils/color-utils) | oklab conversion and cached color token reading, shared by the Tailwind and Stylelint configs |
+| [`@brutalway/lint-utils`](utils/lint-utils) | helpers for the plugins and configs: exports of a module, oxlint rule and fixture testers, oklab conversion and cached color token reading |

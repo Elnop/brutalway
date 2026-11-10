@@ -1,6 +1,6 @@
-import { createColorTokenReader } from '@brutalway/color-utils/createColorTokenReader';
-import { oklab } from '@brutalway/color-utils/oklab';
-import type { ColorToken } from '@brutalway/color-utils/ColorTypes';
+import { createColorTokenReader } from '@brutalway/lint-utils/createColorTokenReader';
+import { oklab } from '@brutalway/lint-utils/oklab';
+import type { ColorToken } from '@brutalway/lint-utils/ColorTypes';
 
 function colorProperties(css: string): ColorToken[] {
   return [...css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/gu)].flatMap((match) => {

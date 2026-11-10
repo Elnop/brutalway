@@ -1,11 +1,11 @@
 import { defineRule } from '@oxlint/plugins';
 import type { ESTree } from '@oxlint/plugins';
 import { isClassAttribute } from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
-import { oklabDistance } from '@brutalway/color-utils/oklab';
+import { oklabDistance } from '@brutalway/lint-utils/oklab';
 import { readColorTokens, readPalette } from '#src/features/color-tokens/lib/readColorTokens.ts';
 import { reportClassOffenses } from '#src/features/color-tokens/lib/reportClassOffenses.ts';
 import { reportLiteralOffenses } from '#src/features/color-tokens/lib/reportLiteralOffenses.ts';
-import type { ColorToken, Oklab } from '@brutalway/color-utils/ColorTypes';
+import type { ColorToken, Oklab } from '@brutalway/lint-utils/ColorTypes';
 import type { Offense } from '#src/features/color-tokens/ColorTokensTypes.ts';
 
 const DEFAULT_STYLESHEET = 'src/app/globals.css';

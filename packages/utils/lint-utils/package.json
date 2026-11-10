@@ -1,12 +1,12 @@
 {
   "name": "@brutalway/lint-utils",
   "version": "0.1.0",
-  "private": true,
-  "description": "Helpers shared by the @brutalway lint plugins: export listing, file base name, oxlint rule and fixture testers.",
+  "description": "Helpers shared by the @brutalway lint configs and plugins: export listing, file base name, oxlint rule and fixture testers, oklab colors and color token reading.",
   "keywords": [
     "oxlint",
     "eslint",
-    "lint"
+    "lint",
+    "oklab"
   ],
   "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/utils/lint-utils#readme",
   "bugs": "https://github.com/Elnop/brutalway/issues",
@@ -33,7 +33,10 @@
     "./ExportTypes": "./dist/ExportTypes.js",
     "./ruleTester": "./dist/ruleTester.js",
     "./lintFixture": "./dist/lintFixture.js",
-    "./OxlintReportTypes": "./dist/OxlintReportTypes.js"
+    "./OxlintReportTypes": "./dist/OxlintReportTypes.js",
+    "./oklab": "./dist/oklab.js",
+    "./createColorTokenReader": "./dist/createColorTokenReader.js",
+    "./ColorTypes": "./dist/ColorTypes.js"
   },
   "scripts": {
     "build": "tsdown",

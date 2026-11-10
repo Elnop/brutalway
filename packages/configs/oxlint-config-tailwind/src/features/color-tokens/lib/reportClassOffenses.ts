@@ -1,6 +1,6 @@
 import type { ESTree } from '@oxlint/plugins';
-import { oklab } from '@brutalway/color-utils/oklab';
-import type { ColorToken } from '@brutalway/color-utils/ColorTypes';
+import { oklab } from '@brutalway/lint-utils/oklab';
+import type { ColorToken } from '@brutalway/lint-utils/ColorTypes';
 import {
   classNames,
   classStrings,

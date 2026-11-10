@@ -59,7 +59,10 @@ describe('parseDocsRoute', () => {
       source: { key: 'create-brutal', label: 'create-brutal' },
       path: 'CHANGELOG.md',
     });
-    expect(parseDocsRoute('#/packages/lint-utils')).not.toHaveProperty('source.changelog');
+    expect(parseDocsRoute('#/packages/lint-utils')).toHaveProperty(
+      'source.changelog',
+      'CHANGELOG.md',
+    );
   });
 
   it('opens the new path of a page that moved, with its section', () => {
