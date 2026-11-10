@@ -82,7 +82,7 @@ The rules these plugins hold run in both Oxlint and ESLint.
 
 | Package | What it does |
 |---|---|
-| [`@brutalway/prettier-config`](configs/prettier-config) | single quotes, trailing commas, 200 columns, and a `tailwind` variant that sorts the classes |
+| [`@brutalway/prettier-config`](configs/prettier-config) | single quotes, trailing commas, 100 columns, and a `tailwind` variant that sorts the classes |
 
 ### Styles
 
