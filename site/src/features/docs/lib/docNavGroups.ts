@@ -20,20 +20,26 @@ function parentPage(path: string, paths: Set<string>): string | undefined {
   return undefined;
 }
 
-function sectionNodes(pageHref: string, headings: DocHeading[], section: string | undefined): DocNavNode[] {
-  const nodes: DocNavNode[] = [];
-  const topDepth = Math.min(...headings.map((heading) => heading.depth));
-  for (const heading of headings) {
-    const node: DocNavNode = { kind: 'section', title: heading.text, href: `${pageHref}#${heading.slug}`, current: heading.slug === section ? 'location' : undefined, children: [] };
-    const parent = nodes.at(-1);
-    if (heading.depth > topDepth && parent !== undefined) parent.children.push(node);
-    else nodes.push(node);
-  }
-  return nodes.map((node) => (node.current === 'location' || node.children.some((child) => child.current === 'location') ? node : { ...node, children: [] }));
-}
-
 function holdsCurrent(node: DocNavNode): boolean {
   return node.current !== undefined || node.children.some(holdsCurrent);
+}
+
+function foldOutsideCurrent(node: DocNavNode): DocNavNode {
+  return { ...node, children: holdsCurrent(node) ? node.children.map(foldOutsideCurrent) : [] };
+}
+
+function sectionNodes(pageHref: string, headings: DocHeading[], section: string | undefined): DocNavNode[] {
+  const roots: DocNavNode[] = [];
+  const open: { depth: number; node: DocNavNode }[] = [];
+  for (const heading of headings) {
+    const node: DocNavNode = { kind: 'section', title: heading.text, href: `${pageHref}#${heading.slug}`, current: heading.slug === section ? 'location' : undefined, children: [] };
+    while ((open.at(-1)?.depth ?? 0) >= heading.depth) open.pop();
+    const parent = open.at(-1);
+    if (parent === undefined) roots.push(node);
+    else parent.node.children.push(node);
+    open.push({ depth: heading.depth, node });
+  }
+  return roots.map(foldOutsideCurrent);
 }
 
 function sourceNodes(source: DocSource, entries: DocEntry[], route: DocsRoute, headings: DocHeading[]): DocNavNode[] {

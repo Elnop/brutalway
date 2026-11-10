@@ -5,7 +5,7 @@ import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 import type { DocHeading } from '@/features/docs/DocsTypes.ts';
 
-const SECTION_DEPTHS = new Set([2, 3]);
+const SECTION_DEPTHS = new Set([2, 3, 4]);
 
 export function docHeadings(markdown: string): DocHeading[] {
   const slugger = new GithubSlugger();

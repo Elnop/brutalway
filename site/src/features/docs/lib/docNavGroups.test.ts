@@ -62,6 +62,23 @@ describe('docNavGroups', () => {
     expect(roadmapOutline('detail')).toStrictEqual([{ Why: ['Detail'] }, 'Steps']);
   });
 
+  it('nests level 4 sections under level 3, folded until one of them is read', () => {
+    const headings = [
+      { depth: 2, text: 'Reference', slug: 'reference' },
+      { depth: 3, text: 'Vite', slug: 'vite' },
+      { depth: 4, text: 'styling', slug: 'styling' },
+      { depth: 4, text: 'ui', slug: 'ui' },
+      { depth: 3, text: 'Fastify', slug: 'fastify' },
+    ];
+    function sections(section: string) {
+      const [group] = docNavGroups(entries, { source: brutalway, path: 'docs/roadmap/README.md', section }, headings);
+      return outline((group?.nodes.at(-1)?.children ?? []).filter((node) => node.kind === 'section'));
+    }
+    expect(sections('fastify')).toStrictEqual([{ Reference: ['Vite', 'Fastify'] }]);
+    expect(sections('vite')).toStrictEqual([{ Reference: [{ Vite: ['styling', 'ui'] }, 'Fastify'] }]);
+    expect(sections('ui')).toStrictEqual([{ Reference: [{ Vite: ['styling', 'ui'] }, 'Fastify'] }]);
+  });
+
   it('shows the templates together, and puts the sections of a landing page under the group label, level 3 at the top when it has no level 2', () => {
     const groups = docNavGroups([{ sourceKey: 'vite', path: 'README.md', title: 'Overview' }], { source: vite, path: 'README.md' }, [{ depth: 3, text: 'Only', slug: 'only' }]);
     expect(groups.map((group) => group.key)).toStrictEqual(['all', 'vite', 'fastify', 'package']);
