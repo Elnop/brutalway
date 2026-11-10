@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown';
 
 export default defineConfig({
-  entry: ['src/TypescriptConfig.ts', 'src/plugin.ts', 'src/typeDefinitionsPlugin.ts', 'src/cognitiveComplexityPlugin.ts'],
+  entry: ['src/TypescriptConfig.ts', 'src/plugin.ts', 'src/typeDefinitionsPlugin.ts', 'src/cognitiveComplexityPlugin.ts', 'src/functionSizePlugin.ts'],
   format: 'esm',
   platform: 'node',
   dts: true,

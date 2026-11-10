@@ -30,17 +30,25 @@ function matchesFixed(answers: Answers, fixed: Answers): boolean {
   return Object.entries(fixed).every(([id, value]) => answers[id] === value);
 }
 
+function removeCovered(uncovered: Set<string>, rows: Answers[], groups: string[][]): void {
+  for (const target of rows.flatMap((answers) => targetsOf(answers, groups))) uncovered.delete(target);
+}
+
+function bestRow(valid: Answers[], groups: string[][], uncovered: Set<string>): Answers {
+  const gains = valid.map((answers) => targetsOf(answers, groups).filter((target) => uncovered.has(target)).length);
+  return valid[gains.indexOf(Math.max(...gains))] ?? {};
+}
+
 function coveringRows(options: StackOption[], valid: Answers[], fixed: Answers): Answers[] {
   const groups = targetGroups(options);
   const uncovered = new Set(valid.flatMap((answers) => targetsOf(answers, groups)));
   const start = { ...defaults(options), ...fixed };
   const rows = satisfiesRules(options, start) && valid.length > 0 ? [start] : [];
-  for (const target of rows.flatMap((answers) => targetsOf(answers, groups))) uncovered.delete(target);
+  removeCovered(uncovered, rows, groups);
   while (uncovered.size > 0) {
-    const gains = valid.map((answers) => targetsOf(answers, groups).filter((target) => uncovered.has(target)).length);
-    const best = valid[gains.indexOf(Math.max(...gains))] ?? {};
+    const best = bestRow(valid, groups, uncovered);
     rows.push(best);
-    for (const target of targetsOf(best, groups)) uncovered.delete(target);
+    removeCovered(uncovered, [best], groups);
   }
   return rows;
 }

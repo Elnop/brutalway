@@ -8,7 +8,7 @@ export async function scaffoldProject(plan: ScaffoldPlan, step: (message: string
   step(`Downloading ${plan.stack.directory}`);
   await fetchTemplate(plan.stack, plan.dir, plan.source);
   step('Applying the options');
-  applyStackChanges(plan.dir, plan.stack, plan.answers, OVERLAYS_ROOT, plan.projectName);
+  applyStackChanges(plan, OVERLAYS_ROOT);
   if (plan.git) {
     step('Initializing git');
     runCommand('git', ['init', '--quiet'], plan.dir);

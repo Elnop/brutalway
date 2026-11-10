@@ -25,15 +25,12 @@ function closestTokens(tokens: ColorToken[], color: Oklab | undefined): ColorTok
     .slice(0, SUGGESTIONS);
 }
 
-function classOffense(name: string, palette: ColorToken[]): Offense | undefined {
-  const { utility } = tailwindClass(name);
-  const arbitraryProperty = /^\[[a-z-]+:(.+)\]$/u.exec(utility);
-  if (arbitraryProperty !== null) {
-    const literal = COLOR_LITERAL.exec(arbitraryProperty[1] ?? '')?.[0];
-    return literal === undefined ? undefined : { text: name, color: oklab(literal), format: (token) => `var(--color-${token})` };
-  }
-  const match = COLOR_UTILITY.exec(utility);
-  if (match === null) return undefined;
+function literalClassOffense(name: string, text: string, format: (token: string) => string): Offense | undefined {
+  const literal = COLOR_LITERAL.exec(text)?.[0];
+  return literal === undefined ? undefined : { text: name, color: oklab(literal), format };
+}
+
+function colorUtilityOffense(name: string, match: RegExpExecArray, palette: ColorToken[]): Offense | undefined {
   const [, prefix = '', value = ''] = match;
   function format(token: string) {
     return `${prefix}-${token}`;
@@ -41,8 +38,15 @@ function classOffense(name: string, palette: ColorToken[]): Offense | undefined 
   const paletteColor = PALETTE_COLOR.exec(value)?.[1];
   if (paletteColor !== undefined) return { text: name, color: palette.find((token) => token.name === paletteColor)?.color, format };
   const arbitrary = /^\[(.+)\](?:\/.+)?$/u.exec(value)?.[1];
-  const literal = arbitrary === undefined ? undefined : COLOR_LITERAL.exec(arbitrary)?.[0];
-  return literal === undefined ? undefined : { text: name, color: oklab(literal), format };
+  return arbitrary === undefined ? undefined : literalClassOffense(name, arbitrary, format);
+}
+
+function classOffense(name: string, palette: ColorToken[]): Offense | undefined {
+  const { utility } = tailwindClass(name);
+  const arbitraryProperty = /^\[[a-z-]+:(.+)\]$/u.exec(utility);
+  if (arbitraryProperty !== null) return literalClassOffense(name, arbitraryProperty[1] ?? '', (token) => `var(--color-${token})`);
+  const match = COLOR_UTILITY.exec(utility);
+  return match === null ? undefined : colorUtilityOffense(name, match, palette);
 }
 
 function literalOffense(text: string): Offense | undefined {

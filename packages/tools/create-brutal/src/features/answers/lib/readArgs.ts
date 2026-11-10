@@ -38,15 +38,19 @@ function optionalBoolean(value: unknown, fallback: boolean | undefined): boolean
   return typeof value === 'boolean' ? value : fallback;
 }
 
-export function readArgs(argv: string[], stack: Stack | undefined): CliArgs {
-  const stackOptions: ParseArgsOptionsConfig = Object.fromEntries((stack?.options ?? []).map((option) => [option.id, { type: isChoice(option) ? 'string' : 'boolean' }]));
-  const { values, positionals } = parseArgs({ args: argv, options: { ...BASE_OPTIONS, ...stackOptions }, allowPositionals: true, allowNegative: true, strict: stack !== undefined });
-  const preset = readPreset(values['preset']);
-  const options: Answers = { ...preset.options };
+function stackAnswers(values: Record<string, unknown>, stack: Stack | undefined, presetOptions: Answers): Answers {
+  const options: Answers = { ...presetOptions };
   for (const option of stack?.options ?? []) {
     const value = values[option.id];
     if (typeof value === 'boolean' || typeof value === 'string') options[option.id] = value;
   }
+  return options;
+}
+
+export function readArgs(argv: string[], stack: Stack | undefined): CliArgs {
+  const stackOptions: ParseArgsOptionsConfig = Object.fromEntries((stack?.options ?? []).map((option) => [option.id, { type: isChoice(option) ? 'string' : 'boolean' }]));
+  const { values, positionals } = parseArgs({ args: argv, options: { ...BASE_OPTIONS, ...stackOptions }, allowPositionals: true, allowNegative: true, strict: stack !== undefined });
+  const preset = readPreset(values['preset']);
   const stackId = values['stack'];
   return {
     dir: positionals[0],
@@ -56,6 +60,6 @@ export function readArgs(argv: string[], stack: Stack | undefined): CliArgs {
     help: values['help'] === true,
     git: optionalBoolean(values['git'], preset.git),
     install: optionalBoolean(values['install'], preset.install),
-    options,
+    options: stackAnswers(values, stack, preset.options),
   };
 }

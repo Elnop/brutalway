@@ -55,13 +55,15 @@ const FILE_GROUPS: FileGroup[] = [
   { folder: 'lib', belongs: (fileName) => fileName.endsWith('.ts') && !NAMED_FILE.test(fileName), appliesIn: outsideOwnFolder('lib') },
 ];
 
-function groupViolations(name: string, folderName: string, fileNames: string[], folderNames: ReadonlySet<string>, categoryFolders: ReadonlySet<string>): string[] {
+type FolderListing = { files: string[]; folders: ReadonlySet<string> };
+
+function groupViolations(name: string, folderName: string, listing: FolderListing, categoryFolders: ReadonlySet<string>): string[] {
   const violations: string[] = [];
   for (const { folder, belongs, appliesIn } of FILE_GROUPS) {
     if (!categoryFolders.has(folder) || !appliesIn(folderName)) continue;
-    const loose = fileNames.filter(belongs);
+    const loose = listing.files.filter(belongs);
     if (loose.length === 0) continue;
-    if (folderNames.has(folder)) violations.push(`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`);
+    if (listing.folders.has(folder)) violations.push(`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`);
     else if (loose.length > 1) violations.push(`${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`);
   }
   return violations;
@@ -78,7 +80,7 @@ function folderViolations(folder: string, name: string, categoryFolders: Readonl
   const violations: string[] = [];
   if (children.length === 0) violations.push(`${name} is empty: delete it`);
   if (children.length === 1 && categoryFolders.has(basename(folder))) violations.push(`${name} holds a single child: move it up one level and delete the folder`);
-  return groupsFiles ? [...violations, ...groupViolations(name, basename(folder), fileNames, folderNames, categoryFolders)] : violations;
+  return groupsFiles ? [...violations, ...groupViolations(name, basename(folder), { files: fileNames, folders: folderNames }, categoryFolders)] : violations;
 }
 
 export function treeViolations(root: string, categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS, options: TreeOptions = {}): string[] {

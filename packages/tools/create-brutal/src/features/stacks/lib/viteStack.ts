@@ -218,7 +218,7 @@ const ANALYTICS_POSTHOG_README = `## Analytics
 
 const ANALYTICS_LAYOUT_FUNCTION = `
   function addTodo(title: string) {
-    add(title);
+    list.add(title);
     analyticsClient.track('todo_added');
   }
 `;
@@ -934,7 +934,7 @@ export const viteStack: Stack = {
           insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
         },
         { file: 'src/features/todo-list/components/TodoListLayout.tsx', after: '= useTodoList();\n', insert: ANALYTICS_LAYOUT_FUNCTION },
-        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={add}', with: 'onAdd={addTodo}' },
+        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={list.add}', with: 'onAdd={addTodo}' },
       ],
     },
     {
@@ -946,7 +946,7 @@ export const viteStack: Stack = {
           insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
         },
         { file: 'src/features/todo-list/components/TodoListLayout.tsx', after: '= useTodoList();\n', insert: ANALYTICS_LAYOUT_FUNCTION },
-        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={add}', with: 'onAdd={addTodo}' },
+        { file: 'src/features/todo-list/components/TodoListLayout.tsx', replace: 'onAdd={list.add}', with: 'onAdd={addTodo}' },
       ],
     },
     {

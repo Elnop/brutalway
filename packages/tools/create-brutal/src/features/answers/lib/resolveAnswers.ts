@@ -24,11 +24,15 @@ async function pickedAnswer(option: StackOption, options: StackOption[], known: 
   return ask(option, allowed);
 }
 
-export async function resolveAnswers(options: StackOption[], given: Answers, ask: AskOption | undefined): Promise<Answers> {
+function checkAllGiven(options: StackOption[], given: Answers): void {
   for (const option of options) {
     const value = given[option.id];
     if (value !== undefined) checkGiven(option, value);
   }
+}
+
+export async function resolveAnswers(options: StackOption[], given: Answers, ask: AskOption | undefined): Promise<Answers> {
+  checkAllGiven(options, given);
   const answers: Answers = {};
   for (const option of options) {
     const known = { ...given, ...answers };

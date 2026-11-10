@@ -7,13 +7,13 @@ import styles from '@/features/todo-list/components/TodoListLayout.module.css';
 
 export function TodoListLayout() {
   const { t } = useTranslation('todoList');
-  const { todos, filter, add, setFilter, toggle, rename, remove } = useTodoList();
+  const list = useTodoList();
   return (
     <section className={styles.list} aria-labelledby="todo-list-title">
       <h2 id="todo-list-title">{t('title')}</h2>
-      <TodoInput onAdd={add} />
-      <TodoFilters filter={filter} onChange={setFilter} />
-      <TodoItems todos={todos} onToggle={toggle} onRename={rename} onRemove={remove} />
+      <TodoInput onAdd={list.add} />
+      <TodoFilters filter={list.filter} onChange={list.setFilter} />
+      <TodoItems todos={list.todos} onToggle={list.toggle} onRename={list.rename} onRemove={list.remove} />
     </section>
   );
 }

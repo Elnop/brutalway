@@ -5,6 +5,7 @@ import { cancel, confirm, intro, isCancel, log, note, outro, select, spinner, te
 import { errorMessage } from '#src/shared/lib/errorMessage.ts';
 import { isChoice } from '#src/shared-features/stack/optionRules.ts';
 import { readArgs } from '#src/features/answers/lib/readArgs.ts';
+import type { CliArgs } from '#src/features/answers/CliTypes.ts';
 import { readStackRefs } from '#src/features/scaffolding/lib/readStackRefs.ts';
 import { resolveAnswers } from '#src/features/answers/lib/resolveAnswers.ts';
 import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.ts';
@@ -110,6 +111,16 @@ async function createProject(dir: string, plan: () => ScaffoldPlan): Promise<voi
   progress.stop(`Created ${dir}`);
 }
 
+type ProjectChoices = Omit<ScaffoldPlan, 'source' | 'projectName'> & { local: boolean };
+
+async function askChoices(argv: string[], first: CliArgs): Promise<ProjectChoices> {
+  const dir = await pickDir(first.dir, first.yes);
+  const stack = await pickStack(first.stack, first.yes);
+  const args = readArgs(argv, stack);
+  const answers = await resolveAnswers(stack.options, args.options, args.yes ? undefined : askOption);
+  return { dir, stack, answers, local: args.local, git: await askYesNo(args.git, args.yes, 'Run git init?'), install: await askYesNo(args.install, args.yes, 'Run npm install?') };
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   const first = readArgs(argv, undefined);
@@ -118,14 +129,14 @@ async function main(): Promise<void> {
     return;
   }
   intro('create-brutal');
-  const dir = await pickDir(first.dir, first.yes);
-  const stack = await pickStack(first.stack, first.yes);
-  const args = readArgs(argv, stack);
-  const answers = await resolveAnswers(stack.options, args.options, args.yes ? undefined : askOption);
-  const git = await askYesNo(args.git, args.yes, 'Run git init?');
-  const install = await askYesNo(args.install, args.yes, 'Run npm install?');
-  await createProject(dir, () => ({ dir: resolve(dir), projectName: basename(resolve(dir)), stack, answers, source: templateSource(stack, args.local), git, install }));
-  note([`cd ${dir}`, ...(install ? [] : ['npm install']), ...(git ? [] : ['git init && git config core.hooksPath .githooks']), ...stack.nextSteps(answers)].join('\n'), 'Next steps');
+  const choices = await askChoices(argv, first);
+  await createProject(choices.dir, () => ({ ...choices, dir: resolve(choices.dir), projectName: basename(resolve(choices.dir)), source: templateSource(choices.stack, choices.local) }));
+  note(
+    [`cd ${choices.dir}`, ...(choices.install ? [] : ['npm install']), ...(choices.git ? [] : ['git init && git config core.hooksPath .githooks']), ...choices.stack.nextSteps(choices.answers)].join(
+      '\n',
+    ),
+    'Next steps',
+  );
   outro('Run npm run check before each commit.');
 }
 

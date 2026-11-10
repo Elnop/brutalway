@@ -5,8 +5,8 @@ import { errorMessage } from '#src/shared/lib/errorMessage.ts';
 import { formatJson } from '#src/features/scaffolding/lib/formatJson.ts';
 import { isRecord } from '#src/shared/lib/isRecord.ts';
 import { PROJECT_NAME_TOKEN } from '#src/features/scaffolding/ScaffoldConfig.ts';
-import type { PackageJson } from '#src/features/scaffolding/ScaffoldTypes.ts';
-import type { Answers, FileEdit, Stack, StackChange } from '#src/shared-features/stack/StackTypes.ts';
+import type { PackageJson, ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
+import type { Answers, FileEdit, StackChange } from '#src/shared-features/stack/StackTypes.ts';
 
 function matches(change: StackChange, answers: Answers): boolean {
   return Object.entries(change.when).every(([id, value]) => answers[id] === value);
@@ -93,7 +93,7 @@ function keepFolders(dir: string, folders: string[]): void {
   }
 }
 
-export function applyStackChanges(dir: string, stack: Stack, answers: Answers, overlaysRoot: string, projectName: string): void {
+export function applyStackChanges({ dir, stack, answers, projectName }: Pick<ScaffoldPlan, 'dir' | 'stack' | 'answers' | 'projectName'>, overlaysRoot: string): void {
   for (const change of stack.changes.filter((candidate) => matches(candidate, answers))) {
     removePaths(dir, change.remove ?? []);
     editFiles(dir, change.edits ?? [], projectName);

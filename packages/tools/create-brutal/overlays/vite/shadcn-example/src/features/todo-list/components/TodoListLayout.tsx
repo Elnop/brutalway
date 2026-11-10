@@ -7,7 +7,7 @@ import { useTodoList } from '@/features/todo-list/useTodoList.ts';
 
 export function TodoListLayout() {
   const { t } = useTranslation('todoList');
-  const { todos, filter, add, setFilter, toggle, rename, remove } = useTodoList();
+  const list = useTodoList();
   return (
     <section aria-labelledby="todo-list-title">
       <Card className="bg-yellow text-on-accent shadow-hard">
@@ -17,9 +17,9 @@ export function TodoListLayout() {
           </h2>
         </CardHeader>
         <CardContent>
-          <TodoInput onAdd={add} />
-          <TodoFilters filter={filter} onChange={setFilter} />
-          <TodoItems todos={todos} onToggle={toggle} onRename={rename} onRemove={remove} />
+          <TodoInput onAdd={list.add} />
+          <TodoFilters filter={list.filter} onChange={list.setFilter} />
+          <TodoItems todos={list.todos} onToggle={list.toggle} onRename={list.rename} onRemove={list.remove} />
         </CardContent>
       </Card>
     </section>

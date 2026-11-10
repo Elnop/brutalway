@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
-import type { HookCheck } from '#src/features/edit-checks/EditChecksTypes.ts';
+import type { HookCheck, HookScope } from '#src/features/edit-checks/EditChecksTypes.ts';
 import type { HookEdit } from '#src/shared-features/hook-edit/HookEditTypes.ts';
 import { vendoredFolder } from '#src/shared-features/vendored/vendoredFolder.ts';
 
@@ -40,14 +40,16 @@ function oxlintFolder(root: string, file: string) {
   return root;
 }
 
-export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file' | 'created'>, trees: string[], vendored: string[] = [], rootEntries = false): HookCheck[] {
+function oxlintCheck(root: string, file: string): HookCheck {
+  const cwd = oxlintFolder(root, file);
+  return { label: `oxlint found problems in ${relative(root, file)}`, command: 'oxlint', args: ['--type-aware', relative(cwd, file)], cwd };
+}
+
+export function hookChecks(root: string, { file, created }: Pick<HookEdit, 'file' | 'created'>, { trees, vendored = [], rootEntries = false }: HookScope): HookCheck[] {
   if (file === '' || !inside(root, file) || isVendored(root, file, vendored)) return [];
   const fromRoot = relative(root, file);
   const checks: HookCheck[] = [];
-  if (/\.tsx?$/u.test(file)) {
-    const cwd = oxlintFolder(root, file);
-    checks.push({ label: `oxlint found problems in ${fromRoot}`, command: 'oxlint', args: ['--type-aware', relative(cwd, file)], cwd });
-  }
+  if (/\.tsx?$/u.test(file)) checks.push(oxlintCheck(root, file));
   if (file.endsWith('.css') && hasStylelintConfig(root)) {
     checks.push({ label: `stylelint found problems in ${fromRoot}`, command: 'stylelint', args: [fromRoot], cwd: root });
   }

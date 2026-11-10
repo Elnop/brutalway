@@ -81,10 +81,7 @@ function label(answers: Answers): string {
     .join(' ');
 }
 
-async function check({ stack, answers, name }: Run): Promise<string | undefined> {
-  const dir = join(WORK_DIR, name);
-  rmSync(dir, { recursive: true, force: true });
-  mkdirSync(dir, { recursive: true });
+async function prepare({ stack, answers, name }: Run, dir: string): Promise<string | undefined> {
   try {
     await scaffoldProject({ dir, projectName: name, stack, answers, source: { kind: 'local', root: LOCAL_ROOT }, git: true, install: false }, () => undefined);
   } catch (error) {
@@ -92,15 +89,26 @@ async function check({ stack, answers, name }: Run): Promise<string | undefined>
   }
   const installed = await withLocalManifest(dir, 'npm', ['install', '--prefer-offline', '--no-audit', '--no-fund']);
   if (!installed.ok) return `npm install failed\n${installed.output.slice(-4000)}`;
-  if (answers['ui'] === 'shadcn') {
-    const added = await withLocalManifest(dir, 'npx', ['shadcn', 'add', ...SHADCN_ADDED_AFTER_SCAFFOLD, '--yes']);
-    if (!added.ok) return `shadcn add failed\n${added.output.slice(-4000)}`;
-  }
+  if (answers['ui'] !== 'shadcn') return undefined;
+  const added = await withLocalManifest(dir, 'npx', ['shadcn', 'add', ...SHADCN_ADDED_AFTER_SCAFFOLD, '--yes']);
+  return added.ok ? undefined : `shadcn add failed\n${added.output.slice(-4000)}`;
+}
+
+async function runCommands(answers: Answers, dir: string): Promise<string | undefined> {
   const commands = [['npm', 'run', 'check'], ['npm', 'test'], ...(values.e2e === true && answers['e2e'] ? [['npm', 'run', 'e2e']] : [])];
   for (const [command = '', ...args] of commands) {
     const result = await run(command, args, dir);
     if (!result.ok) return `${args.join(' ')} failed\n${result.output.slice(-4000)}`;
   }
+  return undefined;
+}
+
+async function check(matrixRun: Run): Promise<string | undefined> {
+  const dir = join(WORK_DIR, matrixRun.name);
+  rmSync(dir, { recursive: true, force: true });
+  mkdirSync(dir, { recursive: true });
+  const failure = (await prepare(matrixRun, dir)) ?? (await runCommands(matrixRun.answers, dir));
+  if (failure !== undefined) return failure;
   if (values.keep !== true) rmSync(dir, { recursive: true, force: true });
   return undefined;
 }

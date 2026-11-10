@@ -35,14 +35,20 @@ function boardTarget(state: IssueStatusState): Target | undefined {
   return label === undefined ? undefined : { label, close: false };
 }
 
-export function planStatusSync(state: IssueStatusState, trigger: Trigger): StatusPlan | undefined {
-  if (trigger.kind === 'labeled' && (!isStatusLabel(trigger.label) || !state.labels.includes(trigger.label))) return undefined;
+function chooseTarget(state: IssueStatusState, trigger: Trigger): Target {
   const fromLabel = trigger.kind === 'labeled' && isStatusLabel(trigger.label) ? trigger.label : STATUS_LABELS.find((label) => state.labels.includes(label));
   const fromAuthor: Target = { label: state.external ? 'triage' : 'todo', close: false };
   const labelTarget: Target | undefined = fromLabel === undefined ? undefined : { label: fromLabel, close: false };
   const board = trigger.kind === 'sweep' ? boardTarget(state) : undefined;
-  const target = board !== undefined && (labelTarget === undefined || boardIsNewer(state)) ? board : (labelTarget ?? fromAuthor);
-  const result = plan(state, target);
-  const changes = result.addLabel !== undefined || result.removeLabels.length > 0 || result.boardStatus !== undefined || result.close;
-  return changes ? result : undefined;
+  return board !== undefined && (labelTarget === undefined || boardIsNewer(state)) ? board : (labelTarget ?? fromAuthor);
+}
+
+function changesSomething(result: StatusPlan): boolean {
+  return result.addLabel !== undefined || result.removeLabels.length > 0 || result.boardStatus !== undefined || result.close;
+}
+
+export function planStatusSync(state: IssueStatusState, trigger: Trigger): StatusPlan | undefined {
+  if (trigger.kind === 'labeled' && (!isStatusLabel(trigger.label) || !state.labels.includes(trigger.label))) return undefined;
+  const result = plan(state, chooseTarget(state, trigger));
+  return changesSomething(result) ? result : undefined;
 }

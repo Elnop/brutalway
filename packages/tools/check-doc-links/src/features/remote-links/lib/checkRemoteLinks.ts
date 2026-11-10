@@ -5,16 +5,21 @@ import type { RemoteCheck } from '#src/features/remote-links/RemoteLinksTypes.ts
 import type { LinkResult } from '#src/shared-features/links/LinksTypes.ts';
 import { inPool } from '#src/shared/inPool.ts';
 
-export async function checkRemoteLinks(cwd: string, urls: string[], now: number): Promise<RemoteCheck> {
-  const cached = readCache(cwd, now);
-  const remote = urls.filter((url) => !cached.has(url));
+function resultsByUrl(urls: string[], answers: (LinkResult | undefined)[]): Map<string, LinkResult> {
   const results = new Map<string, LinkResult>();
-  if (remote.length > 0 && !(await linkClient.isOnline())) return { results, unchecked: remote.length };
-  const answers = await inPool(remote, CONCURRENCY, (url) => linkClient.requestUrl(url));
-  for (const [index, url] of remote.entries()) {
+  for (const [index, url] of urls.entries()) {
     const answer = answers[index];
     if (answer !== undefined) results.set(url, answer);
   }
+  return results;
+}
+
+export async function checkRemoteLinks(cwd: string, urls: string[], now: number): Promise<RemoteCheck> {
+  const cached = readCache(cwd, now);
+  const remote = urls.filter((url) => !cached.has(url));
+  if (remote.length > 0 && !(await linkClient.isOnline())) return { results: new Map<string, LinkResult>(), unchecked: remote.length };
+  const answers = await inPool(remote, CONCURRENCY, (url) => linkClient.requestUrl(url));
+  const results = resultsByUrl(remote, answers);
   writeCache(
     cwd,
     cached,

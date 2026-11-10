@@ -39,10 +39,11 @@ error no-comments(disallowComments): Comments are forbidden
 
 Directives like `oxlint-` and `@ts-expect-error` are allowed. Anything else a comment would say goes in a name.
 
-A function holds 25 lines at most, blank lines not counted, and nests blocks and callbacks 3 levels deep at most. Tests have no length limit.
+A function holds 25 lines at most, blank lines not counted, and nests blocks and callbacks 3 levels deep at most. It takes 4 parameters at most and declares 5 local variables at most, each name of a destructuring counted. Tests have neither limit on length nor on variables.
 
 ```
 error eslint(max-lines-per-function): The function `TodoItem` has too many lines (32). Maximum allowed is 25.
+error function-size(max-variables): This function declares 8 variables, 5 at most: split it, or group the values that go together in a type.
 ```
 
 ## Names and places

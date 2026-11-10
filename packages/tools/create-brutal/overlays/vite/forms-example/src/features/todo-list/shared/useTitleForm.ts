@@ -17,15 +17,17 @@ function titleError(message: string | undefined): (typeof TITLE_ERRORS)[number] 
 
 export function useTitleForm({ initialTitle, clearOnSubmit, onSubmit }: TitleFormOptions) {
   const { t } = useTranslation('todoList');
-  const { register, handleSubmit, reset, formState } = useForm({ resolver: zodResolver(TodoDraftSchema), defaultValues: { title: initialTitle } });
+  const form = useForm({ resolver: zodResolver(TodoDraftSchema), defaultValues: { title: initialTitle } });
 
   function submit(event: SubmitEvent<HTMLFormElement>) {
-    handleSubmit(({ title }) => {
-      onSubmit(title);
-      if (clearOnSubmit) reset({ title: '' });
-    })(event).catch(reportError);
+    form
+      .handleSubmit(({ title }) => {
+        onSubmit(title);
+        if (clearOnSubmit) form.reset({ title: '' });
+      })(event)
+      .catch(reportError);
   }
 
-  const error = titleError(formState.errors.title?.message);
-  return { field: register('title'), error: error === undefined ? undefined : t(`errors.${error}`), submit };
+  const error = titleError(form.formState.errors.title?.message);
+  return { field: form.register('title'), error: error === undefined ? undefined : t(`errors.${error}`), submit };
 }

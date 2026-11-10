@@ -12,9 +12,10 @@ export function useTodoMutations() {
     queryClient.setQueriesData<Todo[]>({ queryKey: todosKeys.lists() }, (todos) => todos?.map((todo) => (todo.id === id ? { ...todo, ...patch } : todo)));
   }
 
-  const add = useMutation({ mutationFn: todosClient.create, ...refresh });
-  const update = useMutation({ mutationFn: todosClient.update, onMutate: showUpdate, ...refresh });
-  const remove = useMutation({ mutationFn: todosClient.remove, ...refresh });
-  const clearCompleted = useMutation({ mutationFn: todosClient.clearCompleted, ...refresh });
-  return { add: add.mutate, update: update.mutate, remove: remove.mutate, clearCompleted: clearCompleted.mutate };
+  return {
+    add: useMutation({ mutationFn: todosClient.create, ...refresh }).mutate,
+    update: useMutation({ mutationFn: todosClient.update, onMutate: showUpdate, ...refresh }).mutate,
+    remove: useMutation({ mutationFn: todosClient.remove, ...refresh }).mutate,
+    clearCompleted: useMutation({ mutationFn: todosClient.clearCompleted, ...refresh }).mutate,
+  };
 }

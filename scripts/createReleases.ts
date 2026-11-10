@@ -26,13 +26,13 @@ async function servedByNpm(candidates: Tag[]): Promise<Tag[]> {
   const served = new Set<string>();
   let pending = candidates;
   while (pending.length > 0) {
-    for (const { tag, name, version } of pending) if (isPublished(name, version)) served.add(tag);
+    for (const candidate of pending) if (isPublished(candidate.name, candidate.version)) served.add(candidate.tag);
     pending = pending.filter(({ tag }) => !served.has(tag));
     if (pending.length === 0 || Date.now() >= deadline) break;
     process.stdout.write(`waiting for npm to serve ${pending.map(({ tag }) => tag).join(', ')}\n`);
     await setTimeout(NPM_POLL_INTERVAL_MS);
   }
-  for (const { tag } of pending) process.stderr.write(`skipped ${tag}: no such package version on npm after ${String(NPM_WAIT_LIMIT_MS / 60_000)} minutes\n`);
+  for (const candidate of pending) process.stderr.write(`skipped ${candidate.tag}: no such package version on npm after ${String(NPM_WAIT_LIMIT_MS / 60_000)} minutes\n`);
   return candidates.filter(({ tag }) => served.has(tag));
 }
 
