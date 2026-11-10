@@ -1,6 +1,11 @@
-import type { DocNavGroup, DocNavNode } from '@/features/docs/DocsTypes.ts';
+import type { DocNavGroup, DocNavNode, NavDrawer } from '@/features/docs/DocsTypes.ts';
 
 type DocsNavProps = {
+  groups: DocNavGroup[];
+  drawer: NavDrawer;
+};
+
+type DocsNavGroupsProps = {
   groups: DocNavGroup[];
 };
 
@@ -30,9 +35,9 @@ function DocsNavList({ nodes }: DocsNavListProps) {
   );
 }
 
-export function DocsNav({ groups }: DocsNavProps) {
+function DocsNavGroups({ groups }: DocsNavGroupsProps) {
   return (
-    <nav aria-label="Documentation" className="docs-nav">
+    <>
       {groups.map((group) => (
         <div key={group.key} className="docs-nav-group">
           <a
@@ -45,6 +50,36 @@ export function DocsNav({ groups }: DocsNavProps) {
           {group.nodes.length > 0 && <DocsNavList nodes={group.nodes} />}
         </div>
       ))}
-    </nav>
+    </>
+  );
+}
+
+export function DocsNav({ groups, drawer }: DocsNavProps) {
+  return (
+    <>
+      <button
+        type="button"
+        className="docs-nav-toggle"
+        aria-expanded={drawer.open}
+        aria-controls="docs-nav"
+        onClick={drawer.toggle}
+      >
+        {drawer.open ? 'Close' : 'Contents'}
+      </button>
+      <button
+        type="button"
+        className="docs-nav-backdrop"
+        aria-label="Close the contents"
+        tabIndex={-1}
+        onClick={drawer.close}
+      />
+      <nav
+        id="docs-nav"
+        aria-label="Documentation"
+        className={drawer.open ? 'docs-nav is-open' : 'docs-nav'}
+      >
+        <DocsNavGroups groups={groups} />
+      </nav>
+    </>
   );
 }

@@ -9,6 +9,7 @@ import {
   useDocTitles,
   usePackageCategories,
 } from '@/features/docs/hooks/useDocs.ts';
+import { useNavDrawer } from '@/features/docs/hooks/useNavDrawer.ts';
 import { useSectionTracking } from '@/features/docs/hooks/useSectionTracking.ts';
 import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
 import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
@@ -36,9 +37,11 @@ function DocsNavPanel({ route, entries, markdown }: DocsNavPanelProps) {
   const slugs = useMemo(() => headings.map((heading) => heading.slug), [headings]);
   const visibleSection = useSectionTracking(route, slugs, markdown !== undefined);
   const categories = usePackageCategories(route.source.route === PACKAGES_INDEX.route);
+  const drawer = useNavDrawer();
   return (
     <DocsNav
       groups={docNavGroups(entries, currentPage(route, visibleSection), headings, categories)}
+      drawer={drawer}
     />
   );
 }

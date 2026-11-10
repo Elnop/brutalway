@@ -79,3 +79,9 @@ export type NavContext = {
   route: DocsRoute;
   headings: DocHeading[];
 };
+
+export type NavDrawer = {
+  open: boolean;
+  toggle: () => void;
+  close: () => void;
+};
