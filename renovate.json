@@ -35,7 +35,8 @@
   "packageRules": [
     {
       "matchPackageNames": ["@brutalway/**", "create-brutal"],
-      "groupName": "brutalway packages"
+      "groupName": "brutalway packages",
+      "minimumReleaseAge": "0 days"
     },
     {
       "matchPackageNames": [
@@ -66,8 +67,12 @@
       "groupName": "GitHub Actions"
     },
     {
-      "matchPackageNames": ["@asamarts/alint"],
+      "matchPackageNames": ["@asamarts/alint", "@brutalway/alint-config"],
       "groupName": "alint"
+    },
+    {
+      "matchPackageNames": ["@playwright/test", "playwright"],
+      "groupName": "playwright"
     }
   ]
 }
