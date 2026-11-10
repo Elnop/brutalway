@@ -31,10 +31,10 @@
     "check": "prettier --check . && npm run unused"
   },
   "peerDependencies": {
-    "@asamarts/alint": "0.21.0"
+    "@asamarts/alint": "0.21.2"
   },
   "devDependencies": {
-    "@asamarts/alint": "0.21.0",
+    "@asamarts/alint": "0.21.2",
     "@brutalway/prettier-config": "0.3.0",
     "knip": "6.44.1",
     "prettier": "3.9.10"
