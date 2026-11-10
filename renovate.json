@@ -1,0 +1,61 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "postUpdateOptions": ["npmDedupe"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Versions the create-brutal stacks write into generated projects",
+      "managerFilePatterns": ["/^packages/tools/create-brutal/src/features/stacks/.+\\.ts$/"],
+      "matchStrings": [
+        "'(?<depName>@?[a-z0-9][a-z0-9._/-]*)': '(?<currentValue>\\d+\\.\\d+\\.\\d+)'",
+        "\\n\\s+(?<depName>[a-z][a-z0-9-]*): '(?<currentValue>\\d+\\.\\d+\\.\\d+)'"
+      ],
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "Version of the shadcn CLI that vendors the shadcn overlay",
+      "managerFilePatterns": [
+        "/^packages/tools/create-brutal/src/features/stacks/configs/shadcnConfig\\.ts$/"
+      ],
+      "matchStrings": ["SHADCN_VERSION = '(?<currentValue>\\d+\\.\\d+\\.\\d+)'"],
+      "depNameTemplate": "shadcn",
+      "datasourceTemplate": "npm"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["@brutalway/**", "create-brutal"],
+      "groupName": "brutalway packages"
+    },
+    {
+      "matchPackageNames": [
+        "oxlint",
+        "oxlint-tsgolint",
+        "typescript",
+        "prettier",
+        "knip",
+        "tsdown",
+        "jscpd",
+        "dependency-cruiser",
+        "@swc/core",
+        "@types/node",
+        "@changesets/cli"
+      ],
+      "groupName": "tooling"
+    },
+    {
+      "matchFileNames": ["site/**"],
+      "groupName": "site"
+    },
+    {
+      "matchFileNames": ["templates/**", "packages/tools/create-brutal/src/features/stacks/**"],
+      "groupName": "generated projects"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}

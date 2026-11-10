@@ -48,9 +48,21 @@ To release:
 
 The site shows each template changelog on the template's page.
 
+## Dependencies
+
+[Renovate](https://docs.renovatebot.com/) opens the update pull requests, configured in `renovate.json`, and nothing merges on its own. It groups them:
+
+- `brutalway packages`: every `@brutalway/*` range in the packages and the root, in one pull request
+- `tooling`: oxlint, TypeScript, Prettier, knip, tsdown and the other checkers
+- `site`: the dependencies of `site/`
+- `generated projects`: the templates and the versions the create-brutal stacks write, read from `src/features/stacks/` with a regex. Such a pull request needs a template changeset and a create-brutal changeset before merging
+- `GitHub Actions`
+
+On a `renovate/` branch, the matrix job runs with `--all`, so every combination of options goes through `npm run check`, `npm test` and the e2e tests.
+
 ## The site
 
-`site/` has its own `package.json` and its own `npm run check`. The Pages workflow deploys it on each push that changes it.
+`site/` has its own `package.json` and its own `npm run check`. The site job of CI runs its check, tests and build on every pull request, and the Pages workflow deploys it on each push that changes it.
 
 ## The roadmap
 

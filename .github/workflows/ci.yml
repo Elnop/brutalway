@@ -43,4 +43,21 @@ jobs:
       - run: npx --no-install playwright install --with-deps --only-shell chromium
         working-directory: packages/tools/playwright-fixtures
       - run: npm run build
-      - run: npm run matrix -- --jobs 1 --e2e --local-packages
+      - run: npm run matrix -- --jobs 1 --e2e --local-packages ${{ startsWith(github.head_ref, 'renovate/') && '--all' || '' }}
+
+  site:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: site/.nvmrc
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
