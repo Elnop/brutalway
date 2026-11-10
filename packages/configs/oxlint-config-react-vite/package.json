@@ -26,9 +26,6 @@
   "files": [
     "dist"
   ],
-  "imports": {
-    "#src/*": "./src/*"
-  },
   "exports": "./dist/ReactViteConfig.js",
   "scripts": {
     "build": "tsdown",

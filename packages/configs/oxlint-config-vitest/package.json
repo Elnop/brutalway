@@ -25,9 +25,6 @@
   "files": [
     "dist"
   ],
-  "imports": {
-    "#src/*": "./src/*"
-  },
   "exports": "./dist/VitestConfig.js",
   "scripts": {
     "build": "tsdown",

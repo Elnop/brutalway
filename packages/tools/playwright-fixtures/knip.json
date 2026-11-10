@@ -1,5 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["fixtures/**"],
+  "entry": ["fixtures/playwright.config.ts", "fixtures/**/*.spec.ts"],
   "ignoreDependencies": ["@brutalway/dependency-cruiser-config", "@swc/core"]
 }
