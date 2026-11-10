@@ -107,13 +107,8 @@
   font-size: 0.875rem;
 }
 
+.docs-nav a[aria-current='page'],
 .docs-nav a[aria-current='location'] {
-  text-decoration: underline;
-  text-decoration-thickness: 3px;
-  font-weight: 700;
-}
-
-.docs-nav a[aria-current='page'] {
   border-color: var(--ink);
   background: var(--yellow);
   color: var(--on-accent);
