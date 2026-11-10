@@ -498,7 +498,7 @@ export const viteStack: Stack = {
       removeScripts: ['styles'],
       removeDependencies: ['stylelint', '@brutalway/stylelint-config'],
       addDevDependencies: {
-        '@brutalway/oxlint-config-tailwind': '0.1.2',
+        '@brutalway/oxlint-config-tailwind': '0.1.3',
         '@brutalway/prettier-config': '0.3.0',
         '@tailwindcss/vite': '4.3.3',
         'prettier-plugin-tailwindcss': '0.8.1',
@@ -624,7 +624,7 @@ export const viteStack: Stack = {
       addDevDependencies: {
         '@brutalway/dependency-cruiser-config': '0.5.0',
         '@brutalway/oxlint-config-shadcn': '0.2.0',
-        '@brutalway/tsconfig': '0.3.0',
+        '@brutalway/tsconfig': '0.4.0',
         shadcn: SHADCN_VERSION,
       },
     },
@@ -652,7 +652,7 @@ export const viteStack: Stack = {
           with: 'Every message says what to change, so the agent does not need to know the convention beforehand. Before an edit, the same hook refuses any change to a file in `third-party/` and tells the agent to run `npx shadcn add <name> --overwrite`, restyle through `src/app/globals.css` or wrap the primitive in `src/`.',
         },
       ],
-      addDevDependencies: { '@brutalway/agent-hook': '0.2.0' },
+      addDevDependencies: { '@brutalway/agent-hook': '0.2.1' },
     },
     {
       when: { styling: 'css-modules' },

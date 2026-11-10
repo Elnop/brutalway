@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/prettier-config",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Prettier config: single quotes, trailing commas, 200 columns, and a variant that sorts Tailwind classes.",
   "keywords": [
     "prettier",

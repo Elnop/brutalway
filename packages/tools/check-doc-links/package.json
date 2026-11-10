@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check-doc-links",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Fails when a Markdown doc links to a page that no longer exists, and skips the check when the machine is offline.",
   "keywords": [
     "markdown",
@@ -44,11 +44,11 @@
     "micromark-extension-gfm": "^3.0.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.5.0",
+    "@brutalway/check-tree": "0.5.1",
     "@brutalway/dependency-cruiser-config": "0.5.0",
-    "@brutalway/oxlint-config-node": "0.2.0",
+    "@brutalway/oxlint-config-node": "0.2.1",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.3.0",
+    "@brutalway/tsconfig": "0.4.0",
     "@types/mdast": "4.0.4",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",

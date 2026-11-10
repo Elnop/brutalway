@@ -1,5 +1,14 @@
 # @brutalkit/oxlint-config-react
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [c438506]
+- Updated dependencies [13485ca]
+- Updated dependencies [11f6d20]
+  - @brutalway/oxlint-config-typescript@0.6.0
+
 ## 0.4.0
 
 ### Minor Changes

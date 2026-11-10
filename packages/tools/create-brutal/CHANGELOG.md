@@ -1,5 +1,19 @@
 # create-brutal
 
+## 0.9.0
+
+### Minor Changes
+
+- c438506: A function holds 25 lines at most, blank lines and comments not counted, and nests blocks and callbacks 3 levels deep at most (`max-lines-per-function`, `max-depth`, `max-nested-callbacks`), as in the Norminette of 42. Tests have no length limit. A project whose functions are longer starts failing. In the vite example, `TodoItem` is split into `TodoItemCheck` and `TodoItemActions`, the list moves to `TodoItems`, and `TodoInput` and `TodoEditor` share `TitleInput` and `TitleError` from `src/features/todo-list/shared/presenters/`.
+- 13485ca: A file declares 5 top-level functions at most (`function-size/max-functions`), as in the Norminette of 42: function declarations and functions assigned to a top-level `const`, exported or not. Nested functions, callbacks and object methods do not count. A project with a file of 6 functions starts failing. The packages move their helpers into files of their own, with no change in behavior. With `server-state`, the in-memory API of the vite example is split into `devApi.ts`, the Vite plugin, and `devApiRoutes.ts`, which answers each route from a table.
+- 11f6d20: A function takes 4 parameters at most (`max-params`) and declares 5 local variables at most (`function-size/max-variables`), as in the Norminette of 42. Each name bound by a destructuring counts, a nested function is counted on its own, and tests are exempt. A project with longer signatures or more locals starts failing. The packages are rewritten to fit, with no change in behavior.
+- 310cccc: Prettier wraps lines at 100 columns instead of 200, the closest to the 80 of the Norminette that the templates fit today. A project that extends the config gets reformatted on its next `prettier --write`, and some `if` bodies need braces once they move to their own line. The vite, fastify and package templates are formatted at 100 and pin `@brutalway/prettier-config` 0.3.0.
+- 00cf6cb: The docs of a new project are split by what they are for. The README keeps the introduction, getting started and a list of links. `docs/guides/` holds the tasks (starting your own app, working with an agent, translations on vite, publishing on package), `docs/reference/` the commands, the layout, the endpoints on fastify and `verifications.md`, and `docs/concepts/` holds `architecture.md`. Turning off `claude-hook`, `release` or the fastify example removes the matching guide or reference page with its link.
+
+### Patch Changes
+
+- a0b6976: `npm run deps` runs dependency-cruiser with `--output-type err-long`, so each import that breaks a layer rule comes with the comment of the rule, which says what to change.
+
 ## 0.8.0
 
 ### Minor Changes

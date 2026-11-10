@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-react",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Oxlint config for React with TypeScript: hooks rules and named XProps types for components.",
   "keywords": [
     "oxlint",
@@ -40,19 +40,19 @@
     "test": "node --test 'src/**/*.test.ts'"
   },
   "dependencies": {
-    "@brutalway/oxlint-config-typescript": "^0.5.0",
+    "@brutalway/oxlint-config-typescript": "^0.6.0",
     "oxlint-plugin-eslint": "^1.91.0"
   },
   "peerDependencies": {
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.5.0",
+    "@brutalway/check-tree": "0.5.1",
     "@brutalway/dependency-cruiser-config": "0.5.0",
     "@brutalway/lint-utils": "0.1.0",
-    "@brutalway/oxlint-config-node": "0.2.0",
+    "@brutalway/oxlint-config-node": "0.2.1",
     "@brutalway/oxlint-config-node-test": "0.1.0",
-    "@brutalway/tsconfig": "0.3.0",
+    "@brutalway/tsconfig": "0.4.0",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.2",
     "oxlint": "1.91.0",
