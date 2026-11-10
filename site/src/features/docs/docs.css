@@ -125,12 +125,11 @@
   justify-self: center;
   margin-block: 2.5rem 6rem;
   width: 100%;
-  max-width: 80rem;
+  max-width: 90rem;
   min-width: 0;
   padding: 2.5rem 3rem;
   border: var(--border);
   background: var(--paper);
-  box-shadow: var(--shadow-large);
   overflow-wrap: break-word;
 }
 
