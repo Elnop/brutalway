@@ -31,7 +31,7 @@
     "check": "prettier --check . && npm run unused"
   },
   "peerDependencies": {
-    "@asamarts/alint": "0.21.0"
+    "@asamarts/alint": "^0.21.0"
   },
   "devDependencies": {
     "@asamarts/alint": "0.21.0",

@@ -6,6 +6,13 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "alint versions allowed to run their install script in allowScripts",
+      "managerFilePatterns": ["/(^|/)package\\.json$/"],
+      "matchStrings": ["\"(?<depName>@asamarts/alint)@(?<currentValue>\\d+\\.\\d+\\.\\d+)\": true"],
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
       "description": "Versions the create-brutal stacks write into generated projects",
       "managerFilePatterns": ["/^packages/tools/create-brutal/src/features/stacks/.+\\.ts$/"],
       "matchStrings": [
@@ -57,6 +64,10 @@
     {
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions"
+    },
+    {
+      "matchPackageNames": ["@asamarts/alint"],
+      "groupName": "alint"
     }
   ]
 }
