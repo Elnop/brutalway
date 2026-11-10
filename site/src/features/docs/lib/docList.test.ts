@@ -3,7 +3,8 @@ import { fixedEntries, loadDocList } from '@/features/docs/lib/docList.ts';
 
 const REPOSITORY_FILES = [
   'README.md',
-  'docs/intent.md',
+  'docs/concepts/intent.md',
+  'docs/getting-started.md',
   'docs/roadmap.md',
   'docs/notes.txt',
   'packages/tools/create-brutal/README.md',
@@ -33,11 +34,18 @@ describe('docList', () => {
     ]);
   });
 
-  it('adds the Markdown files the repository holds under each docs folder, and only those', async () => {
+  it('adds the Markdown files the repository holds under each docs folder, and only those, in the order the source sets', async () => {
     const fetchMock = vi.fn<() => Promise<Response>>(async () => treeAnswer());
     vi.stubGlobal('fetch', fetchMock);
     const entries = await loadDocList(new AbortController().signal);
-    expect(paths(entries, 'brutalway')).toStrictEqual(['README.md', 'packages/tools/create-brutal/README.md', 'CONTRIBUTING.md', 'docs/intent.md', 'docs/roadmap.md']);
+    expect(paths(entries, 'brutalway')).toStrictEqual([
+      'README.md',
+      'docs/getting-started.md',
+      'packages/tools/create-brutal/README.md',
+      'docs/concepts/intent.md',
+      'CONTRIBUTING.md',
+      'docs/roadmap.md',
+    ]);
     expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/architecture.md', 'docs/guides/setup.md', 'CHANGELOG.md']);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });

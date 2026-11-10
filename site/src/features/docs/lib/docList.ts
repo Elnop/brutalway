@@ -4,9 +4,16 @@ import { listRepositoryFiles } from '@/features/docs/githubClient.ts';
 import { docTitle } from '@/features/docs/lib/docTitle.ts';
 import { repositoryPath, sourcePath } from '@/features/docs/lib/docsUrls.ts';
 
+function orderRank(order: string[], path: string): number {
+  const rank = order.findIndex((prefix) => path === prefix || (prefix.endsWith('/') && path.startsWith(prefix)));
+  return rank === -1 ? order.length : rank;
+}
+
 function sourceEntries(source: DocSource, folderPaths: string[]): DocEntry[] {
   const paths = [...source.files, ...folderPaths, ...(source.changelog === undefined ? [] : [source.changelog])];
-  return paths.map((path) => ({ sourceKey: source.key, path, title: docTitle(path) }));
+  const { order } = source;
+  const ordered = order === undefined ? paths : Array.from({ length: order.length + 1 }, (_, rank) => paths.filter((path) => orderRank(order, path) === rank)).flat();
+  return ordered.map((path) => ({ sourceKey: source.key, path, title: docTitle(path) }));
 }
 
 function folderDocs(source: DocSource, files: string[] | undefined): string[] {

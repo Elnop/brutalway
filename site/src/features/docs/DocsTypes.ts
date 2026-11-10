@@ -7,6 +7,7 @@ export type DocSource = {
   files: string[];
   folder?: string;
   changelog?: string;
+  order?: string[];
 };
 
 export type DocEntry = {
