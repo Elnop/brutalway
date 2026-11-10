@@ -2,13 +2,49 @@
 
 Creates a project from one of the [brutalway](https://github.com/Elnop/brutalway) templates and lets you drop the parts you do not need. Whatever you pick, the project passes `npm run check` on the first run.
 
+## Install
+
 ```sh
 npm create brutal my-app
 ```
 
 Node 26 is required, like the templates.
 
-## Stacks and options
+Besides the stack and its options, the CLI asks whether to run `git init` and `npm install`. Without git, the `prepare` script that installs the pre-commit hook is removed. The next steps tell you how to set it up later.
+
+## Usage
+
+### Create a project without questions
+
+A yes/no option has the flags `--<option>` and `--no-<option>`, an option with several values takes `--<option> <value>`. `--yes` takes the default for every question left:
+
+```sh
+npm create brutal my-app -- --stack vite --styling tailwind --no-e2e --yes
+```
+
+### Reuse the same answers
+
+A preset file holds the same answers, and flags override it:
+
+```json
+{ "stack": "vite", "git": true, "install": true, "options": { "styling": "tailwind", "e2e": false } }
+```
+
+```sh
+npm create brutal my-app -- --preset minimal.json --yes
+```
+
+### List the stacks and their options
+
+```sh
+npm create brutal -- --help
+```
+
+It lists the stacks, their options, the values of each option and its default.
+
+## Reference
+
+### Stacks and options
 
 | Stack | Template | Options |
 |---|---|---|
@@ -16,7 +52,13 @@ Node 26 is required, like the templates.
 | `fastify` | [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) | `example`, `swagger`, `database`, `claude-hook`, `ci` |
 | `package` | [template-package](https://github.com/Elnop/brutalway/tree/main/templates/package) | `example`, `bin`, `release`, `claude-hook`, `ci` |
 
+A combination that cannot work stops the CLI before anything is written, with a message naming both options: `--no-zustand cannot be used with --example`.
+
+### The example
+
 `example` keeps the todo list. Without it you get the same structure with empty `src/features/` and `src/shared-features/` folders. On vite, `App.tsx` then only shows the project name, and zustand can only be removed together with the example, since the example uses it. On fastify, `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name. On package, the `"."` export is `src/greet.ts`, a single `greet` function to replace, since the lint rules refuse an empty module.
+
+### Vite
 
 Every vite project goes through i18next, whatever its options: the components of each styling value call `t()`, the messages are JSON in `src/app/locales/en/`, and `@brutalway/oxlint-config-i18next` and `i18next-cli` keep it that way. Without the example, only the `app` namespace remains, with the project name as its title.
 
@@ -36,31 +78,13 @@ On vite, `react-compiler` is off by default. With it, `vite.config.ts` runs the 
 
 On vite, `analytics` takes `none` (the default), `module` or `posthog`. Both values write `src/shared/analyticsClient.ts`, the only place where events leave the app, and the example calls `analyticsClient.track('todo_added')` when a task is added. With `module`, the client dispatches an `analytics` event on `window` for whatever tool you plug in. With `posthog`, it sends the events to PostHog when `VITE_POSTHOG_KEY` is set and nothing otherwise, and `securityHeaders.ts` lets the PostHog hosts through. dependency-cruiser keeps analytics SDKs inside that file.
 
+### Fastify
+
 On fastify, `database` keeps `node:sqlite` and the `DATABASE_PATH` variable. Without it, the example keeps its todos in a `Map`: `todosQueries.ts` has the same functions, so the services and the routes do not change. Without `swagger`, `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
 
+### Package
+
 On package, the project starts at version 0.1.0 and is not `private`, so it can be published. `bin` keeps the `todo` command next to the export, or, without the example, a `src/cli.ts` that prints the project name under a command of the same name. Without it, `package.json` has no `bin` and only the export is built and tested. `release` keeps `@changesets/cli`, the `.changeset/` folder, the `release` script and `.github/workflows/release.yml`, which opens the release pull request of changesets and publishes each merged version to npm through trusted publishing, with provenance. `ci` only removes `.github/workflows/ci.yml`.
-
-The CLI also asks whether to run `git init` and `npm install`. Without git, the `prepare` script that installs the pre-commit hook is removed. The next steps tell you how to set it up later.
-
-## Without questions
-
-A yes/no option has the flags `--<option>` and `--no-<option>`, an option with several values takes `--<option> <value>`. `--yes` takes the default for every question left:
-
-```sh
-npm create brutal my-app -- --stack vite --styling tailwind --no-e2e --yes
-```
-
-A preset file holds the same answers, and flags override it:
-
-```json
-{ "stack": "vite", "git": true, "install": true, "options": { "styling": "tailwind", "e2e": false } }
-```
-
-```sh
-npm create brutal my-app -- --preset minimal.json --yes
-```
-
-`npm create brutal -- --help` lists the stacks, their options, the values of each option and its default. A combination that cannot work stops the CLI before anything is written, with a message naming both options: `--no-zustand cannot be used with --example`.
 
 ## How it works
 

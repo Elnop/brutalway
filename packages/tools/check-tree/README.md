@@ -1,6 +1,45 @@
 # @brutalway/check-tree
 
-Checks the folders of a source tree, which a linter does not see:
+Checks the folders of a source tree, which a linter does not see: no empty folder, no category folder with a single child, and files of one kind grouped in that kind's folder once there are two of them.
+
+## Install
+
+```sh
+npm install --save-dev @brutalway/check-tree
+npx check-tree src
+```
+
+## Usage
+
+### Use your own category folders
+
+```sh
+npx check-tree src --categories components,hooks,utils
+```
+
+The grouping rule only applies to the kinds listed in the table below that are also in this list.
+
+### Keep the entry points of a published package
+
+A published package keeps its entry points at the root of `src/`, one file per bin or export, whatever their kind. `--root-entries` leaves the files at the root of the checked folder where they are, and checks everything below as usual:
+
+```sh
+npx check-tree src --root-entries
+```
+
+### Run the check from code
+
+```ts
+import { treeViolations } from '@brutalway/check-tree/treeViolations';
+
+const violations = treeViolations('src');
+```
+
+It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`.
+
+## Reference
+
+### Rules
 
 - no empty folder
 - a category folder (`components`, `hooks`, `stores`…) does not hold a single child: move the child up and delete the folder
@@ -29,33 +68,14 @@ So a feature with two components puts them in `components/`, and a `components/`
 
 Test files (`*.test.ts`, `*.test.tsx`) are not counted.
 
-```sh
-npm install --save-dev @brutalway/check-tree
-npx check-tree src
-```
+### Output
 
 It prints one line per problem and exits with code 1 if it found any.
 
-The default category folders are `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers` and `lib`. Pass your own list with `--categories`:
+### Options
 
-```sh
-npx check-tree src --categories components,hooks,utils
-```
-
-The grouping rule only applies to the kinds listed in the table that are also in this list.
-
-A published package keeps its entry points at the root of `src/`, one file per bin or export, whatever their kind. `--root-entries` leaves the files at the root of the checked folder where they are, and checks everything below as usual:
-
-```sh
-npx check-tree src --root-entries
-```
-
-The check is also exported as a function:
-
-```ts
-import { treeViolations } from '@brutalway/check-tree/treeViolations';
-
-const violations = treeViolations('src');
-```
-
-It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`.
+| Option                | Default                                                                                                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| folder                | `src`                                                                                                                                                                    |
+| `--categories <list>` | `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers`, `lib` |
+| `--root-entries`      | off                                                                                                                                                                      |

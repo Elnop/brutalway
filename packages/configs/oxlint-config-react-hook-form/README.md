@@ -1,6 +1,8 @@
 # @brutalway/oxlint-config-react-hook-form
 
-Oxlint config for react-hook-form with Zod. A form validates in one place, its schema, so the type of the values it hands over is the type the schema checked.
+Oxlint config for react-hook-form with Zod. A form validates in one place, its schema.
+
+## Install
 
 ```sh
 npm install --save-dev oxlint @brutalway/oxlint-config-react-hook-form
@@ -16,7 +18,13 @@ export default defineConfig({
 });
 ```
 
-## `form-conventions/zod-resolver`
+## Usage
+
+When `form-conventions/validation-in-schema` fires, move the rule into the Zod schema, where `.min(1, 'The title is blank')` also carries the message shown to the user.
+
+## Rules
+
+### `form-conventions/zod-resolver`
 
 `useForm` takes `resolver: zodResolver(XSchema)`. A `useForm()` without options, or with another resolver, is reported:
 
@@ -24,6 +32,10 @@ export default defineConfig({
 useForm({ resolver: zodResolver(TodoDraftSchema), defaultValues: { title: '' } });
 ```
 
-## `form-conventions/validation-in-schema`
+### `form-conventions/validation-in-schema`
 
-No validation outside the schema: `register('title', { required: true })`, `useController({ rules })` and `<Controller rules={...} />` are reported. Move the rule into the Zod schema, where `.min(1, 'The title is blank')` also carries the message shown to the user.
+No validation outside the schema: `register('title', { required: true })`, `useController({ rules })` and `<Controller rules={...} />` are reported.
+
+## Why
+
+With the schema as the only place that validates, the type of the values the form hands over is the type the schema checked.

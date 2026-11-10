@@ -1,11 +1,15 @@
 # @brutalway/color-utils
 
-Color code shared by two `@brutalway` configs, which bundle it at build time. You probably want one of those instead:
+Color code shared by two `@brutalway` configs, which bundle it at build time.
+
+## Install
+
+The package is private and not published to npm. You probably want one of the configs that use it:
 
 - [@brutalway/oxlint-config-tailwind](https://www.npmjs.com/package/@brutalway/oxlint-config-tailwind)
 - [@brutalway/stylelint-config](https://www.npmjs.com/package/@brutalway/stylelint-config)
 
-It exports:
+## Reference
 
 - `oklab(value)`: a hex, `rgb()`, `rgba()` or `oklch()` color in Oklab, or `undefined` for any other value
 - `oklabDistance(left, right)`: the Euclidean distance between two Oklab colors

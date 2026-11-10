@@ -1,10 +1,8 @@
 # @brutalway/oxlint-config-zustand
 
-Oxlint config for zustand stores and their selectors. It extends [@brutalway/oxlint-config-typescript](https://www.npmjs.com/package/@brutalway/oxlint-config-typescript) and turns on [@brutalway/eslint-plugin-store-layout](https://www.npmjs.com/package/@brutalway/eslint-plugin-store-layout): `viewStore.ts` only exports `viewStore` and `viewActions`.
+Oxlint config for zustand stores and their selectors. It extends [@brutalway/oxlint-config-typescript](https://www.npmjs.com/package/@brutalway/oxlint-config-typescript) and turns on [@brutalway/eslint-plugin-store-layout](https://www.npmjs.com/package/@brutalway/eslint-plugin-store-layout).
 
-An `xSelectors.ts` file only exports functions named `selectX`.
-
-In `*Store.ts` files, the base config's placement rule only refuses exported types, since a store exports the result of `create(...)`, and the file naming rule is off, since `store-layout` already checks the names.
+## Install
 
 ```sh
 npm install --save-dev oxlint @brutalway/oxlint-config-zustand
@@ -19,3 +17,13 @@ export default defineConfig({
   extends: [reactConfig, zustandConfig],
 });
 ```
+
+## Rules
+
+- `viewStore.ts` only exports `viewStore` and `viewActions` (`store-layout`)
+- an `xSelectors.ts` file only exports functions named `selectX`
+- in `*Store.ts` files, the base config's placement rule only refuses exported types, and the file naming rule is off
+
+## Why
+
+In `*Store.ts` files the placement rule only refuses exported types, since a store exports the result of `create(...)`. The file naming rule is off in `*Store.ts` files since `store-layout` already checks the names.

@@ -2,6 +2,8 @@
 
 Oxlint config for Tailwind CSS v4 projects that keep their design tokens in one stylesheet. Every color, font and shadow is declared under `@theme` in `src/app/globals.css`, and the rules below keep the components on those tokens.
 
+## Install
+
 ```sh
 npm install --save-dev oxlint @brutalway/oxlint-config-tailwind
 ```
@@ -16,7 +18,23 @@ export default defineConfig({
 });
 ```
 
-## `tailwind/color-tokens`
+## Usage
+
+### Point the color rule at another stylesheet
+
+The stylesheet path is an option of `tailwind/color-tokens`, relative to the folder oxlint runs from:
+
+```ts
+rules: { 'tailwind/color-tokens': ['error', { stylesheet: 'app/styles.css' }] }
+```
+
+### Get the closest tokens in the message
+
+The palette colors are read from the `tailwindcss/theme.css` of the project, so the closest tokens are only computed when `tailwindcss` is installed.
+
+## Rules
+
+### `tailwind/color-tokens`
 
 A color comes from a `--color-*` variable declared under `@theme`. The rule reports:
 
@@ -30,18 +48,16 @@ It reads the class names in `className` and `class`, including the strings passe
 text-zinc-500 is not a color token. Use a color declared under @theme in src/app/globals.css, closest: text-blue, text-yellow, text-ink.
 ```
 
-The palette colors are read from the `tailwindcss/theme.css` of the project, so the closest tokens are only computed when `tailwindcss` is installed. The stylesheet path is an option, relative to the folder oxlint runs from:
-
-```ts
-rules: { 'tailwind/color-tokens': ['error', { stylesheet: 'app/styles.css' }] }
-```
-
 `bg-(--color-ink)`, `bg-transparent`, `fill="currentColor"` and `var(--color-ink)` are allowed.
 
-## `tailwind/font-roles`
+### `tailwind/font-roles`
 
 `h1`, `h2` and `h3` take `font-display`, `code` and `pre` take `font-mono`. The body inherits `font-sans`, which Tailwind applies to `html`. A `className` built only from variables, with no string in it, is not checked.
 
-## `tailwind/no-dark-variant`
+### `tailwind/no-dark-variant`
 
-A `dark:` class is reported. A dark theme gives each token a dark value in the stylesheet that declares it, under `@media (prefers-color-scheme: dark)`, so the classes stay the same in both themes and a component never picks a color per theme.
+A `dark:` class is reported.
+
+## Why
+
+A dark theme gives each token a dark value in the stylesheet that declares it, under `@media (prefers-color-scheme: dark)`, so the classes stay the same in both themes and a component never picks a color per theme. That is why `tailwind/no-dark-variant` rejects `dark:`.
