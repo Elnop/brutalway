@@ -14,6 +14,7 @@ export function parseDocsRoute(fullHash: string): DocsRoute | undefined {
   const path = separator === -1 ? '' : rest.slice(separator + 1);
   const source = sourceKey === '' ? sources[0] : sources.find((candidate) => candidate.key === sourceKey);
   if (source === undefined) return undefined;
-  const page = { source, path: path === '' ? (source.files[0] ?? '') : path };
+  const requested = path === '' ? (source.files[0] ?? '') : path;
+  const page = { source, path: source.moved?.[requested] ?? requested };
   return section === '' ? page : { ...page, section };
 }

@@ -8,6 +8,7 @@ export type DocSource = {
   folder?: string;
   changelog?: string;
   order?: string[];
+  moved?: Record<string, string>;
 };
 
 export type DocEntry = {

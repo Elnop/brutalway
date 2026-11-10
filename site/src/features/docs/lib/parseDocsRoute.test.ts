@@ -8,7 +8,7 @@ describe('parseDocsRoute', () => {
   });
 
   it('reads the source and the path', () => {
-    expect(parseDocsRoute('#/docs/brutalway/docs/intent.md')).toMatchObject({ source: { key: 'brutalway' }, path: 'docs/intent.md' });
+    expect(parseDocsRoute('#/docs/brutalway/docs/concepts/intent.md')).toMatchObject({ source: { key: 'brutalway' }, path: 'docs/concepts/intent.md' });
   });
 
   it('opens the template index by default', () => {
@@ -28,14 +28,25 @@ describe('parseDocsRoute', () => {
     expect(parseDocsRoute('#/packages/lint-utils')).not.toHaveProperty('source.changelog');
   });
 
+  it('opens the new path of a page that moved, with its section', () => {
+    expect(parseDocsRoute('#/docs/brutalway/docs/intent.md#bounded')).toMatchObject({ source: { key: 'brutalway' }, path: 'docs/concepts/intent.md', section: 'bounded' });
+    expect(parseDocsRoute('#/docs/brutalway/docs/inspirations.md')).toMatchObject({ path: 'docs/concepts/inspirations.md' });
+    expect(parseDocsRoute('#/templates/vite/docs/verifications.md')).toMatchObject({ source: { key: 'vite' }, path: 'docs/reference/verifications.md' });
+    expect(parseDocsRoute('#/templates/fastify/docs/architecture.md')).toMatchObject({ source: { key: 'fastify' }, path: 'docs/concepts/architecture.md' });
+  });
+
   it('keeps each source in its own section', () => {
     expect(parseDocsRoute('#/docs/vite')).toBeUndefined();
     expect(parseDocsRoute('#/templates/brutalway')).toBeUndefined();
   });
 
   it('reads the section after the page', () => {
-    expect(parseDocsRoute('#/docs/brutalway/docs/intent.md#why-it-exists')).toStrictEqual({ source: expect.objectContaining({ key: 'brutalway' }), path: 'docs/intent.md', section: 'why-it-exists' });
-    expect(parseDocsRoute('#/docs/brutalway/docs/intent.md')).not.toHaveProperty('section');
+    expect(parseDocsRoute('#/docs/brutalway/docs/concepts/intent.md#bounded')).toStrictEqual({
+      source: expect.objectContaining({ key: 'brutalway' }),
+      path: 'docs/concepts/intent.md',
+      section: 'bounded',
+    });
+    expect(parseDocsRoute('#/docs/brutalway/docs/concepts/intent.md')).not.toHaveProperty('section');
     expect(parseDocsRoute('#/templates/vite#install')).toMatchObject({ source: { key: 'vite' }, path: 'README.md', section: 'install' });
   });
 

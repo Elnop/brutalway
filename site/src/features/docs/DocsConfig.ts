@@ -5,6 +5,8 @@ export const DOCS_BRANCH = 'main';
 
 const TEMPLATE_DOC_ORDER = ['README.md', 'docs/guides/start-', 'docs/guides/', 'docs/reference/', 'docs/concepts/'];
 
+const TEMPLATE_MOVED_DOCS = { 'docs/architecture.md': 'docs/concepts/architecture.md', 'docs/verifications.md': 'docs/reference/verifications.md' };
+
 const PUBLISHED_PACKAGES = [
   'configs/oxlint-config-typescript',
   'configs/oxlint-config-react',
@@ -55,6 +57,7 @@ export const DOC_SOURCES: DocSource[] = [
     files: ['README.md', 'packages/tools/create-brutal/README.md', 'CONTRIBUTING.md'],
     order: ['README.md', 'docs/getting-started.md', 'docs/guides/', 'docs/reference/', 'packages/tools/create-brutal/README.md', 'docs/concepts/', 'CONTRIBUTING.md', 'docs/roadmap.md'],
     folder: 'docs',
+    moved: { 'docs/intent.md': 'docs/concepts/intent.md', 'docs/inspirations.md': 'docs/concepts/inspirations.md' },
   },
   { key: 'all', label: 'templates', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates', files: ['README.md'] },
   {
@@ -67,6 +70,7 @@ export const DOC_SOURCES: DocSource[] = [
     folder: 'docs',
     changelog: 'CHANGELOG.md',
     order: TEMPLATE_DOC_ORDER,
+    moved: TEMPLATE_MOVED_DOCS,
   },
   {
     key: 'fastify',
@@ -78,6 +82,7 @@ export const DOC_SOURCES: DocSource[] = [
     folder: 'docs',
     changelog: 'CHANGELOG.md',
     order: TEMPLATE_DOC_ORDER,
+    moved: TEMPLATE_MOVED_DOCS,
   },
   {
     key: 'package',
@@ -89,6 +94,7 @@ export const DOC_SOURCES: DocSource[] = [
     folder: 'docs',
     changelog: 'CHANGELOG.md',
     order: TEMPLATE_DOC_ORDER,
+    moved: TEMPLATE_MOVED_DOCS,
   },
   PACKAGES_INDEX,
   ...PUBLISHED_PACKAGES.map((folder) => packageSource(folder, true)),
