@@ -11,7 +11,9 @@ function parentNumber(value: unknown): number | undefined {
   return Number.isInteger(number) ? number : undefined;
 }
 
-function issueStatus(value: Record<string, unknown>): Pick<RoadmapIssue, 'closed' | 'completed' | 'labels' | 'parent'> {
+function issueStatus(
+  value: Record<string, unknown>,
+): Pick<RoadmapIssue, 'closed' | 'completed' | 'labels' | 'parent'> {
   const labels = value['labels'];
   return {
     closed: value['state'] === 'closed',

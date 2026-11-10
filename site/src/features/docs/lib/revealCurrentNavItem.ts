@@ -7,5 +7,7 @@ export function revealCurrentNavItem(): void {
   const navBox = nav.getBoundingClientRect();
   const itemBox = item.getBoundingClientRect();
   if (itemBox.top < navBox.top) nav.scrollBy({ top: itemBox.top - navBox.top - NAV_MARGIN });
-  else if (itemBox.bottom > navBox.bottom) nav.scrollBy({ top: itemBox.bottom - navBox.bottom + NAV_MARGIN });
+  else if (itemBox.bottom > navBox.bottom) {
+    nav.scrollBy({ top: itemBox.bottom - navBox.bottom + NAV_MARGIN });
+  }
 }

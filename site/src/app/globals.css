@@ -70,7 +70,11 @@ main {
 
 a {
   color: inherit;
-  background: linear-gradient(var(--link-highlight, var(--yellow)), var(--link-highlight, var(--yellow))) no-repeat left / 0% 100%;
+  background: linear-gradient(
+      var(--link-highlight, var(--yellow)),
+      var(--link-highlight, var(--yellow))
+    )
+    no-repeat left / 0% 100%;
   transition: background-size 150ms ease;
 }
 

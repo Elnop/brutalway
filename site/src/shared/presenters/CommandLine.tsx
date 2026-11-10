@@ -16,7 +16,12 @@ type CommandLineProps = {
 export function CommandLine({ shadow }: CommandLineProps) {
   const { status, copy } = useCopyToClipboard(COMMAND);
   return (
-    <button type="button" className={`command command-${shadow}`} onClick={copy} aria-label={`Copy ${COMMAND}`}>
+    <button
+      type="button"
+      className={`command command-${shadow}`}
+      onClick={copy}
+      aria-label={`Copy ${COMMAND}`}
+    >
       <code>{COMMAND}</code>
       <span className={`command-status command-status-${status}`} aria-live="polite">
         {STATUS_LABELS[status]}

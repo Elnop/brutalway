@@ -10,24 +10,68 @@ const authors = Array.from({ length: AUTHOR_COUNT }, (_unused, index) => ({
 }));
 
 const steps = [
-  { number: '01', title: 'An author writes a file', detail: 'A person in their editor, or an agent with an Edit or a Write.', tone: 'paper' },
-  { number: '02', title: 'The checks run', detail: 'After each edit for an agent, through the Claude Code hook. Before each commit and in CI for everyone.', tone: 'yellow' },
-  { number: '03', title: 'The error comes back', detail: 'It names the file, the rule and what to change.', tone: 'pink' },
-  { number: '04', title: 'The author fixes it', detail: 'Right away, while the change is still in mind or in context.', tone: 'paper' },
+  {
+    number: '01',
+    title: 'An author writes a file',
+    detail: 'A person in their editor, or an agent with an Edit or a Write.',
+    tone: 'paper',
+  },
+  {
+    number: '02',
+    title: 'The checks run',
+    detail:
+      'After each edit for an agent, through the Claude Code hook. Before each commit and in CI for everyone.',
+    tone: 'yellow',
+  },
+  {
+    number: '03',
+    title: 'The error comes back',
+    detail: 'It names the file, the rule and what to change.',
+    tone: 'pink',
+  },
+  {
+    number: '04',
+    title: 'The author fixes it',
+    detail: 'Right away, while the change is still in mind or in context.',
+    tone: 'paper',
+  },
 ];
+
+type AuthorTileProps = {
+  author: (typeof authors)[number];
+};
+
+function AuthorTile({ author }: AuthorTileProps) {
+  return (
+    <div
+      className={author.isAgent ? 'authors-tile tone-yellow' : 'authors-tile tone-paper'}
+      style={{ opacity: author.opacity }}
+    >
+      <span
+        className="authors-icon"
+        style={{
+          maskImage: `url(${import.meta.env.BASE_URL}${author.isAgent ? 'agent' : 'human'}.svg)`,
+        }}
+      />
+    </div>
+  );
+}
 
 function AuthorsFunnel() {
   return (
     <div className="authors-funnel reveal reveal-stamp" aria-hidden="true">
       <div className="authors-crowd">
         {authors.map((author) => (
-          <div key={author.id} className={author.isAgent ? 'authors-tile tone-yellow' : 'authors-tile tone-paper'} style={{ opacity: author.opacity }}>
-            <span className="authors-icon" style={{ maskImage: `url(${import.meta.env.BASE_URL}${author.isAgent ? 'agent' : 'human'}.svg)` }} />
-          </div>
+          <AuthorTile key={author.id} author={author} />
         ))}
       </div>
       <svg className="authors-arrow" width="40" height="56" viewBox="0 0 40 56">
-        <path d="M20 0 V48 M6 34 L20 50 L34 34" fill="none" strokeWidth="5" strokeLinecap="square" />
+        <path
+          d="M20 0 V48 M6 34 L20 50 L34 34"
+          fill="none"
+          strokeWidth="5"
+          strokeLinecap="square"
+        />
       </svg>
       <code className="authors-check">npm run check</code>
     </div>
@@ -55,8 +99,10 @@ export function AuthorsSection() {
         <div className="authors-intro reveal">
           <h2>One author or ten thousand</h2>
           <p>
-            A developer, a team, or a fleet of agents running in parallel: every change goes through the same checks. The rules do not loosen as the team grows, and no one needs onboarding. Agents
-            start each session with no memory of the last one, and it does not matter: the error teaches the convention again.
+            A developer, a team, or a fleet of agents running in parallel: every change goes through
+            the same checks. The rules do not loosen as the team grows, and no one needs onboarding.
+            Agents start each session with no memory of the last one, and it does not matter: the
+            error teaches the convention again.
           </p>
         </div>
         <AuthorsFunnel />

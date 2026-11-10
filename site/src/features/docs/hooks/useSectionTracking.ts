@@ -11,7 +11,10 @@ function scrollToSection(section: string | undefined): void {
   else document.getElementById(section)?.scrollIntoView();
 }
 
-function trackVisibleSection(slugs: string[], setVisible: (section: string | undefined) => void): () => void {
+function trackVisibleSection(
+  slugs: string[],
+  setVisible: (section: string | undefined) => void,
+): () => void {
   let frame = 0;
   function update() {
     cancelAnimationFrame(frame);
@@ -27,13 +30,22 @@ function trackVisibleSection(slugs: string[], setVisible: (section: string | und
   };
 }
 
-function writeSectionHash(source: DocsRoute['source'], path: string, visible: string | undefined): void {
-  const hash = visible === undefined ? docHref(source, path) : `${docHref(source, path)}#${visible}`;
+function writeSectionHash(
+  source: DocsRoute['source'],
+  path: string,
+  visible: string | undefined,
+): void {
+  const hash =
+    visible === undefined ? docHref(source, path) : `${docHref(source, path)}#${visible}`;
   if (window.location.hash !== hash) window.history.replaceState(window.history.state, '', hash);
   if (visible !== undefined) revealCurrentNavItem();
 }
 
-export function useSectionTracking(route: DocsRoute, slugs: string[], ready: boolean): string | undefined | null {
+export function useSectionTracking(
+  route: DocsRoute,
+  slugs: string[],
+  ready: boolean,
+): string | undefined | null {
   const [visible, setVisible] = useState<string | undefined | null>(null);
   const written = useRef<WrittenSection>(undefined);
   const { section } = route;

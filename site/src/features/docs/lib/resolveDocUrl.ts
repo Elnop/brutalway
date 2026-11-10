@@ -14,7 +14,9 @@ type DocLink = {
 const ABSOLUTE_URL = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/iu;
 
 function pathInSource(source: DocSource, fullPath: string): string | undefined {
-  if (source.directory === '' || fullPath === source.directory) return source.directory === '' ? fullPath : '';
+  if (source.directory === '' || fullPath === source.directory) {
+    return source.directory === '' ? fullPath : '';
+  }
   const prefix = `${source.directory}/`;
   return fullPath.startsWith(prefix) ? fullPath.slice(prefix.length) : undefined;
 }
@@ -48,5 +50,7 @@ export function resolveDocUrl({ url, attribute, source, docPath, knownPaths }: D
   const repository = { ...source, directory: '' };
   if (attribute === 'src') return rawFileUrl(repository, fullPath);
   const href = siteHref(source, fullPath, knownPaths);
-  return href === undefined ? `${githubFileUrl(repository, fullPath)}${resolved.hash}` : `${href}${resolved.hash}`;
+  return href === undefined
+    ? `${githubFileUrl(repository, fullPath)}${resolved.hash}`
+    : `${href}${resolved.hash}`;
 }

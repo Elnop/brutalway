@@ -18,7 +18,9 @@ function parseMarkdown(markdown: string) {
 function headingCategory(node: Heading, slugger: GithubSlugger): PackageCategory | undefined {
   const title = toString(node, { includeImageAlt: false });
   const slug = slugger.slug(title);
-  return node.depth < CATEGORY_DEPTH ? undefined : { title, slug, depth: node.depth, packages: [], children: [] };
+  return node.depth < CATEGORY_DEPTH
+    ? undefined
+    : { title, slug, depth: node.depth, packages: [], children: [] };
 }
 
 function addCategory(roots: PackageCategory[], open: PackageCategory[], category: PackageCategory) {
@@ -30,7 +32,13 @@ function addCategory(roots: PackageCategory[], open: PackageCategory[], category
 }
 
 function tableLinks(node: Table): string[] {
-  return node.children.slice(1).flatMap((row) => (row.children[0]?.children ?? []).flatMap((child) => (child.type === 'link' ? [child.url] : [])).slice(0, 1));
+  return node.children
+    .slice(1)
+    .flatMap((row) =>
+      (row.children[0]?.children ?? [])
+        .flatMap((child) => (child.type === 'link' ? [child.url] : []))
+        .slice(0, 1),
+    );
 }
 
 export function packageCategories(markdown: string): PackageCategory[] {

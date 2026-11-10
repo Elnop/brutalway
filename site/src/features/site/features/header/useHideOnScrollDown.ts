@@ -5,7 +5,10 @@ const SCROLL_TOLERANCE = 8;
 
 type HeaderRef = RefObject<HTMLElement | null>;
 
-function watchScrollDirection(headerRef: HeaderRef, setIsScrolledDown: (isScrolledDown: boolean) => void): () => void {
+function watchScrollDirection(
+  headerRef: HeaderRef,
+  setIsScrolledDown: (isScrolledDown: boolean) => void,
+): () => void {
   let lastScrollY = window.scrollY;
   function onScroll(): void {
     const scrollY = window.scrollY;
@@ -18,7 +21,10 @@ function watchScrollDirection(headerRef: HeaderRef, setIsScrolledDown: (isScroll
   return () => window.removeEventListener('scroll', onScroll);
 }
 
-function watchFocusWithin(header: HTMLElement, setHasFocus: (hasFocus: boolean) => void): () => void {
+function watchFocusWithin(
+  header: HTMLElement,
+  setHasFocus: (hasFocus: boolean) => void,
+): () => void {
   function onFocusIn(): void {
     setHasFocus(true);
   }

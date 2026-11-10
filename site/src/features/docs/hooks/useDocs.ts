@@ -11,12 +11,18 @@ import { rawFileUrl } from '@/features/docs/lib/githubUrls.ts';
 import { QUERY_CACHE } from '@/shared/configs/QueryConfig.ts';
 
 export function useDocList(): DocEntry[] {
-  const query = useQuery({ queryKey: docsKeys.list(), queryFn: async ({ signal }) => loadDocList(signal), ...QUERY_CACHE.session });
+  const query = useQuery({
+    queryKey: docsKeys.list(),
+    queryFn: async ({ signal }) => loadDocList(signal),
+    ...QUERY_CACHE.session,
+  });
   return query.data ?? fixedEntries();
 }
 
 export function useDocContent(source: DocSource, path: string): LoadState<string> {
-  const query = useQuery(path === source.roadmap ? roadmapQuery(source.repo) : contentQuery(rawFileUrl(source, path)));
+  const query = useQuery(
+    path === source.roadmap ? roadmapQuery(source.repo) : contentQuery(rawFileUrl(source, path)),
+  );
   if (query.isPending) return { status: 'loading' };
   if (query.isError) return { status: 'error', message: query.error.message };
   return { status: 'ready', value: query.data };
@@ -24,27 +30,50 @@ export function useDocContent(source: DocSource, path: string): LoadState<string
 
 export function usePackageCategories(enabled: boolean): PackageCategory[] {
   const url = rawFileUrl(PACKAGES_INDEX, PACKAGES_INDEX.files[0] ?? '');
-  const query = useQuery({ queryKey: docsKeys.content(url), queryFn: async ({ signal }) => fetchDocText(url, signal), enabled, select: packageCategories, ...QUERY_CACHE.session });
+  const query = useQuery({
+    queryKey: docsKeys.content(url),
+    queryFn: async ({ signal }) => fetchDocText(url, signal),
+    enabled,
+    select: packageCategories,
+    ...QUERY_CACHE.session,
+  });
   return query.data ?? [];
 }
 
-export function useDocTitles(entries: DocEntry[], route: string): DocEntry[] {
-  const pages = entries.flatMap((entry) => {
+function titledPages(entries: DocEntry[], route: string) {
+  return entries.flatMap((entry) => {
     const source = DOC_SOURCES.find((candidate) => candidate.key === entry.sourceKey);
-    return source === undefined || source.route !== route || source.route === PACKAGES_INDEX.route || entry.path === source.changelog || entry.path === source.roadmap
+    return source === undefined ||
+      source.route !== route ||
+      source.route === PACKAGES_INDEX.route ||
+      entry.path === source.changelog ||
+      entry.path === source.roadmap
       ? []
       : [{ entry, url: rawFileUrl(source, entry.path) }];
   });
+}
+
+export function useDocTitles(entries: DocEntry[], route: string): DocEntry[] {
+  const pages = titledPages(entries, route);
   const titles = useQueries({
-    queries: pages.map(({ url }) => ({ queryKey: docsKeys.content(url), queryFn: async ({ signal }: { signal: AbortSignal }) => fetchDocText(url, signal), ...QUERY_CACHE.session })),
+    queries: pages.map(({ url }) => ({
+      queryKey: docsKeys.content(url),
+      queryFn: async ({ signal }: { signal: AbortSignal }) => fetchDocText(url, signal),
+      ...QUERY_CACHE.session,
+    })),
     combine: (results) =>
       new Map(
         results.flatMap((result, index) => {
           const page = pages[index];
           const title = result.data === undefined ? undefined : docMainTitle(result.data);
-          return page === undefined || title === undefined ? [] : [[`${page.entry.sourceKey}/${page.entry.path}`, title] as const];
+          return page === undefined || title === undefined
+            ? []
+            : [[`${page.entry.sourceKey}/${page.entry.path}`, title] as const];
         }),
       ),
   });
-  return entries.map((entry) => ({ ...entry, title: titles.get(`${entry.sourceKey}/${entry.path}`) ?? entry.title }));
+  return entries.map((entry) => ({
+    ...entry,
+    title: titles.get(`${entry.sourceKey}/${entry.path}`) ?? entry.title,
+  }));
 }

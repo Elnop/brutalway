@@ -14,7 +14,12 @@ const REPOSITORY_FILES = [
 ];
 
 function treeAnswer(): Response {
-  return new Response(JSON.stringify({ truncated: false, tree: REPOSITORY_FILES.map((path) => ({ type: 'blob', path })) }));
+  return new Response(
+    JSON.stringify({
+      truncated: false,
+      tree: REPOSITORY_FILES.map((path) => ({ type: 'blob', path })),
+    }),
+  );
 }
 
 function paths(entries: { sourceKey: string; path: string }[], sourceKey: string): string[] {
@@ -37,8 +42,20 @@ describe('docList', () => {
     const fetchMock = vi.fn<() => Promise<Response>>(async () => treeAnswer());
     vi.stubGlobal('fetch', fetchMock);
     const entries = await loadDocList(new AbortController().signal);
-    expect(paths(entries, 'brutalway')).toStrictEqual(['README.md', 'docs/getting-started.md', 'packages/tools/create-brutal/README.md', 'docs/concepts/intent.md', 'CONTRIBUTING.md', 'roadmap']);
-    expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/guides/setup.md', 'docs/architecture.md', 'CHANGELOG.md']);
+    expect(paths(entries, 'brutalway')).toStrictEqual([
+      'README.md',
+      'docs/getting-started.md',
+      'packages/tools/create-brutal/README.md',
+      'docs/concepts/intent.md',
+      'CONTRIBUTING.md',
+      'roadmap',
+    ]);
+    expect(paths(entries, 'vite')).toStrictEqual([
+      'README.md',
+      'docs/guides/setup.md',
+      'docs/architecture.md',
+      'CHANGELOG.md',
+    ]);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 

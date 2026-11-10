@@ -11,5 +11,7 @@ export function sourcePath(source: DocSource, path: string): string {
 }
 
 export function docSourceUrl(source: DocSource, path: string): string {
-  return path === source.roadmap ? `https://github.com/${source.repo}/issues` : githubFileUrl(source, path);
+  return path === source.roadmap
+    ? `https://github.com/${source.repo}/issues`
+    : githubFileUrl(source, path);
 }

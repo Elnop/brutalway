@@ -1,4 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignoreDependencies": ["@swc/core", "@brutalway/alint-config", "@brutalway/dependency-cruiser-config"]
+  "ignoreDependencies": [
+    "@swc/core",
+    "@brutalway/alint-config",
+    "@brutalway/dependency-cruiser-config"
+  ]
 }

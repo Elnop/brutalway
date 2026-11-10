@@ -26,7 +26,8 @@ export function Hero() {
         <div className="hero-pitch-text">
           <h1>Every convention is a check.</h1>
           <p>
-            When a person or an AI agent breaks one, <code>npm run check</code> fails and says what to change. Nothing is left to memory or to code review.
+            When a person or an AI agent breaks one, <code>npm run check</code> fails and says what
+            to change. Nothing is left to memory or to code review.
           </p>
         </div>
         <div className="hero-actions">

@@ -11,16 +11,28 @@ function orderRank(order: string[], path: string): number {
 }
 
 function sourceEntries(source: DocSource, folderPaths: string[]): DocEntry[] {
-  const paths = [...source.files, ...folderPaths, ...(source.roadmap === undefined ? [] : [source.roadmap]), ...(source.changelog === undefined ? [] : [source.changelog])];
+  const paths = [
+    ...source.files,
+    ...folderPaths,
+    ...(source.roadmap === undefined ? [] : [source.roadmap]),
+    ...(source.changelog === undefined ? [] : [source.changelog]),
+  ];
   const { order } = source;
-  const ordered = order === undefined ? paths : Array.from({ length: order.length + 1 }, (_, rank) => paths.filter((path) => orderRank(order, path) === rank)).flat();
+  const ordered =
+    order === undefined
+      ? paths
+      : Array.from({ length: order.length + 1 }, (_, rank) =>
+          paths.filter((path) => orderRank(order, path) === rank),
+        ).flat();
   return ordered.map((path) => ({ sourceKey: source.key, path, title: docTitle(path) }));
 }
 
 function folderDocs(source: DocSource, files: string[] | undefined): string[] {
   if (source.folder === undefined || files === undefined) return [];
   const prefix = `${repositoryPath(source, source.folder)}/`;
-  return files.filter((file) => file.startsWith(prefix) && file.endsWith('.md')).map((file) => sourcePath(source, file));
+  return files
+    .filter((file) => file.startsWith(prefix) && file.endsWith('.md'))
+    .map((file) => sourcePath(source, file));
 }
 
 export function fixedEntries(): DocEntry[] {
@@ -29,6 +41,12 @@ export function fixedEntries(): DocEntry[] {
 
 export async function loadDocList(signal: AbortSignal): Promise<DocEntry[]> {
   const repos = [...new Set(DOC_SOURCES.map((source) => source.repo))];
-  const trees = new Map(await Promise.all(repos.map(async (repo) => [repo, await listRepositoryFiles(repo, signal)] as const)));
-  return DOC_SOURCES.flatMap((source) => sourceEntries(source, folderDocs(source, trees.get(source.repo))));
+  const trees = new Map(
+    await Promise.all(
+      repos.map(async (repo) => [repo, await listRepositoryFiles(repo, signal)] as const),
+    ),
+  );
+  return DOC_SOURCES.flatMap((source) =>
+    sourceEntries(source, folderDocs(source, trees.get(source.repo))),
+  );
 }

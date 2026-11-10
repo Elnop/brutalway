@@ -5,11 +5,20 @@ import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
 
 const [brutalway, , vite] = DOC_SOURCES;
 const checkTree = DOC_SOURCES.find((source) => source.key === 'check-tree');
-const paths = ['README.md', 'packages/tools/create-brutal/README.md', 'docs/intent.md', 'docs/roadmap/README.md', 'docs/roadmap/e1-tailwind-css.md', 'docs/roadmap/order.md'];
+const paths = [
+  'README.md',
+  'packages/tools/create-brutal/README.md',
+  'docs/intent.md',
+  'docs/roadmap/README.md',
+  'docs/roadmap/e1-tailwind-css.md',
+  'docs/roadmap/order.md',
+];
 const entries = paths.map((path) => ({ sourceKey: 'brutalway', path, title: path }));
 
 function outline(nodes: DocNavNode[]): unknown[] {
-  return nodes.map((node) => (node.children.length === 0 ? node.title : { [node.title]: outline(node.children) }));
+  return nodes.map((node) =>
+    node.children.length === 0 ? node.title : { [node.title]: outline(node.children) },
+  );
 }
 
 describe('docNavGroups', () => {
@@ -18,7 +27,11 @@ describe('docNavGroups', () => {
     expect(group?.label).toBe('brutalway');
     expect(group?.href).toBe('#/docs/brutalway/README.md');
     expect(group?.current).toBe('page');
-    expect(outline(group?.nodes ?? [])).toStrictEqual(['packages/tools/create-brutal/README.md', 'docs/intent.md', 'docs/roadmap/README.md']);
+    expect(outline(group?.nodes ?? [])).toStrictEqual([
+      'packages/tools/create-brutal/README.md',
+      'docs/intent.md',
+      'docs/roadmap/README.md',
+    ]);
   });
 
   it('only unfolds the pages of the folder being read', () => {
@@ -37,11 +50,24 @@ describe('docNavGroups', () => {
       { depth: 3, text: 'Detail', slug: 'detail' },
       { depth: 2, text: 'Steps', slug: 'steps' },
     ];
-    const [group] = docNavGroups(entries, { source: brutalway, path: 'docs/roadmap/README.md', section: 'detail' }, headings);
+    const [group] = docNavGroups(
+      entries,
+      { source: brutalway, path: 'docs/roadmap/README.md', section: 'detail' },
+      headings,
+    );
     const roadmap = group?.nodes.at(-1);
-    expect(outline(roadmap?.children ?? [])).toStrictEqual([{ Why: ['Detail'] }, 'Steps', 'docs/roadmap/e1-tailwind-css.md', 'docs/roadmap/order.md']);
+    expect(outline(roadmap?.children ?? [])).toStrictEqual([
+      { Why: ['Detail'] },
+      'Steps',
+      'docs/roadmap/e1-tailwind-css.md',
+      'docs/roadmap/order.md',
+    ]);
     expect(roadmap?.current).toBe('page');
-    expect(roadmap?.children[0]?.children[0]).toMatchObject({ kind: 'section', href: '#/docs/brutalway/docs/roadmap/README.md#detail', current: 'location' });
+    expect(roadmap?.children[0]?.children[0]).toMatchObject({
+      kind: 'section',
+      href: '#/docs/brutalway/docs/roadmap/README.md#detail',
+      current: 'location',
+    });
     expect(group?.current).toBeUndefined();
   });
 
@@ -53,9 +79,14 @@ describe('docNavGroups', () => {
       { depth: 3, text: 'First', slug: 'first' },
     ];
     function roadmapOutline(section?: string) {
-      const route = section === undefined ? { source: brutalway, path: 'docs/roadmap/README.md' } : { source: brutalway, path: 'docs/roadmap/README.md', section };
+      const route =
+        section === undefined
+          ? { source: brutalway, path: 'docs/roadmap/README.md' }
+          : { source: brutalway, path: 'docs/roadmap/README.md', section };
       const [group] = docNavGroups(entries, route, headings);
-      return outline((group?.nodes.at(-1)?.children ?? []).filter((node) => node.kind === 'section'));
+      return outline(
+        (group?.nodes.at(-1)?.children ?? []).filter((node) => node.kind === 'section'),
+      );
     }
     expect(roadmapOutline()).toStrictEqual(['Why', 'Steps']);
     expect(roadmapOutline('steps')).toStrictEqual(['Why', { Steps: ['First'] }]);
@@ -71,16 +102,28 @@ describe('docNavGroups', () => {
       { depth: 3, text: 'Fastify', slug: 'fastify' },
     ];
     function sections(section: string) {
-      const [group] = docNavGroups(entries, { source: brutalway, path: 'docs/roadmap/README.md', section }, headings);
-      return outline((group?.nodes.at(-1)?.children ?? []).filter((node) => node.kind === 'section'));
+      const [group] = docNavGroups(
+        entries,
+        { source: brutalway, path: 'docs/roadmap/README.md', section },
+        headings,
+      );
+      return outline(
+        (group?.nodes.at(-1)?.children ?? []).filter((node) => node.kind === 'section'),
+      );
     }
     expect(sections('fastify')).toStrictEqual([{ Reference: ['Vite', 'Fastify'] }]);
-    expect(sections('vite')).toStrictEqual([{ Reference: [{ Vite: ['styling', 'ui'] }, 'Fastify'] }]);
+    expect(sections('vite')).toStrictEqual([
+      { Reference: [{ Vite: ['styling', 'ui'] }, 'Fastify'] },
+    ]);
     expect(sections('ui')).toStrictEqual([{ Reference: [{ Vite: ['styling', 'ui'] }, 'Fastify'] }]);
   });
 
   it('shows the templates together, and puts the sections of a landing page under the group label, level 3 at the top when it has no level 2', () => {
-    const groups = docNavGroups([{ sourceKey: 'vite', path: 'README.md', title: 'Overview' }], { source: vite, path: 'README.md' }, [{ depth: 3, text: 'Only', slug: 'only' }]);
+    const groups = docNavGroups(
+      [{ sourceKey: 'vite', path: 'README.md', title: 'Overview' }],
+      { source: vite, path: 'README.md' },
+      [{ depth: 3, text: 'Only', slug: 'only' }],
+    );
     expect(groups.map((group) => group.key)).toStrictEqual(['all', 'vite', 'fastify', 'package']);
     expect(outline(groups[1]?.nodes ?? [])).toStrictEqual(['Only']);
     expect(groups[1]?.current).toBe('page');
@@ -90,14 +133,39 @@ describe('docNavGroups', () => {
     expect(checkTree).toBeDefined();
     if (checkTree === undefined) return;
     const categories = [
-      { title: 'Configs', slug: 'configs', depth: 2, packages: [], children: [{ title: 'Oxlint', slug: 'oxlint', depth: 3, packages: ['configs/oxlint-config-react'], children: [] }] },
-      { title: 'Checks', slug: 'checks', depth: 2, packages: ['tools/check-tree/', 'tools/unknown'], children: [] },
+      {
+        title: 'Configs',
+        slug: 'configs',
+        depth: 2,
+        packages: [],
+        children: [
+          {
+            title: 'Oxlint',
+            slug: 'oxlint',
+            depth: 3,
+            packages: ['configs/oxlint-config-react'],
+            children: [],
+          },
+        ],
+      },
+      {
+        title: 'Checks',
+        slug: 'checks',
+        depth: 2,
+        packages: ['tools/check-tree/', 'tools/unknown'],
+        children: [],
+      },
     ];
     const packageEntries = ['oxlint-config-react', 'check-tree'].flatMap((key) => [
       { sourceKey: key, path: 'README.md', title: 'Overview' },
       { sourceKey: key, path: 'CHANGELOG.md', title: 'Changelog' },
     ]);
-    const groups = docNavGroups(packageEntries, { source: checkTree, path: 'README.md' }, [{ depth: 2, text: 'Usage', slug: 'usage' }], categories);
+    const groups = docNavGroups(
+      packageEntries,
+      { source: checkTree, path: 'README.md' },
+      [{ depth: 2, text: 'Usage', slug: 'usage' }],
+      categories,
+    );
     expect(groups.map((group) => [group.label, group.href])).toStrictEqual([
       ['packages', '#/packages/packages/README.md'],
       ['Configs', '#/packages/packages/README.md#configs'],
@@ -105,13 +173,24 @@ describe('docNavGroups', () => {
     ]);
     expect(groups[0]?.current).toBeUndefined();
     expect(outline(groups[1]?.nodes ?? [])).toStrictEqual([{ Oxlint: ['react'] }]);
-    expect(outline(groups[2]?.nodes ?? [])).toStrictEqual([{ 'check-tree': ['Usage', 'Changelog'] }]);
-    expect(groups[2]?.nodes[0]).toMatchObject({ kind: 'page', current: 'page', children: [{ kind: 'section' }, { kind: 'detail', href: '#/packages/check-tree/CHANGELOG.md' }] });
+    expect(outline(groups[2]?.nodes ?? [])).toStrictEqual([
+      { 'check-tree': ['Usage', 'Changelog'] },
+    ]);
+    expect(groups[2]?.nodes[0]).toMatchObject({
+      kind: 'page',
+      current: 'page',
+      children: [
+        { kind: 'section' },
+        { kind: 'detail', href: '#/packages/check-tree/CHANGELOG.md' },
+      ],
+    });
   });
 
   it('keeps one group per source in the packages section until the index is read', () => {
     expect(checkTree).toBeDefined();
     if (checkTree === undefined) return;
-    expect(docNavGroups([], { source: checkTree, path: 'README.md' }, []).length).toBeGreaterThan(20);
+    expect(docNavGroups([], { source: checkTree, path: 'README.md' }, []).length).toBeGreaterThan(
+      20,
+    );
   });
 });

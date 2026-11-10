@@ -1,5 +1,8 @@
 import { useLayoutEffect, useState } from 'react';
-import { readThemeChoice, writeThemeChoice } from '@/features/site/features/theme-switch/themeStorage.ts';
+import {
+  readThemeChoice,
+  writeThemeChoice,
+} from '@/features/site/features/theme-switch/themeStorage.ts';
 import type { ThemeChoice } from '@/features/site/features/theme-switch/ThemeTypes.ts';
 
 export function useThemeChoice(): { choice: ThemeChoice; choose: (choice: ThemeChoice) => void } {

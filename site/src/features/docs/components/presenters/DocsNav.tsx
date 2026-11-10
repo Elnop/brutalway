@@ -8,7 +8,12 @@ type DocsNavListProps = {
   nodes: DocNavNode[];
 };
 
-const ITEM_CLASSES = { page: undefined, detail: 'docs-nav-section', section: 'docs-nav-section', category: 'docs-nav-category' };
+const ITEM_CLASSES = {
+  page: undefined,
+  detail: 'docs-nav-section',
+  section: 'docs-nav-section',
+  category: 'docs-nav-category',
+};
 
 function DocsNavList({ nodes }: DocsNavListProps) {
   return (
@@ -30,7 +35,11 @@ export function DocsNav({ groups }: DocsNavProps) {
     <nav aria-label="Documentation" className="docs-nav">
       {groups.map((group) => (
         <div key={group.key} className="docs-nav-group">
-          <a href={group.href} aria-current={group.current} className={group.isTitle ? 'docs-nav-label docs-nav-title' : 'docs-nav-label'}>
+          <a
+            href={group.href}
+            aria-current={group.current}
+            className={group.isTitle ? 'docs-nav-label docs-nav-title' : 'docs-nav-label'}
+          >
             {group.label}
           </a>
           {group.nodes.length > 0 && <DocsNavList nodes={group.nodes} />}

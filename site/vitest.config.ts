@@ -6,7 +6,12 @@ export default mergeConfig(
   defineConfig({
     test: {
       passWithNoTests: true,
-      projects: [{ extends: true, test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] } }],
+      projects: [
+        {
+          extends: true,
+          test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] },
+        },
+      ],
     },
   }),
 );

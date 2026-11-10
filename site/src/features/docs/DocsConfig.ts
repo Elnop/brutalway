@@ -5,9 +5,18 @@ export const DOCS_BRANCH = 'main';
 
 export const README_FILE = 'README.md';
 
-const TEMPLATE_DOC_ORDER = ['README.md', 'docs/guides/start-', 'docs/guides/', 'docs/reference/', 'docs/concepts/'];
+const TEMPLATE_DOC_ORDER = [
+  'README.md',
+  'docs/guides/start-',
+  'docs/guides/',
+  'docs/reference/',
+  'docs/concepts/',
+];
 
-const TEMPLATE_MOVED_DOCS = { 'docs/architecture.md': 'docs/concepts/architecture.md', 'docs/verifications.md': 'docs/reference/verifications.md' };
+const TEMPLATE_MOVED_DOCS = {
+  'docs/architecture.md': 'docs/concepts/architecture.md',
+  'docs/verifications.md': 'docs/reference/verifications.md',
+};
 
 const PUBLISHED_PACKAGES = [
   'configs/oxlint-config-typescript',
@@ -43,11 +52,25 @@ const PRIVATE_PACKAGES = ['utils/lint-utils', 'utils/color-utils'];
 
 function packageSource(folder: string, changelog: boolean): DocSource {
   const key = folder.slice(folder.indexOf('/') + 1);
-  const source = { key, label: key === 'create-brutal' ? key : `@brutalway/${key}`, route: PACKAGES_ROUTE, repo: 'Elnop/brutalway', directory: `packages/${folder}`, files: ['README.md'] };
+  const source = {
+    key,
+    label: key === 'create-brutal' ? key : `@brutalway/${key}`,
+    route: PACKAGES_ROUTE,
+    repo: 'Elnop/brutalway',
+    directory: `packages/${folder}`,
+    files: ['README.md'],
+  };
   return changelog ? { ...source, changelog: 'CHANGELOG.md' } : source;
 }
 
-export const PACKAGES_INDEX: DocSource = { key: 'packages', label: 'packages', route: PACKAGES_ROUTE, repo: 'Elnop/brutalway', directory: 'packages', files: ['README.md'] };
+export const PACKAGES_INDEX: DocSource = {
+  key: 'packages',
+  label: 'packages',
+  route: PACKAGES_ROUTE,
+  repo: 'Elnop/brutalway',
+  directory: 'packages',
+  files: ['README.md'],
+};
 
 export const DOC_SOURCES: DocSource[] = [
   {
@@ -57,12 +80,32 @@ export const DOC_SOURCES: DocSource[] = [
     repo: 'Elnop/brutalway',
     directory: '',
     files: ['README.md', 'packages/tools/create-brutal/README.md', 'CONTRIBUTING.md'],
-    order: ['README.md', 'docs/getting-started.md', 'docs/guides/', 'docs/reference/', 'packages/tools/create-brutal/README.md', 'docs/concepts/', 'CONTRIBUTING.md', 'roadmap'],
+    order: [
+      'README.md',
+      'docs/getting-started.md',
+      'docs/guides/',
+      'docs/reference/',
+      'packages/tools/create-brutal/README.md',
+      'docs/concepts/',
+      'CONTRIBUTING.md',
+      'roadmap',
+    ],
     folder: 'docs',
-    moved: { 'docs/intent.md': 'docs/concepts/intent.md', 'docs/inspirations.md': 'docs/concepts/inspirations.md', 'docs/roadmap.md': 'roadmap' },
+    moved: {
+      'docs/intent.md': 'docs/concepts/intent.md',
+      'docs/inspirations.md': 'docs/concepts/inspirations.md',
+      'docs/roadmap.md': 'roadmap',
+    },
     roadmap: 'roadmap',
   },
-  { key: 'all', label: 'templates', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates', files: ['README.md'] },
+  {
+    key: 'all',
+    label: 'templates',
+    route: TEMPLATES_ROUTE,
+    repo: 'Elnop/brutalway',
+    directory: 'templates',
+    files: ['README.md'],
+  },
   {
     key: 'vite',
     label: 'template-vite',

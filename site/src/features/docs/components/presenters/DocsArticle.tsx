@@ -32,16 +32,24 @@ function DocsMarkdown({ markdown, source, path, knownPaths }: DocsMarkdownProps)
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeSlug]}
       components={markdownComponents}
-      urlTransform={(url, attribute) => defaultUrlTransform(resolveDocUrl({ url, attribute, source, docPath: path, knownPaths }))}
+      urlTransform={(url, attribute) =>
+        defaultUrlTransform(resolveDocUrl({ url, attribute, source, docPath: path, knownPaths }))
+      }
     >
       {markdown}
     </Markdown>
   );
 }
 
+function sourceLabelOf(source: DocSource, path: string): string {
+  return path === source.roadmap
+    ? `${source.repo} issues`
+    : `${source.repo}/${repositoryPath(source, path)}`;
+}
+
 export function DocsArticle({ content, source, path, knownPaths }: DocsArticleProps) {
   const sourceUrl = docSourceUrl(source, path);
-  const sourceLabel = path === source.roadmap ? `${source.repo} issues` : `${source.repo}/${repositoryPath(source, path)}`;
+  const sourceLabel = sourceLabelOf(source, path);
   return (
     <article className="docs-article">
       {content.status === 'loading' && <p className="docs-status">Loading {path}…</p>}
@@ -50,7 +58,14 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
           {content.message} <SiteLink href={sourceUrl}>Read it on GitHub</SiteLink>.
         </p>
       )}
-      {content.status === 'ready' && <DocsMarkdown markdown={content.value} source={source} path={path} knownPaths={knownPaths} />}
+      {content.status === 'ready' && (
+        <DocsMarkdown
+          markdown={content.value}
+          source={source}
+          path={path}
+          knownPaths={knownPaths}
+        />
+      )}
       <p className="docs-source">
         <SiteLink href={sourceUrl}>{sourceLabel} on GitHub</SiteLink>
       </p>

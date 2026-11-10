@@ -47,7 +47,8 @@ export type DocNavGroup = {
   nodes: DocNavNode[];
 };
 
-export type LoadState<T> = { status: 'loading' } | { status: 'ready'; value: T } | { status: 'error'; message: string };
+export type LoadState<T> =
+  { status: 'loading' } | { status: 'ready'; value: T } | { status: 'error'; message: string };
 
 export type PackageCategory = {
   title: string;

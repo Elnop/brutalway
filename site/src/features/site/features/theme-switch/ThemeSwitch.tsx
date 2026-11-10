@@ -7,7 +7,12 @@ export function ThemeSwitch() {
   return (
     <div role="group" aria-label="Theme" className="theme-switch">
       {THEME_OPTIONS.map((option) => (
-        <button key={option.id} type="button" aria-pressed={option.id === choice} onClick={() => choose(option.id)}>
+        <button
+          key={option.id}
+          type="button"
+          aria-pressed={option.id === choice}
+          onClick={() => choose(option.id)}
+        >
           {option.label}
         </button>
       ))}

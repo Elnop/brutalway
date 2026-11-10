@@ -1,7 +1,12 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useHideOnScrollDown } from '@/features/site/features/header/useHideOnScrollDown.ts';
-import { DOCS_ROUTE, PACKAGES_ROUTE, REPOSITORY_URL, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
+import {
+  DOCS_ROUTE,
+  PACKAGES_ROUTE,
+  REPOSITORY_URL,
+  TEMPLATES_ROUTE,
+} from '@/shared/configs/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
@@ -15,7 +20,15 @@ function SiteLogo() {
       <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
         <rect x="9" y="9" width="27" height="27" fill="#ffe98f" stroke="#111111" strokeWidth="3" />
         <rect x="2" y="2" width="27" height="27" fill="#111111" />
-        <text x="15.5" y="23" textAnchor="middle" fontFamily="Space Grotesk, sans-serif" fontWeight="700" fontSize="19" fill="#fffdf5">
+        <text
+          x="15.5"
+          y="23"
+          textAnchor="middle"
+          fontFamily="Space Grotesk, sans-serif"
+          fontWeight="700"
+          fontSize="19"
+          fill="#fffdf5"
+        >
           B
         </text>
       </svg>
