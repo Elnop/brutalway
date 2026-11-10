@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/alint-config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "alint rules for a repository: category folders hold only their kind, every dependency is pinned (only devDependencies for a published library), doc links and anchors resolve.",
   "keywords": [
     "alint",
