@@ -13,16 +13,22 @@ function outline(nodes: DocNavNode[]): unknown[] {
 }
 
 describe('docNavGroups', () => {
-  it('nests the pages of a folder under its README, and leaves the landing page to the group label', () => {
+  it('folds the pages of a folder under its README, and leaves the landing page to the group label', () => {
     const [group] = docNavGroups(entries, { source: brutalway, path: 'README.md' }, []);
     expect(group?.label).toBe('brutalway');
     expect(group?.href).toBe('#/docs/brutalway/README.md');
     expect(group?.current).toBe('page');
+    expect(outline(group?.nodes ?? [])).toStrictEqual(['packages/tools/create-brutal/README.md', 'docs/intent.md', 'docs/roadmap/README.md']);
+  });
+
+  it('only unfolds the pages of the folder being read', () => {
+    const [group] = docNavGroups(entries, { source: brutalway, path: 'docs/roadmap/order.md' }, []);
     expect(outline(group?.nodes ?? [])).toStrictEqual([
       'packages/tools/create-brutal/README.md',
       'docs/intent.md',
       { 'docs/roadmap/README.md': ['docs/roadmap/e1-tailwind-css.md', 'docs/roadmap/order.md'] },
     ]);
+    expect(group?.nodes.at(-1)?.current).toBeUndefined();
   });
 
   it('puts the sections of the open page under its link, level 3 under level 2, before its subpages', () => {

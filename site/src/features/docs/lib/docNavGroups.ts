@@ -32,6 +32,10 @@ function sectionNodes(pageHref: string, headings: DocHeading[], section: string 
   return nodes.map((node) => (node.current === 'location' || node.children.some((child) => child.current === 'location') ? node : { ...node, children: [] }));
 }
 
+function holdsCurrent(node: DocNavNode): boolean {
+  return node.current !== undefined || node.children.some(holdsCurrent);
+}
+
 function sourceNodes(source: DocSource, entries: DocEntry[], route: DocsRoute, headings: DocHeading[]): DocNavNode[] {
   const paths = new Set(entries.map((entry) => entry.path));
   const childrenOf = new Map<string | undefined, DocEntry[]>();
@@ -44,7 +48,8 @@ function sourceNodes(source: DocSource, entries: DocEntry[], route: DocsRoute, h
     const isOpen = source.key === route.source.key && entry.path === route.path;
     const sections = isOpen ? sectionNodes(href, headings, route.section) : [];
     const pages = (childrenOf.get(entry.path) ?? []).map(build);
-    return { kind: 'page', title: entry.title, href, current: isOpen ? 'page' : undefined, children: [...sections, ...pages] };
+    const unfolded = isOpen || pages.some(holdsCurrent);
+    return { kind: 'page', title: entry.title, href, current: isOpen ? 'page' : undefined, children: unfolded ? [...sections, ...pages] : [] };
   }
   return (childrenOf.get(undefined) ?? []).map(build);
 }
