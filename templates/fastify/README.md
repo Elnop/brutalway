@@ -27,56 +27,14 @@ The API listens on `http://127.0.0.1:3000`, and the Swagger UI on `/docs`. `npm 
 
 `src/shared/lib/readEnv.ts` validates them with Zod at startup: an invalid value stops the server before it listens.
 
-## Commands
+## Documentation
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | starts the server and restarts it on each change |
-| `npm start` | starts the server |
-| `npm run check` | Prettier, `tsc`, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, alint, knip |
-| `npm test` | `node:test`: queries on an in-memory database, routes through `inject()` |
-| `npm run format` | Prettier in write mode |
-
-## Endpoints
-
-| Method | Path | |
-|---|---|---|
-| `GET` | `/todos?filter=all\|active\|completed` | list |
-| `POST` | `/todos` | create from `{ title }` |
-| `PATCH` | `/todos/:id` | change `title`, `completed` or both |
-| `DELETE` | `/todos/:id` | delete one |
-| `DELETE` | `/todos/completed` | delete the completed ones |
-| `GET` | `/stats` | total, completed, remaining |
-
-Requests and responses are Zod schemas, which validate the input, serialize the output and produce the OpenAPI document served on `/docs/json`.
-
-## Layout
-
-```
-src/
-  server.ts         reads the env, builds the app, listens
-  app/              wires everything: database, queries, services, routes, Swagger
-  features/         one folder per feature, never imported by another feature
-  shared-features/  business code shared by several features
-  shared/           code with no domain: env, database connection, server factory
-```
-
-Each layer only imports the layers below it. `src/shared-features/todos/` holds the schemas, the types and `todosQueries.ts`, the only file that runs SQL on the todos table. `src/features/todo-list/` and `src/features/todo-stats/` both use it without knowing each other.
-
-Inside a feature, a request goes `xRoutes.ts` → `xService.ts` → `xQueries.ts`: a route never runs a query. Services get their dependencies as parameters (`createTodoListService({ todos })`), and `src/app/buildApp.ts` is the one place that creates and passes them. Imports go through the `#src/` alias declared in the `imports` field of `package.json`.
-
-[docs/verifications.md](docs/verifications.md) lists every rule and the tool that enforces it.
-
-[docs/architecture.md](docs/architecture.md) lists the architecture patterns this template borrows from, with what it takes and what it leaves out.
+- [Starting your own API](docs/guides/start-your-own-api.md): replace the todo list API with your own routes
+- [Working with an agent](docs/guides/work-with-an-agent.md): the Claude Code hook that sends the errors back to the agent
+- [Commands](docs/reference/commands.md): the npm scripts
+- [Endpoints](docs/reference/endpoints.md): the routes of the example and the OpenAPI document
+- [Layout](docs/reference/layout.md): the layers, the path of a request and where each file goes
+- [Verifications](docs/reference/verifications.md): every rule and the tool that enforces it
+- [Architecture](docs/concepts/architecture.md): the patterns this template borrows from, with what it takes and what it leaves out
 
 [AGENTS.md](AGENTS.md) sums up the commands and the conventions for a coding agent, and `CLAUDE.md` imports it for Claude Code.
-
-## Working with an agent
-
-`.claude/settings.json` runs `@brutalway/agent-hook` after each edit made by Claude Code: Oxlint on the edited file, plus alint and check-tree when a file is created. Errors go back to the agent, which fixes them before moving on.
-
-## Starting your own API
-
-1. Delete `src/features/`, `src/shared-features/todos/` and the lines of `src/app/buildApp.ts` that wire them.
-2. Add a shared feature with its schemas, types and queries, then a feature with its routes and service, and register it in `src/app/buildApp.ts`.
-3. Run `npm run check` often. It tells you where each file goes as the API grows.

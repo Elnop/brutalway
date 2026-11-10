@@ -42,4 +42,4 @@ The name gives the path, the path gives the content.
 
 ## Further reading
 
-[inspirations.md](inspirations.md) lists the existing architecture principles these templates borrow from, what they take from each and what they leave out. Each template has its own `docs/architecture.md` for what is specific to its stack.
+[inspirations.md](inspirations.md) lists the existing architecture principles these templates borrow from, what they take from each and what they leave out. Each template has its own `docs/concepts/architecture.md` for what is specific to its stack.

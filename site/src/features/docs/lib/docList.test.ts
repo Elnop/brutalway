@@ -46,7 +46,7 @@ describe('docList', () => {
       'CONTRIBUTING.md',
       'docs/roadmap.md',
     ]);
-    expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/architecture.md', 'docs/guides/setup.md', 'CHANGELOG.md']);
+    expect(paths(entries, 'vite')).toStrictEqual(['README.md', 'docs/guides/setup.md', 'docs/architecture.md', 'CHANGELOG.md']);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 

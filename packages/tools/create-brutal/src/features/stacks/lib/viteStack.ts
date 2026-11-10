@@ -28,7 +28,7 @@ const COMPONENT_PROJECT = `        {
         },
 `;
 
-const PRESENTER_TEST_EXAMPLE = { file: 'docs/architecture.md', replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,', with: ',' };
+const PRESENTER_TEST_EXAMPLE = { file: 'docs/concepts/architecture.md', replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,', with: ',' };
 
 const TAILWIND_DOC = `\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tailwind\`. A color is a token declared under \`@theme\` in \`src/app/globals.css\`: no \`bg-white\`, no \`bg-[#0f0f0f]\`, no hex in \`style\`, and the message names the closest tokens. \`h1\` to \`h3\` take \`font-display\`, \`code\` and \`pre\` take \`font-mono\`, and \`dark:\` is reported, since a theme changes the values of the tokens, never a class. Prettier sorts the classes with \`prettier-plugin-tailwindcss\`, through \`@brutalway/prettier-config/tailwind\`.
 
@@ -333,26 +333,26 @@ export const viteStack: Stack = {
           with: 'The look',
         },
         {
-          file: 'README.md',
+          file: 'docs/reference/layout.md',
           replace:
             'In the example, `src/shared-features/todos/` holds the tasks and the current filter, used by both `src/features/todo-list/` (add, check, rename, delete, filter) and `src/features/todo-stats/` (counters, clear done). Renaming a task is a sub-feature: `src/features/todo-list/features/todo-editor/`. ',
           with: '',
         },
-        { file: 'README.md', dropLines: '1. Delete `src/features/`' },
-        { file: 'README.md', replace: 'each slice has its own namespace (`app`, `todoList`, `todoStats`)', with: 'each slice gets its own namespace, `app` for now' },
-        { file: 'README.md', replace: '2. Write your first feature', with: '1. Write your first feature' },
-        { file: 'README.md', replace: '3. Run `npm run check` often', with: '2. Run `npm run check` often' },
-        { file: 'docs/verifications.md', replace: '`src/shared/normalizeTitle.test.ts` next to its source', with: 'next to its source' },
-        { file: 'docs/verifications.md', replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`', with: 'next to the presenter' },
+        { file: 'docs/guides/start-your-own-app.md', dropLines: '1. Delete `src/features/`' },
+        { file: 'docs/guides/translations.md', replace: 'each slice has its own namespace (`app`, `todoList`, `todoStats`)', with: 'each slice gets its own namespace, `app` for now' },
+        { file: 'docs/guides/start-your-own-app.md', replace: '2. Write your first feature', with: '1. Write your first feature' },
+        { file: 'docs/guides/start-your-own-app.md', replace: '3. Run `npm run check` often', with: '2. Run `npm run check` often' },
+        { file: 'docs/reference/verifications.md', replace: '`src/shared/normalizeTitle.test.ts` next to its source', with: 'next to its source' },
+        { file: 'docs/reference/verifications.md', replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`', with: 'next to the presenter' },
         {
-          file: 'docs/architecture.md',
+          file: 'docs/concepts/architecture.md',
           replace:
             ' `src/features/todo-list/components/TodoListLayout.tsx` reads the todos through `src/features/todo-list/useTodoList.ts` and hands them to the presenters in `src/features/todo-list/components/presenters/`.',
           with: '',
         },
-        { file: 'docs/architecture.md', dropLines: 'Renaming a task is a sub-feature of the list' },
+        { file: 'docs/concepts/architecture.md', dropLines: 'Renaming a task is a sub-feature of the list' },
         {
-          file: 'docs/architecture.md',
+          file: 'docs/concepts/architecture.md',
           replace:
             '`src/shared-features/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
           with: 'An `xStore.ts` only exports `xStore` and `xActions`, an `xSelectors.ts` only exports `selectX` functions, and components read the store through a `useX.ts` hook.',
@@ -379,11 +379,11 @@ export const viteStack: Stack = {
           replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
           with: 'easy to swap: the colors, fonts and shadows are tokens declared under `@theme` in `src/app/globals.css`, and the components style themselves with Tailwind classes built on them.',
         },
-        { file: 'docs/verifications.md', before: '## Dependencies', insert: TAILWIND_DOC },
-        { file: 'docs/verifications.md', dropSection: '## Styles' },
+        { file: 'docs/reference/verifications.md', before: '## Dependencies', insert: TAILWIND_DOC },
+        { file: 'docs/reference/verifications.md', dropSection: '## Styles' },
         { file: 'package.json', replace: STYLELINT_SETTINGS, with: '' },
         { file: 'package.json', replace: 'npm run lint && npm run styles && ', with: 'npm run lint && ' },
-        { file: 'README.md', replace: 'Oxlint, stylelint, dependency-cruiser', with: 'Oxlint, dependency-cruiser' },
+        { file: 'docs/reference/commands.md', replace: 'Oxlint, stylelint, dependency-cruiser', with: 'Oxlint, dependency-cruiser' },
       ],
       removeScripts: ['styles'],
       removeDependencies: ['stylelint', '@brutalway/stylelint-config'],
@@ -431,10 +431,10 @@ export const viteStack: Stack = {
         { file: 'oxlint.config.ts', replace: "ignorePatterns: ['dist']", with: "ignorePatterns: ['dist', 'third-party']" },
         { file: '.alint.yml', replace: "prefixes: ['src/',", with: "prefixes: ['src/', 'third-party/'," },
         { file: '.alint.yml', after: '    level: error\n', insert: THIRD_PARTY_ALINT },
-        { file: 'README.md', before: '## Commands', insert: SHADCN_README },
-        { file: 'README.md', replace: '| `npm run check` | Prettier, both `tsc` projects,', with: '| `npm run check` | Prettier, the three `tsc` projects,' },
-        { file: 'docs/verifications.md', before: '## Lint', insert: SHADCN_TYPESCRIPT_DOC },
-        { file: 'docs/verifications.md', before: '## Tests', insert: SHADCN_VERIFICATIONS_DOC },
+        { file: 'README.md', before: '## Documentation', insert: SHADCN_README },
+        { file: 'docs/reference/commands.md', replace: '| `npm run check` | Prettier, both `tsc` projects,', with: '| `npm run check` | Prettier, the three `tsc` projects,' },
+        { file: 'docs/reference/verifications.md', before: '## Lint', insert: SHADCN_TYPESCRIPT_DOC },
+        { file: 'docs/reference/verifications.md', before: '## Tests', insert: SHADCN_VERIFICATIONS_DOC },
         { file: '.dependency-cruiser.cjs', replace: "extends: '@brutalway/dependency-cruiser-config/layers'", with: "extends: '@brutalway/dependency-cruiser-config/shadcn'" },
         { file: 'package.json', replace: '"deps": "depcruise src"', with: '"deps": "depcruise src third-party"' },
         {
@@ -443,9 +443,9 @@ export const viteStack: Stack = {
           insert: "import { shadcnConfig } from '@brutalway/oxlint-config-shadcn';\n",
         },
         { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, shadcnConfig' },
-        { file: 'docs/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: SHADCN_LINT_DOC },
+        { file: 'docs/reference/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: SHADCN_LINT_DOC },
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
           after: '- a store lives at the root or in the `stores/` folder of its level\n',
           insert: '- `third-party/` imports nothing from `src/`, and `radix-ui` and `class-variance-authority` are only imported from `third-party/`: `src/` uses the primitives\n',
         },
@@ -463,7 +463,7 @@ export const viteStack: Stack = {
         { file: '.claude/settings.json', replace: '"hooks": {\n    "PostToolUse": [', with: `"hooks": {\n${VENDORED_PRE_TOOL_USE}    "PostToolUse": [` },
         { file: '.claude/settings.json', replace: 'brutal-agent-hook --tree src"', with: 'brutal-agent-hook --tree src --vendored third-party"' },
         {
-          file: 'README.md',
+          file: 'docs/guides/work-with-an-agent.md',
           replace: 'Every message says what to change, so the agent does not need to know the convention beforehand.',
           with: 'Every message says what to change, so the agent does not need to know the convention beforehand. Before an edit, the same hook refuses any change to a file in `third-party/` and tells the agent to run `npx shadcn add <name> --overwrite`, restyle through `src/app/globals.css` or wrap the primitive in `src/`.',
         },
@@ -490,9 +490,9 @@ export const viteStack: Stack = {
           replace: 'easy to swap: the tokens are at the top of `src/app/globals.css`.',
           with: 'easy to swap: the tokens are at the top of `src/app/globals.css`, and each component styles itself in the `X.module.css` next to it.',
         },
-        { file: 'docs/verifications.md', before: '## Dependencies', insert: CSS_MODULES_DOC },
+        { file: 'docs/reference/verifications.md', before: '## Dependencies', insert: CSS_MODULES_DOC },
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
           replace: 'It also rejects two CSS files outside a `styles/` folder.',
           with: 'It also rejects two CSS files outside a `styles/` folder. A `X.module.css` does not count: it stays next to its `X.tsx`.',
         },
@@ -518,13 +518,17 @@ export const viteStack: Stack = {
           insert: "import { tanstackQueryConfig } from '@brutalway/oxlint-config-tanstack-query';\n",
         },
         { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, tanstackQueryConfig' },
-        { file: 'docs/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: SERVER_STATE_LINT_DOC },
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
+          after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n',
+          insert: SERVER_STATE_LINT_DOC,
+        },
+        {
+          file: 'docs/reference/verifications.md',
           replace: '- a presenter imports no store and no shared-feature hook\n',
           with: '- a presenter imports no store, no shared-feature hook, no `xClient.ts` and no `@tanstack/react-query`\n- a store imports no `xClient.ts`, no `xKeys.ts` and no hook: it only holds UI state\n',
         },
-        { file: 'docs/architecture.md', before: '## Sub-features', insert: SERVER_STATE_ARCHITECTURE },
+        { file: 'docs/concepts/architecture.md', before: '## Sub-features', insert: SERVER_STATE_ARCHITECTURE },
       ],
       addDependencies: { '@tanstack/react-query': '5.107.1' },
       addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.2.0' },
@@ -540,14 +544,14 @@ export const viteStack: Stack = {
       edits: [
         { file: 'vite.config.ts', after: "import react from '@vitejs/plugin-react';\n", insert: "import { devApi } from './devApi.ts';\n" },
         { file: 'vite.config.ts', replace: 'plugins: [react()', with: 'plugins: [react(), devApi()' },
-        { file: 'README.md', before: '## Commands', insert: SERVER_STATE_README },
+        { file: 'README.md', before: '## Documentation', insert: SERVER_STATE_README },
         {
-          file: 'README.md',
+          file: 'docs/reference/layout.md',
           replace: '`src/shared-features/todos/` holds the tasks and the current filter,',
           with: '`src/shared-features/todos/` holds the client of the todo API, its query hooks and the current filter,',
         },
         {
-          file: 'docs/architecture.md',
+          file: 'docs/concepts/architecture.md',
           replace: ', `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
           with: ', and components read the store through `src/shared-features/todos/hooks/useTodos.ts`. The store only holds the filter: the todos and the counters come from the API (see Server state below).',
         },
@@ -563,7 +567,7 @@ export const viteStack: Stack = {
           insert: "import { reactHookFormConfig } from '@brutalway/oxlint-config-react-hook-form';\n",
         },
         { file: 'oxlint.config.ts', replace: 'extends: [reactViteConfig', with: 'extends: [reactViteConfig, reactHookFormConfig' },
-        { file: 'docs/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: FORMS_LINT_DOC },
+        { file: 'docs/reference/verifications.md', after: '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n', insert: FORMS_LINT_DOC },
       ],
       addDependencies: { '@hookform/resolvers': '5.9.2', 'react-hook-form': '7.91.0', zod: '4.6.7' },
       addDevDependencies: { '@brutalway/oxlint-config-react-hook-form': '0.2.0' },
@@ -636,7 +640,7 @@ export const viteStack: Stack = {
         { file: 'src/app/App.tsx', after: "import { useTranslation } from 'react-i18next';\n", insert: "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n" },
         { file: 'src/app/App.tsx', before: '      </header>', insert: '        <LanguageSwitch />\n' },
         {
-          file: 'README.md',
+          file: 'docs/guides/translations.md',
           replace: 'To add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
           with: I18N_README,
         },
@@ -688,7 +692,7 @@ export const viteStack: Stack = {
       overlay: 'i18n-e2e',
       edits: [
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
           replace: 'and renaming.',
           with: 'and renaming. `e2e/language.spec.ts` switches to French, checks the heading, a counter, `<html lang>` and the title of the page, runs axe, and reloads to check that the choice stays.',
         },
@@ -701,8 +705,12 @@ export const viteStack: Stack = {
         { file: 'package.json', replace: '"test": "vitest run",', with: '"test": "vitest run --coverage",' },
         { file: '.gitignore', after: 'test-results\n', insert: 'coverage\n' },
         { file: '.prettierignore', after: 'test-results\n', insert: 'coverage\n' },
-        { file: 'docs/verifications.md', before: 'Before keeping a test,', insert: COVERAGE_DOC },
-        { file: 'README.md', replace: 'Vitest: unit tests in Node, component tests in headless Chromium', with: 'Vitest: unit tests in Node, component tests in headless Chromium, 90 % coverage' },
+        { file: 'docs/reference/verifications.md', before: 'Before keeping a test,', insert: COVERAGE_DOC },
+        {
+          file: 'docs/reference/commands.md',
+          replace: 'Vitest: unit tests in Node, component tests in headless Chromium',
+          with: 'Vitest: unit tests in Node, component tests in headless Chromium, 90 % coverage',
+        },
       ],
       addDevDependencies: { '@vitest/coverage-v8': '5.1.0' },
     },
@@ -715,7 +723,7 @@ export const viteStack: Stack = {
       remove: ['e2e/todos.spec.ts'],
       edits: [
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
           replace:
             ' `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.',
           with: '',
@@ -736,7 +744,7 @@ export const viteStack: Stack = {
     },
     {
       when: { zustand: false },
-      edits: [{ file: 'docs/architecture.md', dropSection: '## Store, actions and selectors' }],
+      edits: [{ file: 'docs/concepts/architecture.md', dropSection: '## Store, actions and selectors' }],
       removeDependencies: ['zustand'],
     },
     {
@@ -749,11 +757,11 @@ export const viteStack: Stack = {
         { file: 'vitest.config.ts', replace: "import { playwright } from '@vitest/browser-playwright';\n", with: '' },
         { file: 'vitest.config.ts', replace: `      projects: [\n        ${UNIT_PROJECT},\n${COMPONENT_PROJECT}      ],\n`, with: `      projects: [${UNIT_PROJECT}],\n` },
         { file: 'tsconfig.test.json', replace: ', "@vitest/browser-playwright"]', with: ']' },
-        { file: 'README.md', replace: 'Vitest: unit tests in Node, component tests in headless Chromium', with: 'Vitest unit tests, in Node' },
-        { file: 'docs/verifications.md', dropLines: '| Component |' },
+        { file: 'docs/reference/commands.md', replace: 'Vitest: unit tests in Node, component tests in headless Chromium', with: 'Vitest unit tests, in Node' },
+        { file: 'docs/reference/verifications.md', dropLines: '| Component |' },
         PRESENTER_TEST_EXAMPLE,
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
           replace: 'The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. ',
           with: '',
         },
@@ -778,15 +786,15 @@ export const viteStack: Stack = {
         { file: 'tsconfig.test.json', replace: '    "playwright.config.ts",\n', with: '' },
         { file: 'tsconfig.test.json', replace: '"@/*": ["./src/*"],\n      "@e2e/*": ["./e2e/*"]', with: '"@/*": ["./src/*"]' },
         { file: 'oxlint.config.ts', replace: 'import through an alias (@/ in src/, @e2e/ in e2e/).', with: 'import through the @/ alias.' },
-        { file: 'README.md', dropLines: '| `npm run e2e` |' },
-        { file: 'docs/verifications.md', replace: " That last one is why `playwright.config.ts` reads `process.env['CI']`.", with: '' },
-        { file: 'docs/verifications.md', replace: 'on tests, e2e and configs', with: 'on tests and configs' },
-        { file: 'docs/verifications.md', replace: '`@/` in `src/`, `@e2e/` in `e2e/`', with: '`@/` in `src/`' },
-        { file: 'docs/verifications.md', dropLines: '| E2e |' },
-        { file: 'docs/verifications.md', dropLines: 'The specs import `test`' },
-        { file: 'docs/verifications.md', replace: '`vite preview` sends them, so the e2e tests run under them, and', with: '`vite preview` sends them, and' },
+        { file: 'docs/reference/commands.md', dropLines: '| `npm run e2e` |' },
+        { file: 'docs/reference/verifications.md', replace: " That last one is why `playwright.config.ts` reads `process.env['CI']`.", with: '' },
+        { file: 'docs/reference/verifications.md', replace: 'on tests, e2e and configs', with: 'on tests and configs' },
+        { file: 'docs/reference/verifications.md', replace: '`@/` in `src/`, `@e2e/` in `e2e/`', with: '`@/` in `src/`' },
+        { file: 'docs/reference/verifications.md', dropLines: '| E2e |' },
+        { file: 'docs/reference/verifications.md', dropLines: 'The specs import `test`' },
+        { file: 'docs/reference/verifications.md', replace: '`vite preview` sends them, so the e2e tests run under them, and', with: '`vite preview` sends them, and' },
         {
-          file: 'docs/verifications.md',
+          file: 'docs/reference/verifications.md',
           replace: '`test` from `@brutalway/playwright-fixtures` fails a test when the browser reports a CSP violation, so a script or a request from another origin shows up there first: allow it',
           with: 'A script or a request from another origin is then refused: allow it',
         },
@@ -798,7 +806,7 @@ export const viteStack: Stack = {
       when: { e2e: false, example: true },
       edits: [
         {
-          file: 'README.md',
+          file: 'docs/guides/start-your-own-app.md',
           replace: ', the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.',
           with: ' and the files in `src/shared/`.',
         },
@@ -808,34 +816,34 @@ export const viteStack: Stack = {
       when: { e2e: false, ci: true },
       edits: [
         { file: '.github/workflows/ci.yml', replace: E2E_JOB, with: '' },
-        { file: 'README.md', replace: ' in one job and `e2e` in another.', with: '.' },
+        { file: 'docs/reference/commands.md', replace: ' in one job and `e2e` in another.', with: '.' },
       ],
     },
     {
       when: { e2e: false, 'component-tests': true },
       addDevDependencies: { playwright: '1.64.1' },
       edits: [
-        { file: 'docs/verifications.md', replace: CHROMIUM_DOC, with: 'Component tests need headless Chromium: `npx playwright install --only-shell chromium`.' },
-        { file: 'docs/verifications.md', replace: ', since orchestrators read stores and e2e covers them.', with: ', since orchestrators read stores.' },
+        { file: 'docs/reference/verifications.md', replace: CHROMIUM_DOC, with: 'Component tests need headless Chromium: `npx playwright install --only-shell chromium`.' },
+        { file: 'docs/reference/verifications.md', replace: ', since orchestrators read stores and e2e covers them.', with: ', since orchestrators read stores.' },
       ],
     },
     {
       when: { e2e: true, 'component-tests': false },
-      edits: [{ file: 'docs/verifications.md', replace: CHROMIUM_DOC, with: 'E2e needs headless Chromium: `npx playwright install --only-shell chromium`.' }],
+      edits: [{ file: 'docs/reference/verifications.md', replace: CHROMIUM_DOC, with: 'E2e needs headless Chromium: `npx playwright install --only-shell chromium`.' }],
     },
     {
       when: { e2e: false, 'component-tests': false },
       edits: [
-        { file: 'docs/verifications.md', replace: ` ${CHROMIUM_DOC}`, with: '' },
+        { file: 'docs/reference/verifications.md', replace: ` ${CHROMIUM_DOC}`, with: '' },
         { file: 'README.md', dropLines: 'npx playwright install' },
       ],
     },
     {
       when: { 'claude-hook': false },
-      remove: ['.claude'],
+      remove: ['.claude', 'docs/guides/work-with-an-agent.md'],
       edits: [
         { file: 'knip.json', replace: '"@brutalway/agent-hook", ', with: '' },
-        { file: 'README.md', dropSection: '## Working with an agent' },
+        { file: 'README.md', dropLines: 'docs/guides/work-with-an-agent.md' },
       ],
       removeDependencies: ['@brutalway/agent-hook'],
     },
@@ -843,8 +851,8 @@ export const viteStack: Stack = {
       when: { ci: false },
       remove: ['.github'],
       edits: [
-        { file: 'README.md', dropLines: 'CI (`.github/workflows/ci.yml`)' },
-        { file: 'docs/verifications.md', replace: 'runs locally, in the pre-commit hook and in CI.', with: 'runs locally and in the pre-commit hook.' },
+        { file: 'docs/reference/commands.md', dropLines: 'CI (`.github/workflows/ci.yml`)' },
+        { file: 'docs/reference/verifications.md', replace: 'runs locally, in the pre-commit hook and in CI.', with: 'runs locally and in the pre-commit hook.' },
       ],
     },
     {
@@ -872,7 +880,7 @@ export const viteStack: Stack = {
         { file: 'vite.config.ts', replace: 'plugins: [react()', with: "plugins: [react(), ...(process.env['VITEST'] === undefined ? [babel({ presets: [reactCompilerPreset()] })] : [])" },
         { file: 'oxlint.config.ts', replace: "'no-restricted-imports': ['error', { patterns: [{ regex:", with: REACT_COMPILER_LINT },
         { file: 'oxlint.config.ts', replace: "' }] }],\n  },\n});", with: "' }],\n      },\n    ],\n  },\n});" },
-        { file: 'docs/verifications.md', before: '## Dependencies', insert: REACT_COMPILER_DOC },
+        { file: 'docs/reference/verifications.md', before: '## Dependencies', insert: REACT_COMPILER_DOC },
         { file: 'knip.json', replace: '"ignoreDependencies": ["@swc/core", ', with: '"ignoreDependencies": ["@swc/core", "@babel/core", "babel-plugin-react-compiler", ' },
       ],
       addDevDependencies: { '@babel/core': '7.29.13', '@rolldown/plugin-babel': '0.3.0', 'babel-plugin-react-compiler': '1.0.0' },
@@ -891,14 +899,14 @@ export const viteStack: Stack = {
     {
       when: { analytics: 'module' },
       overlay: 'analytics-module',
-      edits: [{ file: 'README.md', before: '## Commands', insert: ANALYTICS_MODULE_README }],
+      edits: [{ file: 'README.md', before: '## Documentation', insert: ANALYTICS_MODULE_README }],
       addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0' },
     },
     {
       when: { analytics: 'posthog' },
       overlay: 'analytics-posthog',
       edits: [
-        { file: 'README.md', before: '## Commands', insert: ANALYTICS_POSTHOG_README },
+        { file: 'README.md', before: '## Documentation', insert: ANALYTICS_POSTHOG_README },
         { file: 'securityHeaders.ts', replace: `"connect-src 'self'",`, with: `"connect-src 'self' https://*.posthog.com",` },
       ],
       addDependencies: { 'posthog-js': '1.447.3' },

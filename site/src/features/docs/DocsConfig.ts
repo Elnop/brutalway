@@ -3,6 +3,8 @@ import { DOCS_ROUTE, PACKAGES_ROUTE, TEMPLATES_ROUTE } from '@/shared/configs/Li
 
 export const DOCS_BRANCH = 'main';
 
+const TEMPLATE_DOC_ORDER = ['README.md', 'docs/guides/start-', 'docs/guides/', 'docs/reference/', 'docs/concepts/'];
+
 const PUBLISHED_PACKAGES = [
   'configs/oxlint-config-typescript',
   'configs/oxlint-config-react',
@@ -55,9 +57,39 @@ export const DOC_SOURCES: DocSource[] = [
     folder: 'docs',
   },
   { key: 'all', label: 'templates', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates', files: ['README.md'] },
-  { key: 'vite', label: 'template-vite', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/vite', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
-  { key: 'fastify', label: 'template-fastify', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/fastify', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
-  { key: 'package', label: 'template-package', route: TEMPLATES_ROUTE, repo: 'Elnop/brutalway', directory: 'templates/package', files: ['README.md'], folder: 'docs', changelog: 'CHANGELOG.md' },
+  {
+    key: 'vite',
+    label: 'template-vite',
+    route: TEMPLATES_ROUTE,
+    repo: 'Elnop/brutalway',
+    directory: 'templates/vite',
+    files: ['README.md'],
+    folder: 'docs',
+    changelog: 'CHANGELOG.md',
+    order: TEMPLATE_DOC_ORDER,
+  },
+  {
+    key: 'fastify',
+    label: 'template-fastify',
+    route: TEMPLATES_ROUTE,
+    repo: 'Elnop/brutalway',
+    directory: 'templates/fastify',
+    files: ['README.md'],
+    folder: 'docs',
+    changelog: 'CHANGELOG.md',
+    order: TEMPLATE_DOC_ORDER,
+  },
+  {
+    key: 'package',
+    label: 'template-package',
+    route: TEMPLATES_ROUTE,
+    repo: 'Elnop/brutalway',
+    directory: 'templates/package',
+    files: ['README.md'],
+    folder: 'docs',
+    changelog: 'CHANGELOG.md',
+    order: TEMPLATE_DOC_ORDER,
+  },
   PACKAGES_INDEX,
   ...PUBLISHED_PACKAGES.map((folder) => packageSource(folder, true)),
   ...PRIVATE_PACKAGES.map((folder) => packageSource(folder, false)),

@@ -5,7 +5,7 @@ import { docTitle } from '@/features/docs/lib/docTitle.ts';
 import { repositoryPath, sourcePath } from '@/features/docs/lib/docsUrls.ts';
 
 function orderRank(order: string[], path: string): number {
-  const rank = order.findIndex((prefix) => path === prefix || (prefix.endsWith('/') && path.startsWith(prefix)));
+  const rank = order.findIndex((prefix) => path.startsWith(prefix));
   return rank === -1 ? order.length : rank;
 }
 

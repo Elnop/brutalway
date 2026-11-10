@@ -1,6 +1,6 @@
 # Working on this project
 
-A standalone npm package in TypeScript where every convention is checked by a tool. `README.md` explains the layout and the commands, `docs/architecture.md` the patterns it follows and `docs/verifications.md` each rule with the tool that enforces it.
+A standalone npm package in TypeScript where every convention is checked by a tool. `docs/reference/layout.md` explains the layout, `docs/reference/commands.md` the commands, `docs/concepts/architecture.md` the patterns it follows and `docs/reference/verifications.md` each rule with the tool that enforces it.
 
 ## Before calling a change done
 

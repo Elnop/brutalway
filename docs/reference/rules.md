@@ -1,6 +1,6 @@
 # Common rules
 
-The rules every template shares, the tool that enforces each one and the message it prints. The rules that belong to one stack are in that template's `docs/verifications.md`: [template-vite](../../templates/vite/docs/verifications.md), [template-fastify](../../templates/fastify/docs/verifications.md), [template-package](../../templates/package/docs/verifications.md).
+The rules every template shares, the tool that enforces each one and the message it prints. The rules that belong to one stack are in that template's `docs/reference/verifications.md`: [template-vite](../../templates/vite/docs/reference/verifications.md), [template-fastify](../../templates/fastify/docs/reference/verifications.md), [template-package](../../templates/package/docs/reference/verifications.md).
 
 All of them run in `npm run check`, in the pre-commit hook and in CI. The messages below come from a project created with `npm create brutal`.
 

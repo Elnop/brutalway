@@ -1,6 +1,6 @@
 # Working on this project
 
-A Vite + React + TypeScript app where every convention is checked by a tool. `README.md` explains the layout, `docs/architecture.md` the patterns it follows and `docs/verifications.md` each rule with the tool that enforces it.
+A Vite + React + TypeScript app where every convention is checked by a tool. `docs/reference/layout.md` explains the layout, `docs/concepts/architecture.md` the patterns it follows and `docs/reference/verifications.md` each rule with the tool that enforces it.
 
 ## Before calling a change done
 
