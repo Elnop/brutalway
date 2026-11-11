@@ -66,7 +66,7 @@
     "@swc/core": "1.16.22",
     "@types/node": "26.6.6",
     "dependency-cruiser": "18.7.2",
-    "jscpd": "5.4.2",
+    "jscpd": "5.4.3",
     "knip": "6.44.2",
     "oxlint": "1.92.0",
     "oxlint-tsgolint": "7.0.2006",
