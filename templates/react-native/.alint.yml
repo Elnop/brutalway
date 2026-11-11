@@ -5,5 +5,5 @@ rules:
   - id: doc-paths-resolve
     kind: markdown_paths_resolve
     paths: ['README.md', 'AGENTS.md', 'docs/**/*.md']
-    prefixes: ['src/', 'docs/', '.github/', '.claude/']
+    prefixes: ['src/', 'scripts/', 'docs/', '.github/', '.claude/']
     level: error

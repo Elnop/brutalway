@@ -19,6 +19,12 @@
     ],
     "updates": {
       "enabled": false
+    },
+    "ios": {
+      "bundleIdentifier": "com.example.templatereactnative"
+    },
+    "android": {
+      "package": "com.example.templatereactnative"
     }
   }
 }

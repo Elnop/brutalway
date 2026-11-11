@@ -4,7 +4,7 @@ Everything below runs locally, in the pre-commit hook and in CI. None of it need
 
 ## TypeScript
 
-`tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/base.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`, and add what React Native needs: the `react-native` export condition and the `@/` alias. The root `tsconfig.json` repeats the alias, because Metro, the bundler of Expo, reads it from there.
+`tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/base.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`, and add what React Native needs: the `react-native` export condition and the `@/` alias. The root `tsconfig.json` repeats the alias, because Metro, the bundler of Expo, reads it from there, and extends `expo/tsconfig.base`, which Expo CLI would otherwise add itself on each start.
 
 Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of `src/app/locales/en/` into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
 
@@ -13,7 +13,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 `oxlint.config.ts` extends `@brutalway/oxlint-config-react`, which brings the TypeScript base, then the zustand and i18next configs, and turns on the `jest` plugin of oxlint with the same test rules as `@brutalway/oxlint-config-vitest`. Each package README details its rules. The main ones:
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
-- no relative imports: `@/` in `src/`. Root config files are the only exception
+- no relative imports: `@/` in `src/`. Root config files and `scripts/` are the only exceptions. `scripts/` runs in Node on your machine, so it may also print to the console and call `fetch`
 - no `index.ts` outside `src/app/screens/`, where Expo Router needs `index.tsx` for the first screen, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
 - a file with a single export is named after it

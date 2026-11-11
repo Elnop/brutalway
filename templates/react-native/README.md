@@ -13,16 +13,17 @@ Node 26 is required (`.nvmrc`, and `.npmrc` refuses other versions).
 ```sh
 nvm use
 npm install
-npm start
+npm run android
 ```
 
-`npm start` prints a QR code: scan it with Expo Go on a phone, or press `w` to open the app in the browser. No Xcode or Android Studio is needed to run the example.
+`npm run android` builds the development build of the app and opens it on an Android emulator or a phone plugged in over USB. It needs the Android SDK; [Running on a device](docs/guides/run-on-a-device.md) covers iOS, WSL2 and the setup. To try the app without installing anything native, `npm run start:go` opens it in Expo Go and `npm run web` in the browser.
 
 `npm install` also points git to `.githooks/`, so every commit runs `npm run check` first.
 
 ## Documentation
 
 - [Starting your own app](docs/guides/start-your-own-app.md): replace the todo list with your own code
+- [Running on a device](docs/guides/run-on-a-device.md): the development build on Android and iOS, a USB phone from WSL2, Expo Go
 - [Translations](docs/guides/translations.md): how the texts go through i18next, and how to add a language
 - [Working with an agent](docs/guides/work-with-an-agent.md): the Claude Code hook that sends the errors back to the agent
 - [Commands](docs/reference/commands.md): the npm scripts and what CI runs

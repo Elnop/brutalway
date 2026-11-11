@@ -29,8 +29,12 @@ export default defineConfig({
     'jest/prefer-to-be': 'error',
   },
   overrides: [
-    { files: ['*.config.ts', 'jest.setup.ts'], env: { node: true } },
-    { files: ['*.config.ts'], rules: { 'no-restricted-imports': 'off' } },
+    { files: ['*.config.ts', 'jest.setup.ts', 'scripts/**'], env: { node: true } },
+    { files: ['*.config.ts', 'scripts/**'], rules: { 'no-restricted-imports': 'off' } },
+    {
+      files: ['scripts/**'],
+      rules: { 'no-console': 'off', 'fetch-placement/no-restricted-syntax': 'off' },
+    },
     {
       files: ['src/app/screens/**/*.tsx'],
       rules: {
