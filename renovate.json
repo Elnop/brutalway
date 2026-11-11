@@ -17,7 +17,7 @@
       "managerFilePatterns": ["/^packages/tools/create-brutal/src/features/stacks/.+\\.ts$/"],
       "matchStrings": [
         "'(?<depName>@?[a-z0-9][a-z0-9._/-]*)': '(?<currentValue>\\d+\\.\\d+\\.\\d+)'",
-        "\\n\\s+(?<depName>[a-z][a-z0-9-]*): '(?<currentValue>\\d+\\.\\d+\\.\\d+)'"
+        "[{,\\n]\\s*(?<depName>[a-z][a-z0-9-]*): '(?<currentValue>\\d+\\.\\d+\\.\\d+)'"
       ],
       "datasourceTemplate": "npm"
     },
