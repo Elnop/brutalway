@@ -1,5 +1,11 @@
 # @brutalway/stylelint-config
 
+## 0.2.2
+
+### Patch Changes
+
+- 6ec96e4: The `stylelint` peer dependency also accepts 18.x.
+
 ## 0.2.1
 
 ### Patch Changes

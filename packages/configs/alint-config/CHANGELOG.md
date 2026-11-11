@@ -1,5 +1,11 @@
 # @brutalkit/alint-config
 
+## 0.2.2
+
+### Patch Changes
+
+- 6ec96e4: The `@asamarts/alint` peer dependency also accepts 0.22.x.
+
 ## 0.2.1
 
 ### Patch Changes
