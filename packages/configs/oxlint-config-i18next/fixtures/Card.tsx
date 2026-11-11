@@ -30,6 +30,8 @@ export function Card({ name, count }: CardProps) {
       <span aria-description={`${name}`} />
       <span aria-description="42 · %" />
       <span aria-description="PET_ID" />
+      <Card accessibilityLabel="Pet card" name={name} count={count} />
+      <Card accessibilityHint={t('hint')} name={name} count={count} />
     </section>
   );
 }

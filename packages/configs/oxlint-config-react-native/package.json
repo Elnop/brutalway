@@ -1,0 +1,83 @@
+{
+  "name": "@brutalway/oxlint-config-react-native",
+  "version": "0.0.0",
+  "description": "Oxlint preset for React Native and Expo apps: styles from the theme only, no inline style, the rules of eslint-plugin-react-native, Expo Router route files and Jest, built on @brutalway/oxlint-config-react and @brutalway/oxlint-config-zustand.",
+  "keywords": [
+    "oxlint",
+    "oxlint-config",
+    "react",
+    "react-native",
+    "expo",
+    "zustand",
+    "lint"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/configs/oxlint-config-react-native#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/configs/oxlint-config-react-native"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "dist"
+  ],
+  "imports": {
+    "#src/*": "./src/*"
+  },
+  "exports": "./dist/ReactNativeConfig.js",
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p .",
+    "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
+    "deps": "depcruise --output-type err-long src",
+    "tree": "check-tree src --root-entries",
+    "duplicates": "jscpd src",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
+    "test": "node --test 'src/**/*.test.ts'",
+    "format": "prettier --write .",
+    "unused": "knip"
+  },
+  "dependencies": {
+    "@brutalway/oxlint-config-react": "^0.4.1",
+    "@brutalway/oxlint-config-zustand": "^0.2.5",
+    "eslint-plugin-react-native": "^5.0.0",
+    "oxlint-plugin-eslint": "^1.91.0"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.91.0"
+  },
+  "devDependencies": {
+    "@brutalway/check-tree": "0.5.1",
+    "@brutalway/dependency-cruiser-config": "0.5.0",
+    "@brutalway/lint-utils": "0.2.0",
+    "@brutalway/oxlint-config-node": "0.2.1",
+    "@brutalway/oxlint-config-node-test": "0.1.0",
+    "@brutalway/prettier-config": "0.3.0",
+    "@brutalway/tsconfig": "0.4.0",
+    "@swc/core": "1.16.22",
+    "@types/node": "26.6.6",
+    "dependency-cruiser": "18.7.2",
+    "jscpd": "5.4.3",
+    "knip": "6.44.2",
+    "oxlint": "1.92.0",
+    "oxlint-tsgolint": "7.0.2006",
+    "prettier": "3.9.10",
+    "tsdown": "0.23.7",
+    "typescript": "7.0.2"
+  },
+  "prettier": "@brutalway/prettier-config",
+  "allowScripts": {
+    "@swc/core": false
+  },
+  "overrides": {
+    "eslint-plugin-no-comments": {
+      "minimatch": "^11.0.1"
+    }
+  }
+}

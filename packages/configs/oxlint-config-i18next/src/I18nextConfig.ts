@@ -41,7 +41,15 @@ export const i18nextConfig: OxlintConfig = defineConfig({
         mode: 'jsx-only',
         'should-validate-template': true,
         'jsx-attributes': {
-          include: ['aria-label', 'aria-description', 'placeholder', 'title', 'alt'],
+          include: [
+            'aria-label',
+            'aria-description',
+            'placeholder',
+            'title',
+            'alt',
+            'accessibilityLabel',
+            'accessibilityHint',
+          ],
         },
         words: { exclude: [WITHOUT_LETTERS, '[A-Z_-]+'] },
       },

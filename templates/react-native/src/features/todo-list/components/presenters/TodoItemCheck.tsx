@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
   check: {
     flexDirection: 'row',
     flexGrow: 1,
-    flexBasis: 160,
+    flexBasis: THEME.sizes.field,
     gap: THEME.spacing.m,
     alignItems: 'center',
   },
   box: {
     ...THEME.border,
-    width: 24,
-    height: 24,
+    width: THEME.sizes.checkbox,
+    height: THEME.sizes.checkbox,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: THEME.colors.paper,

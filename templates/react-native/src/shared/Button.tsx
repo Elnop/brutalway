@@ -9,6 +9,10 @@ type ButtonProps = PressableProps & {
   small?: boolean;
 };
 
+function toneStyle(tone: Tone) {
+  return { paper: styles.paper, yellow: styles.yellow, pink: styles.pink, blue: styles.blue }[tone];
+}
+
 export function Button({ label, tone = 'paper', small = false, ...pressable }: ButtonProps) {
   const selected = pressable['aria-selected'] === true;
   return (
@@ -16,7 +20,7 @@ export function Button({ label, tone = 'paper', small = false, ...pressable }: B
       role="button"
       style={({ pressed }) => [
         styles.button,
-        { backgroundColor: selected ? THEME.colors.ink : THEME.colors[tone] },
+        selected ? styles.selected : toneStyle(tone),
         small && styles.small,
         pressed && styles.pressed,
         pressable.disabled === true && styles.disabled,
@@ -37,6 +41,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: THEME.spacing.l,
     boxShadow: THEME.shadows.small,
   },
+  paper: { backgroundColor: THEME.colors.paper },
+  yellow: { backgroundColor: THEME.colors.yellow },
+  pink: { backgroundColor: THEME.colors.pink },
+  blue: { backgroundColor: THEME.colors.blue },
+  selected: { backgroundColor: THEME.colors.ink },
   small: { paddingVertical: THEME.spacing.xs, paddingHorizontal: THEME.spacing.m },
   pressed: {
     transform: [{ translateX: THEME.pressedOffset }, { translateY: THEME.pressedOffset }],

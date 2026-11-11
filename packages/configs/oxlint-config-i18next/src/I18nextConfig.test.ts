@@ -19,6 +19,7 @@ describe('i18nextConfig', () => {
       'Card.tsx:26 i18next(no-literal-string)',
       'Card.tsx:27 i18next-attributes(no-restricted-syntax)',
       'Card.tsx:28 i18next-attributes(no-restricted-syntax)',
+      'Card.tsx:33 i18next(no-literal-string)',
     ]);
   });
 });

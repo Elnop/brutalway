@@ -30,6 +30,7 @@ const PUBLISHED_PACKAGES = [
   'configs/oxlint-config-vitest',
   'configs/oxlint-config-react-vite',
   'configs/oxlint-config-next',
+  'configs/oxlint-config-react-native',
   'configs/oxlint-config-fastify',
   'configs/oxlint-config-node',
   'configs/oxlint-config-node-test',

@@ -14,6 +14,7 @@ export const THEME = {
   fonts: { regular: 'SpaceGrotesk_400Regular', bold: 'SpaceGrotesk_700Bold' },
   fontSizes: { small: 14, body: 17, heading: 24, title: 56 },
   spacing: { xs: 4, s: 8, m: 12, l: 20, xl: 32 },
+  sizes: { checkbox: 24, field: 160 },
   border: { borderWidth: 3, borderColor: COLORS.ink },
   shadows: { large: `6px 6px 0 ${COLORS.ink}`, small: `4px 4px 0 ${COLORS.ink}` },
   pressedOffset: 4,

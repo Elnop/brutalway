@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   input: {
     ...THEME.border,
     flexGrow: 1,
-    flexBasis: 160,
+    flexBasis: THEME.sizes.field,
     minWidth: 0,
     paddingVertical: THEME.spacing.s,
     paddingHorizontal: THEME.spacing.m,
