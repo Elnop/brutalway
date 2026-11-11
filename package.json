@@ -41,7 +41,7 @@
     }
   },
   "allowScripts": {
-    "@asamarts/alint@0.21.0": true,
+    "@asamarts/alint@0.22.0": true,
     "@swc/core": false
   },
   "docLength": {
