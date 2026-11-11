@@ -796,7 +796,7 @@ export const viteStack: Stack = {
         },
       ],
       addDependencies: {
-        '@hookform/resolvers': '5.9.2',
+        '@hookform/resolvers': '7.0.3',
         'react-hook-form': '7.91.0',
         zod: '4.6.7',
       },
@@ -1335,7 +1335,7 @@ export const viteStack: Stack = {
         },
       ],
       addDevDependencies: {
-        '@babel/core': '7.29.13',
+        '@babel/core': '8.1.0',
         '@rolldown/plugin-babel': '0.3.0',
         'babel-plugin-react-compiler': '1.0.0',
       },
