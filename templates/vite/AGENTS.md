@@ -13,3 +13,12 @@ Run `npm run check`: Prettier, tsc, Oxlint, stylelint, dependency-cruiser, check
 - Every visible string goes through `t()`, with its English text in `src/app/locales/en/`.
 - Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.
 - No comments, no relative imports (`@/` instead), no `index.ts`.
+
+## When a brutalway tool gets in the way
+
+The checks, their configs and this template come from [brutalway](https://github.com/Elnop/brutalway). When one of them rejects valid code, misses a case it should catch, crashes, or prints a message that does not say what to change, do not work around it in silence with an `oxlint-disable` or a rule turned off. Tell the user what you ran into and offer to report it upstream. Do the same when you see how a rule, a message or the template could be better.
+
+- An issue, through the form that fits: [bug](https://github.com/Elnop/brutalway/issues/new?template=bug.yml), [rule or convention](https://github.com/Elnop/brutalway/issues/new?template=rule.yml) or [template](https://github.com/Elnop/brutalway/issues/new?template=template.yml). Give the package and its version from `package.json`, the smallest code that shows the problem, the message, and what you expected.
+- A pull request on brutalway, when the fix is small and clear.
+
+Write the draft and wait for the user's go-ahead before opening anything. `gh issue create --repo Elnop/brutalway --web` then opens the form in the browser.

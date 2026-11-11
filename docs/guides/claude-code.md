@@ -37,6 +37,10 @@ or declare the hook in `.claude/settings.json`, to share it with everyone who cl
 
 Pass `--tree` once per source folder: `--tree web/src --tree server/src`.
 
+## When a check is wrong
+
+The hook messages end with a line asking the agent to leave a wrong check on, tell you, and offer to report it on the brutalway issues. A project created from a template says more in `AGENTS.md`: which issue form fits, what the report holds, and that nothing is opened before you agree. In another project, the same section can go in your `AGENTS.md` or `CLAUDE.md`; copy it from [template-vite](../../templates/vite/AGENTS.md).
+
 ## Vendored code
 
 With shadcn/ui, `--vendored third-party` makes the hook refuse an edit under `third-party/` before it happens, and tell the agent to run `npx shadcn add <name> --overwrite` or to restyle through the tokens instead. A project created with `--ui shadcn` already has it. The [agent-hook README](../../packages/tools/agent-hook/README.md#vendored-code) has the settings to add it by hand.

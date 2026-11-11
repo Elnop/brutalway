@@ -55,7 +55,7 @@ Anyone can open an issue or a pull request. Each kind of issue has its form:
 - [Rule or convention](https://github.com/Elnop/brutalway/issues/new?template=rule.yml): a missing check, or a change to one that exists
 - [Template](https://github.com/Elnop/brutalway/issues/new?template=template.yml): a new stack, or a change to the stack of a template
 
-Before asking to drop a rule, read [why the rules exist](docs/concepts/intent.md). The issues labeled [`good first issue`](https://github.com/Elnop/brutalway/labels/good%20first%20issue) are small enough to start with. A pull request is welcome without an issue first, [CONTRIBUTING.md](CONTRIBUTING.md) explains how to build and check the repository.
+Before asking to drop a rule, read [why the rules exist](docs/concepts/intent.md). The issues labeled [`good first issue`](https://github.com/Elnop/brutalway/labels/good%20first%20issue) are small enough to start with. The agents working in a project created from a template do the same: `AGENTS.md` tells them to offer you an issue or a pull request here when a check gets in their way, instead of turning it off. A pull request is welcome without an issue first, [CONTRIBUTING.md](CONTRIBUTING.md) explains how to build and check the repository.
 
 ## Documentation
 

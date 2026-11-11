@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
+import { UPSTREAM_REPORT_HINT } from '#src/features/edit-checks/EditChecksConfig.ts';
 import { hookChecks } from '#src/features/edit-checks/lib/hookChecks.ts';
 import { readHookEdit } from '#src/shared-features/hook-edit/readHookEdit.ts';
 import { vendoredEditMessage } from '#src/features/vendored-refusal/vendoredEditMessage.ts';
@@ -46,7 +47,10 @@ if (refusal !== undefined) {
   process.stderr.write(`${refusal}\n`);
   process.exitCode = 2;
 } else if (problems.length > 0 || notStarted.length > 0) {
-  const found = problems.length > 0 ? `${problems.join('\n')}\nFix them before going on.\n` : '';
+  const found =
+    problems.length > 0
+      ? `${problems.join('\n')}\nFix them before going on.\n${UPSTREAM_REPORT_HINT}\n`
+      : '';
   process.stderr.write(`${found}${notStarted.join('')}`);
   process.exitCode = 2;
 }

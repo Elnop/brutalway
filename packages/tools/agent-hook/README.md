@@ -77,7 +77,7 @@ After each `Edit` or `Write` by the agent:
 
 ### Exit code
 
-If one of them fails, the hook prints their output and exits with code 2: Claude Code sends it back to the agent, which fixes the problem before going on. When a tool cannot start, for example because the project root does not exist, the hook says which command failed, in which folder, and the error from Node, and also exits with code 2.
+If one of them fails, the hook prints their output and exits with code 2: Claude Code sends it back to the agent, which fixes the problem before going on. The output ends with a line asking the agent, when a check is wrong for the code, to leave it on, tell the user and offer to report it on the [brutalway issues](https://github.com/Elnop/brutalway/issues/new/choose). When a tool cannot start, for example because the project root does not exist, the hook says which command failed, in which folder, and the error from Node, and also exits with code 2.
 
 ### Flags
 

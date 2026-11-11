@@ -4,6 +4,7 @@ import { chmodSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
+import { UPSTREAM_REPORT_HINT } from '#src/features/edit-checks/EditChecksConfig.ts';
 
 const CLI = join(import.meta.dirname, 'agentHook.ts');
 const TOOLS = ['oxlint', 'alint', 'check-tree', 'stylelint'];
@@ -72,7 +73,8 @@ describe('brutal-agent-hook', () => {
       status: 2,
       stdout: '',
       stderr:
-        'oxlint found problems in web/src/a.tsx:\noxlint --type-aware src/a.tsx in /web\noxlint says no\n\nFix them before going on.\n',
+        'oxlint found problems in web/src/a.tsx:\noxlint --type-aware src/a.tsx in /web\noxlint says no\n\nFix them before going on.\n' +
+        `${UPSTREAM_REPORT_HINT}\n`,
     });
   });
 
@@ -102,6 +104,7 @@ describe('brutal-agent-hook', () => {
           'check-tree says no',
           '',
           'Fix them before going on.',
+          UPSTREAM_REPORT_HINT,
           '',
         ].join('\n'),
       },
@@ -130,6 +133,7 @@ describe('brutal-agent-hook', () => {
           'check-tree says no',
           '',
           'Fix them before going on.',
+          UPSTREAM_REPORT_HINT,
           '',
         ].join('\n'),
       },
@@ -147,7 +151,8 @@ describe('brutal-agent-hook', () => {
         status: 2,
         stdout: '',
         stderr:
-          'stylelint found problems in src/a.css:\nstylelint src/a.css in \nstylelint says no\n\nFix them before going on.\n',
+          'stylelint found problems in src/a.css:\nstylelint src/a.css in \nstylelint says no\n\nFix them before going on.\n' +
+          `${UPSTREAM_REPORT_HINT}\n`,
       },
     );
     const withoutConfig = project({ 'src/a.css': '' });
@@ -168,7 +173,8 @@ describe('brutal-agent-hook', () => {
       status: 2,
       stdout: '',
       stderr:
-        'oxlint found problems in src/a.ts:\noxlint --type-aware src/a.ts in \noxlint says no\n\nFix them before going on.\n',
+        'oxlint found problems in src/a.ts:\noxlint --type-aware src/a.ts in \noxlint says no\n\nFix them before going on.\n' +
+        `${UPSTREAM_REPORT_HINT}\n`,
     };
     assert.deepEqual(
       run({
