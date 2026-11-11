@@ -1213,7 +1213,7 @@ export const viteStack: Stack = {
     },
     {
       when: { e2e: false, 'component-tests': true },
-      addDevDependencies: { playwright: '1.64.1' },
+      addDevDependencies: { playwright: '1.65.0' },
       edits: [
         {
           file: 'docs/reference/verifications.md',
