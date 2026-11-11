@@ -15,6 +15,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 - no `app.decorate`: dependencies are factory parameters
 - an `async` handler returns its value and never calls `reply.send()`
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`, Zod schemas in an `XSchemas.ts` that exports nothing else
+- no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `plugin.ts`, `xPlugin.ts`, `.d.ts`): each module is imported under the name it exports
 - no `xRoutes.ts` under `shared-features/`
 - `fetch` is called only in an `xClient.ts` file (or a test)
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`

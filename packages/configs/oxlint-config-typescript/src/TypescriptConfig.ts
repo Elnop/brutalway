@@ -52,6 +52,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'import/no-cycle': 'error',
     'import/no-self-import': 'error',
     'import/no-duplicates': 'error',
+    'import/no-default-export': 'error',
     'typescript/no-floating-promises': 'error',
     'typescript/no-misused-promises': 'error',
     'typescript/await-thenable': 'error',
@@ -195,6 +196,17 @@ export const typescriptConfig: OxlintConfig = defineConfig({
         'max-lines-per-function': 'off',
         'function-size/max-variables': 'off',
       },
+    },
+    {
+      files: [
+        '**/*.config.ts',
+        '**/*.config.mts',
+        '**/plugin.ts',
+        '**/*Plugin.ts',
+        '**/*.d.ts',
+        '**/fixtures/**',
+      ],
+      rules: { 'import/no-default-export': 'off' },
     },
   ],
 });

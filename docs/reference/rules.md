@@ -50,7 +50,7 @@ error function-size(max-variables): This function declares 8 variables, 5 at mos
 
 ## Names and places
 
-A file with a single export is named after it. An exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`, a hook in a `useX.ts`.
+A file with a single export is named after it. Nothing is exported by default, except in the files a tool loads by their default export, such as `vite.config.ts`. An exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`, a hook in a `useX.ts`.
 
 Files are placed by kind. One file of a kind stays at the root of its folder. Two or more move into the folder of their kind: `components/`, `hooks/`, `lib/`, `routes/` and so on. No folder is empty, and none holds a single child.
 

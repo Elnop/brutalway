@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { lintFixture } from '@brutalway/lint-utils/lintFixture';
 
 describe('typescriptConfig', () => {
-  it('reports each convention once, with the per-file overrides for XTypes.ts, XConfig.ts, XSchemas.ts and tests, where functions have no length limit', () => {
+  it('reports each convention once, with the per-file overrides for XTypes.ts, XConfig.ts, XSchemas.ts, tests and the files a tool loads by their default export, where functions have no length limit', () => {
     assert.deepEqual(lintFixture(fileURLToPath(new URL('../fixtures', import.meta.url))), [
       'area.ts:2 type-definitions(no-restricted-syntax)',
       'area.ts:6 eslint(func-style)',
@@ -16,6 +16,7 @@ describe('typescriptConfig', () => {
       'clamp.ts:5 unicorn(no-array-for-each)',
       'clamp.ts:6 eslint(no-nested-ternary)',
       'clamp.ts:6 eslint(require-unicode-regexp)',
+      'discount.ts:1 import(no-default-export)',
       'formatPrice.ts:1 file-named-after-export(file-named-after-export)',
       'gather.ts:1 function-size(max-variables)',
       'helpers.ts:3 export-placement(no-restricted-syntax)',

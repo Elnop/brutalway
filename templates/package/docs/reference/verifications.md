@@ -12,6 +12,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 - no comments, no relative imports (use `#src/`), no `index.ts`, no `export *`
 - a file with a single export is named after it, an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`
+- no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `plugin.ts`, `xPlugin.ts`, `.d.ts`): each module is imported under the name it exports
 - `console` only for `console.error`: a command writes to `process.stdout` and `process.stderr`
 - `fetch` is called only in an `xClient.ts` file (or a test)
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`

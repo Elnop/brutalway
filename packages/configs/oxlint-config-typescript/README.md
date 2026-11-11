@@ -50,6 +50,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - no `xConfig.tsx`: a config is plain data in `xConfig.ts`, and its JSX goes in a component. `xContent.tsx` stays allowed for content written in JSX.
 - file names in camelCase or PascalCase
 - a file with a single export is named after it ([@brutalway/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutalway/eslint-plugin-file-named-after-export))
+- no `export default` (`import/no-default-export`), so a module is imported under the name it exports and never renamed at the import. The files a tool loads by their default export are exempt: `*.config.ts` and `*.config.mts` (Vite, Vitest, Playwright, tsdown, Oxlint, i18next), `plugin.ts` and `xPlugin.ts` (Oxlint `jsPlugins`, ESLint plugins), `.d.ts` files, which describe a module, and `fixtures/`. `React.lazy` reads a default export too: map the named export in the import, `lazy(() => import('#src/x/SettingsPage.tsx').then((module) => ({ default: module.SettingsPage })))`
 - named functions are declarations (`function area() {}`), arrow functions stay for callbacks
 - an `if` without braces fits on one line (`curly` set to `multi-line`)
 - object shapes use `type`, `interface` is only accepted to augment a global such as `Window` inside `declare global`, or a package such as `fastify` inside `declare module 'fastify'`
