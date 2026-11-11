@@ -128,6 +128,7 @@ describe('docNavGroups', () => {
       'all',
       'vite',
       'next',
+      'react-native',
       'fastify',
       'package',
     ]);

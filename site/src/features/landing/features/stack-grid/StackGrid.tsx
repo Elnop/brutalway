@@ -33,10 +33,10 @@ const stacks = [
   },
   {
     name: 'template-react-native',
-    status: 'Planned',
-    tools: 'React Native',
-    tone: 'paper',
-    url: undefined,
+    status: 'Ready',
+    tools: 'Expo, Expo Router, React Native, zustand, Jest',
+    tone: 'ink',
+    url: `${TEMPLATES_ROUTE}/react-native`,
   },
 ];
 

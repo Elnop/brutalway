@@ -45,7 +45,7 @@ Every template builds the same todo list, so the stacks can be compared side by 
 | [template-fastify](templates/fastify) | Fastify, Zod, node:sqlite, node:test, Swagger UI | ready |
 | [template-package](templates/package) | a standalone npm package: tsdown, node:test, changesets | ready |
 | [template-next](templates/next) | Next.js App Router, React, zustand, Vitest, Playwright | ready |
-| template-react-native | React Native | planned |
+| [template-react-native](templates/react-native) | Expo, Expo Router, React Native, zustand, Jest | ready |
 
 ## Proposing a change
 

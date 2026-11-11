@@ -1,8 +1,10 @@
 # Common rules
 
-The rules every template shares, the tool that enforces each one and the message it prints. The rules that belong to one stack are in that template's `docs/reference/verifications.md`: [template-vite](../../templates/vite/docs/reference/verifications.md), [template-next](../../templates/next/docs/reference/verifications.md), [template-fastify](../../templates/fastify/docs/reference/verifications.md), [template-package](../../templates/package/docs/reference/verifications.md).
+The rules every template shares, the tool that enforces each one and the message it prints. The rules that belong to one stack are in that template's `docs/reference/verifications.md`: [template-vite](../../templates/vite/docs/reference/verifications.md), [template-next](../../templates/next/docs/reference/verifications.md), [template-react-native](../../templates/react-native/docs/reference/verifications.md), [template-fastify](../../templates/fastify/docs/reference/verifications.md), [template-package](../../templates/package/docs/reference/verifications.md).
 
 All of them run in `npm run check`, in the pre-commit hook and in CI. The messages below come from a project created with `npm create brutal`.
+
+template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template moves to that config once it is published on npm.
 
 ## Layers
 
@@ -63,7 +65,7 @@ src/shared holds 2 lib files (normalizeTitle.ts, percent.ts): move them into lib
 
 ## Visible text
 
-On vite, no text the user can read is written in JSX, nor in `aria-label`, `placeholder`, `title` or `alt`. It goes in `src/app/locales/en/` and through `t()`.
+On vite, next and react-native, no text the user can read is written in JSX, nor in `aria-label`, `placeholder`, `title` or `alt`, nor on React Native in `accessibilityLabel` or `accessibilityHint`. It goes in `src/app/locales/en/` and through `t()`.
 
 Checked by [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next), then by `i18next-cli`, which fails on a missing or an unused key.
 

@@ -8,7 +8,7 @@ Each template is a starter repository where the conventions are checked by tools
 | [template-fastify](fastify) | Fastify, Zod, node:sqlite, node:test, Swagger UI | ready |
 | [template-package](package) | a standalone npm package: tsdown, node:test, changesets | ready |
 | [template-next](next) | Next.js App Router, React, zustand, Vitest, Playwright | ready |
-| template-react-native | React Native | planned |
+| [template-react-native](react-native) | Expo, Expo Router, React Native, zustand, Jest | ready |
 
 To start a project from one of them:
 
