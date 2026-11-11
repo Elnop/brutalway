@@ -121,6 +121,18 @@ export const DOC_SOURCES: DocSource[] = [
     moved: TEMPLATE_MOVED_DOCS,
   },
   {
+    key: 'next',
+    label: 'template-next',
+    route: TEMPLATES_ROUTE,
+    repo: 'Elnop/brutalway',
+    directory: 'templates/next',
+    files: ['README.md'],
+    folder: 'docs',
+    changelog: 'CHANGELOG.md',
+    order: TEMPLATE_DOC_ORDER,
+    moved: TEMPLATE_MOVED_DOCS,
+  },
+  {
     key: 'fastify',
     label: 'template-fastify',
     route: TEMPLATES_ROUTE,

@@ -124,7 +124,13 @@ describe('docNavGroups', () => {
       { source: vite, path: 'README.md' },
       [{ depth: 3, text: 'Only', slug: 'only' }],
     );
-    expect(groups.map((group) => group.key)).toStrictEqual(['all', 'vite', 'fastify', 'package']);
+    expect(groups.map((group) => group.key)).toStrictEqual([
+      'all',
+      'vite',
+      'next',
+      'fastify',
+      'package',
+    ]);
     expect(outline(groups[1]?.nodes ?? [])).toStrictEqual(['Only']);
     expect(groups[1]?.current).toBe('page');
   });

@@ -1,6 +1,6 @@
 # Inspirations
 
-None of the ideas in these templates is new. This page lists where each one comes from, what we take, what we leave out and which check enforces it. The principles that only apply to one stack are in that template's `docs/concepts/architecture.md`: [template-vite](../../templates/vite/docs/concepts/architecture.md) and [template-fastify](../../templates/fastify/docs/concepts/architecture.md).
+None of the ideas in these templates is new. This page lists where each one comes from, what we take, what we leave out and which check enforces it. The principles that only apply to one stack are in that template's `docs/concepts/architecture.md`: [template-vite](../../templates/vite/docs/concepts/architecture.md), [template-next](../../templates/next/docs/concepts/architecture.md) and [template-fastify](../../templates/fastify/docs/concepts/architecture.md).
 
 The first five justify the axioms of [intent.md](intent.md). The others justify the folder layout.
 

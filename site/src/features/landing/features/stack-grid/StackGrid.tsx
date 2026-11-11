@@ -24,7 +24,13 @@ const stacks = [
     tone: 'blue',
     url: `${TEMPLATES_ROUTE}/package`,
   },
-  { name: 'template-next', status: 'Planned', tools: 'Next.js', tone: 'paper', url: undefined },
+  {
+    name: 'template-next',
+    status: 'Ready',
+    tools: 'Next.js App Router, React, zustand, Vitest, Playwright',
+    tone: 'ink',
+    url: `${TEMPLATES_ROUTE}/next`,
+  },
   {
     name: 'template-react-native',
     status: 'Planned',
