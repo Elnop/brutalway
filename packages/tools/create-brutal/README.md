@@ -57,6 +57,7 @@ A combination that cannot work stops the CLI before anything is written, with a 
 Without `example`, the structure stays with empty `src/features/` and `src/shared-features/` folders.
 
 - vite: `App.tsx` only shows the project name, and only the `app` namespace of the messages remains
+- next: `src/app/page.tsx` only shows the project name, which is also the title of the page, and only the `app` namespace remains
 - fastify: `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name
 - package: the `"."` export is `src/greet.ts`, a single `greet` function to replace, since the lint rules refuse an empty module
 
@@ -129,6 +130,21 @@ Both values write `src/shared/analyticsClient.ts`, the only place where events l
 
 - `module`: the client dispatches an `analytics` event on `window`, for whatever tool you plug in
 - `posthog`: the client sends the events to PostHog when `VITE_POSTHOG_KEY` is set, and `securityHeaders.ts` lets the PostHog hosts through
+
+### Next.js
+
+[template-next](https://github.com/Elnop/brutalway/tree/main/templates/next). The same todo list on the App Router: the route files of `src/app/` are server components, and the orchestrators that read the zustand store start with `'use client'`. It takes the options of the vite stack, with the same values and defaults, except `server-state`.
+
+| Option | Difference with vite |
+|---|---|
+| `styling` | `tailwind` goes through `@tailwindcss/postcss` and `postcss.config.mjs`. With `css-modules`, the styles of the page are in `src/app/page.module.css` |
+| `ui` | the same vendored files and `components.json`, and the alias `@third-party/` is also declared in `vitest.config.ts` |
+| `i18n` | the language is saved in a `language` cookie instead of `localStorage`. `src/features/language-switch/lib/requestLanguage.ts` reads it on the server, or the first language of `Accept-Language` the project has, so the page, `<html lang>` and the title come in that language from the server. The switch sets the cookie and calls `router.refresh()` |
+| `react-compiler` | `reactCompiler: true` in `next.config.ts`, with `babel-plugin-react-compiler` |
+| `analytics` | with `posthog`, the key is `NEXT_PUBLIC_POSTHOG_KEY`, nothing is sent during server rendering, and `src/proxy.ts` lets the PostHog hosts through its Content Security Policy |
+| `coverage` | `src/proxy.ts` is left out instead of `src/main.tsx` |
+
+`server-state` is not offered: on Next.js a server component can read the data itself and hand it to the client components, so TanStack Query in the browser is not the default way any more. The example keeps its todos in the browser, in zustand, like on vite.
 
 ### Fastify
 

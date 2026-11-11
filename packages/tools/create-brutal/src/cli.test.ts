@@ -11,7 +11,7 @@ const HIDE_CURSOR = '\u001B[?25l';
 
 const USAGE = `Usage: npm create brutal [dir] -- [flags]
 
-  --stack <id>       vite, fastify, package
+  --stack <id>       vite, next, fastify, package
   --preset <file>    JSON file with stack, options, git and install
   --yes, -y          take the default of every question left
   --no-git           skip git init (the pre-commit hook is dropped)
@@ -28,6 +28,22 @@ vite
   --ui none|shadcn               default: none
   --[no-]dark-theme              default: no
   --[no-]server-state            default: no
+  --[no-]forms                   default: no
+  --[no-]i18n                    default: no
+  --[no-]react-compiler          default: no
+  --analytics none|module|posthog default: none
+  --[no-]component-tests         default: yes
+  --[no-]coverage                default: no
+  --[no-]e2e                     default: yes
+  --[no-]claude-hook             default: yes
+  --[no-]ci                      default: yes
+
+next
+  --[no-]example                 default: yes
+  --[no-]zustand                 default: yes
+  --styling css|css-modules|tailwind default: css
+  --ui none|shadcn               default: none
+  --[no-]dark-theme              default: no
   --[no-]forms                   default: no
   --[no-]i18n                    default: no
   --[no-]react-compiler          default: no
@@ -154,7 +170,7 @@ describe('create-brutal', () => {
   it('refuses an unknown stack, an unknown flag, a choice without value and options that conflict', () => {
     assert.deepEqual(
       outcome(run(['app', '--stack', 'nope', '-y'])),
-      failure('Unknown stack nope. Choose one of: vite, fastify, package'),
+      failure('Unknown stack nope. Choose one of: vite, next, fastify, package'),
     );
     assert.deepEqual(
       outcome(run(['app', '--stack', 'fastify', '--bogus', '-y'])),
@@ -300,6 +316,38 @@ describe('create-brutal', () => {
     ]) {
       assert.equal(existsSync(join(project, file)), false, file);
     }
+  });
+
+  it('copies the next overlays of the chosen options, with the route files of src/app/', () => {
+    const options = [
+      '--styling',
+      'css-modules',
+      '--i18n',
+      '--analytics',
+      'posthog',
+      '--no-e2e',
+      '--no-component-tests',
+    ];
+    const result = run(['app', '--stack', 'next', '-y', ...OFFLINE, ...options]);
+    assert.deepEqual(outcome(result), { status: 0, stdout: CREATED_WITHOUT_GIT, stderr: '' });
+    const project = join(result.cwd, 'app');
+    for (const file of [
+      'src/app/page.tsx',
+      'src/app/page.module.css',
+      'src/app/locales/fr/app.json',
+      'src/features/language-switch/lib/requestLanguage.ts',
+      'src/features/language-switch/components/LanguageSwitch.module.css',
+      'src/shared/analyticsClient.ts',
+    ]) {
+      assert.equal(existsSync(join(project, file)), true, file);
+    }
+    for (const file of ['src/app/App.tsx', 'playwright.config.ts', 'CHANGELOG.md']) {
+      assert.equal(existsSync(join(project, file)), false, file);
+    }
+    assert.match(
+      readFileSync(join(project, 'src/app/layout.tsx'), 'utf8'),
+      /<html lang=\{language\}>/u,
+    );
   });
 
   it('creates the package project with the example, the todo bin and the release setup, at version 0.1.0 and publishable', () => {

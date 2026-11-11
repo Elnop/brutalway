@@ -8,6 +8,7 @@ function contentSecurityPolicy(nonce: string): string {
     "default-src 'self'",
     `script-src ${scriptSources.join(' ')}`,
     `style-src 'self' 'nonce-${nonce}'`,
+    "style-src-attr 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
     "connect-src 'self'",

@@ -62,7 +62,7 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 `next.config.ts` sends HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` and `Permissions-Policy` on every route, and drops `X-Powered-By`.
 
-The Content Security Policy comes from `src/proxy.ts`, since Next.js writes inline scripts into the page: the proxy draws a nonce for each request, and Next.js puts it on its own scripts. Only those scripts, and the ones they load, run. Styles, fonts and requests stay on the app's own origin. A nonce changes on each request, so `src/app/layout.tsx` calls `connection()` and every page renders on request instead of at build time. In dev, the policy also allows `'unsafe-eval'`, which hot reload needs.
+The Content Security Policy comes from `src/proxy.ts`, since Next.js writes inline scripts into the page: the proxy draws a nonce for each request, and Next.js puts it on its own scripts. Only those scripts, and the ones they load, run. Stylesheets, fonts and requests stay on the app's own origin. `style` attributes are allowed (`style-src-attr 'unsafe-inline'`), since the server writes into the HTML the ones React renders, while a `<style>` element still needs the nonce. A nonce changes on each request, so `src/app/layout.tsx` calls `connection()` and every page renders on request instead of at build time. In dev, the policy also allows `'unsafe-eval'`, which hot reload needs.
 
 `npm run e2e` runs against `next start`, so the tests run under these headers. `test` from `@brutalway/playwright-fixtures` fails a test when the browser reports a CSP violation, so a script or a request from another origin shows up there first: allow it in `src/proxy.ts`, on the narrowest directive.
 

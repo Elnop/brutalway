@@ -1,0 +1,140 @@
+:root {
+  --ink: #111111;
+  --paper: #fffdf5;
+  --page: #f4e9d8;
+  --yellow: #ffe98f;
+  --pink: #ffb8e6;
+  --blue: #b3c5ff;
+  --on-accent: #111111;
+  --focus: #2a5cff;
+  --border: 3px solid var(--ink);
+  --shadow: 6px 6px 0 var(--ink);
+  --shadow-small: 4px 4px 0 var(--ink);
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page);
+  color: var(--ink);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 12vw, 5rem);
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+input:not([type='checkbox']) {
+  padding: 0.55rem 0.75rem;
+  border: var(--border);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.button {
+  padding: 0.55rem 1.1rem;
+  border: var(--border);
+  background: var(--paper);
+  font-weight: 700;
+  box-shadow: var(--shadow-small);
+  cursor: pointer;
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease;
+  color: var(--ink);
+}
+
+.button:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button-small {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.button-yellow {
+  background: var(--yellow);
+  color: var(--on-accent);
+}
+
+.button-pink {
+  background: var(--pink);
+  color: var(--on-accent);
+}
+
+.button-blue {
+  background: var(--blue);
+  color: var(--on-accent);
+}
+
+.field-error {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 0.2rem 0.6rem;
+  border: var(--border);
+  background: var(--pink);
+  font-weight: 700;
+  color: var(--on-accent);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}

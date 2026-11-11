@@ -1,0 +1,23 @@
+{
+  "title": "Tâches",
+  "empty": "Rien ici.",
+  "newTask": "Nouvelle tâche",
+  "placeholder": "Que faut-il faire ?",
+  "add": "Ajouter",
+  "show": "Afficher",
+  "filters": {
+    "all": "Toutes",
+    "active": "En cours",
+    "completed": "Faites"
+  },
+  "edit": "Modifier",
+  "editTask": "Modifier {{title}}",
+  "delete": "Supprimer",
+  "deleteTask": "Supprimer {{title}}",
+  "rename": "Renommer {{title}}",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "errors": {
+    "blankTitle": "Le titre est vide"
+  }
+}

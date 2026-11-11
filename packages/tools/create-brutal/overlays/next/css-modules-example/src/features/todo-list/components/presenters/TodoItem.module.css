@@ -1,0 +1,11 @@
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  border: var(--border);
+  background: var(--paper);
+  box-shadow: var(--shadow-small);
+  color: var(--ink);
+}

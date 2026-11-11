@@ -1,0 +1,7 @@
+.list {
+  padding: 1.5rem;
+  border: var(--border);
+  background: var(--yellow);
+  box-shadow: var(--shadow);
+  color: var(--on-accent);
+}
