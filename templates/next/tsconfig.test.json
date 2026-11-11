@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["node", "@vitest/browser-playwright"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@e2e/*": ["./e2e/*"]
+    }
+  },
+  "include": [
+    "src",
+    "node_modules/.cache/i18next",
+    "e2e",
+    "next.config.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts",
+    "oxlint.config.ts",
+    "playwright.config.ts",
+    "i18next.config.ts"
+  ],
+  "exclude": []
+}

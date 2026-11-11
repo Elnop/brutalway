@@ -1,0 +1,23 @@
+{
+  "title": "Tasks",
+  "empty": "Nothing here.",
+  "newTask": "New task",
+  "placeholder": "What needs doing?",
+  "add": "Add",
+  "show": "Show",
+  "filters": {
+    "all": "All",
+    "active": "Active",
+    "completed": "Done"
+  },
+  "edit": "Edit",
+  "editTask": "Edit {{title}}",
+  "delete": "Delete",
+  "deleteTask": "Delete {{title}}",
+  "rename": "Rename {{title}}",
+  "save": "Save",
+  "cancel": "Cancel",
+  "errors": {
+    "blankTitle": "The title is blank"
+  }
+}

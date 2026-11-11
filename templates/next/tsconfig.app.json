@@ -1,0 +1,11 @@
+{
+  "extends": "@brutalway/tsconfig/react-vite.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "node_modules/.cache/i18next"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}
