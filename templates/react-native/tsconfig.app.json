@@ -1,0 +1,17 @@
+{
+  "extends": "@brutalway/tsconfig/base.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "customConditions": ["react-native"],
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "types": [],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "node_modules/.cache/i18next"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

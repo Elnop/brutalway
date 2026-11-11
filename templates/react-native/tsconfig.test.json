@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["node", "jest"]
+  },
+  "include": [
+    "src",
+    "node_modules/.cache/i18next",
+    "jest.setup.ts",
+    "oxlint.config.ts",
+    "i18next.config.ts"
+  ],
+  "exclude": []
+}

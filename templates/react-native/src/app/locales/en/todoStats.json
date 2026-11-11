@@ -1,0 +1,8 @@
+{
+  "title": "Progress",
+  "left_one": "{{count}} task left",
+  "left_other": "{{count}} tasks left",
+  "done_one": "{{count}} done",
+  "done_other": "{{count}} done",
+  "clear": "Clear done"
+}

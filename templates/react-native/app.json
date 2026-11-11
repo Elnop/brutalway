@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "template-react-native",
+    "slug": "template-react-native",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "scheme": "template-react-native",
+    "web": {
+      "output": "single"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "root": "src/app/screens"
+        }
+      ],
+      "expo-font"
+    ],
+    "updates": {
+      "enabled": false
+    }
+  }
+}

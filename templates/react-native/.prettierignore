@@ -1,0 +1,5 @@
+**/*.md
+dist
+.expo
+expo-env.d.ts
+package-lock.json
