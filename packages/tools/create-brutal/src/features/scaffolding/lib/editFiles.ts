@@ -1,16 +1,16 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { applyFileEdit } from '#src/features/scaffolding/lib/applyFileEdit.ts';
-import { PROJECT_NAME_TOKEN } from '#src/features/scaffolding/ScaffoldConfig.ts';
+import { fillProjectTokens } from '#src/features/scaffolding/lib/fillProjectTokens.ts';
 import { errorMessage } from '#src/shared/lib/errorMessage.ts';
 import type { FileEdit } from '#src/shared-features/stack/StackTypes.ts';
 
 function withProjectName(edit: FileEdit, projectName: string): FileEdit {
   if ('with' in edit) {
-    return { ...edit, with: edit.with.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+    return { ...edit, with: fillProjectTokens(edit.with, projectName) };
   }
   if ('insert' in edit) {
-    return { ...edit, insert: edit.insert.replaceAll(PROJECT_NAME_TOKEN, projectName) };
+    return { ...edit, insert: fillProjectTokens(edit.insert, projectName) };
   }
   return edit;
 }

@@ -58,6 +58,7 @@ Without `example`, the structure stays with empty `src/features/` and `src/share
 
 - vite: `App.tsx` only shows the project name, and only the `app` namespace of the messages remains
 - next: `src/app/page.tsx` only shows the project name, which is also the title of the page, and only the `app` namespace remains
+- react-native: `src/app/screens/index.tsx` only shows the project name, and `src/shared/theme/` keeps the theme and the `Button`
 - fastify: `buildApp.ts` only creates the server, and the Swagger UI, if kept, is titled with the project name
 - package: the `"."` export is `src/greet.ts`, a single `greet` function to replace, since the lint rules refuse an empty module
 
@@ -145,6 +146,25 @@ Both values write `src/shared/analyticsClient.ts`, the only place where events l
 | `coverage` | `src/proxy.ts` is left out instead of `src/main.tsx` |
 
 `server-state` is not offered: on Next.js a server component can read the data itself and hand it to the client components, so TanStack Query in the browser is not the default way any more. The example keeps its todos in the browser, in zustand, like on vite.
+
+### React Native
+
+[template-react-native](https://github.com/Elnop/brutalway/tree/main/templates/react-native). The same todo list on Expo and Expo Router, for iOS, Android and the web build. `app.json` takes the name of the project, and the identifier of the app on the stores becomes `com.example.<name>`, without its dashes: change it before the first build.
+
+| Option | Difference with vite |
+|---|---|
+| `dark-theme` | `src/shared/theme/ThemeConfig.ts` holds a light and a dark set of colors and picks one through `Appearance` when the app starts, and `app.json` follows the system with `expo-system-ui` |
+| `server-state` | the client calls `EXPO_PUBLIC_API_URL`, or `http://localhost:3000`, where template-fastify answers: there is no dev server to mock the API from, as Vite does |
+| `forms` | the field goes through `useController`, since React Native has no `<form>` and no `register` |
+| `i18n` | the language is saved in AsyncStorage, the first one comes from the device through `expo-localization`, and the switch sits under the title |
+| `react-compiler` | `experiments.reactCompiler` in `app.json`, with `babel-plugin-react-compiler` |
+| `analytics` | `module` emits an event on `DeviceEventEmitter`. `posthog` sends through `posthog-react-native` when `EXPO_PUBLIC_POSTHOG_KEY` is set |
+| `component-tests` | React Native Testing Library on Jest, in Node |
+| `coverage` | the thresholds sit under `jest` in `package.json` |
+
+`expo-go`, off by default, runs the app in Expo Go instead of a development build: it drops `expo-dev-client`, `eas.json` and `scripts/phone.ts`, and `npm start` prints the QR code to scan. Expo Go cannot load a native library outside the Expo SDK, so a project that needs one moves to a development build.
+
+Tailwind, CSS Modules, shadcn/ui and the security headers are not offered: React Native has no CSS, the styles come from the theme object, and an app sends no HTTP headers of its own. There are no e2e tests either, since they need a simulator.
 
 ### Fastify
 

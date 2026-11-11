@@ -16,7 +16,7 @@ Enforced by `@brutalway/dependency-cruiser-config` (a presenter imports no store
 
 From the design tokens of the web templates: every color, size and font has a name, and the components only use the names.
 
-React Native has no CSS, so the tokens are a TypeScript object, `THEME` in `src/shared/ThemeConfig.ts`, and each component declares its styles in a `StyleSheet.create` at the bottom of its file. The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared/Button.tsx`.
+React Native has no CSS, so the tokens are a TypeScript object, `THEME` in `src/shared/theme/ThemeConfig.ts`, and each component declares its styles in a `StyleSheet.create` at the bottom of its file. The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared/theme/Button.tsx`.
 
 We leave out styling libraries (NativeWind, Tamagui, styled-components): the theme object covers the example, and nothing has to be learned on top of React Native.
 

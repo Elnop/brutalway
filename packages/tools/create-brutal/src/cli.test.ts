@@ -11,7 +11,7 @@ const HIDE_CURSOR = '\u001B[?25l';
 
 const USAGE = `Usage: npm create brutal [dir] -- [flags]
 
-  --stack <id>       vite, next, fastify, package
+  --stack <id>       vite, next, react-native, fastify, package
   --preset <file>    JSON file with stack, options, git and install
   --yes, -y          take the default of every question left
   --no-git           skip git init (the pre-commit hook is dropped)
@@ -51,6 +51,21 @@ next
   --[no-]component-tests         default: yes
   --[no-]coverage                default: no
   --[no-]e2e                     default: yes
+  --[no-]claude-hook             default: yes
+  --[no-]ci                      default: yes
+
+react-native
+  --[no-]example                 default: yes
+  --[no-]zustand                 default: yes
+  --[no-]dark-theme              default: no
+  --[no-]server-state            default: no
+  --[no-]forms                   default: no
+  --[no-]i18n                    default: no
+  --[no-]react-compiler          default: no
+  --analytics none|module|posthog default: none
+  --[no-]component-tests         default: yes
+  --[no-]coverage                default: no
+  --[no-]expo-go                 default: no
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
 
@@ -141,6 +156,7 @@ type Manifest = {
   bin?: Record<string, string>;
   exports?: Record<string, Record<string, string>>;
   scripts?: Record<string, string>;
+  dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
 };
 
@@ -170,7 +186,7 @@ describe('create-brutal', () => {
   it('refuses an unknown stack, an unknown flag, a choice without value and options that conflict', () => {
     assert.deepEqual(
       outcome(run(['app', '--stack', 'nope', '-y'])),
-      failure('Unknown stack nope. Choose one of: vite, next, fastify, package'),
+      failure('Unknown stack nope. Choose one of: vite, next, react-native, fastify, package'),
     );
     assert.deepEqual(
       outcome(run(['app', '--stack', 'fastify', '--bogus', '-y'])),
@@ -348,6 +364,29 @@ describe('create-brutal', () => {
       readFileSync(join(project, 'src/app/layout.tsx'), 'utf8'),
       /<html lang=\{language\}>/u,
     );
+  });
+
+  it('copies the react-native overlays, names the app after its folder and keeps Expo Go when asked', () => {
+    const options = ['--i18n', '--server-state', '--analytics', 'module', '--expo-go'];
+    const result = run(['my-app', '--stack', 'react-native', '-y', ...OFFLINE, ...options]);
+    assert.equal(result.status, 0, result.stdout);
+    const project = join(result.cwd, 'my-app');
+    for (const file of [
+      'src/app/queryClient.ts',
+      'src/app/locales/fr/app.json',
+      'src/features/language-switch/components/LanguageSwitchContainer.tsx',
+      'src/shared-features/todos/hooks/useTodosQuery.ts',
+      'src/shared/analyticsClient.ts',
+    ]) {
+      assert.equal(existsSync(join(project, file)), true, file);
+    }
+    for (const file of ['scripts/phone.ts', 'eas.json', 'CHANGELOG.md']) {
+      assert.equal(existsSync(join(project, file)), false, file);
+    }
+    const app = readFileSync(join(project, 'app.json'), 'utf8');
+    assert.match(app, /"slug": "my-app"/u);
+    assert.match(app, /"package": "com\.example\.myapp"/u);
+    assert.equal(manifest(project).dependencies?.['expo-dev-client'], undefined);
   });
 
   it('creates the package project with the example, the todo bin and the release setup, at version 0.1.0 and publishable', () => {

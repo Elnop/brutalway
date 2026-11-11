@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import type { PressableProps } from 'react-native';
-import { THEME } from '@/shared/ThemeConfig.ts';
-import type { Tone } from '@/shared/ThemeTypes.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
+import type { Tone } from '@/shared/theme/ThemeTypes.ts';
 
 type ButtonProps = PressableProps & {
   label: string;

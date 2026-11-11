@@ -7,7 +7,7 @@
     "customConditions": ["react-native"],
     "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "types": [],
+    "types": ["expo/types"],
     "paths": {
       "@/*": ["./src/*"]
     }

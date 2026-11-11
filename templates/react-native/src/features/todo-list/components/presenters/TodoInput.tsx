@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { TitleError } from '@/features/todo-list/shared/presenters/TitleError.tsx';
 import { TitleInput } from '@/features/todo-list/shared/presenters/TitleInput.tsx';
 import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
-import { Button } from '@/shared/Button.tsx';
-import { THEME } from '@/shared/ThemeConfig.ts';
+import { Button } from '@/shared/theme/Button.tsx';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 type TodoInputProps = {
   onAdd: (title: string) => void;

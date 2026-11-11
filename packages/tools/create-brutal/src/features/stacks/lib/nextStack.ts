@@ -17,6 +17,7 @@ import {
   FRONTEND_TAILWIND,
   FRONTEND_TEST_SWITCHES,
   FRONTEND_UI_AND_STYLING,
+  I18N_LOCALE_EDITS,
 } from '#src/features/stacks/configs/frontendChangesConfig.ts';
 
 const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/components/LanguageSwitchContainer.tsx\`, which saves the choice in a \`language\` cookie and asks the server to render the page again. The languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`. On each request, \`src/features/language-switch/lib/requestLanguage.ts\` reads the cookie, or else the first language of the browser that the project has, so the server renders the texts, \`<html lang>\` and the title of the page in that language from the start.
@@ -48,6 +49,8 @@ const ANCHORS = {
   lint: 'oxlint --type-aware src e2e oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
   lintWithoutE2e:
     'oxlint --type-aware src oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
+  testsLintLine:
+    '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)',
   coverageEntries: "          'src/proxy.ts',\n          '**/request[A-Z]*.ts',\n",
   coverageLeftOut: ', `src/app/`, `src/proxy.ts` and the `requestX.ts` files that read the request',
 };
@@ -94,22 +97,7 @@ export const nextStack: Stack = {
         when: { i18n: true },
         overlay: 'i18n',
         edits: [
-          {
-            file: 'src/app/locales/en/app.json',
-            after: '{\n',
-            insert:
-              '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n',
-          },
-          {
-            file: 'src/app/createI18n.ts',
-            replace: '      en: {',
-            with: '      fr: FRENCH,\n      en: {',
-          },
-          {
-            file: 'i18next.config.ts',
-            replace: "locales: ['en'],",
-            with: "locales: ['en', 'fr'],",
-          },
+          ...I18N_LOCALE_EDITS,
           {
             file: 'src/app/layout.tsx',
             replace: "import { connection } from 'next/server';\n",

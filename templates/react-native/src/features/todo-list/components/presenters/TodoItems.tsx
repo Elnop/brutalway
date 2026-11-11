@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { TodoItem } from '@/features/todo-list/components/presenters/TodoItem.tsx';
-import { THEME } from '@/shared/ThemeConfig.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
 
 type TodoItemsProps = {

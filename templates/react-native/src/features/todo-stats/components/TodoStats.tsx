@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button } from '@/shared/Button.tsx';
-import { THEME } from '@/shared/ThemeConfig.ts';
+import { Button } from '@/shared/theme/Button.tsx';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 type TodoStatsProps = {
   remaining: number;

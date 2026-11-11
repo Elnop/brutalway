@@ -31,7 +31,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 ## Styles
 
-There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules: no color, size, spacing, font or shadow literal in a `StyleSheet.create`, and no style object written in JSX. The template follows them and will extend that config once it is published on npm.
+There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules: no color, size, spacing, font or shadow literal in a `StyleSheet.create`, and no style object written in JSX. The template follows them and will extend that config once it is published on npm.
 
 ## Dependencies
 

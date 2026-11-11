@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TodoListLayout } from '@/features/todo-list/components/TodoListLayout.tsx';
 import { TodoStatsContainer } from '@/features/todo-stats/components/TodoStatsContainer.tsx';
-import { THEME } from '@/shared/ThemeConfig.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 export default function HomePage() {
   const { t } = useTranslation('app');

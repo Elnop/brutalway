@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput } from 'react-native';
 import type { TextInputProps } from 'react-native';
-import { THEME } from '@/shared/ThemeConfig.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 type TitleInputProps = TextInputProps & {
   label: string;

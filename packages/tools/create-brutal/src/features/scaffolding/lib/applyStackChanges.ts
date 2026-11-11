@@ -14,7 +14,7 @@ import { editFiles } from '#src/features/scaffolding/lib/editFiles.ts';
 import { formatJson } from '#src/features/scaffolding/lib/formatJson.ts';
 import { updatePackage } from '#src/features/scaffolding/lib/updatePackage.ts';
 import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
-import { PROJECT_NAME_TOKEN } from '#src/features/scaffolding/ScaffoldConfig.ts';
+import { fillProjectTokens } from '#src/features/scaffolding/lib/fillProjectTokens.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
 
 function formatJsonFiles(dir: string): void {
@@ -41,10 +41,7 @@ function copyOverlay(from: string, to: string, projectName: string): void {
       copyOverlay(source, target, projectName);
     } else {
       cpSync(source, target);
-      writeFileSync(
-        target,
-        readFileSync(target, 'utf8').replaceAll(PROJECT_NAME_TOKEN, projectName),
-      );
+      writeFileSync(target, fillProjectTokens(readFileSync(target, 'utf8'), projectName));
     }
   }
 }

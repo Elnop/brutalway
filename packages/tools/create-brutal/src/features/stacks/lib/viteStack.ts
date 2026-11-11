@@ -17,21 +17,12 @@ import {
   FRONTEND_TAILWIND,
   FRONTEND_TEST_SWITCHES,
   FRONTEND_UI_AND_STYLING,
+  FRONTEND_COMPILER_EXAMPLE,
+  FRONTEND_FORMS_SERVER_STATE,
+  FRONTEND_SERVER_STATE,
+  FRONTEND_SERVER_STATE_AGENTS,
+  I18N_LOCALE_EDITS,
 } from '#src/features/stacks/configs/frontendChangesConfig.ts';
-
-const SERVER_STATE_LINT_DOC = `
-\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tanstack-query\`: a query key comes from an \`xKeys\` factory, \`staleTime\` and \`gcTime\` from a profile of \`src/shared/QueryConfig.ts\`, a query key lists every variable its \`queryFn\` reads, and the \`QueryClient\` is created once, outside any component. \`fetch\` is only called from an \`xClient.ts\`, never inside an effect.
-`;
-
-const SERVER_STATE_ARCHITECTURE = `## Server state
-
-From bedrock: data that comes from an API and state that only the UI owns are held by two different tools. Data from the API goes through TanStack Query, UI state goes into a zustand store, and a store never holds what the API returns.
-
-The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of \`src/shared/QueryConfig.ts\`, the \`QueryClient\` lives in \`src/app/queryClient.ts\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
-
-Enforced by \`@brutalway/oxlint-config-tanstack-query\` (keys, cache windows), \`@brutalway/oxlint-config-react\` (\`fetch\` only in an \`xClient.ts\`, never in an effect) and \`@brutalway/dependency-cruiser-config\` (no client, no query hook and no \`@tanstack/react-query\` in a presenter or a store).
-
-`;
 
 const SERVER_STATE_README = `## API
 
@@ -72,6 +63,8 @@ const ANCHORS = {
   lint: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts',
   lintWithoutE2e:
     'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts securityHeaders.ts',
+  testsLintLine:
+    '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)',
   coverageEntries: "          'src/main.tsx',\n",
   coverageLeftOut: ' and `src/app/`',
 };
@@ -121,41 +114,7 @@ export const viteStack: Stack = {
         addDevDependencies: { '@tailwindcss/vite': '4.3.5' },
       },
       ...FRONTEND_UI_AND_STYLING,
-      {
-        when: { 'server-state': true },
-        overlay: 'server-state',
-        edits: [
-          {
-            file: 'oxlint.config.ts',
-            after: "import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';\n",
-            insert:
-              "import { tanstackQueryConfig } from '@brutalway/oxlint-config-tanstack-query';\n",
-          },
-          {
-            file: 'oxlint.config.ts',
-            replace: 'extends: [reactViteConfig',
-            with: 'extends: [reactViteConfig, tanstackQueryConfig',
-          },
-          {
-            file: 'docs/reference/verifications.md',
-            after:
-              '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)\n',
-            insert: SERVER_STATE_LINT_DOC,
-          },
-          {
-            file: 'docs/reference/verifications.md',
-            replace: '- a presenter imports no store and no shared-feature hook\n',
-            with: '- a presenter imports no store, no shared-feature hook, no `xClient.ts` and no `@tanstack/react-query`\n- a store imports no `xClient.ts`, no `xKeys.ts` and no hook: it only holds UI state\n',
-          },
-          {
-            file: 'docs/concepts/architecture.md',
-            before: '## Sub-features',
-            insert: SERVER_STATE_ARCHITECTURE,
-          },
-        ],
-        addDependencies: { '@tanstack/react-query': '5.107.1' },
-        addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.2.0' },
-      },
+      ...FRONTEND_SERVER_STATE,
       {
         when: { 'server-state': true, example: false },
         remove: ['src/shared/.gitkeep'],
@@ -222,70 +181,12 @@ export const viteStack: Stack = {
         when: { forms: true, example: true, 'server-state': false },
         overlay: 'forms-schemas',
       },
-      {
-        when: { forms: true, example: true, 'server-state': true },
-        edits: [
-          {
-            file: 'src/shared-features/todos/TodosSchemas.ts',
-            after: "import { z } from 'zod';\n",
-            insert:
-              "import { normalizeTitle } from '@/shared/normalizeTitle.ts';\nimport { TITLE_ERRORS } from '@/shared-features/todos/TodosConfig.ts';\n",
-          },
-          {
-            file: 'src/shared-features/todos/TodosSchemas.ts',
-            after: 'export const ClearedSchema = z.object({ deleted: z.number().int().min(0) });\n',
-            insert:
-              '\nexport const TodoDraftSchema = z.object({\n  title: z\n    .string()\n    .transform(normalizeTitle)\n    .pipe(z.string().min(1, TITLE_ERRORS[0]).max(200, TITLE_ERRORS[1])),\n});\n',
-          },
-          {
-            file: 'src/shared-features/todos/TodosTypes.ts',
-            replace: 'import type { TodoFilterSchema, TodoSchema } from',
-            with: 'import type {\n  TodoDraftSchema,\n  TodoFilterSchema,\n  TodoSchema,\n} from',
-          },
-          {
-            file: 'src/shared-features/todos/TodosTypes.ts',
-            after: 'export type TodoFilter = z.infer<typeof TodoFilterSchema>;\n',
-            insert: '\nexport type TodoDraft = z.output<typeof TodoDraftSchema>;\n',
-          },
-          {
-            file: 'src/shared-features/todos/todosClient.ts',
-            replace: 'import type { Todo, TodoFilter, TodoUpdate }',
-            with: 'import type {\n  Todo,\n  TodoDraft,\n  TodoFilter,\n  TodoUpdate,\n}',
-          },
-          {
-            file: 'src/shared-features/todos/todosClient.ts',
-            replace:
-              "create: async (title: string) => request(TodoSchema, 'POST', '/todos', { title }),",
-            with: "create: async (draft: TodoDraft) => request(TodoSchema, 'POST', '/todos', draft),",
-          },
-          {
-            file: 'src/features/todo-list/useTodoList.ts',
-            replace:
-              'return { todos, filter, add, setFilter: todosActions.setFilter, toggle, rename, remove };',
-            with: 'return {\n    todos,\n    filter,\n    add: (title: string) => add({ title }),\n    setFilter: todosActions.setFilter,\n    toggle,\n    rename,\n    remove,\n  };',
-          },
-        ],
-      },
+      ...FRONTEND_FORMS_SERVER_STATE,
       {
         when: { i18n: true },
         overlay: 'i18n',
         edits: [
-          {
-            file: 'src/app/locales/en/app.json',
-            after: '{\n',
-            insert:
-              '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n',
-          },
-          {
-            file: 'src/app/createI18n.ts',
-            replace: '      en: {',
-            with: '      fr: FRENCH,\n      en: {',
-          },
-          {
-            file: 'i18next.config.ts',
-            replace: "locales: ['en'],",
-            with: "locales: ['en', 'fr'],",
-          },
+          ...I18N_LOCALE_EDITS,
           {
             file: 'src/main.tsx',
             after: "import { createI18n } from '@/app/createI18n.ts';\n",
@@ -392,22 +293,7 @@ export const viteStack: Stack = {
           'babel-plugin-react-compiler': '1.0.0',
         },
       },
-      {
-        when: { 'react-compiler': true, example: true, 'server-state': false },
-        edits: [
-          {
-            file: 'src/features/todo-list/useTodoList.ts',
-            replace: "import { useMemo } from 'react';\n",
-            with: '',
-          },
-          {
-            file: 'src/features/todo-list/useTodoList.ts',
-            replace:
-              'const todos = useMemo(() => selectVisibleTodos({ todos: allTodos, filter }), [allTodos, filter]);',
-            with: 'const todos = selectVisibleTodos({ todos: allTodos, filter });',
-          },
-        ],
-      },
+      ...FRONTEND_COMPILER_EXAMPLE,
       ...FRONTEND_ANALYTICS,
       {
         when: { analytics: 'posthog' },
@@ -416,17 +302,7 @@ export const viteStack: Stack = {
         ],
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
-      {
-        when: { 'server-state': true },
-        edits: [
-          {
-            file: 'AGENTS.md',
-            before: '- No comments,',
-            insert:
-              '- Data from the API goes through the query hooks of TanStack Query, each request lives in an `xClient.ts` that parses the response with Zod, and a store only holds UI state.\n',
-          },
-        ],
-      },
+      ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
     ],
     ANCHORS,

@@ -252,6 +252,19 @@ describe('dependency-cruiser-config', () => {
     assert.deepEqual(violatedRules(root), ['analytics-in-client']);
   });
 
+  it('posthog-react-native is an analytics SDK too', () => {
+    const root = project({
+      'package.json': JSON.stringify({
+        name: 'fixture',
+        dependencies: { 'posthog-react-native': '1.0.0' },
+      }),
+      ...fakePackage('posthog-react-native'),
+      'src/features/list/listHelper.ts':
+        "import posthog from 'posthog-react-native';\nexport const listHelper = posthog;\n",
+    });
+    assert.deepEqual(violatedRules(root), ['analytics-in-client']);
+  });
+
   it('the library rules keep the entry points at the root of src/, imported by nothing but tests', () => {
     const root = project(
       {

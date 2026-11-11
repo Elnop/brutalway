@@ -1,0 +1,6 @@
+{
+  "language": "Langue",
+  "languages": { "en": "English", "fr": "Français" },
+  "title": "__PROJECT_NAME__",
+  "start": "Écrivez votre première feature dans src/features/ et affichez-la ici."
+}

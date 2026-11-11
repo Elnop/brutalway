@@ -205,7 +205,7 @@ module.exports = {
         'Events leave the app through analyticsClient.ts only: call analyticsClient.track() instead of the SDK, so swapping the tool happens in one file.',
       from: { pathNot: '(^|/)analyticsClient\\.ts$' },
       to: {
-        path: 'node_modules/(posthog-js|@segment/analytics-next|mixpanel-browser|@amplitude/analytics-browser|react-ga4|@vercel/analytics)/',
+        path: 'node_modules/(posthog-js|posthog-react-native|@segment/analytics-next|mixpanel-browser|@amplitude/analytics-browser|react-ga4|@vercel/analytics)/',
       },
     },
     {

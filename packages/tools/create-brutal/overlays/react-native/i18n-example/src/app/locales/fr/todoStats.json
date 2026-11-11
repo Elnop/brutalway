@@ -1,0 +1,8 @@
+{
+  "title": "Avancement",
+  "left_one": "{{count}} tâche restante",
+  "left_other": "{{count}} tâches restantes",
+  "done_one": "{{count}} faite",
+  "done_other": "{{count}} faites",
+  "clear": "Effacer les faites"
+}

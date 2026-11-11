@@ -4,7 +4,7 @@ import { TodoFilters } from '@/features/todo-list/components/presenters/TodoFilt
 import { TodoInput } from '@/features/todo-list/components/presenters/TodoInput.tsx';
 import { TodoItems } from '@/features/todo-list/components/presenters/TodoItems.tsx';
 import { useTodoList } from '@/features/todo-list/useTodoList.ts';
-import { THEME } from '@/shared/ThemeConfig.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 export function TodoListLayout() {
   const { t } = useTranslation('todoList');
