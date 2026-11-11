@@ -169,6 +169,15 @@ const SHADCN_VERIFICATIONS_DOC = `## Vendored code
 
 `;
 
+const SHADCN_DRIFT_STEP = `      - name: Vendored shadcn files match the registry
+        run: |
+          npx shadcn add $(basename -s .tsx third-party/shadcn/*.tsx) --overwrite --yes
+          git diff --exit-code -- third-party/shadcn || { echo "::error::A file of third-party/shadcn/ differs from what the shadcn CLI writes: undo the hand edit with npx shadcn add <name> --overwrite, and restyle through src/app/globals.css or a wrapper in src/."; exit 1; }
+`;
+
+const SHADCN_DRIFT_DOC = ` CI runs \`npx shadcn add <name> --overwrite\` on each file of \`third-party/shadcn/\`, with the \`shadcn\` version pinned in \`package.json\`, and fails when the result differs from the commit: a hand edit there is caught even when it did not go through the agent hook.
+`;
+
 const THIRD_PARTY_ALINT = `  - id: third-party-only-registries
     kind: dir_absent
     paths: ['third-party/*', '!third-party/shadcn']
@@ -631,6 +640,26 @@ export const viteStack: Stack = {
     {
       when: { ui: 'shadcn', example: true },
       overlay: 'shadcn-example',
+    },
+    {
+      when: { ui: 'shadcn', ci: true },
+      edits: [
+        {
+          file: '.github/workflows/ci.yml',
+          before: '      - run: npm run build',
+          insert: SHADCN_DRIFT_STEP,
+        },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'hand-written code goes in `src/`.\n',
+          with: `hand-written code goes in \`src/\`.${SHADCN_DRIFT_DOC}`,
+        },
+        {
+          file: 'docs/reference/commands.md',
+          replace: 'runs `check`, `test` and `build` in one job',
+          with: 'runs `check`, `test`, a comparison of `third-party/shadcn/` with the registry and `build` in one job',
+        },
+      ],
     },
     {
       when: { ui: 'shadcn', 'claude-hook': true },
