@@ -51,9 +51,11 @@ const PUBLISHED_PACKAGES = [
 
 function packageSource(folder: string): DocSource {
   const key = folder.slice(folder.indexOf('/') + 1);
+  const name = key === 'create-brutal' ? key : `@brutalway/${key}`;
   return {
     key,
-    label: key === 'create-brutal' ? key : `@brutalway/${key}`,
+    label: name,
+    npmPackage: name,
     route: PACKAGES_ROUTE,
     repo: 'Elnop/brutalway',
     directory: `packages/${folder}`,

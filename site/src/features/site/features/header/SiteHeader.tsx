@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useHideOnScrollDown } from '@/features/site/features/header/useHideOnScrollDown.ts';
 import {
   DOCS_ROUTE,
+  NEW_ISSUE_URL,
   PACKAGES_ROUTE,
   REPOSITORY_URL,
   TEMPLATES_ROUTE,
@@ -49,6 +50,7 @@ export function SiteHeader({ actions }: SiteHeaderProps) {
           <a href={TEMPLATES_ROUTE}>Templates</a>
           <a href={PACKAGES_ROUTE}>Packages</a>
           <SiteLink href={REPOSITORY_URL}>GitHub</SiteLink>
+          <SiteLink href={NEW_ISSUE_URL}>Contribute</SiteLink>
         </div>
         <div className="site-header-actions">{actions}</div>
       </nav>

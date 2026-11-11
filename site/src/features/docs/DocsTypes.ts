@@ -10,6 +10,7 @@ export type DocSource = {
   order?: string[];
   moved?: Record<string, string>;
   roadmap?: string;
+  npmPackage?: string;
 };
 
 export type DocEntry = {

@@ -1,8 +1,17 @@
 [![brutalway: every convention is a check](.github/assets/banner.png)](https://brutalway.elnop.dev/)
 
+[![create-brutal on npm](https://img.shields.io/npm/v/create-brutal?label=create-brutal)](https://www.npmjs.com/package/create-brutal)
+[![@brutalway packages on npm](https://img.shields.io/badge/npm-%40brutalway-cb3837)](https://www.npmjs.com/org/brutalway)
+
 # brutalway
 
 Project templates where the conventions are enforced by deterministic checks. When several people or AI agents write in the same codebase, a convention that is only written down drifts within days. Here each one is a lint rule, an import rule or a tree rule, and `npm run check` fails with a message that says what to change.
+
+```sh
+npm create brutal my-app
+```
+
+The CLI asks for a stack, then for the parts to keep. Every combination passes `npm run check`. Each lint config, plugin and check is also published on its own under [`@brutalway`](https://www.npmjs.com/org/brutalway), for a project that did not start from a template: the [packages](packages/README.md) page lists them.
 
 A lone hook put in `src/features/todo-stats/hooks/useTodoProgress.ts`:
 
@@ -38,11 +47,15 @@ Every template builds the same todo list, so the stacks can be compared side by 
 | template-next | Next.js | planned |
 | template-react-native | React Native | planned |
 
-```sh
-npm create brutal my-app
-```
+## Proposing a change
 
-The CLI asks for a stack, then for the parts to keep. Every combination passes `npm run check`.
+Anyone can open an issue or a pull request. Each kind of issue has its form:
+
+- [Bug](https://github.com/Elnop/brutalway/issues/new?template=bug.yml): a check fails on valid code, misses invalid code, or a tool crashes
+- [Rule or convention](https://github.com/Elnop/brutalway/issues/new?template=rule.yml): a missing check, or a change to one that exists
+- [Template](https://github.com/Elnop/brutalway/issues/new?template=template.yml): a new stack, or a change to the stack of a template
+
+Before asking to drop a rule, read [why the rules exist](docs/concepts/intent.md). The issues labeled [`good first issue`](https://github.com/Elnop/brutalway/labels/good%20first%20issue) are small enough to start with. A pull request is welcome without an issue first, [CONTRIBUTING.md](CONTRIBUTING.md) explains how to build and check the repository.
 
 ## Documentation
 

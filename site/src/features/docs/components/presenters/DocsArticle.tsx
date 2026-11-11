@@ -6,6 +6,7 @@ import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
 import { docSourceUrl } from '@/features/docs/lib/docsUrls.ts';
 import { repositoryPath } from '@/features/docs/lib/githubUrls.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
+import { NEW_ISSUE_URL, NPM_PACKAGE_URL } from '@/shared/configs/LinksConfig.ts';
 import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
 
 const markdownComponents: Components = {
@@ -47,9 +48,35 @@ function sourceLabelOf(source: DocSource, path: string): string {
     : `${source.repo}/${repositoryPath(source, path)}`;
 }
 
+type DocsArticleFooterProps = {
+  source: DocSource;
+  path: string;
+};
+
+function DocsArticleFooter({ source, path }: DocsArticleFooterProps) {
+  return (
+    <footer className="docs-article-footer">
+      <p className="docs-source">
+        <SiteLink href={docSourceUrl(source, path)}>
+          {sourceLabelOf(source, path)} on GitHub
+        </SiteLink>
+        {source.npmPackage !== undefined && (
+          <SiteLink href={`${NPM_PACKAGE_URL}${source.npmPackage}`}>
+            {source.npmPackage} on npm
+          </SiteLink>
+        )}
+      </p>
+      <p className="docs-contribute">
+        Something wrong or missing on this page?{' '}
+        <SiteLink href={NEW_ISSUE_URL}>Open an issue</SiteLink>, or fix it in a pull request from
+        the GitHub page above.
+      </p>
+    </footer>
+  );
+}
+
 export function DocsArticle({ content, source, path, knownPaths }: DocsArticleProps) {
   const sourceUrl = docSourceUrl(source, path);
-  const sourceLabel = sourceLabelOf(source, path);
   return (
     <article className="docs-article">
       {content.status === 'loading' && <p className="docs-status">Loading {path}…</p>}
@@ -66,9 +93,7 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
           knownPaths={knownPaths}
         />
       )}
-      <p className="docs-source">
-        <SiteLink href={sourceUrl}>{sourceLabel} on GitHub</SiteLink>
-      </p>
+      <DocsArticleFooter source={source} path={path} />
     </article>
   );
 }
