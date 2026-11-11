@@ -41,7 +41,7 @@
   },
   "allowScripts": {
     "@swc/core": false,
-    "@asamarts/alint@0.21.0": true
+    "@asamarts/alint@0.22.0": true
   },
   "overrides": {
     "eslint-plugin-no-comments": {
@@ -49,9 +49,9 @@
     }
   },
   "devDependencies": {
-    "@asamarts/alint": "0.21.0",
+    "@asamarts/alint": "0.22.0",
     "@brutalway/agent-hook": "0.2.1",
-    "@brutalway/alint-config": "0.2.0",
+    "@brutalway/alint-config": "0.2.2",
     "@brutalway/check-doc-length": "0.2.1",
     "@brutalway/check-doc-links": "0.2.1",
     "@brutalway/check-doc-sources": "0.2.1",
