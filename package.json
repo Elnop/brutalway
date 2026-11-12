@@ -13,7 +13,7 @@
     "lint": "oxlint --type-aware --disable-nested-config",
     "format": "prettier --write .",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
-    "check": "prettier --check . && npm run typecheck && npm run lint && node scripts/eachPackage.ts run check --if-present && npm run docs && knip && npm test",
+    "check": "node scripts/check.ts",
     "test": "node scripts/eachPackage.ts test --if-present && node --test 'scripts/**/*.test.ts'",
     "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
     "changeset": "npm run changeset --prefix packages",

@@ -11,7 +11,7 @@ How to build, check and release this repository. To use brutalway in a project, 
 | `site/` | the landing page and the docs, made from template-vite and deployed to GitHub Pages at [brutalway.elnop.dev](https://brutalway.elnop.dev/) |
 | `docs/` | the guides, the reference and the concepts, also shown on the site |
 | `plugins/`, `.claude-plugin/` | the Claude Code plugin and its marketplace |
-| `scripts/` | the scripts run from the root: one runs an npm command in every package, one creates a GitHub release for each published version and each template version, and one keeps the issue labels and the project board in sync |
+| `scripts/` | the scripts run from the root: one runs `npm run check`, one runs an npm command in every package, one creates a GitHub release for each published version and each template version, and one keeps the issue labels and the project board in sync |
 
 ## Build and check
 
@@ -22,7 +22,7 @@ npm run build
 npm run check
 ```
 
-`npm run bootstrap` runs `npm ci` at the root, in `packages/`, in `templates/` and in each package. Some tests load their package through its built `exports`, so `npm run build` comes first. `npm run check` runs Prettier, tsc and oxlint on the root scripts, then `npm run check` in each package, the doc checks, knip and every test.
+`npm run bootstrap` runs `npm ci` at the root, in `packages/`, in `templates/` and in each package. Some tests load their package through its built `exports`, so `npm run build` comes first. `npm run check` runs Prettier, tsc and oxlint on the root scripts, then `npm run check` in each package, the doc checks, knip and every test. A step that passes prints one line, such as `knip ok` or `packages/tools/check-tree test ok`. A step that fails or prints a warning prints its whole output: the check stops at the first failure and goes on after a warning.
 
 To work on a single package, run the same commands from its folder: `npm ci`, `npm run build`, `npm run check`, `npm test`.
 
