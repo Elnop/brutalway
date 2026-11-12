@@ -2,7 +2,7 @@
 
 A React Native + Expo + TypeScript starter, for iOS, Android and the web, where the conventions are checked by tools instead of written down and hoped for. It is meant for codebases where several people or AI agents write code at the same time: when one of them puts a file in the wrong folder, imports across features or leaves a comment, `npm run check` fails and says what to do.
 
-The example app is a todo list. It is there so every rule has real code to check: delete it and keep the structure. The look is neo-brutalist (thick black borders, flat pastel colors, hard shadows), shared by every template of the series and easy to swap: the tokens are in `src/shared/theme/ThemeConfig.ts`.
+The example app is a todo list. It is there so every rule has real code to check: delete it and keep the structure. The look is neo-brutalist (thick black borders, flat pastel colors, hard shadows), shared by every template of the series and easy to swap: the tokens are in `src/shared-features/theme/ThemeConfig.ts`.
 
 Part of [brutalway](https://github.com/Elnop/brutalway), which also publishes the `@brutalway/*` packages holding the rules and configs: this repository only holds what is specific to it.
 

@@ -75,9 +75,10 @@ Each rule has a `comment` that says what to do instead.
 | `features-not-to-app`                | a feature importing `app/`                                                                                                                                                      |
 | `no-cross-feature`                   | a feature importing another feature                                                                                                                                             |
 | `no-cross-shared-feature`            | a shared feature importing another shared feature                                                                                                                               |
-| `no-cross-sub-feature`               | a sub-feature (`features/<x>/features/<y>/`) importing a sibling or its feature root instead of the feature `shared/`                                                           |
-| `feature-shared-not-to-sub-features` | a feature `shared/` importing one of its sub-features                                                                                                                           |
-| `feature-nesting-too-deep`           | a feature nested more than 10 levels deep                                                                                                                                       |
+| `no-cross-sub-feature` | a sub-feature (`features/<y>/` inside a feature or a shared feature) importing a sibling or the root of its parent instead of the parent `shared-features/` or `shared/` |
+| `no-cross-sub-shared-feature` | a sub shared feature (`shared-features/<y>/` inside a feature or a shared feature) importing a sibling, a sub-feature or the root of its parent |
+| `feature-shared-not-to-sub-features` | the `shared/` of a feature or a shared feature importing one of its sub-features or sub shared features |
+| `feature-nesting-too-deep` | a feature or a shared feature nested more than 10 levels deep                                                                                                                                       |
 | `presenters-are-pure`                | a presenter (any component not named `XContainer`, `XLayout`, `XPage`, `XContent` or `XConfig`) importing a store, a shared-feature hook, an `xClient.ts` or `@tanstack/react-query` |
 | `stores-hold-no-server-data`         | an `xStore.ts` importing an `xClient.ts`, an `xKeys.ts`, a hook or `@tanstack/react-query`                                                                                      |
 | `analytics-in-client`                | `posthog-js`, `posthog-react-native`, `@segment/analytics-next`, `mixpanel-browser`, `@amplitude/analytics-browser`, `react-ga4` or `@vercel/analytics` imported anywhere but an `analyticsClient.ts`   |
@@ -87,7 +88,7 @@ Each rule has a `comment` that says what to do instead.
 | `no-prod-to-tests`                   | production code importing a test file                                                                                                                                           |
 | `not-to-dev-dep`                     | code under `src/` importing a devDependency                                                                                                                                     |
 
-Sub-features nest like the features they live in: a sub-feature can hold its own `features/` and `shared/`, and the same two rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
+Sub-features and sub shared features nest like the features they live in: each can hold its own `features/`, `shared-features/` and `shared/`, under a feature or a shared feature, and the same three rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
 
 ### shadcn/ui
 

@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { THEME } from '@/shared/theme/ThemeConfig.ts';
+import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
 
 export default function HomePage() {
   const { t } = useTranslation('app');

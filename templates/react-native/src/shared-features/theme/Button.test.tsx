@@ -1,6 +1,6 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import { render, screen, userEvent } from '@testing-library/react-native';
-import { Button } from '@/shared/theme/Button.tsx';
+import { Button } from '@/shared-features/theme/Button.tsx';
 
 describe('Button', () => {
   it('shows its label and reports a press', async () => {

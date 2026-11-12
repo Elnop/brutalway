@@ -337,6 +337,41 @@ describe('dependency-cruiser-config', () => {
     ]);
   });
 
+  it('applies the same rules inside a shared feature, and keeps sub shared features apart', () => {
+    const root = project({
+      'src/features/editor/features/form/form.ts':
+        "import { draft } from '../../shared-features/draft/draft.ts';\nexport const form = draft;\n",
+      'src/features/editor/shared-features/draft/draft.ts':
+        "import { helper } from '../../shared/helper.ts';\nexport const draft = helper;\n",
+      'src/features/editor/shared/helper.ts': 'export const helper = 1;\n',
+      'src/shared-features/plan/features/steps/steps.ts':
+        "import { lock } from '../../shared-features/lock/lock.ts';\nexport const steps = lock;\n",
+      'src/shared-features/plan/shared-features/lock/lock.ts': 'export const lock = 1;\n',
+      'src/shared-features/plan/plan.ts':
+        "import { steps } from './features/steps/steps.ts';\nexport const plan = steps;\n",
+    });
+    assert.deepEqual(violatedRules(root), []);
+    const imports: Record<string, string> = {
+      'src/shared-features/plan/features/budget/budget.ts':
+        "import { steps } from '../steps/steps.ts';\nexport const budget = steps;\n",
+      'src/shared-features/plan/features/steps/total.ts':
+        "import { plan } from '../../plan.ts';\nexport const total = plan;\n",
+      'src/features/editor/shared-features/history/history.ts':
+        "import { draft } from '../draft/draft.ts';\nimport { form } from '../../features/form/form.ts';\nexport const history = draft + form;\n",
+      'src/shared-features/plan/shared/check.ts':
+        "import { lock } from '../shared-features/lock/lock.ts';\nexport const check = lock;\n",
+    };
+    for (const [path, content] of Object.entries(imports)) {
+      mkdirSync(dirname(join(root, path)), { recursive: true });
+      writeFileSync(join(root, path), content);
+    }
+    assert.deepEqual(violatedRules(root), [
+      'feature-shared-not-to-sub-features',
+      'no-cross-sub-feature',
+      'no-cross-sub-shared-feature',
+    ]);
+  });
+
   it('rejects a feature nested more than 10 levels deep, and any import of it', () => {
     const nested = `src/features/f1${Array.from({ length: 10 }, (_, index) => `/features/f${index + 2}`).join('')}`;
     const tenLevels = nested.slice(0, nested.lastIndexOf('/features/'));

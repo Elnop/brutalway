@@ -151,7 +151,7 @@ export const reactNativeStack: Stack = {
           {
             file: 'knip.json',
             replace: '"src/app/screens/**/*.tsx"',
-            with: '"src/app/screens/**/*.tsx", "src/shared/theme/Button.tsx"',
+            with: '"src/app/screens/**/*.tsx", "src/shared-features/theme/Button.tsx"',
           },
         ],
       },
@@ -169,12 +169,12 @@ export const reactNativeStack: Stack = {
         when: { 'dark-theme': true },
         edits: [
           {
-            file: 'src/shared/theme/ThemeConfig.ts',
+            file: 'src/shared-features/theme/ThemeConfig.ts',
             replace: 'const COLORS = {',
             with: "import { Appearance } from 'react-native';\n\nconst LIGHT = {",
           },
           {
-            file: 'src/shared/theme/ThemeConfig.ts',
+            file: 'src/shared-features/theme/ThemeConfig.ts',
             replace: '} as const;\n\nexport const THEME',
             with: `} as const;\n\n${DARK_COLORS}export const THEME`,
           },
@@ -188,7 +188,7 @@ export const reactNativeStack: Stack = {
             file: 'AGENTS.md',
             before: '- No comments,',
             insert:
-              '- Colors follow the theme of the system: a color token gets its dark value in the `DARK` set of `src/shared/theme/ThemeConfig.ts`, never in a component.\n',
+              '- Colors follow the theme of the system: a color token gets its dark value in the `DARK` set of `src/shared-features/theme/ThemeConfig.ts`, never in a component.\n',
           },
         ],
         addDependencies: { 'expo-system-ui': '58.0.7' },
@@ -291,7 +291,7 @@ export const reactNativeStack: Stack = {
       },
       {
         when: { 'component-tests': false, example: false },
-        remove: ['src/shared/theme/Button.test.tsx'],
+        remove: ['src/shared-features/theme/Button.test.tsx'],
       },
       {
         when: { 'component-tests': false },

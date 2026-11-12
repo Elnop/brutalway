@@ -29,7 +29,7 @@ npx oxlint --type-aware
 
 ## 2. Tree
 
-[`check-tree`](../../packages/tools/check-tree) needs no config. It rejects empty folders and category folders holding a single file.
+[`check-tree`](../../packages/tools/check-tree) needs no config. It rejects empty folders, category folders holding a single file and folders the layout of `src/` does not name, so a project laid out another way gets one message per such folder.
 
 ```sh
 npm install --save-dev @brutalway/check-tree

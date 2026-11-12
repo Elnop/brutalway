@@ -10,6 +10,8 @@ import type {
   FolderListing,
   TreeOptions,
 } from '#src/features/tree-violations/TreeViolationsTypes.ts';
+import { childLayer } from '#src/features/tree-violations/features/layout/childLayer.ts';
+import type { Layer } from '#src/features/tree-violations/features/layout/LayoutTypes.ts';
 
 function groupViolations(
   name: string,
@@ -72,18 +74,22 @@ export function treeViolations(
   options: TreeOptions = {},
 ): string[] {
   const categories = new Set(categoryFolders);
-  function walk(folder: string): string[] {
+  function walk(folder: string, layer: Layer): string[] {
+    const name = relative(join(root, '..'), folder);
     return [
       ...folderViolations(
         folder,
-        relative(join(root, '..'), folder),
+        name,
         categories,
         folder !== root || options.rootEntries !== true,
       ),
       ...readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
-        .flatMap((entry) => walk(join(folder, entry.name))),
+        .flatMap((entry) => {
+          const child = childLayer(layer, `${name}/${entry.name}`, categories);
+          return [...child.violations, ...walk(join(folder, entry.name), child.layer)];
+        }),
     ];
   }
-  return walk(root);
+  return walk(root, 'source');
 }

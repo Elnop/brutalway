@@ -1,5 +1,5 @@
 import { StyleSheet, Text } from 'react-native';
-import { THEME } from '@/shared/theme/ThemeConfig.ts';
+import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
 
 type TitleErrorProps = {
   error: string | undefined;

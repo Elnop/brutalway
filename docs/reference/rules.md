@@ -4,11 +4,11 @@ The rules every template shares, the tool that enforces each one and the message
 
 All of them run in `npm run check`, in the pre-commit hook and in CI. The messages below come from a project created with `npm create brutal`.
 
-template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template extends it.
+template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared-features/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template extends it.
 
 ## Layers
 
-`src/` has four layers: `app`, `features`, `shared-features`, `shared`. A layer imports only the layers below it. Two features never import each other, nor do two shared features. A sub-feature in `features/<x>/features/<y>/` imports neither its siblings nor its feature root, only the `shared/` folder of its feature.
+`src/` has four layers: `app`, `features`, `shared-features`, `shared`. A layer imports only the layers below it. Two features never import each other, nor do two shared features. Inside a feature or a shared feature, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. check-tree rejects a folder these layers do not name, like a concept folder under `src/shared/`.
 
 Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config).
 

@@ -16,7 +16,7 @@ Enforced by `@brutalway/dependency-cruiser-config` (a presenter imports no store
 
 From the design tokens of the web templates: every color, size and font has a name, and the components only use the names.
 
-React Native has no CSS, so the tokens are a TypeScript object, `THEME` in `src/shared/theme/ThemeConfig.ts`, and each component declares its styles in a `StyleSheet.create` at the bottom of its file. The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared/theme/Button.tsx`.
+React Native has no CSS, so the tokens are a TypeScript object, `THEME` in `src/shared-features/theme/ThemeConfig.ts`, and each component declares its styles in a `StyleSheet.create` at the bottom of its file. The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared-features/theme/Button.tsx`.
 
 We leave out styling libraries (NativeWind, Tamagui, styled-components): the theme object covers the example, and nothing has to be learned on top of React Native.
 
@@ -34,7 +34,7 @@ Enforced by `@brutalway/oxlint-config-zustand` and `@brutalway/dependency-cruise
 
 ## Sub-features
 
-From Feature-Sliced Design, extended. A feature can hold its own features in `features/<x>/features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared/` folder.
+From Feature-Sliced Design, extended. A feature or a shared feature can hold its own features in `features/<y>/` and its own shared features in `shared-features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared-features/` (business code) or `shared/` (no domain).
 
 Renaming a task is a sub-feature of the list: `src/features/todo-list/features/todo-editor/`.
 

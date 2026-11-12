@@ -33,11 +33,11 @@ describe('check-tree', () => {
   it('prints nothing and exits with 0 on a conforming tree', () => {
     const root = project([
       'src/app/App.tsx',
-      'src/lib/a.ts',
-      'src/lib/b.ts',
-      'src/lib/a.test.ts',
-      'src/feature/styles/a.css',
-      'src/feature/styles/b.css',
+      'src/shared/lib/a.ts',
+      'src/shared/lib/b.ts',
+      'src/shared/lib/a.test.ts',
+      'src/features/feature/styles/a.css',
+      'src/features/feature/styles/b.css',
     ]);
     assert.deepEqual(run(root, ['src']), { status: 0, stdout: '', lines: [] });
   });
@@ -47,44 +47,45 @@ describe('check-tree', () => {
       [
         'web/a.css',
         'web/b.css',
-        'web/lib/a.ts',
-        'web/feature/cartTypes.ts',
-        'web/feature/userTypes.ts',
+        'web/shared/lib/a.ts',
+        'web/features/feature/cartTypes.ts',
+        'web/features/feature/userTypes.ts',
+        'web/shared/http/client.ts',
       ],
-      ['web/empty'],
+      ['web/features/empty'],
     );
     assert.deepEqual(run(root, ['web']), {
       status: 1,
       stdout: '',
       lines: [
         'web holds 2 styles files (a.css, b.css): move them into styles/',
-        'web/empty is empty: delete it',
-        'web/feature holds 2 types files (cartTypes.ts, userTypes.ts): move them into types/',
-        'web/lib holds a single child: move it up one level and delete the folder',
+        'web/features/empty is empty: delete it',
+        'web/features/feature holds 2 types files (cartTypes.ts, userTypes.ts): move them into types/',
+        'web/shared/http is not a kind folder: web/shared/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature',
+        'web/shared/lib holds a single child: move it up one level and delete the folder',
       ],
     });
   });
 
   it('checks src when no folder is given', () => {
-    const root = project(['src/lib/a.ts']);
+    const root = project(['src/shared/lib/a.ts']);
     assert.deepEqual(run(root), {
       status: 1,
       stdout: '',
-      lines: ['src/lib holds a single child: move it up one level and delete the folder'],
+      lines: ['src/shared/lib holds a single child: move it up one level and delete the folder'],
     });
   });
 
   it('replaces the category folders with --categories', () => {
     const root = project([
-      'src/lib/a.ts',
-      'src/utils/b.ts',
-      'src/hooks/useA.ts',
-      'src/hooks/useB.ts',
+      'src/shared/utils/b.ts',
+      'src/shared/hooks/useA.ts',
+      'src/shared/hooks/useB.ts',
     ]);
     assert.deepEqual(run(root, ['src', '--categories', 'utils, hooks']), {
       status: 1,
       stdout: '',
-      lines: ['src/utils holds a single child: move it up one level and delete the folder'],
+      lines: ['src/shared/utils holds a single child: move it up one level and delete the folder'],
     });
   });
   it('with --root-entries, leaves the files at the root of the checked folder where they are and checks the rest', () => {

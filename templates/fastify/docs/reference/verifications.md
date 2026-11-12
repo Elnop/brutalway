@@ -30,7 +30,7 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
-- a sub-feature (`features/<x>/features/<y>/`) imports neither its siblings nor its feature root, only its feature `shared/`, at every nesting level, and features nest at most ten levels deep
+- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
 - a route never imports queries, queries are only imported by a service, a worker, other queries, `src/app/` or a test
 - the database driver (`node:sqlite`, `pg`…) is only imported by queries and `src/shared/`
 - an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server
@@ -39,7 +39,7 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
 
 ## Duplicates
 

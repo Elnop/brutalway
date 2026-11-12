@@ -11,7 +11,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 - `src/app/` is the app layer: the Expo Router routes in `src/app/screens/` compose the features, `src/features/` holds one folder per feature, `src/shared-features/` the business code several features use, `src/shared/` the code with no domain. Each layer only imports the layers below it, and a feature never imports another feature.
 - A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`) that reads state through hooks, or a presenter that only gets props.
 - Every visible string goes through `t()`, with its English text in `src/app/locales/en/`.
-- Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared/theme/ThemeConfig.ts`.
+- Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared-features/theme/ThemeConfig.ts`.
 - No comments, no relative imports (`@/` instead), no `index.ts` and no `export default` outside the route files and the configs.
 
 ## When a brutalway tool gets in the way

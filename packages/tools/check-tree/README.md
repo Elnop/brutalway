@@ -1,6 +1,6 @@
 # @brutalway/check-tree
 
-Checks the folders of a source tree, which a linter does not see: no empty folder, no category folder with a single child, and files of one kind grouped in that kind's folder once there are two of them.
+Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no category folder with a single child, and files of one kind grouped in that kind's folder once there are two of them.
 
 ## Install
 
@@ -17,7 +17,7 @@ npx check-tree src
 npx check-tree src --categories components,hooks,utils
 ```
 
-The grouping rule only applies to the kinds listed in the table below that are also in this list.
+These are the kind folders the layout accepts, and the grouping rule only applies to the kinds listed in the table below that are also in this list.
 
 ### Keep the entry points of a published package
 
@@ -41,6 +41,11 @@ It takes the category folders as second argument and `{ rootEntries: true }` as 
 
 ### Rules
 
+- a folder has a name the layout gives it:
+  - `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, next to its entry files, and `app/` is not checked
+  - `src/shared/` holds kind folders only (`lib/`, `types/`, `configs/`...), since it has no domain
+  - a feature (`features/<x>/`) or a shared feature (`shared-features/<x>/`), at any depth, holds kind folders, `features/` for its sub-features, `shared-features/` for the business code they share and `shared/` for the code with no domain
+  - a kind folder holds kind folders only, like `presenters/` inside `components/`
 - no empty folder
 - a category folder (`components`, `hooks`, `stores`…) does not hold a single child: move the child up and delete the folder
 - files of one kind stay at the root of their folder while there is one of them, and move into the kind's folder from two on. A folder that has that kind's folder keeps none of them next to it. The kinds are recognized by their name:

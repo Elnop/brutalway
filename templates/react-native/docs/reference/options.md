@@ -46,7 +46,7 @@ npm create brutal my-app -- --preset react-native.json --yes
 
 A combination from the last column stops the CLI before anything is written, with a message naming both flags.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/screens/index.tsx` only shows the project name, `src/shared/theme/` keeps the theme and the `Button`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` when `i18n` is off.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/screens/index.tsx` only shows the project name, `src/shared-features/theme/` keeps the theme and the `Button`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` when `i18n` is off.
 
 Tailwind, CSS Modules, shadcn/ui and the security headers are not offered: React Native has no CSS, the styles come from the theme object, and an app sends no HTTP headers of its own. There are no e2e tests either, since they need a simulator.
 
@@ -56,7 +56,7 @@ Without it, the `zustand` dependency is removed. The example needs the store, so
 
 ## dark-theme
 
-`src/shared/theme/ThemeConfig.ts` holds a light and a dark set of colors and picks one through `Appearance` when the app starts. `app.json` follows the system, with `expo-system-ui` added.
+`src/shared-features/theme/ThemeConfig.ts` holds a light and a dark set of colors and picks one through `Appearance` when the app starts. `app.json` follows the system, with `expo-system-ui` added.
 
 ## server-state
 
@@ -85,7 +85,7 @@ Both values add `analyticsClient.ts` to `src/shared/`, the only place where even
 
 ## component-tests
 
-Without it, the `.test.tsx` files, `src/shared/theme/Button.test.tsx` included, and `@testing-library/react-native` are removed. Jest keeps the unit tests.
+Without it, the `.test.tsx` files, `src/shared-features/theme/Button.test.tsx` included, and `@testing-library/react-native` are removed. Jest keeps the unit tests.
 
 ## coverage
 

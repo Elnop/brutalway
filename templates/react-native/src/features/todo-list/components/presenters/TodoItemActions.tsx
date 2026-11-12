@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/shared/theme/Button.tsx';
+import { Button } from '@/shared-features/theme/Button.tsx';
 import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
 
 type TodoItemActionsProps = {

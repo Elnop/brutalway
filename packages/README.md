@@ -23,7 +23,7 @@ Each one installs on its own, in a project that did not start from a template: `
 
 | Package | What it does | npm |
 |---|---|---|
-| [`@brutalway/check-tree`](tools/check-tree) | no empty folder, no category folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component | [npm](https://www.npmjs.com/package/@brutalway/check-tree) |
+| [`@brutalway/check-tree`](tools/check-tree) | no folder the layout does not name, no empty folder, no category folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component | [npm](https://www.npmjs.com/package/@brutalway/check-tree) |
 
 ### Docs
 

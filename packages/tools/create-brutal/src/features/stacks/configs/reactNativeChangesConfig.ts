@@ -65,7 +65,7 @@ const COLORS = Appearance.getColorScheme() === 'dark' ? DARK : LIGHT;
 
 `;
 
-export const DARK_THEME_README = `The colors follow the theme of the system when the app starts. \`src/shared/theme/ThemeConfig.ts\` holds a light and a dark set of the same color tokens and picks one through \`Appearance\`, so a component never picks a color per theme. The pastel accents carry dark text in both themes (\`onAccent\`) and the other surfaces the ink of the theme, so text keeps a contrast of at least 4.5:1 everywhere. A theme change while the app runs shows at the next start.
+export const DARK_THEME_README = `The colors follow the theme of the system when the app starts. \`src/shared-features/theme/ThemeConfig.ts\` holds a light and a dark set of the same color tokens and picks one through \`Appearance\`, so a component never picks a color per theme. The pastel accents carry dark text in both themes (\`onAccent\`) and the other surfaces the ink of the theme, so text keeps a contrast of at least 4.5:1 everywhere. A theme change while the app runs shows at the next start.
 
 `;
 

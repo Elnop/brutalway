@@ -31,13 +31,13 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 ## Styles
 
-There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules:
+There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared-features/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules:
 
 - no color, size, spacing, font or shadow literal in a `StyleSheet.create`: the value is a token of `THEME`, and a missing token is added there. `0`, percentages, `transparent` and `none` stay literal
 - no style object written in JSX: the style goes in the `StyleSheet.create` of the file, and a style that depends on a prop picks one of several styles of the sheet
 - no style of the sheet left unused, no array holding a single style, no raw text outside a `<Text>`, and a component made for iOS or Android only kept in a `X.ios.tsx` or `X.android.tsx` file (from `eslint-plugin-react-native`)
 
-`no-unused-styles` only sees a style read as `styles.x`: `styles[tone]` does not count, so `src/shared/theme/Button.tsx` picks its style through an explicit map.
+`no-unused-styles` only sees a style read as `styles.x`: `styles[tone]` does not count, so `src/shared-features/theme/Button.tsx` picks its style through an explicit map.
 
 ## Dependencies
 
@@ -45,14 +45,14 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
 - a feature never imports another feature, a shared feature never imports another shared feature
-- a sub-feature imports neither its siblings nor its feature root, only its feature `shared/`, at every nesting level, and features nest at most ten levels deep
+- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
 - a presenter imports no store and no shared-feature hook
 - a store lives at the root or in the `stores/` folder of its level
 - no cycles, no import of a test file or a devDependency from production code
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source.
 
 ## Messages
 

@@ -29,13 +29,14 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/library`:
 - there is no `app` folder under `src/`: the entry points compose the features
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature
 - a feature never imports another feature, a shared feature never imports another shared feature
+- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
 - no cycles, no import of a test file, no devDependency in the code of `src/` unless it is also a peerDependency
 
 `.dependency-cruiser.cjs` resolves packages through their `exports` field, so an import of a path a package does not export fails.
 
 ## Tree
 
-`check-tree --root-entries` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `types/`, `configs/`, `clients/` or `lib/`, among others. `--root-entries` leaves the files at the root of `src/` where they are, whatever their kind, since each one is an entry point.
+`check-tree --root-entries` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `features/`, `shared-features/` and `shared/` next to the entry points, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `types/`, `configs/`, `clients/` or `lib/`, among others. `--root-entries` leaves the files at the root of `src/` where they are, whatever their kind, since each one is an entry point.
 
 ## Duplicates
 

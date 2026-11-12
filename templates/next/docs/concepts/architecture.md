@@ -32,7 +32,7 @@ Enforced by `@brutalway/oxlint-config-zustand` and `@brutalway/dependency-cruise
 
 ## Sub-features
 
-From Feature-Sliced Design, extended. A feature can hold its own features in `features/<x>/features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared/` folder.
+From Feature-Sliced Design, extended. A feature or a shared feature can hold its own features in `features/<y>/` and its own shared features in `shared-features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared-features/` (business code) or `shared/` (no domain).
 
 Renaming a task is a sub-feature of the list: `src/features/todo-list/features/todo-editor/`.
 
