@@ -4,7 +4,7 @@ The rules every template shares, the tool that enforces each one and the message
 
 All of them run in `npm run check`, in the pre-commit hook and in CI. The messages below come from a project created with `npm create brutal`.
 
-template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template moves to that config once it is published on npm.
+template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template extends it.
 
 ## Layers
 

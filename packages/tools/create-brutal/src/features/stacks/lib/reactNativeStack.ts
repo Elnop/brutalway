@@ -45,8 +45,8 @@ import {
 
 const ANCHORS = {
   template: 'react-native',
-  preset: 'reactConfig',
-  presetImport: "import { reactConfig } from '@brutalway/oxlint-config-react';",
+  preset: 'reactNativeConfig',
+  presetImport: "import { reactNativeConfig } from '@brutalway/oxlint-config-react-native';",
   testsLintLine:
     '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives',
 };

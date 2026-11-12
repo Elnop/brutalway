@@ -609,7 +609,7 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
     ],
     addDependencies: SHADCN_DEPENDENCIES,
     addDevDependencies: {
-      '@brutalway/dependency-cruiser-config': '0.5.0',
+      '@brutalway/dependency-cruiser-config': '0.6.0',
       '@brutalway/oxlint-config-shadcn': '0.2.0',
       '@brutalway/tsconfig': '0.4.0',
       shadcn: SHADCN_VERSION,
@@ -1146,7 +1146,7 @@ export const FRONTEND_ANALYTICS: StackChange[] = [
     when: { analytics: 'module' },
     overlay: 'analytics-module',
     edits: [{ file: 'README.md', before: '## Documentation', insert: ANALYTICS_MODULE_README }],
-    addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0' },
+    addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.6.0' },
   },
   {
     when: { analytics: 'posthog' },
@@ -1159,7 +1159,7 @@ export const FRONTEND_ANALYTICS: StackChange[] = [
       },
     ],
     addDependencies: { 'posthog-js': '1.447.3' },
-    addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.5.0' },
+    addDevDependencies: { '@brutalway/dependency-cruiser-config': '0.6.0' },
   },
 ];
 

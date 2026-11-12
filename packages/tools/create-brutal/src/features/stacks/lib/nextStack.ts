@@ -41,8 +41,8 @@ const ANALYTICS_POSTHOG_README = `## Analytics
 
 const ANCHORS = {
   template: 'next',
-  preset: 'reactConfig',
-  presetImport: "import { reactConfig } from '@brutalway/oxlint-config-react';",
+  preset: 'nextConfig',
+  presetImport: "import { nextConfig } from '@brutalway/oxlint-config-next';",
   aliasFile: 'vitest.config.ts',
   ignorePatterns: "'.next', 'next-env.d.ts'",
   cspFile: 'src/proxy.ts',
@@ -226,28 +226,6 @@ export const nextStack: Stack = {
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
-      {
-        when: { forms: true, styling: 'tailwind', ui: 'none' },
-        edits: [
-          {
-            file: 'oxlint.config.ts',
-            replace:
-              'extends: [reactConfig, reactHookFormConfig, tailwindConfig, zustandConfig, vitestConfig, i18nextConfig],',
-            with: 'extends: [\n    reactConfig,\n    reactHookFormConfig,\n    tailwindConfig,\n    zustandConfig,\n    vitestConfig,\n    i18nextConfig,\n  ],',
-          },
-        ],
-      },
-      {
-        when: { forms: true, ui: 'shadcn' },
-        edits: [
-          {
-            file: 'oxlint.config.ts',
-            replace:
-              'extends: [reactConfig, reactHookFormConfig, shadcnConfig, tailwindConfig, zustandConfig, vitestConfig, i18nextConfig],',
-            with: 'extends: [\n    reactConfig,\n    reactHookFormConfig,\n    shadcnConfig,\n    tailwindConfig,\n    zustandConfig,\n    vitestConfig,\n    i18nextConfig,\n  ],',
-          },
-        ],
-      },
     ],
     ANCHORS,
   ),

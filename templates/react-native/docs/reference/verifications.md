@@ -10,7 +10,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 ## Lint
 
-`oxlint.config.ts` extends `@brutalway/oxlint-config-react`, which brings the TypeScript base, then the zustand and i18next configs, and turns on the `jest` plugin of oxlint with the same test rules as `@brutalway/oxlint-config-vitest`. Each package README details its rules. The main ones:
+`oxlint.config.ts` extends `@brutalway/oxlint-config-react-native`, which brings the React config and its TypeScript base, the zustand config, the `jest` plugin of oxlint with the same test rules as `@brutalway/oxlint-config-vitest` and the style rules below, then the i18next config. Each package README details its rules. The main ones:
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
 - no relative imports: `@/` in `src/`. Root config files and `scripts/` are the only exceptions. `scripts/` runs in Node on your machine, so it may also print to the console and call `fetch`
@@ -26,12 +26,18 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - a function takes 4 parameters at most, and declares 5 local variables at most, each name of a destructuring counted. Tests have no variable limit
 - a file declares 5 top-level functions at most, exported or not: the helpers move into files of their own
-- no visible text in JSX, in `aria-label`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `src/app/locales/en/` and through `t()`. The message only says "disallow literal string"
+- no visible text in JSX, in `aria-label`, `accessibilityLabel`, `accessibilityHint`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `src/app/locales/en/` and through `t()`. The message only says "disallow literal string"
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives
 
 ## Styles
 
-There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules: no color, size, spacing, font or shadow literal in a `StyleSheet.create`, and no style object written in JSX. The template follows them and will extend that config once it is published on npm.
+There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules:
+
+- no color, size, spacing, font or shadow literal in a `StyleSheet.create`: the value is a token of `THEME`, and a missing token is added there. `0`, percentages, `transparent` and `none` stay literal
+- no style object written in JSX: the style goes in the `StyleSheet.create` of the file, and a style that depends on a prop picks one of several styles of the sheet
+- no style of the sheet left unused, no array holding a single style, no raw text outside a `<Text>`, and a component made for iOS or Android only kept in a `X.ios.tsx` or `X.android.tsx` file (from `eslint-plugin-react-native`)
+
+`no-unused-styles` only sees a style read as `styles.x`: `styles[tone]` does not count, so `src/shared/theme/Button.tsx` picks its style through an explicit map.
 
 ## Dependencies
 

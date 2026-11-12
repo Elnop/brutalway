@@ -12,14 +12,14 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 ## Lint
 
-`oxlint.config.ts` extends `@brutalway/oxlint-config-react`, which brings the TypeScript base, then the zustand, Vitest and i18next configs, and turns on the `nextjs` plugin of oxlint. Each package README details its rules. The main ones:
+`oxlint.config.ts` extends `@brutalway/oxlint-config-next`, which brings the React config and its TypeScript base, the zustand and Vitest configs and the rules of Next.js below, then the i18next config. Each package README details its rules. The main ones:
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
 - no relative imports: `@/` in `src/`, `@e2e/` in `e2e/`. Root config files are the only exception
 - no `index.ts`, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
 - a file with a single export is named after it
-- no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `.d.ts`, and the route files `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx` of `src/app/`): each module is imported under the name it exports. A route file may also export `generateMetadata`
+- no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `.d.ts`, and the route files of `src/app/` such as `page.tsx`, `layout.tsx`, `loading.tsx` or `error.tsx`): each module is imported under the name it exports. A route file may also export `generateMetadata`, `metadata` and the route segment options
 - `xStore.ts` exports only `xStore` and `xActions`
 - a component types its props with a named `XProps` type, and callback props are named `onX`
 - no orchestrator (`XContainer`, `XLayout`, `XPage`) under `shared-features/`: the components that read shared state belong to a feature
@@ -30,6 +30,15 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - a file declares 5 top-level functions at most, exported or not: the helpers move into files of their own
 - no visible text in JSX, in `aria-label`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `src/app/locales/en/` and through `t()`. The message only says "disallow literal string"
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)
+
+## Next.js
+
+`@brutalway/oxlint-config-next` adds what only Next.js has:
+
+- every rule of the `nextjs` plugin of oxlint: `next/image` over `<img>`, `next/link` over `<a>` for a page of the app, no `<head>` element, no async client component
+- `'use client'` only goes on an orchestrator (`XContainer`, `XLayout`, `XPage`), a provider (`XProvider`) or an `error.tsx`. A presenter, a hook or a file under `shared/` becomes client code through the orchestrator that renders it
+- a `'use client'` file imports no `xClient.ts` other than `analyticsClient.ts`: a server component reads the data and passes it down
+- a server action lives in a `.ts` file of its own that starts with `'use server'` and exports one async function
 
 ## Styles
 

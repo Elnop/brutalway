@@ -54,9 +54,6 @@
     ]
   },
   "docLinks": {
-    "skip": [
-      "^https://www\\.npmjs\\.com/package/@brutalway/oxlint-config-(next|react-native)$"
-    ],
     "ignore": [
       "**/node_modules/**",
       "**/dist/**",
