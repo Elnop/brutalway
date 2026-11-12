@@ -1,5 +1,11 @@
 # template-next
 
+## 0.1.2
+
+### Patch Changes
+
+- 51ebbed: `@brutalway/oxlint-config-next` 0.1.1, which lets a `'use client'` file import `analyticsClient.ts`.
+
 ## 0.1.1
 
 ### Patch Changes

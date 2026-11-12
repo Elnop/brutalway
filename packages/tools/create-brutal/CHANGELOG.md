@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.10.2
+
+### Patch Changes
+
+- 51ebbed: The `next` projects install `@brutalway/oxlint-config-next` 0.1.1, so a project with the example and `analytics` passes `npm run check`: its `TodoListLayout.tsx` may import `analyticsClient.ts`.
+
 ## 0.10.1
 
 ### Patch Changes
