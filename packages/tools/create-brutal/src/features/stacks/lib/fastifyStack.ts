@@ -1,4 +1,5 @@
 import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const NPM_TEST_ROW = '`node:test`: queries on an in-memory database, routes through `inject()`';
 const ROW_ID_SENTENCE =
@@ -37,6 +38,7 @@ export const fastifyStack: Stack = {
       remove: ['CHANGELOG.md'],
       edits: [{ file: 'README.md', replace: '# template-fastify\n', with: '# __PROJECT_NAME__\n' }],
     },
+    TEMPLATE_ONLY_DOCS,
     {
       when: { example: false },
       remove: [

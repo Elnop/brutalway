@@ -6,6 +6,14 @@ The example is the todo list API that every template of the series builds. Delet
 
 Part of [brutalway](https://github.com/Elnop/brutalway), which also publishes the `@brutalway/*` packages holding the rules and configs: this repository only holds what is specific to it.
 
+## Create a project from it
+
+```sh
+npm create brutal my-api -- --stack fastify
+```
+
+The CLI asks which parts to keep or add. [Options](docs/reference/options.md) lists them, with what each one changes and the flags to answer without questions.
+
 ## Getting started
 
 Node 26 is required (`.nvmrc`, and `.npmrc` refuses other versions). Node runs the TypeScript directly: there is no build step.
@@ -34,6 +42,7 @@ The API listens on `http://127.0.0.1:3000`, and the Swagger UI on `/docs`. `npm 
 - [Commands](docs/reference/commands.md): the npm scripts
 - [Endpoints](docs/reference/endpoints.md): the routes of the example and the OpenAPI document
 - [Layout](docs/reference/layout.md): the layers, the path of a request and where each file goes
+- [Options](docs/reference/options.md): what each option of `npm create brutal` adds or removes
 - [Verifications](docs/reference/verifications.md): every rule and the tool that enforces it
 - [Architecture](docs/concepts/architecture.md): the patterns this template borrows from, with what it takes and what it leaves out
 

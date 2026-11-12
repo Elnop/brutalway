@@ -19,7 +19,7 @@ Stop the dev server and run the checks:
 npm run check
 ```
 
-Everything passes. That is true for any combination of options the CLI offers.
+Everything passes. That is true for any combination of options the CLI offers, listed in the [options of template-vite](../templates/vite/docs/reference/options.md).
 
 ## The goal
 

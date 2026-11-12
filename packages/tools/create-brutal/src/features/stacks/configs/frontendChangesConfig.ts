@@ -1,5 +1,6 @@
 import type { FileEdit, StackChange, StackOption } from '#src/shared-features/stack/StackTypes.ts';
 import { SHADCN_DEPENDENCIES, SHADCN_VERSION } from '#src/features/stacks/configs/shadcnConfig.ts';
+import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const CHROMIUM_LINE = '      - run: npx playwright install --with-deps --only-shell chromium\n';
 
@@ -363,6 +364,7 @@ export const FRONTEND_BASE: StackChange[] = [
       { file: 'README.md', replace: '# template-{{template}}\n', with: '# __PROJECT_NAME__\n' },
     ],
   },
+  TEMPLATE_ONLY_DOCS,
 ];
 
 export const FRONTEND_SKELETON: StackChange[] = [

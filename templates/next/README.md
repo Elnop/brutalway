@@ -6,6 +6,14 @@ The example app is a todo list. It is there so every rule has real code to check
 
 Part of [brutalway](https://github.com/Elnop/brutalway), which also publishes the `@brutalway/*` packages holding the rules and configs: this repository only holds what is specific to it.
 
+## Create a project from it
+
+```sh
+npm create brutal my-app -- --stack next
+```
+
+The CLI asks which parts to keep or add. [Options](docs/reference/options.md) lists them, with what each one changes and the flags to answer without questions.
+
 ## Getting started
 
 Node 26 is required (`.nvmrc`, and `.npmrc` refuses other versions).
@@ -26,6 +34,7 @@ npm run dev
 - [Working with an agent](docs/guides/work-with-an-agent.md): the Claude Code hook that sends the errors back to the agent
 - [Commands](docs/reference/commands.md): the npm scripts and what CI runs
 - [Layout](docs/reference/layout.md): the layers, the slices and where each file goes
+- [Options](docs/reference/options.md): what each option of `npm create brutal` adds or removes
 - [Verifications](docs/reference/verifications.md): every rule and the tool that enforces it
 - [Architecture](docs/concepts/architecture.md): the patterns this template borrows from, with what it takes and what it leaves out
 

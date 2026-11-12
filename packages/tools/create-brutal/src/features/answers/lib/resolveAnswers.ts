@@ -1,4 +1,4 @@
-import { flag } from '#src/features/answers/lib/flag.ts';
+import { flag } from '#src/shared-features/stack/lib/flag.ts';
 import { blockerOf } from '#src/shared-features/stack/lib/optionRules.ts';
 import { candidateValues, isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
 import type { AnswerValue, Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';

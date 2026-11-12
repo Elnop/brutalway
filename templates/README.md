@@ -16,4 +16,4 @@ To start a project from one of them:
 npm create brutal my-app
 ```
 
-The CLI asks for the stack, then lets you drop the parts you do not need. Every option is listed in the [create-brutal README](../packages/tools/create-brutal/README.md).
+The CLI asks for the stack, then lets you drop the parts you do not need. `--stack <stack>` picks it up front. The options page of each template lists what you can turn on or off, with the flags to answer without questions: [vite](vite/docs/reference/options.md), [next](next/docs/reference/options.md), [react-native](react-native/docs/reference/options.md), [fastify](fastify/docs/reference/options.md), [package](package/docs/reference/options.md). The flags shared by every stack are in the [create-brutal README](../packages/tools/create-brutal/README.md).

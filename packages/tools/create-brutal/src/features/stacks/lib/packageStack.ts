@@ -1,4 +1,5 @@
 import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const BIN_SENTENCE =
   ' `src/todo.test.ts` runs `node src/todo.ts` in a temporary folder and compares the exact output and exit code.';
@@ -62,6 +63,7 @@ export const packageStack: Stack = {
         { file: 'package.json', dropLines: '"private": true' },
       ],
     },
+    TEMPLATE_ONLY_DOCS,
     {
       when: { bin: false },
       edits: [
