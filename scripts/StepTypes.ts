@@ -1,1 +1,7 @@
-export type Step = { label: string; command: string; args: string[]; cwd?: string };
+export type Step = {
+  label: string;
+  command: string;
+  args: string[];
+  cwd?: string;
+  reportsWhenPassing?: boolean;
+};

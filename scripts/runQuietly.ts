@@ -1,5 +1,4 @@
 import { spawn } from 'node:child_process';
-import { hasWarning } from './hasWarning.ts';
 import type { Step } from './StepTypes.ts';
 
 const colorEnv = process.stdout.isTTY ? { ...process.env, FORCE_COLOR: '1' } : process.env;
@@ -19,11 +18,12 @@ function capture({ command, args, cwd }: Step): Promise<{ status: number; output
 
 export async function runQuietly(step: Step): Promise<number> {
   const { status, output } = await capture(step);
-  if (status === 0 && !hasWarning(output)) {
+  const report = output.trimEnd();
+  if (status === 0 && (step.reportsWhenPassing !== true || report === '')) {
     process.stdout.write(`${step.label} ok\n`);
     return 0;
   }
-  const verdict = status === 0 ? 'warned' : 'failed';
-  process.stdout.write(`\n${step.label} ${verdict}\n\n${output.trimEnd()}\n\n`);
+  const verdict = status === 0 ? 'passed with notes' : 'failed';
+  process.stdout.write(`\n${step.label} ${verdict}\n\n${report}\n\n`);
   return status;
 }

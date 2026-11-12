@@ -15,7 +15,12 @@ const steps: Step[] = [
     cwd: folder,
   })),
   { label: 'check-doc-length', command: 'check-doc-length', args: [] },
-  { label: 'check-doc-sources', command: 'check-doc-sources', args: [] },
+  {
+    label: 'check-doc-sources',
+    command: 'check-doc-sources',
+    args: [],
+    reportsWhenPassing: true,
+  },
   { label: 'check-doc-links', command: 'check-doc-links', args: [] },
   { label: 'knip', command: 'knip', args: [] },
   ...folders.map((folder) => ({
