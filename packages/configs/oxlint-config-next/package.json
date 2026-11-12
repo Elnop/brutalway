@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-next",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Oxlint preset for Next.js App Router apps: the nextjs rules of oxlint, the client and server boundary, route files, built on @brutalway/oxlint-config-react, @brutalway/oxlint-config-zustand and @brutalway/oxlint-config-vitest.",
   "keywords": [
     "oxlint",

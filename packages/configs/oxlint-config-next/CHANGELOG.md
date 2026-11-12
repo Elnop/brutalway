@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-next
 
+## 0.1.1
+
+### Patch Changes
+
+- b7aacf7: A `'use client'` file may import `analyticsClient.ts`, since events happen in the browser. Any other `xClient.ts` is still reported.
+
 ## 0.1.0
 
 ### Minor Changes

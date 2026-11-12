@@ -1,5 +1,11 @@
 # template-next
 
+## 0.1.1
+
+### Patch Changes
+
+- d8ea465: `oxlint.config.ts` extends `@brutalway/oxlint-config-next`: `'use client'` only goes on an orchestrator, a provider or an `error.tsx`, a `'use client'` file imports no `xClient.ts`, and a server action lives in a `.ts` file of its own.
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.10.1
+
+### Patch Changes
+
+- d8ea465: The `next` and `react-native` projects extend `@brutalway/oxlint-config-next` and `@brutalway/oxlint-config-react-native`, and the `analytics` option installs `@brutalway/dependency-cruiser-config` 0.6.0.
+
 ## 0.10.0
 
 ### Minor Changes
