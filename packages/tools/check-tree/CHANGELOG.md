@@ -1,5 +1,11 @@
 # @brutalkit/check-tree
 
+## 0.6.0
+
+### Minor Changes
+
+- 5485d9e: check-tree rejects a folder the layout does not name. `src/` holds `app/`, `features/`, `shared-features/` and `shared/` next to its entry files, `src/shared/` holds kind folders only, and a feature or a shared feature, at any depth, holds kind folders, `features/`, `shared-features/` and `shared/`. A kind folder holds kind folders only, and `app/` is not checked. A concept folder like `src/shared/authentication/` now gets `src/shared/authentication is not a kind folder: src/shared/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature`. `--categories` also sets the kind folders the layout accepts.
+
 ## 0.5.1
 
 ### Patch Changes
@@ -13,7 +19,7 @@
 - 6c02dd7: `--root-entries` (`{ rootEntries: true }` for the function) leaves the files at the root of the checked folder where they are: a published package keeps one entry point per bin or export there, whatever their kind.
 - afbf814: New `css-modules` value for the `styling` option on vite: each component of the example gets its own `X.module.css` next to it, and `happy-css-modules` writes the types of the class names so `styles.typo` fails `tsc`. Projects in plain CSS or CSS Modules now run stylelint with `@brutalway/stylelint-config`, a new package with three rules: `color-tokens` (a color is a `var()` of a custom property declared in `src/app/globals.css`, with the closest tokens in the message), `module-next-to-component` and `no-unused-class`. In a `.module.css`, classes are camelCase. check-tree leaves `X.module.css` next to its component instead of asking to move it into `styles/`, and the agent hook runs stylelint on each edited stylesheet.
 - 0b57e92: New `server-state` option on vite, off by default: the example reads and writes its todos through TanStack Query against the routes of template-fastify. `todosClient.ts` parses each response with Zod, query keys come from `todosKeys`, cache windows from `src/shared/QueryConfig.ts`, and the zustand store only keeps the filter. `devApi.ts` answers `/api` from an in-memory list in dev and preview, or proxies it to `API_URL`.
-  
+
   `@brutalway/oxlint-config-tanstack-query` is a new package: `query-key-factory` and `named-cache-windows`, plus `exhaustive-deps` and `stable-query-client` from `@tanstack/eslint-plugin-query`. `@brutalway/oxlint-config-react` only accepts `fetch` in an `xClient.ts` and never inside an effect. The `xSchemas.ts` convention moves from the Fastify config to the TypeScript base, so the front gets it too. dependency-cruiser keeps clients, query hooks and `@tanstack/react-query` out of presenters and stores, and check-tree learns `xKeys.ts` and the `keys/` folder.
 
 ## 0.4.0

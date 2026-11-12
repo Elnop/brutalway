@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check-tree",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Checks a source tree: only the folders the layout names, no empty folder, no category folder holding a single child, stylesheets grouped in styles/.",
   "keywords": [
     "lint",

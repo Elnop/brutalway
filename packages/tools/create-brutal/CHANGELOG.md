@@ -1,5 +1,12 @@
 # create-brutal
 
+## 0.10.3
+
+### Patch Changes
+
+- dbc7821: The reference of the README links to the options page of each template, where the flags, values, defaults and incompatible flags of every option are listed, and a test compares these pages with the definitions of the stacks. A created project drops that page and the section of its README about `npm create brutal`.
+- 5485d9e: The react-native stack edits the theme in `src/shared-features/theme/`, where template-react-native now keeps it.
+
 ## 0.10.2
 
 ### Patch Changes
