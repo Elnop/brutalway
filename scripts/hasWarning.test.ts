@@ -10,7 +10,21 @@ test('a clean output has no warning', () => {
 });
 
 test('a line that starts with Warning is a warning', () => {
-  assert.equal(hasWarning('Found 0 clones.\nWarning: jscpd analyzed no files\n'), true);
+  assert.equal(hasWarning('Found 0 clones.\nWarning: something went wrong\n'), true);
+});
+
+test('jscpd analyzing no files is tolerated', () => {
+  assert.equal(
+    hasWarning('Found 0 clones.\nWarning: jscpd analyzed no files: check the paths\n'),
+    false,
+  );
+});
+
+test('a tolerated warning does not hide another one', () => {
+  assert.equal(
+    hasWarning('Warning: jscpd analyzed no files: check the paths\nWarning: other\n'),
+    true,
+  );
 });
 
 test('a line that starts with npm warn is a warning', () => {
