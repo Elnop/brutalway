@@ -9,9 +9,9 @@ const USE_CLIENT_PLACEMENT = {
 };
 
 const CLIENT_READS_API = {
-  selector: `Program:has(> ${USE_CLIENT}) > ImportDeclaration[source.value=/Client(\\.ts)?$/u]`,
+  selector: `Program:has(> ${USE_CLIENT}) > ImportDeclaration[source.value=/(?<!\\/analytics)Client(\\.ts)?$/u]`,
   message:
-    'A client component does not call an API client: read the data in a server component (page.tsx, layout.tsx) and pass it down as a prop.',
+    'A client component does not call an API client: read the data in a server component (page.tsx, layout.tsx) and pass it down as a prop. analyticsClient.ts is the exception, since events happen in the browser.',
 };
 
 const CLIENT_FILES = [
