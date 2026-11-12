@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-typescript",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Oxlint config for TypeScript projects: no comments, no barrel files, files named after their export, types and constants in dedicated files.",
   "keywords": [
     "oxlint",

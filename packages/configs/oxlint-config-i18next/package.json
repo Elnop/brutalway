@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-i18next",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Oxlint config for a React app translated with i18next: no visible text in JSX, in aria-label, aria-description, placeholder, title or alt, nor in a template literal.",
   "keywords": [
     "oxlint",

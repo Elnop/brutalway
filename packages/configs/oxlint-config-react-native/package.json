@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-react-native",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Oxlint preset for React Native and Expo apps: styles from the theme only, no inline style, the rules of eslint-plugin-react-native, Expo Router route files and Jest, built on @brutalway/oxlint-config-react and @brutalway/oxlint-config-zustand.",
   "keywords": [
     "oxlint",

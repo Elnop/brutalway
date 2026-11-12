@@ -1,5 +1,13 @@
 # create-brutal
 
+## 0.10.0
+
+### Minor Changes
+
+- 972574d: `npm create brutal` offers a `next` stack, template-next on the Next.js App Router. It takes the options of the vite stack except `server-state`: styling, shadcn/ui, dark theme, forms, i18n, React Compiler, analytics, component tests, coverage, e2e, the Claude Code hook and CI. With `i18n`, the language is saved in a cookie and read on the server, so the page comes in the right language from the first render. The changes both front-end stacks share now live in `src/features/stacks/configs/frontendChangesConfig.ts`, and each stack fills in its own file names through `fillAnchors`. The vite projects come out byte for byte the same.
+- 284c471: `npm create brutal` offers a `react-native` stack, template-react-native on Expo and Expo Router. It takes the options of the vite stack that make sense on a phone: dark theme, TanStack Query, forms, i18n, React Compiler, analytics, component tests and coverage, plus `expo-go` to run the app in Expo Go instead of a development build. `app.json` takes the name of the project, and its identifier on the stores becomes `com.example.<name>`.
+- 5224fa7: With shadcn/ui and the GitHub Actions workflow, CI runs `npx shadcn add <name> --overwrite` on each file of `third-party/shadcn/` and fails when the result differs from the commit, so a hand edit of a vendored primitive is caught even when it did not go through the agent hook.
+
 ## 0.9.0
 
 ### Minor Changes
@@ -19,10 +27,11 @@
 ### Minor Changes
 
 - 5c45ee3: New `dark-theme` option on vite, off by default. It adds a `@media (prefers-color-scheme: dark)` block to `src/app/globals.css` that gives each color token a dark value, so the app follows the theme of the system with the same classes and stylesheets, in plain CSS, CSS Modules and Tailwind. Text keeps a contrast of 4.5:1 on every color, and with e2e tests on, `e2e/darkTheme.spec.ts` runs axe with the system in dark mode.
-  
+
   With `--ui shadcn`, the `dark:` classes of the vendored primitives now only apply under a `.dark` class (`@custom-variant dark` in `src/app/globals.css`). Before, a system in dark mode turned the fields and checkboxes grey on a light page.
-  
+
   `@brutalway/oxlint-config-tailwind`: the message of `no-dark-variant` no longer says the project is light only. It says to give the token its dark value in the stylesheet that declares it.
+
 - 7a815dc: The vite projects take a pastel palette in every styling value: yellow `#ffe98f`, pink `#ffb8e6` and blue `#b3c5ff`. Text on these colors uses a new `on-accent` token, dark in both themes, and the focus outline has its own `focus` token so it keeps a strong blue on the cream page. With `dark-theme`, the accents stay pastel in the dark and keep their dark text. With shadcn/ui, the primary and destructive buttons and the checked checkbox use `on-accent` too.
 
 ### Patch Changes
@@ -41,34 +50,38 @@
 
 - a0fbb5d: Each vite option writes its own lines of `AGENTS.md`, as it does in the README: the styling value, shadcn/ui, server state, forms, French, the React Compiler and analytics each add or replace a convention, and a project without e2e drops `npm run e2e`.
 - 854b682: New `analytics` option on vite: `none` by default, `module` or `posthog`. Both write `src/shared/analyticsClient.ts`, the only place events leave the app (`analyticsClient.track('todo_added')`, which the example calls when a task is added). With `module` it dispatches an `analytics` event on `window` for any tool to plug in. With `posthog` it sends to PostHog when `VITE_POSTHOG_KEY` is set, and nothing otherwise, with autocapture and remote scripts off and the PostHog hosts allowed in `connect-src`.
-  
+
   `@brutalway/dependency-cruiser-config` adds `analytics-in-client`: `posthog-js`, `@segment/analytics-next`, `mixpanel-browser`, `@amplitude/analytics-browser`, `react-ga4` and `@vercel/analytics` are only imported from an `analyticsClient.ts`.
+
 - afbf814: New `css-modules` value for the `styling` option on vite: each component of the example gets its own `X.module.css` next to it, and `happy-css-modules` writes the types of the class names so `styles.typo` fails `tsc`. Projects in plain CSS or CSS Modules now run stylelint with `@brutalway/stylelint-config`, a new package with three rules: `color-tokens` (a color is a `var()` of a custom property declared in `src/app/globals.css`, with the closest tokens in the message), `module-next-to-component` and `no-unused-class`. In a `.module.css`, classes are camelCase. check-tree leaves `X.module.css` next to its component instead of asking to move it into `styles/`, and the agent hook runs stylelint on each edited stylesheet.
 - a36a8fb: New `forms` option on vite, off by default: the title fields of the example go through `react-hook-form` with `zodResolver(TodoDraftSchema)`. `@brutalway/oxlint-config-react-hook-form` is a new package with `zod-resolver` (every `useForm` takes `resolver: zodResolver(...)`) and `validation-in-schema` (no validation passed to `register`, `useController` or a `Controller`). With `server-state`, `TodoDraftSchema` joins the API schemas and `todosClient.create` takes its inferred type. The CLI now writes `knip.json` the way Prettier formats it, so a long `ignoreDependencies` list no longer fails `prettier --check`.
 - a916a80: New `i18n` option on vite, off by default: the project comes in English and French, with English and Français buttons in the header (a `Button` with `--ui shadcn`). `src/features/language-switch/` holds the switch, the list of languages and `languageStorage.ts`, which starts from the language saved in `localStorage`, or else the first language of the browser the project has, and keeps `<html lang>` and the title of the page in line. `i18next-cli status` then checks that French has every key, and with e2e, `e2e/language.spec.ts` switches to French, runs axe and reloads.
 - 583202b: Every vite project now goes through i18next, whatever its options: the presenters of each styling value call `t()`, and a project without the example keeps an `app` namespace with its title. With `forms`, the messages of `TodoDraftSchema` are keys listed in `TITLE_ERRORS`, translated by `useTitleForm`.
-  
+
   `@brutalway/oxlint-config-i18next` is a new package that runs `no-literal-string` from `eslint-plugin-i18next` as an Oxlint JS plugin: visible text in JSX, in `aria-label`, `aria-description`, `placeholder`, `title` and `alt`, and in template literals is reported, while a string without letters (`42%`, `×`) is not.
+
 - 66a62bf: New `package` stack, from template-package: a standalone npm package with the todo list as its `"."` export and a `todo` bin. Its options are `example` (without it, `src/greet.ts` as the export and, with `bin`, a `src/cli.ts` named after the project), `bin`, `release` (changesets, a `release` script and a workflow publishing to npm with trusted publishing and provenance), `claude-hook` and `ci`. The project starts at version 0.1.0, without `private`, through the new `projectVersion` field of a stack.
 - f1b60f3: `@brutalway/oxlint-config-typescript` reports a function whose cognitive complexity is above 15 with Sonar's own rule, `sonarjs/cognitive-complexity`. The whole `eslint-plugin-sonarjs` does not load under Oxlint with TypeScript 7, so a small plugin loads the file of that rule alone, from an exact version of the package.
-  
+
   `@brutalway/oxlint-config-react` adds rules taken from bedrock: no array index as a `key`, `localStorage` and `sessionStorage` only in an `xStorage.ts` file, no `useX.tsx` hook file, no formatting (`toFixed`, `Intl`, `sort`, `filter`, `reduce`...) in a presenter, an orchestrator that calls at least one hook, and at most 6 props per component.
-  
+
   `@brutalway/oxlint-config-i18next` leaves test files alone, since they pass literal props to what they render.
-  
+
   New `coverage` option on vite, off by default, which needs component tests: `npm test` runs `vitest run --coverage` and fails under 90 % of presenters, pure functions, selectors and stores. With `i18n`, `LanguageSwitch.tsx` gets its component test, and `languagePreference.ts` becomes `languageStorage.ts`.
+
 - fde3a22: New `react-compiler` option on vite, off by default: `vite.config.ts` runs `babel-plugin-react-compiler` 1.0 through `@rolldown/plugin-babel` and `reactCompilerPreset()`, outside Vitest, and `oxlint.config.ts` reports `useMemo`, `useCallback` and `memo` imported from `react`.
 - 0b57e92: New `server-state` option on vite, off by default: the example reads and writes its todos through TanStack Query against the routes of template-fastify. `todosClient.ts` parses each response with Zod, query keys come from `todosKeys`, cache windows from `src/shared/QueryConfig.ts`, and the zustand store only keeps the filter. `devApi.ts` answers `/api` from an in-memory list in dev and preview, or proxies it to `API_URL`.
-  
+
   `@brutalway/oxlint-config-tanstack-query` is a new package: `query-key-factory` and `named-cache-windows`, plus `exhaustive-deps` and `stable-query-client` from `@tanstack/eslint-plugin-query`. `@brutalway/oxlint-config-react` only accepts `fetch` in an `xClient.ts` and never inside an effect. The `xSchemas.ts` convention moves from the Fastify config to the TypeScript base, so the front gets it too. dependency-cruiser keeps clients, query hooks and `@tanstack/react-query` out of presenters and stores, and check-tree learns `xKeys.ts` and the `keys/` folder.
+
 - b7940fa: New `ui` option on vite, `none` by default. `--ui shadcn` (with `--styling tailwind`) copies the Button, Input, Checkbox and Card of shadcn/ui into `third-party/shadcn/`, outside `src/`, and the example uses them. `components.json` points every alias of the shadcn CLI to `@third-party/shadcn`, so `npx shadcn add <name>` writes there too. The vendored files are checked by a TypeScript project of their own, `tsconfig.third-party.json`, referenced by the app and built with `tsc -b`. Prettier, Oxlint and check-tree skip the folder, knip takes its files as entries, and alint refuses any folder in `third-party/` but `shadcn/`. The tokens of `src/app/globals.css` give the primitives the look of the series without touching their files.
-  
+
   `@brutalway/tsconfig` ships `react-vite-third-party.json`: `react-vite.json` without `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature`, for code copied from a registry.
-  
+
   `@brutalway/dependency-cruiser-config/shadcn` extends the layers with `third-party-not-to-src` and `third-party-packages-only-from-third-party`: vendored code imports nothing from the app, and `radix-ui` and `class-variance-authority` are only imported from `third-party/`. Projects made with `--ui shadcn` use it and run `depcruise src third-party`.
-  
+
   `@brutalway/oxlint-config-shadcn` is a new package with `primitives-first` (no raw `<button>`, `<input>`, `<select>` or `<textarea>`, the message names the primitive and the `npx shadcn add` command) and `one-icon-library` (icons only from `lucide-react`). Projects made with `--ui shadcn` extend it.
-  
+
   `@brutalway/agent-hook` takes `--vendored <folder>`: the `PostToolUse` hook runs no check on a file there, and the same command as a `PreToolUse` hook refuses the edit with what to do instead (`npx shadcn add <name> --overwrite`, the tokens or a `data-slot` rule in `src/app/globals.css`, a wrapper in `src/`). Projects made with `--ui shadcn` and the Claude Code hook get both.
 
 ### Patch Changes

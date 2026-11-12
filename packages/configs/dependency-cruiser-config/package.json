@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/dependency-cruiser-config",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "dependency-cruiser rules for a layered app: app, features, states and shared, with pure presenters and stores in their folder.",
   "keywords": [
     "dependency-cruiser",
