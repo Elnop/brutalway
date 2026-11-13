@@ -19,20 +19,19 @@ function groupViolations(
   listing: FolderListing,
   categoryFolders: ReadonlySet<string>,
 ): string[] {
-  const violations: string[] = [];
-  for (const { folder, belongs, appliesIn } of FILE_GROUPS) {
-    if (!categoryFolders.has(folder) || !appliesIn(folderName)) continue;
+  const holdsFilesOnly = categoryFolders.has(folderName) && listing.folders.size === 0;
+  return FILE_GROUPS.flatMap(({ folder, belongs, appliesIn }) => {
+    if (!categoryFolders.has(folder) || !appliesIn(folderName)) return [];
     const loose = listing.files.filter(belongs);
-    if (loose.length === 0) continue;
+    if (loose.length === 0 || (holdsFilesOnly && loose.length === listing.files.length)) return [];
     if (listing.folders.has(folder)) {
-      violations.push(`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`);
-    } else if (loose.length > 1) {
-      violations.push(
-        `${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`,
-      );
+      return [`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`];
     }
-  }
-  return violations;
+    if (loose.length === 1) return [];
+    return [
+      `${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`,
+    ];
+  });
 }
 
 function folderListing(entries: Dirent[]): FolderListing {

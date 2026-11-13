@@ -390,4 +390,25 @@ describe('treeViolations', () => {
       ['src/features/a has a clients/ folder: move githubClient.ts into it'],
     );
   });
+
+  it('a category folder whose files all belong to one group keeps them, since the group folder would be its single child', () => {
+    assert.deepEqual(
+      treeViolations(
+        tree(['features/a/components/PageShell.tsx', 'features/a/components/ThemedStack.tsx']),
+      ),
+      [],
+    );
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'features/a/components/PageShell.tsx',
+          'features/a/components/ThemedStack.tsx',
+          'features/a/components/ShellLayout.tsx',
+        ]),
+      ),
+      [
+        'src/features/a/components holds 2 presenters files (PageShell.tsx, ThemedStack.tsx): move them into presenters/',
+      ],
+    );
+  });
 });
