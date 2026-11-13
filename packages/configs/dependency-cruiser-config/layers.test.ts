@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
@@ -181,7 +181,7 @@ describe('dependency-cruiser-config', () => {
     assert.deepEqual(violatedRules(root), ['presenters-are-pure', 'stores-hold-no-server-data']);
   });
 
-  it('the server rules keep queries behind services and SQLite inside queries', () => {
+  it('the server rules keep queries behind services and SQLite inside queries, the database feature and tests', () => {
     const root = project(
       {
         'src/app/buildApp.ts':
@@ -196,6 +196,8 @@ describe('dependency-cruiser-config', () => {
           "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nexport const listRoutes = createTodosQueries;\n",
         'src/features/list/listHelper.ts':
           "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nimport { DatabaseSync } from 'node:sqlite';\nexport const listHelper = [createTodosQueries, DatabaseSync];\n",
+        'src/features/list/listService.test.ts':
+          "import { DatabaseSync } from 'node:sqlite';\nimport { createListService } from './listService.ts';\nexport const checked = createListService(new DatabaseSync(':memory:'));\n",
       },
       'server.cjs',
     );
@@ -204,6 +206,8 @@ describe('dependency-cruiser-config', () => {
       'queries-behind-services',
       'routes-not-to-queries',
     ]);
+    rmSync(join(root, 'src/features/list/listHelper.ts'));
+    assert.deepEqual(violatedRules(root), ['queries-behind-services', 'routes-not-to-queries']);
   });
 
   it('the server rules let a worker run queries, start workers from src/app/ and keep HTTP calls in clients', () => {

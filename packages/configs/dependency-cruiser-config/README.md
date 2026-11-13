@@ -122,7 +122,7 @@ A package has no `src/app/`: each entry point (a bin, an export of `package.json
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `routes-not-to-queries`    | an `xRoutes.ts` importing an `xQueries.ts`: routes call their service                                                 |
 | `queries-behind-services`  | an `xQueries.ts` imported by anything but a service, a worker, other queries or a test |
-| `database-in-queries`      | `node:sqlite`, `pg`, `postgres`, `mysql2` or `better-sqlite3` imported outside an `xQueries.ts` and `src/features/database/`, which opens the connection |
+| `database-in-queries`      | `node:sqlite`, `pg`, `postgres`, `mysql2` or `better-sqlite3` imported outside an `xQueries.ts`, `src/features/database/`, which opens the connection, and the tests |
 | `workers-started-from-app` | an `xWorker.ts` imported by anything but `src/app/`, which starts and stops it with the server, or a test. Since `src/app/` only imports features, a worker lives in a feature |
 | `http-in-clients`          | `node:http`, `node:https`, `undici`, `axios`, `got` or `node-fetch` imported outside an `xClient.ts` and the tests    |
 

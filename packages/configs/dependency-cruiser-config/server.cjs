@@ -25,7 +25,7 @@ module.exports = {
       severity: 'error',
       comment:
         'Only an xQueries.ts file talks to the database driver (src/features/database/ opens the connection): move this SQL into the queries of its shared feature.',
-      from: { pathNot: ['Queries\\.ts$', '^src/features/database/'] },
+      from: { pathNot: ['Queries\\.ts$', '^src/features/database/', ...TEST_CODE] },
       to: { path: ['^(node:)?sqlite$', 'node_modules/(pg|postgres|mysql2|better-sqlite3)/'] },
     },
     {
