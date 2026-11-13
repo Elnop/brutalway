@@ -1,4 +1,4 @@
-import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { FileEdit, Stack } from '#src/shared-features/stack/StackTypes.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
   FRONTEND_FEATURE_OPTIONS,
@@ -52,6 +52,19 @@ const ANALYTICS_POSTHOG_README = `## Analytics
 \`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`VITE_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`VITE_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev, in preview or in the e2e tests. Autocapture and the scripts PostHog loads from its servers are off, and \`securityHeaders.ts\` lets the PostHog hosts through \`connect-src\`.
 
 `;
+
+const APP_OPENED: FileEdit[] = [
+  {
+    file: 'src/main.tsx',
+    after: "import { createI18n } from '@/app/createI18n.ts';\n",
+    insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+  },
+  {
+    file: 'src/main.tsx',
+    after: '  </StrictMode>,\n);\n',
+    insert: "\nanalyticsClient.track('app_opened');\n",
+  },
+];
 
 const ANCHORS = {
   template: 'vite',
@@ -302,6 +315,8 @@ export const viteStack: Stack = {
         ],
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
+      { when: { analytics: 'module', example: false }, edits: APP_OPENED },
+      { when: { analytics: 'posthog', example: false }, edits: APP_OPENED },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
     ],

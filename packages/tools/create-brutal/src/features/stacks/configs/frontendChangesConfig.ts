@@ -1172,26 +1172,6 @@ export const FRONTEND_ANALYTICS: StackChange[] = [
 
 export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
   {
-    when: { analytics: 'module', example: false },
-    edits: [
-      {
-        file: 'knip.json',
-        replace: '"entry": ["i18next.config.ts"',
-        with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts!"',
-      },
-    ],
-  },
-  {
-    when: { analytics: 'posthog', example: false },
-    edits: [
-      {
-        file: 'knip.json',
-        replace: '"entry": ["i18next.config.ts"',
-        with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts!"',
-      },
-    ],
-  },
-  {
     when: { analytics: 'module', example: true },
     edits: [
       {

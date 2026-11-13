@@ -1,4 +1,4 @@
-import type { Stack, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import type { FileEdit, Stack, StackOption } from '#src/shared-features/stack/StackTypes.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
   FRONTEND_AGENTS,
@@ -42,6 +42,30 @@ import {
   TESTS_PARAGRAPH,
   WITHOUT_ASYNC_STORAGE,
 } from '#src/features/stacks/configs/reactNativeChangesConfig.ts';
+
+const JEST_WITHOUT_TESTS: FileEdit = {
+  file: 'package.json',
+  replace: '"test": "jest",',
+  with: '"test": "jest --passWithNoTests",',
+};
+
+const APP_OPENED: FileEdit[] = [
+  {
+    file: 'src/app/screens/_layout.tsx',
+    after: "import { Stack } from 'expo-router';\n",
+    insert: "import { useEffect } from 'react';\n",
+  },
+  {
+    file: 'src/app/screens/_layout.tsx',
+    after: "import { I18nProvider } from '@/app/I18nProvider.tsx';\n",
+    insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+  },
+  {
+    file: 'src/app/screens/_layout.tsx',
+    after: 'export default function RootLayout() {\n',
+    insert: "  useEffect(() => {\n    analyticsClient.track('app_opened');\n  }, []);\n",
+  },
+];
 
 const ANCHORS = {
   template: 'react-native',
@@ -142,26 +166,34 @@ export const reactNativeStack: Stack = {
       },
       {
         when: { example: false, 'component-tests': false },
+        edits: [JEST_WITHOUT_TESTS],
+      },
+      {
+        when: { example: false, 'component-tests': true, i18n: false },
+        edits: [JEST_WITHOUT_TESTS],
+      },
+      {
+        when: { example: false, i18n: false, 'component-tests': true },
+        remove: ['src/shared-features/theme/Button.test.tsx'],
+      },
+      {
+        when: { example: false, i18n: false },
+        remove: ['src/shared-features/theme/Button.tsx', 'src/shared-features/theme/ThemeTypes.ts'],
         edits: [
           {
-            file: 'package.json',
-            replace: '"test": "jest",',
-            with: '"test": "jest --passWithNoTests",',
+            file: 'docs/concepts/architecture.md',
+            replace:
+              ' The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared-features/theme/Button.tsx`.',
+            with: '',
+          },
+          {
+            file: 'docs/reference/verifications.md',
+            dropLines: '`no-unused-styles` only sees a style read as',
           },
         ],
       },
       {
-        when: { example: false },
-        edits: [
-          {
-            file: 'knip.json',
-            replace: '"src/app/screens/**/*.tsx!"',
-            with: '"src/app/screens/**/*.tsx!", "src/shared-features/theme/Button.tsx!"',
-          },
-        ],
-      },
-      {
-        when: { example: false, 'component-tests': false, i18n: false },
+        when: { example: false, i18n: false },
         edits: [
           {
             file: 'knip.json',
@@ -324,7 +356,7 @@ export const reactNativeStack: Stack = {
             after: '    "preset": "jest-expo",\n',
             insert: COVERAGE_JEST,
           },
-          { file: 'package.json', replace: '"test": "jest",', with: '"test": "jest --coverage",' },
+          { file: 'package.json', replace: '"test": "jest', with: '"test": "jest --coverage' },
           { file: '.gitignore', after: '.expo\n', insert: 'coverage\n' },
           { file: '.prettierignore', after: '.expo\n', insert: 'coverage\n' },
           {
@@ -435,6 +467,8 @@ export const reactNativeStack: Stack = {
         },
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
+      { when: { analytics: 'module', example: false }, edits: APP_OPENED },
+      { when: { analytics: 'posthog', example: false }, edits: APP_OPENED },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS,
     ],

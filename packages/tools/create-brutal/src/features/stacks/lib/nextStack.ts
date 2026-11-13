@@ -225,6 +225,8 @@ export const nextStack: Stack = {
         ],
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
+      { when: { analytics: 'module', example: false }, overlay: 'analytics-home' },
+      { when: { analytics: 'posthog', example: false }, overlay: 'analytics-home' },
       ...FRONTEND_AGENTS_AND_THEME,
     ],
     ANCHORS,
