@@ -1,13 +1,15 @@
 # @brutalway/check-tree
 
-Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no category folder with a single child, and files of one kind grouped in that kind's folder once there are two of them.
+Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no category folder with a single child, files of one kind grouped in that kind's folder once there are two of them, and no file in a `shared/` folder that a single feature uses.
 
 ## Install
 
 ```sh
-npm install --save-dev @brutalway/check-tree
+npm install --save-dev @brutalway/check-tree dependency-cruiser
 npx check-tree src
 ```
+
+check-tree runs from the folder that holds the dependency-cruiser config (`.dependency-cruiser.cjs` and the like) and reads it to resolve the imports, with the same tsconfig and aliases.
 
 ## Usage
 
@@ -35,7 +37,13 @@ import { treeViolations } from '@brutalway/check-tree/treeViolations';
 const violations = treeViolations('src');
 ```
 
-It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`.
+It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`. The check on `shared/` reads the imports, so it has its own export:
+
+```ts
+import { sharedViolations } from '@brutalway/check-tree/sharedViolations';
+
+const violations = await sharedViolations('src');
+```
 
 ## Reference
 
@@ -68,6 +76,8 @@ It takes the category folders as second argument and `{ rootEntries: true }` as 
 | `workers/`                             | `xWorker.ts`                                                      |
 | `stores/`                              | `xStore.ts`                                                       |
 | `lib/`                                 | any other `.ts` file, except `xContent.ts`, `xEnv.ts` and `.d.ts` |
+
+- a file of a `shared/` folder is used by at least two consumers. For `src/shared/`, a consumer is a feature or a shared feature, a sub-feature counting as the feature it sits in. For the `shared/` of a feature or a shared feature, a consumer is one of its sub-features, one of its sub shared features, or its own files outside them. A file imported by another file of the same `shared/` gets the consumers of that file. Tests do not count, and a file of `src/shared/` used only by `app/` or by the entry files of `src/` passes. A file with a single consumer gets `src/shared/lib/format.ts is only used by src/features/cart: move it into src/features/cart`.
 
 So a feature with two components puts them in `components/`, and a `components/` folder with two presenters puts them in `presenters/`. The `components/` rule does not apply inside `components/`, `orchestrators/` or `presenters/`.
 

@@ -1,18 +1,23 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 
 const CLI = join(import.meta.dirname, 'checkTree.ts');
 
-function project(files: string[], folders: string[] = []): string {
+function project(
+  files: string[],
+  folders: string[] = [],
+  sources: Record<string, string> = {},
+): string {
   const root = mkdtempSync(join(tmpdir(), 'check-tree-'));
+  writeFileSync(join(root, '.dependency-cruiser.cjs'), 'module.exports = {};');
   for (const folder of folders) mkdirSync(join(root, folder), { recursive: true });
   for (const file of files) {
     mkdirSync(dirname(join(root, file)), { recursive: true });
-    writeFileSync(join(root, file), '');
+    writeFileSync(join(root, file), sources[file] ?? '');
   }
   return root;
 }
@@ -103,5 +108,41 @@ describe('check-tree', () => {
       lines: ['src/features/a holds 2 lib files (one.ts, two.ts): move them into lib/'],
     });
     assert.equal(run(root, ['src']).lines.length, 3);
+  });
+
+  it('reports a file of shared/ that a single feature uses', () => {
+    const root = project(
+      [
+        'src/features/a/A.ts',
+        'src/features/b/B.ts',
+        'src/shared/format.ts',
+        'src/shared/SlugTypes.ts',
+      ],
+      [],
+      {
+        'src/features/a/A.ts':
+          "import '../../shared/format.ts';\nimport '../../shared/SlugTypes.ts';",
+        'src/features/b/B.ts': "import '../../shared/format.ts';",
+      },
+    );
+    assert.deepEqual(run(root, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: [
+        'src/shared/SlugTypes.ts is only used by src/features/a: move it into src/features/a',
+      ],
+    });
+  });
+
+  it('stops with a message when the folder has no dependency-cruiser config', () => {
+    const root = project(['src/a.ts']);
+    rmSync(join(root, '.dependency-cruiser.cjs'));
+    assert.deepEqual(run(root, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: [
+        'check-tree reads the dependency-cruiser config to resolve imports, and the current folder has none of .dependency-cruiser.js, .dependency-cruiser.cjs, .dependency-cruiser.mjs, .dependency-cruiser.json',
+      ],
+    });
   });
 });

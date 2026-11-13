@@ -1,7 +1,7 @@
 {
   "name": "@brutalway/check-tree",
   "version": "0.6.0",
-  "description": "Checks a source tree: only the folders the layout names, no empty folder, no category folder holding a single child, stylesheets grouped in styles/.",
+  "description": "Checks a source tree: only the folders the layout names, no empty folder, no category folder holding a single child, stylesheets grouped in styles/, no file of shared/ used by a single feature.",
   "keywords": [
     "lint",
     "folder-structure",
@@ -28,7 +28,8 @@
     "check-tree": "./dist/checkTree.js"
   },
   "exports": {
-    "./treeViolations": "./dist/treeViolations.js"
+    "./treeViolations": "./dist/treeViolations.js",
+    "./sharedViolations": "./dist/sharedViolations.js"
   },
   "scripts": {
     "build": "tsdown",
@@ -70,5 +71,8 @@
     "eslint-plugin-no-comments": {
       "minimatch": "^11.0.1"
     }
+  },
+  "peerDependencies": {
+    "dependency-cruiser": ">=18"
   }
 }
