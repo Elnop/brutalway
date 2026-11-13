@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-next
 
+## 0.1.2
+
+### Patch Changes
+
+- 632ccfd: `instrumentation-client.ts` keeps its kebab-case name, the one Next.js looks for, like `not-found.tsx`.
+
 ## 0.1.1
 
 ### Patch Changes
