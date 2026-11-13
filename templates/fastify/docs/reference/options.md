@@ -36,12 +36,12 @@ npm create brutal my-api -- --preset fastify.json --yes
 
 Every combination works.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/buildApp.ts` only creates the server, and `src/shared/ErrorSchemas.ts` and `docs/reference/endpoints.md` are removed. The Swagger UI, if kept, is titled with the project name.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/buildApp.ts` only creates the server, and the two features of the example, `test-utils/` and `docs/reference/endpoints.md` are removed. The Swagger UI, if kept, is titled with the project name.
 
 ## swagger
 
-Without it, there is no Swagger UI on `/docs`: `src/shared/swaggerTheme.css` and `@fastify/swagger-ui` are removed. `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
+Without it, there is no Swagger UI on `/docs`: `src/features/http-server/swaggerTheme.css` and `@fastify/swagger-ui` are removed. `@fastify/swagger` and `openapi-types` stay installed, because `fastify-type-provider-zod` needs them.
 
 ## database
 
-Without it, `src/shared/lib/openDatabase.ts` and the `DATABASE_PATH` variable are removed, and nothing uses `node:sqlite`. The example keeps its todos in a `Map`: `src/shared-features/todos/todosQueries.ts` has the same functions, so the services and the routes do not change.
+Without it, `src/features/database/` and the `DATABASE_PATH` variable are removed, and nothing uses `node:sqlite`. The example keeps its todos in a `Map` at the top of `src/shared-features/todos/todosQueries.ts`, which has the same functions: both services call `createTodosQueries()` and see the same todos, and the routes do not change.

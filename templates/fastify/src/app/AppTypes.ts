@@ -1,3 +1,3 @@
-import type { Env } from '#src/shared/EnvTypes.ts';
+import type { createHttpServer } from '#src/features/http-server/createHttpServer.ts';
 
-export type BuildAppOptions = Pick<Env, 'databasePath' | 'logLevel'>;
+export type BuildAppOptions = Parameters<typeof createHttpServer>[0] & { databasePath: string };

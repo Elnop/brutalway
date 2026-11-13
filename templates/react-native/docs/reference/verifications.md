@@ -44,6 +44,7 @@ There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts 
 dependency-cruiser checks the direction of imports. The rules come from `@brutalway/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
+- `src/app/` imports features only, neither `src/shared-features/` nor `src/shared/`
 - a feature never imports another feature, a shared feature never imports another shared feature
 - inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
 - a presenter imports no store and no shared-feature hook
@@ -52,7 +53,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a `shared/` folder that a single feature uses is rejected too: it moves into that feature.
 
 ## Messages
 

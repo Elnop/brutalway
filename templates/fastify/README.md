@@ -33,7 +33,7 @@ The API listens on `http://127.0.0.1:3000`, and the Swagger UI on `/docs`. `npm 
 | `DATABASE_PATH` | `todos.db` | a SQLite file, or `:memory:` |
 | `LOG_LEVEL` | `info` | `fatal` to `trace`, or `silent` |
 
-`src/shared/lib/readEnv.ts` validates them with Zod at startup: an invalid value stops the server before it listens.
+`src/shared/readEnv.ts` validates them with Zod at startup: an invalid value stops the server before it listens.
 
 ## Documentation
 

@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { openDatabase } from '#src/shared/lib/openDatabase.ts';
+import { DatabaseSync } from 'node:sqlite';
 import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';
 
 function emptyQueries() {
-  return createTodosQueries(openDatabase(':memory:'));
+  return createTodosQueries(new DatabaseSync(':memory:'));
 }
 
 describe('todosQueries', () => {

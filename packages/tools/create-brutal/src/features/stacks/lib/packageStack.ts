@@ -133,7 +133,7 @@ export const packageStack: Stack = {
         {
           file: 'docs/reference/layout.md',
           replace:
-            ' `src/shared-features/todos/` holds the `Todo` type and `todosFile.ts`, the only file that reads and writes the todos. `src/features/add-todo/`, `src/features/list-todos/` and `src/features/complete-todo/` all use it without knowing each other, and `src/shared/jsonFile.ts` reads and writes any JSON file.',
+            ' `src/shared-features/todos/` holds the `Todo` type and `todosFile.ts`, the only file that reads and writes the todos. `src/features/add-todo/`, `src/features/list-todos/` and `src/features/complete-todo/` all use it without knowing each other.',
           with: '',
         },
         { file: 'docs/guides/start-your-own-package.md', dropLines: '1. Delete `src/features/`' },

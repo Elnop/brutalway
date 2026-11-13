@@ -21,19 +21,12 @@ export const WITHOUT_ASYNC_STORAGE: FileEdit[] = [
 
 export const SERVER_STATE_LAYOUT = `    <I18nProvider>
       <QueryClientProvider client={queryClient}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: THEME.colors.page },
-          }}
-        />
+        <Stack screenOptions={STACK_SCREEN_OPTIONS} />
       </QueryClientProvider>
     </I18nProvider>`;
 
 export const PLAIN_LAYOUT = `    <I18nProvider>
-      <Stack
-        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: THEME.colors.page } }}
-      />
+      <Stack screenOptions={STACK_SCREEN_OPTIONS} />
     </I18nProvider>`;
 
 export const SERVER_STATE_README = `## API

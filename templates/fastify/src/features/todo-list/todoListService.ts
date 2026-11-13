@@ -1,11 +1,8 @@
-import type {
-  TodoDraft,
-  TodoFilter,
-  TodoPatch,
-  TodosQueries,
-} from '#src/shared-features/todos/TodosTypes.ts';
+import type { TodoDraft, TodoFilter, TodoPatch } from '#src/shared-features/todos/TodosTypes.ts';
+import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';
 
-export function createTodoListService({ todos }: { todos: TodosQueries }) {
+export function createTodoListService(database: Parameters<typeof createTodosQueries>[0]) {
+  const todos = createTodosQueries(database);
   return {
     list: (filter: TodoFilter) =>
       filter === 'all' ? todos.list() : todos.listByCompleted(filter === 'completed'),

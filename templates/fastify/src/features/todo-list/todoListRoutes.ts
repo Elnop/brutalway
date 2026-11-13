@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { orNotFound } from '#src/features/todo-list/orNotFound.ts';
-import { ClearedSchema, TodoIdParamsSchema } from '#src/features/todo-list/TodoListSchemas.ts';
+import {
+  ClearedSchema,
+  ErrorSchema,
+  TodoIdParamsSchema,
+} from '#src/features/todo-list/TodoListSchemas.ts';
 import type { TodoListService } from '#src/features/todo-list/TodoListTypes.ts';
-import { ErrorSchema } from '#src/shared/ErrorSchemas.ts';
 import {
   TodoDraftSchema,
   TodoFilterSchema,

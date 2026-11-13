@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { readEnv } from '#src/shared/lib/readEnv.ts';
+import { readEnv } from '#src/shared/readEnv.ts';
 
 describe('readEnv', () => {
   it('fills the defaults', () => {

@@ -60,7 +60,7 @@ Without it, the `zustand` dependency is removed. The example needs the store, so
 
 ## server-state
 
-It adds `@tanstack/react-query`, a query client with the cache profiles of `QueryConfig.ts` in `src/shared/`, and `@brutalway/oxlint-config-tanstack-query`.
+It adds `@tanstack/react-query`, a query client in a `query-client` feature, the cache profiles of `QueryConfig.ts` in `src/shared/` (next to the client without the example, since nothing else reads them), and `@brutalway/oxlint-config-tanstack-query`.
 
 With the example, the todos are read and written through the routes of template-fastify, at `EXPO_PUBLIC_API_URL` or `http://localhost:3000`: there is no dev server to mock the API from, as Vite does. A client parses each response with Zod (added as a dependency), the API filters the list and gives the counters, and the zustand store only keeps the filter, so `src/shared-features/todos/todosSelectors.ts` goes. `expo-crypto` is removed, and `@react-native-async-storage/async-storage` too when `i18n` is off.
 
@@ -78,7 +78,7 @@ It adds French next to English: a `fr/` folder beside `src/app/locales/en/` and 
 
 ## analytics
 
-Both values add `analyticsClient.ts` to `src/shared/`, the only place where events leave the app, and the example calls `analyticsClient.track('todo_added')`.
+Both values add `analyticsClient.ts` to `src/shared/`, the only place where events leave the app, and the root layout sends `app_opened` at startup through the `useAppOpened` hook of an `analytics` feature. The example also calls `analyticsClient.track('todo_added')`. Without it, the hook is the only user of `analyticsClient.ts`, which then moves next to it.
 
 - `module`: the client emits an event on `DeviceEventEmitter`, for whatever tool you plug in
 - `posthog`: it adds `posthog-react-native` and the Expo modules it needs (`expo-application`, `expo-device`, `expo-file-system`, `expo-localization`), and the client sends the events when `EXPO_PUBLIC_POSTHOG_KEY` is set

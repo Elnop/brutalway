@@ -1,6 +1,5 @@
 import {
   cpSync,
-  existsSync,
   globSync,
   mkdirSync,
   readFileSync,
@@ -10,19 +9,12 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { join } from 'node:path';
+import { finishProject } from '#src/features/scaffolding/lib/finishProject.ts';
 import { editFiles } from '#src/features/scaffolding/lib/editFiles.ts';
-import { formatJson } from '#src/features/scaffolding/lib/formatJson.ts';
+import { movePaths } from '#src/features/scaffolding/lib/movePaths.ts';
 import { updatePackage } from '#src/features/scaffolding/lib/updatePackage.ts';
-import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
 import { fillProjectTokens } from '#src/features/scaffolding/lib/fillProjectTokens.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
-
-function formatJsonFiles(dir: string): void {
-  for (const file of ['knip.json', ...globSync('tsconfig*.json', { cwd: dir })]) {
-    const path = join(dir, file);
-    if (existsSync(path)) writeFileSync(path, formatJson(readFileSync(path, 'utf8'), file));
-  }
-}
 
 function removePaths(dir: string, patterns: string[]): void {
   for (const pattern of patterns) {
@@ -61,6 +53,7 @@ export function applyStackChanges(target: StackTarget, overlaysRoot: string): vo
     Object.entries(change.when).every(([id, value]) => target.answers[id] === value),
   );
   for (const change of changes) {
+    movePaths(target.dir, change.move ?? {});
     removePaths(target.dir, change.remove ?? []);
     editFiles(target.dir, change.edits ?? [], target.projectName);
     updatePackage(target.dir, change);
@@ -73,10 +66,5 @@ export function applyStackChanges(target: StackTarget, overlaysRoot: string): vo
     }
     keepFolders(target.dir, change.keep ?? []);
   }
-  formatJsonFiles(target.dir);
-  updatePackageJson(target.dir, (pkg) => {
-    pkg['name'] = target.projectName;
-    if (target.stack.projectVersion === undefined) delete pkg['version'];
-    else pkg['version'] = target.stack.projectVersion;
-  });
+  finishProject(target);
 }

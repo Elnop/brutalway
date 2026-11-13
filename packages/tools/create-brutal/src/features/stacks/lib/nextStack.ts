@@ -1,4 +1,5 @@
 import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
   FRONTEND_FEATURE_OPTIONS,
@@ -93,6 +94,7 @@ export const nextStack: Stack = {
         when: { forms: true, example: true },
         overlay: 'forms-schemas',
       },
+      ...normalizeTitleChanges(['docs/reference/verifications.md'], false),
       {
         when: { i18n: true },
         overlay: 'i18n',
@@ -225,8 +227,8 @@ export const nextStack: Stack = {
         ],
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
-      { when: { analytics: 'module', example: false }, overlay: 'analytics-home' },
-      { when: { analytics: 'posthog', example: false }, overlay: 'analytics-home' },
+      { when: { analytics: 'module' }, overlay: 'analytics-home' },
+      { when: { analytics: 'posthog' }, overlay: 'analytics-home' },
       ...FRONTEND_AGENTS_AND_THEME,
     ],
     ANCHORS,

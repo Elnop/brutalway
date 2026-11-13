@@ -5,16 +5,14 @@ import {
 } from '@expo-google-fonts/space-grotesk';
 import { Stack } from 'expo-router';
 import { I18nProvider } from '@/app/I18nProvider.tsx';
-import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
+import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ SpaceGrotesk_400Regular, SpaceGrotesk_700Bold });
   if (!fontsLoaded) return null;
   return (
     <I18nProvider>
-      <Stack
-        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: THEME.colors.page } }}
-      />
+      <Stack screenOptions={STACK_SCREEN_OPTIONS} />
     </I18nProvider>
   );
 }

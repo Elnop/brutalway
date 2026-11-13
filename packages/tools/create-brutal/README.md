@@ -78,7 +78,7 @@ Each version of the package downloads the templates from `templates/` in this re
 
 Each stack is described in `src/features/stacks/lib/viteStack.ts`, `src/features/stacks/lib/fastifyStack.ts` or `src/features/stacks/lib/packageStack.ts`. An option lists what it changes:
 
-- files to remove, and files to copy from `overlays/`
+- files to move, files to remove, and files to copy from `overlays/`
 - text to replace, or to insert `after` or `before` an anchor, in the docs and configs
 - scripts and dependencies to drop or add
 

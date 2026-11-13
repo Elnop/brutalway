@@ -238,8 +238,8 @@ describe('create-brutal', () => {
     assert.equal(existsSync(join(project, '.git')), false);
     for (const file of [
       'src/server.ts',
-      'src/shared/lib/openDatabase.ts',
-      'src/shared/swaggerTheme.css',
+      'src/features/database/openDatabase.ts',
+      'src/features/http-server/swaggerTheme.css',
       '.github/workflows/ci.yml',
       'src/features/todo-list/todoListRoutes.ts',
     ]) {
@@ -269,14 +269,14 @@ describe('create-brutal', () => {
     assert.deepEqual(outcome(result), { status: 0, stdout: CREATED_WITHOUT_GIT, stderr: '' });
     const project = join(result.cwd, 'app');
     for (const file of [
-      'src/shared/lib/openDatabase.ts',
-      'src/shared/swaggerTheme.css',
+      'src/features/database/openDatabase.ts',
+      'src/features/http-server/swaggerTheme.css',
       '.github/workflows/ci.yml',
       'src/features/todo-list/todoListRoutes.ts',
     ]) {
       assert.equal(existsSync(join(project, file)), false, file);
     }
-    assert.equal(existsSync(join(project, 'src/features/.gitkeep')), true);
+    assert.equal(existsSync(join(project, 'src/features/http-server/createHttpServer.ts')), true);
   });
 
   it('reads the stack, the options, git and install from a preset', () => {
@@ -291,7 +291,7 @@ describe('create-brutal', () => {
     );
     assert.deepEqual(outcome(result), { status: 0, stdout: CREATED_WITHOUT_GIT, stderr: '' });
     const project = join(result.cwd, 'app');
-    assert.equal(existsSync(join(project, 'src/shared/swaggerTheme.css')), false);
+    assert.equal(existsSync(join(project, 'src/features/http-server/swaggerTheme.css')), false);
     assert.equal(existsSync(join(project, '.github/workflows/ci.yml')), false);
     assert.equal(existsSync(join(project, '.git')), false);
   });
@@ -372,7 +372,7 @@ describe('create-brutal', () => {
     assert.equal(result.status, 0, result.stdout);
     const project = join(result.cwd, 'my-app');
     for (const file of [
-      'src/app/queryClient.ts',
+      'src/features/query-client/queryClient.ts',
       'src/app/locales/fr/app.json',
       'src/features/language-switch/components/LanguageSwitchContainer.tsx',
       'src/shared-features/todos/hooks/useTodosQuery.ts',

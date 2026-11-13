@@ -1,4 +1,4 @@
-import { readJsonFile, writeJsonFile } from '#src/shared/jsonFile.ts';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import type { Todo } from '#src/shared-features/todos/TodosTypes.ts';
 
 function isTodo(value: unknown): value is Todo {
@@ -14,7 +14,7 @@ function isTodo(value: unknown): value is Todo {
 }
 
 export function readTodos(file: string): Todo[] {
-  const content = readJsonFile(file, []);
+  const content: unknown = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : [];
   if (!Array.isArray(content) || !content.every(isTodo)) {
     throw new Error(`${file} does not hold a list of todos.`);
   }
@@ -22,5 +22,5 @@ export function readTodos(file: string): Todo[] {
 }
 
 export function writeTodos(file: string, todos: Todo[]): void {
-  writeJsonFile(file, todos);
+  writeFileSync(file, `${JSON.stringify(todos, null, 2)}\n`);
 }

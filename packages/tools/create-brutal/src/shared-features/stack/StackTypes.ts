@@ -40,6 +40,7 @@ export type FileEdit =
 
 export type StackChange = {
   when: Answers;
+  move?: Record<string, string>;
   remove?: string[];
   edits?: FileEdit[];
   removeScripts?: string[];

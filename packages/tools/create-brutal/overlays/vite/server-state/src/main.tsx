@@ -7,7 +7,7 @@ import '@fontsource/space-grotesk/700.css';
 import '@/app/globals.css';
 import { App } from '@/app/App.tsx';
 import { createI18n } from '@/app/createI18n.ts';
-import { queryClient } from '@/app/queryClient.ts';
+import { queryClient } from '@/features/query-client/queryClient.ts';
 
 const i18n = createI18n();
 

@@ -10,7 +10,7 @@ src/
 
 Each layer only imports the layers below it. No slice name appears in two layers.
 
-`src/app/` is the top layer. Its routes sit in `src/app/screens/`, the folder `app.json` gives Expo Router: `_layout.tsx` loads the fonts and wraps every screen in the i18n provider, `index.tsx` is the first screen. They are the orchestrators of the app and only lay out the features. Expo Router turns every file of that folder into a route, so `src/app/I18nProvider.tsx`, `src/app/createI18n.ts` and the messages sit one level up, next to it.
+`src/app/` is the top layer. Its routes sit in `src/app/screens/`, the folder `app.json` gives Expo Router: `_layout.tsx` loads the fonts and wraps every screen in the i18n provider, `index.tsx` is the first screen. They are the orchestrators of the app and only lay out the features: they import nothing but features, so the frame of the page and the themed stack come from `src/features/page-shell/`. Expo Router turns every file of that folder into a route, so `src/app/I18nProvider.tsx`, `src/app/createI18n.ts` and the messages sit one level up, next to it.
 
 A feature or a shared feature that grows holds sub-features in `features/<y>/`, the business code several of them share in `shared-features/<y>/` and the code with no domain in `shared/`, next to its kind folders. Each of them can do the same, down to ten levels. check-tree rejects any other folder name there, and in `src/shared/`, which holds kind folders only (`lib/`, `types/`, `configs/`...).
 

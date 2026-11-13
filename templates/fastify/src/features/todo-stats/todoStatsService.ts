@@ -1,6 +1,7 @@
-import type { TodosQueries } from '#src/shared-features/todos/TodosTypes.ts';
+import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';
 
-export function createTodoStatsService({ todos }: { todos: TodosQueries }) {
+export function createTodoStatsService(database: Parameters<typeof createTodosQueries>[0]) {
+  const todos = createTodosQueries(database);
   return {
     stats: () => {
       const { total, completed } = todos.count();

@@ -1,4 +1,5 @@
 import type { FileEdit, Stack } from '#src/shared-features/stack/StackTypes.ts';
+import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
   FRONTEND_FEATURE_OPTIONS,
@@ -129,10 +130,6 @@ export const viteStack: Stack = {
       ...FRONTEND_UI_AND_STYLING,
       ...FRONTEND_SERVER_STATE,
       {
-        when: { 'server-state': true, example: false },
-        remove: ['src/shared/.gitkeep'],
-      },
-      {
         when: { 'server-state': true, example: true },
         overlay: 'server-state-example',
         remove: [
@@ -195,6 +192,7 @@ export const viteStack: Stack = {
         overlay: 'forms-schemas',
       },
       ...FRONTEND_FORMS_SERVER_STATE,
+      ...normalizeTitleChanges(['docs/reference/verifications.md']),
       {
         when: { i18n: true },
         overlay: 'i18n',
@@ -315,8 +313,8 @@ export const viteStack: Stack = {
         ],
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
-      { when: { analytics: 'module', example: false }, edits: APP_OPENED },
-      { when: { analytics: 'posthog', example: false }, edits: APP_OPENED },
+      { when: { analytics: 'module' }, edits: APP_OPENED },
+      { when: { analytics: 'posthog' }, edits: APP_OPENED },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
     ],

@@ -1,16 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import { DatabaseSync } from 'node:sqlite';
 import { todoListRoutes } from '#src/features/todo-list/todoListRoutes.ts';
 import { createTodoListService } from '#src/features/todo-list/todoListService.ts';
-import { createServer } from '#src/shared/lib/createServer.ts';
-import { openDatabase } from '#src/shared/lib/openDatabase.ts';
-import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';
+import { createTestServer } from '#test-utils/createTestServer.ts';
 
 async function emptyApp() {
-  const app = createServer({ logLevel: 'silent' });
-  await app.register(
-    todoListRoutes(createTodoListService({ todos: createTodosQueries(openDatabase(':memory:')) })),
-  );
+  const app = createTestServer();
+  await app.register(todoListRoutes(createTodoListService(new DatabaseSync(':memory:'))));
   return app;
 }
 

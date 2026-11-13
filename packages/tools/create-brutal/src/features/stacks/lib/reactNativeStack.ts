@@ -1,4 +1,5 @@
 import type { FileEdit, Stack, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
   FRONTEND_AGENTS,
@@ -49,22 +50,37 @@ const JEST_WITHOUT_TESTS: FileEdit = {
   with: '"test": "jest --passWithNoTests",',
 };
 
+function analyticsClientPath(file: string): FileEdit {
+  return {
+    file,
+    replace: '`src/shared/analyticsClient.ts`',
+    with: '`src/features/analytics/analyticsClient.ts`',
+    all: true,
+  };
+}
+
 const APP_OPENED: FileEdit[] = [
   {
     file: 'src/app/screens/_layout.tsx',
-    after: "import { Stack } from 'expo-router';\n",
-    insert: "import { useEffect } from 'react';\n",
-  },
-  {
-    file: 'src/app/screens/_layout.tsx',
-    after: "import { I18nProvider } from '@/app/I18nProvider.tsx';\n",
-    insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+    before: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
+    insert: "import { useAppOpened } from '@/features/analytics/useAppOpened.ts';\n",
   },
   {
     file: 'src/app/screens/_layout.tsx',
     after: 'export default function RootLayout() {\n',
-    insert: "  useEffect(() => {\n    analyticsClient.track('app_opened');\n  }, []);\n",
+    insert: '  useAppOpened();\n',
   },
+];
+
+const ANALYTICS_HOME = 'src/features/analytics';
+
+const ANALYTICS_HOME_IMPORTS: FileEdit[] = [
+  {
+    file: `${ANALYTICS_HOME}/useAppOpened.ts`,
+    replace: "'@/shared/analyticsClient.ts'",
+    with: "'@/features/analytics/analyticsClient.ts'",
+  },
+  analyticsClientPath('README.md'),
 ];
 
 const ANCHORS = {
@@ -236,13 +252,13 @@ export const reactNativeStack: Stack = {
         edits: [
           {
             file: 'src/app/screens/_layout.tsx',
-            after: "import { Stack } from 'expo-router';\n",
+            before: "import { I18nProvider } from '@/app/I18nProvider.tsx';\n",
             insert: "import { QueryClientProvider } from '@tanstack/react-query';\n",
           },
           {
             file: 'src/app/screens/_layout.tsx',
-            after: "import { I18nProvider } from '@/app/I18nProvider.tsx';\n",
-            insert: "import { queryClient } from '@/app/queryClient.ts';\n",
+            after: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
+            insert: "import { queryClient } from '@/features/query-client/queryClient.ts';\n",
           },
           { file: 'src/app/screens/_layout.tsx', replace: PLAIN_LAYOUT, with: SERVER_STATE_LAYOUT },
         ],
@@ -285,6 +301,10 @@ export const reactNativeStack: Stack = {
         overlay: 'forms-schemas',
       },
       ...FRONTEND_FORMS_SERVER_STATE,
+      ...normalizeTitleChanges([
+        'docs/reference/verifications.md',
+        'docs/guides/start-your-own-app.md',
+      ]),
       {
         when: { i18n: true },
         overlay: 'i18n',
@@ -292,14 +312,14 @@ export const reactNativeStack: Stack = {
           ...I18N_LOCALE_EDITS,
           {
             file: 'src/app/screens/index.tsx',
-            after: "import { SafeAreaView } from 'react-native-safe-area-context';\n",
+            before: "import { PageShell } from '@/features/page-shell/PageShell.tsx';\n",
             insert:
               "import { LanguageSwitchContainer } from '@/features/language-switch/components/LanguageSwitchContainer.tsx';\n",
           },
           {
             file: 'src/app/screens/index.tsx',
-            before: '        </View>\n        <View role="main"',
-            insert: '          <LanguageSwitchContainer />\n',
+            replace: "<PageShell title={t('title')}",
+            with: "<PageShell actions={<LanguageSwitchContainer />} title={t('title')}",
           },
           {
             file: 'docs/guides/translations.md',
@@ -328,7 +348,7 @@ export const reactNativeStack: Stack = {
       },
       {
         when: { 'component-tests': false, example: false },
-        remove: ['src/shared-features/theme/Button.test.tsx'],
+        remove: ['src/**/*.test.tsx'],
       },
       {
         when: { 'component-tests': false },
@@ -467,10 +487,34 @@ export const reactNativeStack: Stack = {
         },
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
-      { when: { analytics: 'module', example: false }, edits: APP_OPENED },
-      { when: { analytics: 'posthog', example: false }, edits: APP_OPENED },
+      { when: { analytics: 'module' }, edits: APP_OPENED, overlay: 'analytics-app-opened' },
+      { when: { analytics: 'posthog' }, edits: APP_OPENED, overlay: 'analytics-app-opened' },
+      {
+        when: { analytics: 'module', example: false },
+        move: { 'src/shared/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts` },
+        edits: ANALYTICS_HOME_IMPORTS,
+        keep: ['src/shared'],
+      },
+      {
+        when: { analytics: 'posthog', example: false },
+        move: {
+          'src/shared/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts`,
+          'src/shared/AnalyticsTypes.ts': `${ANALYTICS_HOME}/AnalyticsTypes.ts`,
+        },
+        edits: [
+          ...ANALYTICS_HOME_IMPORTS,
+          {
+            file: `${ANALYTICS_HOME}/analyticsClient.ts`,
+            replace: "'@/shared/AnalyticsTypes.ts'",
+            with: "'@/features/analytics/AnalyticsTypes.ts'",
+          },
+        ],
+        keep: ['src/shared'],
+      },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS,
+      { when: { analytics: 'module', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
+      { when: { analytics: 'posthog', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
     ],
     ANCHORS,
   ),

@@ -8,15 +8,15 @@ The classic layered backend, described by Martin Fowler as [Service Layer](https
 
 We take the three roles under the names `xRoutes.ts`, `xService.ts` and `xQueries.ts`. A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared-features/todos/todosQueries.ts`, and only queries run SQL.
 
-We leave out classes, base repositories and generic CRUD. Queries are plain functions written in SQL, and the service receives them as an object typed by `TodosQueries`, which is all the abstraction the in-memory version needs.
+We leave out classes, base repositories and generic CRUD. Queries are plain functions written in SQL, grouped by `createTodosQueries()` behind the `TodosQueries` type, which is all the abstraction the in-memory version needs.
 
-Enforced by `@brutalway/dependency-cruiser-config/server` (a route never imports queries, the database driver is only imported by queries and `src/shared/`) and check-tree (the `routes/`, `services/` and `queries/` kinds).
+Enforced by `@brutalway/dependency-cruiser-config/server` (a route never imports queries, the database driver is only imported by queries, `src/features/database/` and the tests) and check-tree (the `routes/`, `services/` and `queries/` kinds).
 
 ## Dependencies as parameters
 
-Dependency injection, without the container. A service is built by a factory that takes its dependencies as arguments (`createTodoListService({ todos })`), and `src/app/buildApp.ts` is the one place that creates and passes them.
+Dependency injection, without the container. A service is built by a factory that takes its dependencies as arguments (`createTodoListService(database)`), and `src/app/buildApp.ts` is the one place that creates and passes them. `src/app/` only imports features, so the service builds its own queries from the database it gets.
 
-We leave out Fastify's `decorate`, which hangs dependencies on the app instance and hides where they come from, and DI containers, which resolve them by name at runtime. A test builds the service with whatever it needs and nothing else.
+We leave out Fastify's `decorate`, which hangs dependencies on the app instance and hides where they come from, and DI containers, which resolve them by name at runtime. A test builds the service on a `:memory:` database and nothing else.
 
 Enforced by `@brutalway/oxlint-config-fastify` (no `app.decorate`).
 
@@ -34,7 +34,7 @@ Enforced by `@brutalway/oxlint-config-fastify` (schemas in an `XSchemas.ts` that
 
 From [The Twelve-Factor App](https://12factor.net/config): configuration that changes between deploys comes from environment variables.
 
-We take it, and add one rule: `process.env` is read in a single file, `src/shared/lib/readEnv.ts`, which validates every variable with Zod at startup. An invalid value stops the server before it listens.
+We take it, and add one rule: `process.env` is read in a single file, `src/shared/readEnv.ts`, which validates every variable with Zod at startup. An invalid value stops the server before it listens.
 
 We leave out the rest of the twelve factors, which are about deployment and out of scope for a template.
 

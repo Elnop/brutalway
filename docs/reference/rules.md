@@ -8,7 +8,7 @@ template-react-native has no CSS, so stylelint does not run there. The colors, s
 
 ## Layers
 
-`src/` has four layers: `app`, `features`, `shared-features`, `shared`. A layer imports only the layers below it. Two features never import each other, nor do two shared features. Inside a feature or a shared feature, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. check-tree rejects a folder these layers do not name, like a concept folder under `src/shared/`.
+`src/` has four layers: `app`, `features`, `shared-features`, `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other, nor do two shared features. Inside a feature or a shared feature, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. check-tree rejects a folder these layers do not name, like a concept folder under `src/shared/`. It also rejects a file of a `shared/` folder that a single feature uses: it moves into that feature.
 
 Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config).
 

@@ -262,7 +262,7 @@ const SERVER_STATE_ARCHITECTURE = `## Server state
 
 From bedrock: data that comes from an API and state that only the UI owns are held by two different tools. Data from the API goes through TanStack Query, UI state goes into a zustand store, and a store never holds what the API returns.
 
-The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of \`src/shared/QueryConfig.ts\`, the \`QueryClient\` lives in \`src/app/queryClient.ts\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
+The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of \`src/shared/QueryConfig.ts\`, the \`QueryClient\` lives in \`src/features/query-client/queryClient.ts\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
 
 Enforced by \`@brutalway/oxlint-config-tanstack-query\` (keys, cache windows), \`@brutalway/oxlint-config-react\` (\`fetch\` only in an \`xClient.ts\`, never in an effect) and \`@brutalway/dependency-cruiser-config\` (no client, no query hook and no \`@tanstack/react-query\` in a presenter or a store).
 
@@ -371,7 +371,8 @@ export const FRONTEND_SKELETON: StackChange[] = [
   {
     when: { example: false },
     remove: [
-      'src/features',
+      'src/features/todo-list',
+      'src/features/todo-stats',
       'src/shared-features/todos',
       'src/shared/normalizeTitle.ts',
       'src/shared/normalizeTitle.test.ts',
@@ -391,7 +392,10 @@ export const FRONTEND_SKELETON: StackChange[] = [
           'In the example, `src/shared-features/todos/` holds the tasks and the current filter, used by both `src/features/todo-list/` (add, check, rename, delete, filter) and `src/features/todo-stats/` (counters, clear done). Renaming a task is a sub-feature: `src/features/todo-list/features/todo-editor/`.\n\n',
         with: '',
       },
-      { file: 'docs/guides/start-your-own-app.md', dropLines: '1. Delete `src/features/`' },
+      {
+        file: 'docs/guides/start-your-own-app.md',
+        dropLines: '1. Delete `src/features/todo-list/`',
+      },
       {
         file: 'docs/guides/translations.md',
         replace: 'each slice has its own namespace (`app`, `todoList`, `todoStats`)',
@@ -795,7 +799,6 @@ export const FRONTEND_I18N_LOCALES: StackChange[] = [
   {
     when: { i18n: true, example: false },
     overlay: 'i18n-skeleton',
-    remove: ['src/features/.gitkeep'],
     edits: [
       {
         file: 'src/app/createI18n.ts',
@@ -1408,6 +1411,18 @@ export const FRONTEND_SERVER_STATE: StackChange[] = [
     ],
     addDependencies: { '@tanstack/react-query': '5.107.1' },
     addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.2.0' },
+  },
+  {
+    when: { 'server-state': true, example: false },
+    remove: ['src/shared/QueryConfig.ts'],
+    keep: ['src/shared'],
+    edits: ['docs/reference/verifications.md', 'docs/concepts/architecture.md'].map((file) => ({
+      file,
+      replace: '`src/shared/QueryConfig.ts`',
+      with: '`src/features/query-client/QueryConfig.ts`',
+      all: true,
+    })),
+    overlay: 'server-state-skeleton',
   },
 ];
 

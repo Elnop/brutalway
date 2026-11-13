@@ -11,7 +11,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 `oxlint.config.ts` extends `@brutalway/oxlint-config-fastify` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
 - no comments, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
-- `process.env` is read only in a file whose name ends with `Env.ts`: here `src/shared/lib/readEnv.ts`
+- `process.env` is read only in a file whose name ends with `Env.ts`: here `src/shared/readEnv.ts`
 - no `app.decorate`: dependencies are factory parameters
 - an `async` handler returns its value and never calls `reply.send()`
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`, Zod schemas in an `XSchemas.ts` that exports nothing else
@@ -29,17 +29,18 @@ Everything below runs locally, in the pre-commit hook and in CI.
 dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
+- `src/app/` imports features only, neither `src/shared-features/` nor `src/shared/`
 - a feature never imports another feature, a shared feature never imports another shared feature
 - inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
-- a route never imports queries, queries are only imported by a service, a worker, other queries, `src/app/` or a test
-- the database driver (`node:sqlite`, `pg`…) is only imported by queries and `src/shared/`
-- an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server
+- a route never imports queries, queries are only imported by a service, a worker, other queries or a test
+- the database driver (`node:sqlite`, `pg`…) is only imported by queries, `src/features/database/` and the tests
+- an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server, so it lives in a feature
 - HTTP libraries (`undici`, `node:https`…) are only imported by an `xClient.ts`
 - no cycles, no import of a test file or of `test-utils/`, no devDependency in production code
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. That is why `src/shared/lib/` exists: it holds three plain modules.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. A file of a `shared/` folder that a single feature uses is rejected too: it moves into that feature. That is why the server factory lives in `src/features/http-server/`.
 
 ## Duplicates
 
@@ -62,9 +63,9 @@ alint extends `@brutalway/alint-config`: every path in backticks, link and ancho
 | Kind | What it tests | Example |
 |---|---|---|
 | Queries | the SQL, on a `:memory:` database | `src/shared-features/todos/todosQueries.test.ts` |
-| Routes | one feature mounted alone on `createServer()`, called with `inject()` | `src/features/todo-list/todoListRoutes.test.ts` |
+| Routes | one feature mounted alone on `createTestServer()` from `test-utils/`, called with `inject()` | `src/features/todo-list/todoListRoutes.test.ts` |
 | App | the full wiring and the OpenAPI document | `src/app/buildApp.test.ts` |
-| Env | defaults, conversion, refusal of invalid values | `src/shared/lib/readEnv.test.ts` |
+| Env | defaults, conversion, refusal of invalid values | `src/shared/readEnv.test.ts` |
 
 A test sits next to its source. `inject()` sends fake requests to Fastify without opening a port.
 
