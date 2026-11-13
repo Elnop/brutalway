@@ -61,7 +61,8 @@ describe('dependency-cruiser-config', () => {
 
   it('each rule reports its violation', () => {
     const root = project({
-      'src/app/App.ts': 'export const app = 1;\n',
+      'src/app/App.ts':
+        "import { state } from '../shared-features/plan/state.ts';\nexport const app = state;\n",
       'src/shared/util.ts':
         "import { feature } from '../features/editor/feature.ts';\nexport const util = feature;\n",
       'src/shared-features/plan/state.ts':
@@ -92,6 +93,7 @@ describe('dependency-cruiser-config', () => {
     assert.deepEqual(
       violatedRules(root),
       [
+        'app-only-to-features',
         'feature-shared-not-to-sub-features',
         'features-not-to-app',
         'no-circular',
@@ -183,8 +185,8 @@ describe('dependency-cruiser-config', () => {
     const root = project(
       {
         'src/app/buildApp.ts':
-          "import { createTodosQueries } from '../shared-features/todos/todosQueries.ts';\nimport { createListService } from '../features/list/listService.ts';\nexport const app = createListService(createTodosQueries);\n",
-        'src/shared/openDatabase.ts':
+          "import { openDatabase } from '../features/database/openDatabase.ts';\nimport { createListService } from '../features/list/listService.ts';\nexport const app = createListService(openDatabase);\n",
+        'src/features/database/openDatabase.ts':
           "import { DatabaseSync } from 'node:sqlite';\nexport const openDatabase = DatabaseSync;\n",
         'src/shared-features/todos/todosQueries.ts':
           "import { DatabaseSync } from 'node:sqlite';\nexport const createTodosQueries = DatabaseSync;\n",
@@ -214,16 +216,17 @@ describe('dependency-cruiser-config', () => {
         ...fakePackage('pg'),
         ...fakePackage('undici'),
         'src/app/buildApp.ts':
-          "import { createSweepWorker } from '../shared-features/todos/sweepWorker.ts';\nexport const app = createSweepWorker;\n",
-        'src/shared/openDatabase.ts': "import pg from 'pg';\nexport const openDatabase = pg;\n",
+          "import { createSweepWorker } from '../features/sweep/sweepWorker.ts';\nexport const app = createSweepWorker;\n",
+        'src/features/database/openDatabase.ts':
+          "import pg from 'pg';\nexport const openDatabase = pg;\n",
         'src/shared-features/todos/todosQueries.ts':
           "import pg from 'pg';\nexport const createTodosQueries = pg;\n",
-        'src/shared-features/todos/sweepWorker.ts':
-          "import { createTodosQueries } from './todosQueries.ts';\nexport const createSweepWorker = createTodosQueries;\n",
+        'src/features/sweep/sweepWorker.ts':
+          "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nexport const createSweepWorker = createTodosQueries;\n",
         'src/shared-features/todos/syncClient.ts':
           "import { request } from 'undici';\nimport https from 'node:https';\nexport const createSyncClient = [request, https];\n",
-        'src/features/list/listService.ts':
-          "import { createSweepWorker } from '../../shared-features/todos/sweepWorker.ts';\nexport const createListService = createSweepWorker;\n",
+        'src/features/sweep/sweepService.ts':
+          "import { createSweepWorker } from './sweepWorker.ts';\nexport const createSweepService = createSweepWorker;\n",
         'src/features/list/listHelper.ts':
           "import pg from 'pg';\nimport { request } from 'undici';\nexport const listHelper = [pg, request];\n",
       },
@@ -329,7 +332,7 @@ describe('dependency-cruiser-config', () => {
     mkdirSync(join(root, 'src/app'));
     writeFileSync(
       join(root, 'src/app/App.ts'),
-      "import { util } from '../shared/util.ts';\nexport const app = util;\n",
+      "import { feature } from '../features/list/feature.ts';\nexport const app = feature;\n",
     );
     assert.deepEqual(violatedRules(root), ['entries-not-imported', 'no-app-folder']);
   });

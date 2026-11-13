@@ -184,6 +184,18 @@ module.exports = {
       },
     },
     {
+      name: 'app-only-to-features',
+      severity: 'error',
+      comment:
+        'app/ composes the features: it imports neither shared-features/ nor shared/. Wrap what it needs in a feature, like a page shell or the server setup.',
+      from: {
+        path: '^src/app/',
+      },
+      to: {
+        path: '^src/(shared|shared-features)/',
+      },
+    },
+    {
       name: 'no-cross-feature',
       severity: 'error',
       comment:

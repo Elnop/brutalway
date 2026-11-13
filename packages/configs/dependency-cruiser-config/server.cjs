@@ -14,9 +14,9 @@ module.exports = {
       name: 'queries-behind-services',
       severity: 'error',
       comment:
-        'Queries are only used by a service, a worker, other queries or by src/app/ to wire them: call the service instead.',
+        'Queries are only used by a service, a worker or other queries: call the service instead.',
       from: {
-        pathNot: ['Service\\.ts$', 'Worker\\.ts$', 'Queries\\.ts$', '^src/app/', ...TEST_CODE],
+        pathNot: ['Service\\.ts$', 'Worker\\.ts$', 'Queries\\.ts$', ...TEST_CODE],
       },
       to: { path: 'Queries\\.ts$' },
     },
@@ -24,15 +24,15 @@ module.exports = {
       name: 'database-in-queries',
       severity: 'error',
       comment:
-        'Only an xQueries.ts file talks to the database driver (src/shared/ opens the connection): move this SQL into the queries of its shared feature.',
-      from: { pathNot: ['Queries\\.ts$', '^src/shared/'] },
+        'Only an xQueries.ts file talks to the database driver (src/features/database/ opens the connection): move this SQL into the queries of its shared feature.',
+      from: { pathNot: ['Queries\\.ts$', '^src/features/database/'] },
       to: { path: ['^(node:)?sqlite$', 'node_modules/(pg|postgres|mysql2|better-sqlite3)/'] },
     },
     {
       name: 'workers-started-from-app',
       severity: 'error',
       comment:
-        'A worker is started and stopped by src/app/ with the server: start it there, not from a route or a service.',
+        'A worker is started and stopped by src/app/ with the server: start it there, not from a route or a service. It lives in a feature, since src/app/ imports nothing else.',
       from: { pathNot: ['^src/app/', ...TEST_CODE] },
       to: { path: 'Worker\\.ts$' },
     },

@@ -3,7 +3,7 @@
 [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) rules for an app split into layers under `src/`:
 
 ```
-src/app/              composes the features
+src/app/              composes the features, and imports nothing else
 src/features/         one folder per feature
 src/shared-features/  business code shared by several features
 src/shared/           code with no domain
@@ -74,6 +74,7 @@ Each rule has a `comment` that says what to do instead.
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `shared-not-to-features`             | `src/shared/` importing `app/`, `features/` or `shared-features/`                                                                                                               |
 | `shared-features-not-to-features`    | `src/shared-features/` importing `app/` or `features/`                                                                                                                          |
+| `app-only-to-features`               | `src/app/` importing `shared-features/` or `shared/`: what it needs, like a page shell or the server setup, goes into a feature |
 | `features-not-to-app`                | a feature importing `app/`                                                                                                                                                      |
 | `no-cross-feature`                   | a feature importing another feature                                                                                                                                             |
 | `no-cross-shared-feature`            | a shared feature importing another shared feature                                                                                                                               |
@@ -120,9 +121,9 @@ A package has no `src/app/`: each entry point (a bin, an export of `package.json
 | Rule                       | Rejects                                                                                                               |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `routes-not-to-queries`    | an `xRoutes.ts` importing an `xQueries.ts`: routes call their service                                                 |
-| `queries-behind-services`  | an `xQueries.ts` imported by anything but a service, a worker, other queries, `src/app/` (which wires them) or a test |
-| `database-in-queries`      | `node:sqlite`, `pg`, `postgres`, `mysql2` or `better-sqlite3` imported outside an `xQueries.ts` and `src/shared/`     |
-| `workers-started-from-app` | an `xWorker.ts` imported by anything but `src/app/`, which starts and stops it with the server, or a test             |
+| `queries-behind-services`  | an `xQueries.ts` imported by anything but a service, a worker, other queries or a test |
+| `database-in-queries`      | `node:sqlite`, `pg`, `postgres`, `mysql2` or `better-sqlite3` imported outside an `xQueries.ts` and `src/features/database/`, which opens the connection |
+| `workers-started-from-app` | an `xWorker.ts` imported by anything but `src/app/`, which starts and stops it with the server, or a test. Since `src/app/` only imports features, a worker lives in a feature |
 | `http-in-clients`          | `node:http`, `node:https`, `undici`, `axios`, `got` or `node-fetch` imported outside an `xClient.ts` and the tests    |
 
 `fetch` is a global, so dependency-cruiser does not see it: `@brutalway/oxlint-config-fastify` keeps it in `xClient.ts` files.
