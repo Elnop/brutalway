@@ -34,6 +34,8 @@ module.exports = {
 
 Run it with `npx depcruise --output-type err-long src`. The default output only prints the name of the rule, `err-long` adds its comment, which says what to change.
 
+A file under `test-utils/` or `e2e/` counts as a test: the server and library rules let it import what a test may import.
+
 ### shadcn/ui
 
 For a project that keeps the shadcn/ui primitives in `third-party/shadcn/`, outside `src/`, as the registry wrote them, extend `@brutalway/dependency-cruiser-config/shadcn`. Run it on both folders, `depcruise --output-type err-long src third-party`.
@@ -85,7 +87,7 @@ Each rule has a `comment` that says what to do instead.
 | `stores-in-their-folder`             | an `xStore.ts` outside the root or the `stores/` folder of its level                                                                                                            |
 | `no-circular`                        | import cycles                                                                                                                                                                   |
 | `no-unresolvable`                    | imports that resolve to no file                                                                                                                                                 |
-| `no-prod-to-tests`                   | production code importing a test file                                                                                                                                           |
+| `no-prod-to-tests`                   | production code importing a test file, a test utility from `test-utils/` or a file from `e2e/`                                                                                  |
 | `not-to-dev-dep`                     | code under `src/` importing a devDependency                                                                                                                                     |
 
 Sub-features and sub shared features nest like the features they live in: each can hold its own `features/`, `shared-features/` and `shared/`, under a feature or a shared feature, and the same three rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
@@ -107,7 +109,7 @@ A package has no `src/app/`: each entry point (a bin, an export of `package.json
 
 | Rule                   | Rejects                                                                       |
 | ---------------------- | ----------------------------------------------------------------------------- |
-| `entries-not-imported` | a file at the root of `src/` imported by anything but a test                  |
+| `entries-not-imported` | a file at the root of `src/` imported by anything but a test or `test-utils/` |
 | `no-app-folder`        | a file under `src/app/`                                                       |
 | `not-to-dev-dep`       | code under `src/` importing a devDependency that is not also a peerDependency |
 

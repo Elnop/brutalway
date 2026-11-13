@@ -109,6 +109,50 @@ describe('dependency-cruiser-config', () => {
     );
   });
 
+  it('test-utils/ and e2e/ hold test code: production imports neither, a test imports both', () => {
+    const root = project({
+      'src/shared/util.ts': 'export const util = 1;\n',
+      'src/shared/util.test.ts':
+        "import { util } from './util.ts';\nimport { seed } from '../../test-utils/seed.ts';\nimport { openApp } from '../../e2e/openApp.ts';\nexport const checked = [util, seed, openApp];\n",
+      'test-utils/seed.ts':
+        "import { util } from '../src/shared/util.ts';\nimport { more } from './more.ts';\nexport const seed = util + more;\n",
+      'test-utils/more.ts': 'export const more = 1;\n',
+      'e2e/openApp.ts': 'export const openApp = 1;\n',
+    });
+    assert.deepEqual(violatedRules(root), []);
+    writeFileSync(
+      join(root, 'src/shared/prod.ts'),
+      "import { seed } from '../../test-utils/seed.ts';\nimport { openApp } from '../../e2e/openApp.ts';\nexport const prod = [seed, openApp];\n",
+    );
+    assert.deepEqual(violatedRules(root), ['no-prod-to-tests']);
+  });
+
+  it('a test utility reaches queries, workers and entry points like a test', () => {
+    const server = project(
+      {
+        'src/shared-features/todos/todosQueries.ts': 'export const createTodosQueries = 1;\n',
+        'src/shared-features/todos/sweepWorker.ts': 'export const createSweepWorker = 1;\n',
+        'src/shared-features/todos/todos.test.ts':
+          "import { seedTodos } from '../../../test-utils/seedTodos.ts';\nexport const checked = seedTodos;\n",
+        'test-utils/seedTodos.ts':
+          "import { createTodosQueries } from '../src/shared-features/todos/todosQueries.ts';\nimport { createSweepWorker } from '../src/shared-features/todos/sweepWorker.ts';\nimport https from 'node:https';\nexport const seedTodos = [createTodosQueries, createSweepWorker, https];\n",
+      },
+      'server.cjs',
+    );
+    assert.deepEqual(violatedRules(server), []);
+    const library = project(
+      {
+        'src/cli.ts': 'export const cli = 1;\n',
+        'src/shared/util.test.ts':
+          "import { runCli } from '../../test-utils/runCli.ts';\nexport const checked = runCli;\n",
+        'test-utils/runCli.ts':
+          "import { cli } from '../src/cli.ts';\nexport const runCli = cli;\n",
+      },
+      'library.cjs',
+    );
+    assert.deepEqual(violatedRules(library), []);
+  });
+
   it('server data stays out of presenters and stores', () => {
     const root = project({
       'package.json': JSON.stringify({

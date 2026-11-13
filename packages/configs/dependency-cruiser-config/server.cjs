@@ -1,3 +1,5 @@
+const TEST_CODE = ['\\.test\\.tsx?$', '^(test-utils|e2e)/'];
+
 module.exports = {
   extends: require.resolve('./layers.cjs'),
   forbidden: [
@@ -14,7 +16,7 @@ module.exports = {
       comment:
         'Queries are only used by a service, a worker, other queries or by src/app/ to wire them: call the service instead.',
       from: {
-        pathNot: ['Service\\.ts$', 'Worker\\.ts$', 'Queries\\.ts$', '^src/app/', '\\.test\\.ts$'],
+        pathNot: ['Service\\.ts$', 'Worker\\.ts$', 'Queries\\.ts$', '^src/app/', ...TEST_CODE],
       },
       to: { path: 'Queries\\.ts$' },
     },
@@ -31,7 +33,7 @@ module.exports = {
       severity: 'error',
       comment:
         'A worker is started and stopped by src/app/ with the server: start it there, not from a route or a service.',
-      from: { pathNot: ['^src/app/', '\\.test\\.ts$'] },
+      from: { pathNot: ['^src/app/', ...TEST_CODE] },
       to: { path: 'Worker\\.ts$' },
     },
     {
@@ -39,7 +41,7 @@ module.exports = {
       severity: 'error',
       comment:
         'Only an xClient.ts file calls another HTTP API: move this call into the client of that API.',
-      from: { pathNot: ['Client\\.ts$', '\\.test\\.ts$'] },
+      from: { pathNot: ['Client\\.ts$', ...TEST_CODE] },
       to: { path: ['^(node:)?https?$', 'node_modules/(undici|axios|got|node-fetch)/'] },
     },
   ],

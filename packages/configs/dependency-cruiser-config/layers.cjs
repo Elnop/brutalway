@@ -1,4 +1,5 @@
 const MAX_FEATURE_DEPTH = 10;
+const TEST_CODE = ['\\.test\\.tsx?$', '^(test-utils|e2e)/'];
 const SLICE = '(?:features|shared-features)/[^/]+';
 
 function featureAtDepth(depth) {
@@ -93,12 +94,13 @@ module.exports = {
     {
       name: 'no-prod-to-tests',
       severity: 'error',
-      comment: 'Production code never imports a test file.',
+      comment:
+        'Production code never imports a test file, a test utility from test-utils/ or an end-to-end file from e2e/.',
       from: {
-        pathNot: '\\.test\\.tsx?$',
+        pathNot: TEST_CODE,
       },
       to: {
-        path: '\\.test\\.tsx?$',
+        path: TEST_CODE,
       },
     },
     {
