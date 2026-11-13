@@ -13,6 +13,14 @@ const appConfig = defineConfig({
 export default mergeConfig(
   appConfig,
   defineConfig({
+    resolve: {
+      alias: [
+        {
+          find: /^@test-utils\//u,
+          replacement: fileURLToPath(new URL('./test-utils/', import.meta.url)),
+        },
+      ],
+    },
     test: {
       passWithNoTests: true,
       setupFiles: ['vitest.setup.ts'],

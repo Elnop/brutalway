@@ -12,6 +12,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 - A request goes `xRoutes.ts` to `xService.ts` to `xQueries.ts`: a route never runs a query, and only an `xQueries.ts` touches the storage.
 - Services get their dependencies as parameters, and `src/app/buildApp.ts` is the one place that creates and passes them.
 - Requests and responses are Zod schemas in an `xSchemas.ts`, and the environment is read once, at startup.
+- A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `#test-utils/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`#src/` instead), no `index.ts`.
 
 ## When a brutalway tool gets in the way

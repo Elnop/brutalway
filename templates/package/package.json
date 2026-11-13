@@ -21,19 +21,20 @@
     }
   },
   "imports": {
-    "#src/*": "./src/*"
+    "#src/*": "./src/*",
+    "#test-utils/*": "./test-utils/*"
   },
   "prettier": "@brutalway/prettier-config",
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p .",
-    "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
+    "lint": "oxlint --type-aware src test-utils oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise --output-type err-long src",
     "tree": "check-tree src --root-entries",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run docs && alint check && knip",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run docs && alint check && knip && knip --production",
     "test": "node --test 'src/**/*.test.ts'",
     "release": "changeset publish",
     "prepack": "npm run build",

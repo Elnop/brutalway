@@ -46,9 +46,9 @@ const ANCHORS = {
   aliasFile: 'vitest.config.ts',
   ignorePatterns: "'.next', 'next-env.d.ts'",
   cspFile: 'src/proxy.ts',
-  lint: 'oxlint --type-aware src e2e oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
+  lint: 'oxlint --type-aware src test-utils e2e oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
   lintWithoutE2e:
-    'oxlint --type-aware src oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
+    'oxlint --type-aware src test-utils oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
   testsLintLine:
     '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)',
   coverageEntries: "          'src/proxy.ts',\n          '**/request[A-Z]*.ts',\n",

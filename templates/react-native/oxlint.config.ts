@@ -11,7 +11,8 @@ export default defineConfig({
         patterns: [
           {
             regex: '^\\.\\.?/',
-            message: 'Relative imports are not allowed: import through the @/ alias.',
+            message:
+              'Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/).',
           },
         ],
       },

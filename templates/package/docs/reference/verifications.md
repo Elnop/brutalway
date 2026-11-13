@@ -10,7 +10,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 `oxlint.config.ts` extends `@brutalway/oxlint-config-node` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
-- no comments, no relative imports (use `#src/`), no `index.ts`, no `export *`
+- no comments, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
 - a file with a single export is named after it, an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`
 - no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `plugin.ts`, `xPlugin.ts`, `.d.ts`): each module is imported under the name it exports
 - `console` only for `console.error`: a command writes to `process.stdout` and `process.stderr`
@@ -30,7 +30,7 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/library`:
 - `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature
 - a feature never imports another feature, a shared feature never imports another shared feature
 - inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
-- no cycles, no import of a test file, no devDependency in the code of `src/` unless it is also a peerDependency
+- no cycles, no import of a test file or of `test-utils/`, no devDependency in the code of `src/` unless it is also a peerDependency
 
 `.dependency-cruiser.cjs` resolves packages through their `exports` field, so an import of a path a package does not export fails.
 
@@ -52,7 +52,7 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Repository
 
-alint extends `library.yml` of `@brutalway/alint-config`: every path in backticks, link and anchor of the README, `AGENTS.md` and `docs/` exists, category folders only hold their kind, and every devDependency is pinned to an exact version, while `dependencies` and `peerDependencies` keep their ranges. knip rejects unused exports, files and dependencies, and reads the entry points from `package.json`.
+alint extends `library.yml` of `@brutalway/alint-config`: every path in backticks, link and anchor of the README, `AGENTS.md` and `docs/` exists, category folders only hold their kind, and every devDependency is pinned to an exact version, while `dependencies` and `peerDependencies` keep their ranges. knip rejects unused exports, files and dependencies, and reads the entry points from `package.json`. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since no entry point never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 
 ## Tests
 
@@ -63,4 +63,8 @@ alint extends `library.yml` of `@brutalway/alint-config`: every path in backtick
 | Bin | `node src/todo.ts` in a temporary folder: exact output, exit code | `src/todo.test.ts` |
 | Export | the names the export offers, called together on one file | `src/todos.test.ts` |
 
-A test sits next to its source. Before keeping a test, break the code it protects and watch it fail.
+A test sits next to its source.
+
+A helper that tests share (a fixture, a seeding function, a fake) goes in `test-utils/` at the root of the project, never in `src/`, and the tests import it through `#test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
+
+Before keeping a test, break the code it protects and watch it fail.

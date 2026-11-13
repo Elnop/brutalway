@@ -13,7 +13,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 `oxlint.config.ts` extends `@brutalway/oxlint-config-react-vite`, which brings the TypeScript base, the React, zustand and Vitest configs, and `@brutalway/oxlint-config-i18next`. Each package README details its rules. The main ones:
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
-- no relative imports: `@/` in `src/`, `@e2e/` in `e2e/`. Root config files are the only exception
+- no relative imports: `@/` in `src/`, `@test-utils/` in `test-utils/`, `@e2e/` in `e2e/`. Root config files are the only exception
 - no `index.ts`, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
 - a file with a single export is named after it
@@ -42,7 +42,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 - inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
 - a presenter imports no store and no shared-feature hook
 - a store lives at the root or in the `stores/` folder of its level
-- no cycles, no import of a test file or a devDependency from production code
+- no cycles, no import of a test file, of `test-utils/` or of a devDependency from production code
 
 ## Tree
 
@@ -82,7 +82,7 @@ alint checks that:
 
 The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
 
-knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name.
+knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name. `npm run check` runs it a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the app never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 
 ## Tests
 
@@ -95,5 +95,7 @@ knip (`knip.json`) rejects exports nobody imports, unused files, unused dependen
 The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. Find elements by role and accessible name, wait with retrying assertions, never with a timeout. `vitest.setup.ts` gives the tests the same i18next instance as the app, so a presenter renders its English text.
 
 The specs import `test`, `expect` and `axeViolations` from `@brutalway/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `e2e/openApp.ts` opens the app and waits for its `h1`. `e2e/app.spec.ts` checks the first screen: no axe violation, no sideways scroll at 320 px. `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.
+
+A helper that tests share (a fixture, a builder, a fake) goes in `test-utils/` at the root of the project, never in `src/`, and the tests import it through `@test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
 
 Before keeping a test, break the code it protects and watch it fail.

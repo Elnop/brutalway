@@ -445,6 +445,11 @@ export const FRONTEND_TAILWIND: StackChange[] = [
     overlay: 'tailwind',
     edits: [
       {
+        file: 'knip.json',
+        replace: '"src/**/*.{ts,tsx}!"',
+        with: '"src/**/*.{ts,tsx,css}!"',
+      },
+      {
         file: 'oxlint.config.ts',
         after: '{{presetImport}}\n',
         insert: "import { tailwindConfig } from '@brutalway/oxlint-config-tailwind';\n",
@@ -542,7 +547,7 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
       {
         file: 'knip.json',
         replace: '"entry": ["i18next.config.ts"]',
-        with: '"entry": ["i18next.config.ts", "third-party/**/*.{ts,tsx}"]',
+        with: '"entry": ["i18next.config.ts", "third-party/**/*.{ts,tsx}!"]',
       },
       {
         file: 'knip.json',
@@ -999,14 +1004,14 @@ export const FRONTEND_TEST_SWITCHES: StackChange[] = [
       { file: 'tsconfig.test.json', replace: '    "playwright.config.ts",\n', with: '' },
       {
         file: 'tsconfig.test.json',
-        replace: '"@/*": ["./src/*"],\n      "@e2e/*": ["./e2e/*"]',
-        with: '"@/*": ["./src/*"]',
+        replace: '"@e2e/*": ["./e2e/*"],\n      ',
+        with: '',
       },
       {
         file: 'oxlint.config.ts',
         replace:
-          "message:\n              'Relative imports are not allowed: import through an alias (@/ in src/, @e2e/ in e2e/).',",
-        with: "message: 'Relative imports are not allowed: import through the @/ alias.',",
+          "'Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/, @e2e/ in e2e/).',",
+        with: "'Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/).',",
       },
       { file: 'docs/reference/commands.md', dropLines: '| `npm run e2e` |' },
       {
@@ -1021,8 +1026,8 @@ export const FRONTEND_TEST_SWITCHES: StackChange[] = [
       },
       {
         file: 'docs/reference/verifications.md',
-        replace: '`@/` in `src/`, `@e2e/` in `e2e/`',
-        with: '`@/` in `src/`',
+        replace: ', `@e2e/` in `e2e/`',
+        with: '',
       },
       { file: 'docs/reference/verifications.md', dropLines: '| E2e |' },
       { file: 'docs/reference/verifications.md', dropLines: 'The specs import `test`' },
@@ -1172,7 +1177,7 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
       {
         file: 'knip.json',
         replace: '"entry": ["i18next.config.ts"',
-        with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"',
+        with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts!"',
       },
     ],
   },
@@ -1182,7 +1187,7 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
       {
         file: 'knip.json',
         replace: '"entry": ["i18next.config.ts"',
-        with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts"',
+        with: '"entry": ["i18next.config.ts", "src/shared/analyticsClient.ts!"',
       },
     ],
   },

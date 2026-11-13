@@ -35,7 +35,7 @@ Function declarations, `type` over `interface`, `for...of` over `forEach`, impor
 Checked by Oxlint, with [`@brutalway/oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) and the config of each stack.
 
 ```
-error eslint(no-restricted-imports): '../../shared-features/todos/useTodos.ts' import is restricted from being used by a pattern. help: Relative imports are not allowed: import through an alias (@/ in src/, @e2e/ in e2e/).
+error eslint(no-restricted-imports): '../../shared-features/todos/useTodos.ts' import is restricted from being used by a pattern. help: Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/, @e2e/ in e2e/).
 error no-comments(disallowComments): Comments are forbidden
 ```
 

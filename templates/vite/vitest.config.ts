@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig, mergeConfig } from 'vitest/config';
 import viteConfig from './vite.config.ts';
@@ -5,6 +6,14 @@ import viteConfig from './vite.config.ts';
 export default mergeConfig(
   viteConfig,
   defineConfig({
+    resolve: {
+      alias: [
+        {
+          find: /^@test-utils\//u,
+          replacement: fileURLToPath(new URL('./test-utils/', import.meta.url)),
+        },
+      ],
+    },
     test: {
       passWithNoTests: true,
       setupFiles: ['vitest.setup.ts'],

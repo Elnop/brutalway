@@ -9,16 +9,18 @@ Every tool `npm run check` runs in a project created with `npm create brutal`, t
 | Prettier | [`@brutalway/prettier-config`](../../packages/configs/prettier-config) | yes | yes | yes | yes | yes | a file not formatted: single quotes, trailing commas, 100 columns |
 | tsc | [`@brutalway/tsconfig`](../../packages/configs/tsconfig) | `react-vite.json` | `react-vite.json` | `base.json` | `node.json` | `node.json` | a type error, with `strict` and every extra strictness flag on |
 | Oxlint | [`@brutalway/oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) and the config of the stack | yes | yes | yes | yes | yes | comments, relative imports, `index.ts`, `export *`, a file not named after its single export, a function over 25 lines, 4 parameters or 5 variables, a file over 5 top-level functions |
-| dependency-cruiser | [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) | `layers` | `layers` | `layers` | `server` | `library` | an import that goes up a layer or crosses features, a cycle, a test file or a devDependency imported by production code |
+| dependency-cruiser | [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) | `layers` | `layers` | `layers` | `server` | `library` | an import that goes up a layer or crosses features, a cycle, a test file, `test-utils/` or a devDependency imported by production code |
 | check-tree | [`@brutalway/check-tree`](../../packages/tools/check-tree) | yes | yes | yes | yes | `--root-entries` | an empty folder, a category folder holding a single file, two files of a kind outside their folder, a folder the layout does not name |
 | jscpd | `.jscpd.json` | yes | yes | yes | yes | yes | a block of 8 lines or 120 tokens that appears twice in `src/`, tests left out |
 | check-doc-length | [`@brutalway/check-doc-length`](../../packages/tools/check-doc-length) | yes | yes | yes | yes | yes | a Markdown file over 300 lines |
 | check-doc-sources | [`@brutalway/check-doc-sources`](../../packages/tools/check-doc-sources) | yes | yes | yes | yes | yes | warns, without failing, when a cited file changed and the doc did not |
 | check-doc-links | [`@brutalway/check-doc-links`](../../packages/tools/check-doc-links) | yes | yes | yes | yes | yes | an external link that answers `404` or `410`, or whose domain is gone |
 | alint | [`@brutalway/alint-config`](../../packages/configs/alint-config) | `base.yml` | `base.yml` | `base.yml` | `base.yml` | `library.yml` | a path, link or anchor of the docs that does not exist, a category folder holding another kind, a dependency not pinned |
-| knip | `knip.json` | yes | yes | yes | yes | yes | an unused export, file or dependency, a package used without being declared |
+| knip | `knip.json` | yes | yes | yes | yes | yes | an unused export, file or dependency, a package used without being declared, and with `--production` a file or an export of `src/` that only a test uses |
 
 The package stack pins only its devDependencies: `dependencies` and `peerDependencies` keep their ranges.
+
+A test sits next to its source, and a helper several tests share goes in `test-utils/` at the root of the project, outside `src/`. `npm run check` runs knip twice: the second run, `knip --production`, only reads `src/` without its tests, so a file or an export that only a test reaches is reported. dependency-cruiser keeps production code from importing `test-utils/`.
 
 ## Oxlint config of each stack
 

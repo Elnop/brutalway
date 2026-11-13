@@ -148,10 +148,15 @@ export const reactNativeStack: Stack = {
             replace: '"test": "jest",',
             with: '"test": "jest --passWithNoTests",',
           },
+        ],
+      },
+      {
+        when: { example: false },
+        edits: [
           {
             file: 'knip.json',
-            replace: '"src/app/screens/**/*.tsx"',
-            with: '"src/app/screens/**/*.tsx", "src/shared-features/theme/Button.tsx"',
+            replace: '"src/app/screens/**/*.tsx!"',
+            with: '"src/app/screens/**/*.tsx!", "src/shared-features/theme/Button.tsx!"',
           },
         ],
       },
@@ -353,8 +358,8 @@ export const reactNativeStack: Stack = {
           },
           {
             file: 'package.json',
-            replace: 'oxlint --type-aware src scripts ',
-            with: 'oxlint --type-aware src ',
+            replace: 'oxlint --type-aware src test-utils scripts ',
+            with: 'oxlint --type-aware src test-utils ',
           },
           { file: 'tsconfig.test.json', replace: '    "scripts",\n', with: '' },
           { file: 'knip.json', replace: ', "scripts/*.ts"]', with: ']' },

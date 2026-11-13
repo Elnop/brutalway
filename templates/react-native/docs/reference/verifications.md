@@ -13,7 +13,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 `oxlint.config.ts` extends `@brutalway/oxlint-config-react-native`, which brings the React config and its TypeScript base, the zustand config, the `jest` plugin of oxlint with the same test rules as `@brutalway/oxlint-config-vitest` and the style rules below, then the i18next config. Each package README details its rules. The main ones:
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
-- no relative imports: `@/` in `src/`. Root config files and `scripts/` are the only exceptions. `scripts/` runs in Node on your machine, so it may also print to the console and call `fetch`
+- no relative imports: `@/` in `src/`, `@test-utils/` in `test-utils/`. Root config files and `scripts/` are the only exceptions. `scripts/` runs in Node on your machine, so it may also print to the console and call `fetch`
 - no `index.ts` outside `src/app/screens/`, where Expo Router needs `index.tsx` for the first screen, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
 - a file with a single export is named after it
@@ -48,7 +48,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 - inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
 - a presenter imports no store and no shared-feature hook
 - a store lives at the root or in the `stores/` folder of its level
-- no cycles, no import of a test file or a devDependency from production code
+- no cycles, no import of a test file, of `test-utils/` or of a devDependency from production code
 
 ## Tree
 
@@ -80,7 +80,7 @@ alint checks that:
 
 The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/screens/index.tsx`.
 
-knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name. `app.json` turns off `updates`, since the template does not set up EAS Update: knip would otherwise ask for `expo-updates`.
+knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name. `app.json` turns off `updates`, since the template does not set up EAS Update: knip would otherwise ask for `expo-updates`. `npm run check` runs it a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the app never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 
 ## Tests
 
@@ -94,5 +94,7 @@ knip (`knip.json`) rejects exports nobody imports, unused files, unused dependen
 `jest.setup.ts` gives the tests the same i18next instance as the app, so a presenter renders its English text, and swaps AsyncStorage for its in-memory mock.
 
 There are no e2e tests yet: they need a simulator, which CI does not run.
+
+A helper that tests share (a fixture, a builder, a fake) goes in `test-utils/` at the root of the project, never in `src/`, and the tests import it through `@test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
 
 Before keeping a test, break the code it protects and watch it fail.

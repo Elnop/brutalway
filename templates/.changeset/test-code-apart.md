@@ -1,0 +1,9 @@
+---
+'template-vite': minor
+'template-next': minor
+'template-react-native': minor
+'template-fastify': minor
+'template-package': minor
+---
+
+`npm run check` runs knip a second time with `--production`, on `src/` without its tests, so a file or an export of `src/` that only a test uses is reported. A helper shared by tests goes in `test-utils/`, at the root, imported through `@test-utils/` (`#test-utils/` on fastify and package), and `@brutalway/dependency-cruiser-config` 0.8.0 rejects an import of it from production code. On vite, next and react-native, dependency-cruiser reads `tsconfig.test.json` to resolve that alias.

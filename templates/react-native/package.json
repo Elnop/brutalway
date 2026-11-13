@@ -16,14 +16,14 @@
     "web": "expo start --web",
     "build": "expo export --platform web",
     "typecheck": "i18next-cli types --quiet && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
-    "lint": "oxlint --type-aware src scripts oxlint.config.ts jest.setup.ts i18next.config.ts",
+    "lint": "oxlint --type-aware src test-utils scripts oxlint.config.ts jest.setup.ts i18next.config.ts",
     "deps": "depcruise --output-type err-long src",
     "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
     "messages": "i18next-cli status && i18next-cli status --unused",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run docs && npm run messages && alint check && knip",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run docs && npm run messages && alint check && knip && knip --production",
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "git config core.hooksPath .githooks && i18next-cli types --quiet"
@@ -94,7 +94,8 @@
       "<rootDir>/jest.setup.ts"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^@test-utils/(.*)$": "<rootDir>/test-utils/$1"
     }
   },
   "expo": {

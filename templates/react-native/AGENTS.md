@@ -12,6 +12,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 - A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`) that reads state through hooks, or a presenter that only gets props.
 - Every visible string goes through `t()`, with its English text in `src/app/locales/en/`.
 - Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared-features/theme/ThemeConfig.ts`.
+- A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `@test-utils/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`@/` instead), no `index.ts` and no `export default` outside the route files and the configs.
 
 ## When a brutalway tool gets in the way

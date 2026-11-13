@@ -60,9 +60,9 @@ const ANCHORS = {
   aliasFile: 'vite.config.ts',
   ignorePatterns: "'dist'",
   cspFile: 'securityHeaders.ts',
-  lint: 'oxlint --type-aware src e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts',
+  lint: 'oxlint --type-aware src test-utils e2e oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts',
   lintWithoutE2e:
-    'oxlint --type-aware src oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts securityHeaders.ts',
+    'oxlint --type-aware src test-utils oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts securityHeaders.ts',
   testsLintLine:
     '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)',
   coverageEntries: "          'src/main.tsx',\n",

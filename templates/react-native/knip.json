@@ -1,6 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": ["i18next.config.ts", "src/app/screens/**/*.tsx", "scripts/*.ts"],
+  "entry": ["i18next.config.ts", "src/app/screens/**/*.tsx!", "scripts/*.ts"],
+  "project": ["src/**/*.{ts,tsx}!", "{,scripts/**/,test-utils/**/}*.{ts,tsx}"],
   "ignoreDependencies": [
     "@swc/core",
     "@brutalway/agent-hook",

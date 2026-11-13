@@ -1,10 +1,15 @@
 {
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "types": ["expo/types", "node", "jest"]
+    "types": ["expo/types", "node", "jest"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@test-utils/*": ["./test-utils/*"]
+    }
   },
   "include": [
     "src",
+    "test-utils",
     "node_modules/.cache/i18next",
     "jest.setup.ts",
     "scripts",

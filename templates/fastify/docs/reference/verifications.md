@@ -10,7 +10,7 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 `oxlint.config.ts` extends `@brutalway/oxlint-config-fastify` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
-- no comments, no relative imports (use `#src/`), no `index.ts`, no `export *`
+- no comments, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
 - `process.env` is read only in a file whose name ends with `Env.ts`: here `src/shared/lib/readEnv.ts`
 - no `app.decorate`: dependencies are factory parameters
 - an `async` handler returns its value and never calls `reply.send()`
@@ -35,7 +35,7 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 - the database driver (`node:sqlite`, `pg`…) is only imported by queries and `src/shared/`
 - an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server
 - HTTP libraries (`undici`, `node:https`…) are only imported by an `xClient.ts`
-- no cycles, no import of a test file, no devDependency in production code
+- no cycles, no import of a test file or of `test-utils/`, no devDependency in production code
 
 ## Tree
 
@@ -55,7 +55,7 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Repository
 
-alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies.
+alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the server never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 
 ## Tests
 
@@ -66,4 +66,8 @@ alint extends `@brutalway/alint-config`: every path in backticks, link and ancho
 | App | the full wiring and the OpenAPI document | `src/app/buildApp.test.ts` |
 | Env | defaults, conversion, refusal of invalid values | `src/shared/lib/readEnv.test.ts` |
 
-A test sits next to its source. `inject()` sends fake requests to Fastify without opening a port. Before keeping a test, break the code it protects and watch it fail.
+A test sits next to its source. `inject()` sends fake requests to Fastify without opening a port.
+
+A helper that tests share (a fixture, a seeding function, a fake) goes in `test-utils/` at the root of the project, never in `src/`, and the tests import it through `#test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
+
+Before keeping a test, break the code it protects and watch it fail.

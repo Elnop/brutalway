@@ -4,11 +4,13 @@
     "types": ["vite/client", "node", "@vitest/browser-playwright"],
     "paths": {
       "@/*": ["./src/*"],
-      "@e2e/*": ["./e2e/*"]
+      "@e2e/*": ["./e2e/*"],
+      "@test-utils/*": ["./test-utils/*"]
     }
   },
   "include": [
     "src",
+    "test-utils",
     "node_modules/.cache/i18next",
     "e2e",
     "vite.config.ts",

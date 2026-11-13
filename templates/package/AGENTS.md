@@ -13,6 +13,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 - Each entry point has a test that uses it end to end, the way a user does.
 - A change worth a release comes with a changeset (`npx changeset`).
 - `devDependencies` are pinned to exact versions, `dependencies` and `peerDependencies` keep ranges.
+- A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `#test-utils/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`#src/` instead), no `index.ts`.
 
 ## When a brutalway tool gets in the way
