@@ -1,4 +1,4 @@
-import { SLICE, TEST_CODE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
+import { SLICE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
 
 function slotOf(owner: string, importer: string): string {
@@ -10,7 +10,6 @@ function slotOf(owner: string, importer: string): string {
 function importersByModule(modules: readonly ImportedModule[]): Map<string, string[]> {
   const importers = new Map<string, string[]>();
   for (const { source, imports } of modules) {
-    if (TEST_CODE.test(source)) continue;
     for (const target of imports) importers.set(target, [...(importers.get(target) ?? []), source]);
   }
   return importers;

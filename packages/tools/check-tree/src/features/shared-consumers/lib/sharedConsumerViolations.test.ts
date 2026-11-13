@@ -81,14 +81,14 @@ describe('sharedConsumerViolations', () => {
     assert.deepEqual(sharedConsumerViolations('src', modules), []);
   });
 
-  it('tests and unused files are not counted', () => {
+  it('a test counts for the feature it sits in, a test next to the file adds no consumer, an unused file passes', () => {
     const modules = graph({
-      'src/features/a/A.tsx': ['src/shared/lib/format.ts'],
-      'src/features/b/B.test.tsx': ['src/shared/lib/format.ts', 'src/shared/lib/unused.ts'],
-      'src/shared/lib/format.test.ts': ['src/shared/lib/format.ts'],
+      'src/features/a/A.tsx': ['src/shared/lib/format.ts', 'src/shared/lib/slug.ts'],
+      'src/features/b/B.test.tsx': ['src/shared/lib/format.ts'],
+      'src/shared/lib/slug.test.ts': ['src/shared/lib/slug.ts', 'src/shared/lib/unused.ts'],
     });
     assert.deepEqual(sharedConsumerViolations('src', modules), [
-      'src/shared/lib/format.ts is only used by src/features/a: move it into src/features/a',
+      'src/shared/lib/slug.ts is only used by src/features/a: move it into src/features/a',
     ]);
   });
 });
