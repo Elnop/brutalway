@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { runCommand } from '#src/shared/lib/runCommand.ts';
+import { runCommand } from '#src/features/scaffolding/lib/runCommand.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
 
 const root = fileURLToPath(new URL('../../../..', import.meta.url));

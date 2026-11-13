@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { inPool } from '#src/shared/inPool.ts';
+import { inPool } from '#src/features/remote-links/lib/inPool.ts';
 
 describe('inPool', () => {
   it('results keep the order of the items, with at most the given number running at once', async () => {

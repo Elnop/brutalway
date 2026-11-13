@@ -1,7 +1,7 @@
 import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { downloadTemplate } from 'giget';
-import { runCommand } from '#src/shared/lib/runCommand.ts';
+import { runCommand } from '#src/features/scaffolding/lib/runCommand.ts';
 import { TEMPLATES_REPOSITORY } from '#src/features/scaffolding/ScaffoldConfig.ts';
 import type { TemplateSource } from '#src/features/scaffolding/ScaffoldTypes.ts';
 import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
