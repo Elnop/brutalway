@@ -1,6 +1,6 @@
 {
   "name": "create-brutal",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Creates a project from one of the brutalway templates, where every convention is a check.",
   "keywords": [
     "create",

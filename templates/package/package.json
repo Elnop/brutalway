@@ -1,6 +1,6 @@
 {
   "name": "template-package",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "A todo list kept in a JSON file, as a library and as the todo command.",
   "license": "MIT",
