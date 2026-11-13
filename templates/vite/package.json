@@ -48,7 +48,7 @@
     "@brutalway/check-doc-links": "0.2.1",
     "@brutalway/check-doc-sources": "0.2.1",
     "@brutalway/check-tree": "0.6.0",
-    "@brutalway/dependency-cruiser-config": "0.7.0",
+    "@brutalway/dependency-cruiser-config": "0.8.0",
     "@brutalway/oxlint-config-i18next": "0.2.0",
     "@brutalway/oxlint-config-react-vite": "0.4.2",
     "@brutalway/playwright-fixtures": "0.2.0",
