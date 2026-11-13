@@ -49,5 +49,9 @@ export const nextConfig: OxlintConfig = defineConfig({
       files: ['e2e/**', '**/*.config.ts', '**/proxy.ts', '**/instrumentation.ts'],
       env: { node: true },
     },
+    {
+      files: ['**/instrumentation-client.ts'],
+      rules: { 'unicorn/filename-case': 'off' },
+    },
   ],
 });

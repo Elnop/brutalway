@@ -32,7 +32,7 @@ When a rule fires:
 - `'use client'` only in an orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`), a provider (`XProvider.tsx`) or an `error.tsx` of `app/`, and never under `shared/` or `presenters/`
 - a `'use client'` file imports no `xClient.ts`, except `analyticsClient.ts`, since events happen in the browser
 - a server action lives in a `.ts` file that starts with `'use server'`, exports one async function and is named after it (`addTodo` in `addTodo.ts`). `'use server'` inside a function body is reported.
-- the route files of `app/` (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `template.tsx`, `default.tsx`...) may `export default`, and may export `generateMetadata`, `metadata`, `revalidate` and the other route segment options next to the component. `not-found.tsx`, `global-error.tsx` and `global-not-found.tsx` keep their kebab-case names, and `route.ts` may export `GET`, `POST`...
+- the route files of `app/` (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `template.tsx`, `default.tsx`...) may `export default`, and may export `generateMetadata`, `metadata`, `revalidate` and the other route segment options next to the component. `not-found.tsx`, `global-error.tsx`, `global-not-found.tsx` and `instrumentation-client.ts` keep their kebab-case names, and `route.ts` may export `GET`, `POST`...
 - no relative imports: import through the aliases of `tsconfig.json`
 - side effect imports allowed for `.css` files only
 - `import/default`, `typescript/no-non-null-assertion` and `unicorn/prefer-add-event-listener` off
