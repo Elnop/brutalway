@@ -1,5 +1,11 @@
 # @brutalkit/dependency-cruiser-config
 
+## 0.8.0
+
+### Minor Changes
+
+- ce02622: `no-prod-to-tests` also rejects production code importing `test-utils/` or `e2e/`, and the server and library rules treat a file in those folders as a test.
+
 ## 0.7.0
 
 ### Minor Changes
