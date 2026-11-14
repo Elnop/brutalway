@@ -44,7 +44,7 @@
     }
   },
   "devDependencies": {
-    "knip": "6.44.2",
+    "knip": "6.45.1",
     "prettier": "3.9.10",
     "prettier-plugin-tailwindcss": "0.8.1",
     "tailwindcss": "4.3.5"

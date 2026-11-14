@@ -60,7 +60,7 @@
     "@types/node": "26.6.6",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.3",
-    "knip": "6.44.2",
+    "knip": "6.45.1",
     "oxlint": "^1.91.0",
     "oxlint-tsgolint": "7.0.2006",
     "prettier": "3.9.10",
