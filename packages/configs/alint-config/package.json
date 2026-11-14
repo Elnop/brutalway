@@ -36,7 +36,7 @@
   "devDependencies": {
     "@asamarts/alint": "0.22.0",
     "@brutalway/prettier-config": "0.3.0",
-    "knip": "6.44.2",
+    "knip": "6.45.1",
     "prettier": "3.9.10"
   },
   "prettier": "@brutalway/prettier-config",
