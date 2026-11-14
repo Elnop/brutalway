@@ -669,7 +669,7 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
         with: 'Every message says what to change, so the agent does not need to know the convention beforehand. Before an edit, the same hook refuses any change to a file in `third-party/` and tells the agent to run `npx shadcn add <name> --overwrite`, restyle through `src/app/globals.css` or wrap the primitive in `src/`.',
       },
     ],
-    addDevDependencies: { '@brutalway/agent-hook': '0.2.1' },
+    addDevDependencies: { '@brutalway/agent-hook': '0.3.0' },
   },
   {
     when: { styling: 'css-modules' },
@@ -741,7 +741,7 @@ export const FRONTEND_FORMS: StackChange[] = [
       },
     ],
     addDependencies: {
-      '@hookform/resolvers': '7.0.3',
+      '@hookform/resolvers': '7.0.5',
       'react-hook-form': '7.91.0',
       zod: '4.6.7',
     },
@@ -1166,7 +1166,7 @@ export const FRONTEND_ANALYTICS: StackChange[] = [
         with: `"connect-src 'self' https://*.posthog.com",`,
       },
     ],
-    addDependencies: { 'posthog-js': '1.447.3' },
+    addDependencies: { 'posthog-js': '1.447.12' },
   },
 ];
 

@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@asamarts/alint": "0.22.0",
-    "@brutalway/agent-hook": "0.2.1",
+    "@brutalway/agent-hook": "0.3.0",
     "@brutalway/alint-config": "0.2.2",
     "@brutalway/check-doc-length": "0.2.1",
     "@brutalway/check-doc-links": "0.2.1",
@@ -59,8 +59,8 @@
     "@types/node": "26.6.6",
     "dependency-cruiser": "18.7.2",
     "jscpd": "5.4.3",
-    "knip": "6.44.2",
-    "oxlint": "1.92.0",
+    "knip": "6.45.1",
+    "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2006",
     "prettier": "3.9.10",
     "typescript": "7.0.2"
