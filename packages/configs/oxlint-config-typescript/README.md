@@ -46,7 +46,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - no comments, except tool directives (`oxlint-`, `eslint-`, `@ts-expect-error`, triple-slash references, shebang)
 - no `index.ts` and no barrel file
 - no `types.ts`: name it `xTypes.ts`
-- nothing under `shared-features/` that belongs to a feature: no orchestrator component (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts`
+- nothing in a slice of `shared/`, at any depth, that belongs to a feature: no orchestrator component (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts`
 - no `xConfig.tsx`: a config is plain data in `xConfig.ts`, and its JSX goes in a component. `xContent.tsx` stays allowed for content written in JSX.
 - file names in camelCase or PascalCase
 - a file with a single export is named after it ([@brutalway/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutalway/eslint-plugin-file-named-after-export))
@@ -69,6 +69,6 @@ Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules, th
 
 ## Why
 
-The whole file-name blocklist for `shared-features/` lives in this config, so a preset that extends several configs cannot lose part of it.
+The whole file-name blocklist for `shared/` lives in this config, so a preset that extends several configs cannot lose part of it.
 
 The whole `eslint-plugin-sonarjs` plugin does not load under Oxlint with TypeScript 7 (its `ts-api-utils` finds the project's TypeScript, which has no JavaScript API), so `src/cognitiveComplexityPlugin.ts` loads the file of `sonarjs/cognitive-complexity` alone. `eslint-plugin-sonarjs` is pinned to an exact version, since the path is internal to it, and a fixture test fails if it moves.
