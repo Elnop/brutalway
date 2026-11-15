@@ -47,14 +47,15 @@ describe('dependency-cruiser-config', () => {
       'src/app/App.ts':
         "import { feature } from '../features/editor/feature.ts';\nexport const app = feature;\n",
       'src/features/editor/feature.ts':
-        "import { state } from '../../shared-features/plan/state.ts';\nimport { sub } from './features/form/sub.ts';\nexport const feature = state + sub;\n",
+        "import { state } from '../../shared/plan/state.ts';\nimport { sub } from './features/form/sub.ts';\nexport const feature = state + sub;\n",
       'src/features/editor/features/form/sub.ts':
-        "import { helper } from '../../shared/helper.ts';\nexport const sub = helper;\n",
-      'src/features/editor/shared/helper.ts':
-        "import { util } from '../../../shared/util.ts';\nexport const helper = util;\n",
-      'src/shared-features/plan/state.ts':
-        "import { util } from '../../shared/util.ts';\nexport const state = util;\n",
-      'src/shared/util.ts': 'export const util = 1;\n',
+        "import { helper } from '../../shared/help/helper.ts';\nexport const sub = helper;\n",
+      'src/features/editor/shared/help/helper.ts':
+        "import { util } from '../../../../shared/util/util.ts';\nexport const helper = util;\n",
+      'src/shared/plan/state.ts':
+        "import { label } from './label.ts';\nexport const state = label;\n",
+      'src/shared/plan/label.ts': 'export const label = 1;\n',
+      'src/shared/util/util.ts': 'export const util = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
   });
@@ -62,50 +63,47 @@ describe('dependency-cruiser-config', () => {
   it('each rule reports its violation', () => {
     const root = project({
       'src/app/App.ts':
-        "import { state } from '../shared-features/plan/state.ts';\nexport const app = state;\n",
-      'src/shared/util.ts':
-        "import { feature } from '../features/editor/feature.ts';\nexport const util = feature;\n",
-      'src/shared-features/plan/state.ts':
+        "import { state } from '../shared/plan/state.ts';\nexport const app = state;\n",
+      'src/shared/plan/state.ts':
         "import { other } from '../other/other.ts';\nimport { feature } from '../../features/editor/feature.ts';\nexport const state = other + feature;\n",
-      'src/shared-features/other/other.ts': 'export const other = 1;\n',
+      'src/shared/other/other.ts': 'export const other = 1;\n',
       'src/features/editor/feature.ts':
         "import { app } from '../../app/App.ts';\nimport { summary } from '../summary/summary.ts';\nexport const feature = app + summary;\n",
       'src/features/summary/summary.ts': 'export const summary = 1;\n',
       'src/features/editor/features/form/form.ts':
         "import { list } from '../list/list.ts';\nexport const form = list;\n",
       'src/features/editor/features/list/list.ts': 'export const list = 1;\n',
-      'src/features/editor/shared/helper.ts':
-        "import { list } from '../features/list/list.ts';\nexport const helper = list;\n",
+      'src/features/editor/shared/help/helper.ts':
+        "import { list } from '../../features/list/list.ts';\nexport const helper = list;\n",
       'src/features/editor/components/Card.tsx':
-        "import { useOther } from '../../../shared-features/other/useOther.ts';\nexport const Card = useOther;\n",
-      'src/shared-features/other/useOther.ts': 'export const useOther = 1;\n',
+        "import { useOther } from '../../../shared/other/useOther.ts';\nexport const Card = useOther;\n",
+      'src/shared/other/useOther.ts': 'export const useOther = 1;\n',
       'src/features/summary/lib/cartStore.ts': 'export const cartStore = 1;\n',
       'src/features/summary/lib/useCart.ts':
         "import { cartStore } from './cartStore.ts';\nexport const useCart = cartStore;\n",
-      'src/shared/a.ts': "import { b } from './b.ts';\nexport const a = 1 + b;\n",
-      'src/shared/b.ts': "import { a } from './a.ts';\nexport const b = a;\n",
-      'src/shared/missing.ts':
+      'src/shared/cycle/a.ts': "import { b } from './b.ts';\nexport const a = 1 + b;\n",
+      'src/shared/cycle/b.ts': "import { a } from './a.ts';\nexport const b = a;\n",
+      'src/shared/misc/missing.ts':
         "import { nothing } from './nothing.ts';\nexport const missing = nothing;\n",
-      'src/shared/prod.ts':
+      'src/shared/misc/prod.ts':
         "import { fixture } from './prod.test.ts';\nimport tooling from 'tooling';\nexport const prod = fixture + tooling;\n",
-      'src/shared/prod.test.ts': 'export const fixture = 1;\n',
+      'src/shared/misc/prod.test.ts': 'export const fixture = 1;\n',
     });
     assert.deepEqual(
       violatedRules(root),
       [
         'app-only-to-features',
-        'feature-shared-not-to-sub-features',
         'features-not-to-app',
         'no-circular',
         'no-cross-feature',
-        'no-cross-shared-feature',
+        'no-cross-shared',
         'no-cross-sub-feature',
+        'no-cross-sub-shared',
         'no-prod-to-tests',
         'no-unresolvable',
         'not-to-dev-dep',
         'presenters-are-pure',
         'shared-not-to-features',
-        'shared-features-not-to-features',
         'stores-in-their-folder',
       ].toSorted(),
     );
@@ -113,18 +111,18 @@ describe('dependency-cruiser-config', () => {
 
   it('test-utils/ and e2e/ hold test code: production imports neither, a test imports both', () => {
     const root = project({
-      'src/shared/util.ts': 'export const util = 1;\n',
-      'src/shared/util.test.ts':
-        "import { util } from './util.ts';\nimport { seed } from '../../test-utils/seed.ts';\nimport { openApp } from '../../e2e/openApp.ts';\nexport const checked = [util, seed, openApp];\n",
+      'src/shared/util/util.ts': 'export const util = 1;\n',
+      'src/shared/util/util.test.ts':
+        "import { util } from './util.ts';\nimport { seed } from '../../../test-utils/seed.ts';\nimport { openApp } from '../../../e2e/openApp.ts';\nexport const checked = [util, seed, openApp];\n",
       'test-utils/seed.ts':
-        "import { util } from '../src/shared/util.ts';\nimport { more } from './more.ts';\nexport const seed = util + more;\n",
+        "import { util } from '../src/shared/util/util.ts';\nimport { more } from './more.ts';\nexport const seed = util + more;\n",
       'test-utils/more.ts': 'export const more = 1;\n',
       'e2e/openApp.ts': 'export const openApp = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
     writeFileSync(
-      join(root, 'src/shared/prod.ts'),
-      "import { seed } from '../../test-utils/seed.ts';\nimport { openApp } from '../../e2e/openApp.ts';\nexport const prod = [seed, openApp];\n",
+      join(root, 'src/shared/util/prod.ts'),
+      "import { seed } from '../../../test-utils/seed.ts';\nimport { openApp } from '../../../e2e/openApp.ts';\nexport const prod = [seed, openApp];\n",
     );
     assert.deepEqual(violatedRules(root), ['no-prod-to-tests']);
   });
@@ -132,12 +130,12 @@ describe('dependency-cruiser-config', () => {
   it('a test utility reaches queries, workers and entry points like a test', () => {
     const server = project(
       {
-        'src/shared-features/todos/todosQueries.ts': 'export const createTodosQueries = 1;\n',
-        'src/shared-features/todos/sweepWorker.ts': 'export const createSweepWorker = 1;\n',
-        'src/shared-features/todos/todos.test.ts':
+        'src/shared/todos/todosQueries.ts': 'export const createTodosQueries = 1;\n',
+        'src/shared/todos/sweepWorker.ts': 'export const createSweepWorker = 1;\n',
+        'src/shared/todos/todos.test.ts':
           "import { seedTodos } from '../../../test-utils/seedTodos.ts';\nexport const checked = seedTodos;\n",
         'test-utils/seedTodos.ts':
-          "import { createTodosQueries } from '../src/shared-features/todos/todosQueries.ts';\nimport { createSweepWorker } from '../src/shared-features/todos/sweepWorker.ts';\nimport https from 'node:https';\nexport const seedTodos = [createTodosQueries, createSweepWorker, https];\n",
+          "import { createTodosQueries } from '../src/shared/todos/todosQueries.ts';\nimport { createSweepWorker } from '../src/shared/todos/sweepWorker.ts';\nimport https from 'node:https';\nexport const seedTodos = [createTodosQueries, createSweepWorker, https];\n",
       },
       'server.cjs',
     );
@@ -145,8 +143,8 @@ describe('dependency-cruiser-config', () => {
     const library = project(
       {
         'src/cli.ts': 'export const cli = 1;\n',
-        'src/shared/util.test.ts':
-          "import { runCli } from '../../test-utils/runCli.ts';\nexport const checked = runCli;\n",
+        'src/shared/util/util.test.ts':
+          "import { runCli } from '../../../test-utils/runCli.ts';\nexport const checked = runCli;\n",
         'test-utils/runCli.ts':
           "import { cli } from '../src/cli.ts';\nexport const runCli = cli;\n",
       },
@@ -162,20 +160,20 @@ describe('dependency-cruiser-config', () => {
         dependencies: { '@tanstack/react-query': '1.0.0' },
       }),
       ...fakePackage('@tanstack/react-query'),
-      'src/shared-features/todos/todosClient.ts': 'export const todosClient = 1;\n',
-      'src/shared-features/todos/todosKeys.ts': 'export const todosKeys = 1;\n',
-      'src/shared-features/todos/hooks/useTodosQuery.ts':
+      'src/shared/todos/todosClient.ts': 'export const todosClient = 1;\n',
+      'src/shared/todos/todosKeys.ts': 'export const todosKeys = 1;\n',
+      'src/shared/todos/hooks/useTodosQuery.ts':
         "import { useQuery } from '@tanstack/react-query';\nimport { todosClient } from '../todosClient.ts';\nimport { todosKeys } from '../todosKeys.ts';\nexport const useTodosQuery = [useQuery, todosClient, todosKeys];\n",
       'src/features/list/components/ListLayout.tsx':
-        "import { useTodosQuery } from '../../../shared-features/todos/hooks/useTodosQuery.ts';\nexport const ListLayout = useTodosQuery;\n",
+        "import { useTodosQuery } from '../../../shared/todos/hooks/useTodosQuery.ts';\nexport const ListLayout = useTodosQuery;\n",
     });
     assert.deepEqual(violatedRules(root), []);
     writeFileSync(
       join(root, 'src/features/list/components/Item.tsx'),
-      "import { todosClient } from '../../../shared-features/todos/todosClient.ts';\nexport const Item = todosClient;\n",
+      "import { todosClient } from '../../../shared/todos/todosClient.ts';\nexport const Item = todosClient;\n",
     );
     writeFileSync(
-      join(root, 'src/shared-features/todos/todosStore.ts'),
+      join(root, 'src/shared/todos/todosStore.ts'),
       "import { todosClient } from './todosClient.ts';\nexport const todosStore = todosClient;\n",
     );
     assert.deepEqual(violatedRules(root), ['presenters-are-pure', 'stores-hold-no-server-data']);
@@ -188,14 +186,14 @@ describe('dependency-cruiser-config', () => {
           "import { openDatabase } from '../features/database/openDatabase.ts';\nimport { createListService } from '../features/list/listService.ts';\nexport const app = createListService(openDatabase);\n",
         'src/features/database/openDatabase.ts':
           "import { DatabaseSync } from 'node:sqlite';\nexport const openDatabase = DatabaseSync;\n",
-        'src/shared-features/todos/todosQueries.ts':
+        'src/shared/todos/todosQueries.ts':
           "import { DatabaseSync } from 'node:sqlite';\nexport const createTodosQueries = DatabaseSync;\n",
         'src/features/list/listService.ts':
-          "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nexport const createListService = createTodosQueries;\n",
+          "import { createTodosQueries } from '../../shared/todos/todosQueries.ts';\nexport const createListService = createTodosQueries;\n",
         'src/features/list/listRoutes.ts':
-          "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nexport const listRoutes = createTodosQueries;\n",
+          "import { createTodosQueries } from '../../shared/todos/todosQueries.ts';\nexport const listRoutes = createTodosQueries;\n",
         'src/features/list/listHelper.ts':
-          "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nimport { DatabaseSync } from 'node:sqlite';\nexport const listHelper = [createTodosQueries, DatabaseSync];\n",
+          "import { createTodosQueries } from '../../shared/todos/todosQueries.ts';\nimport { DatabaseSync } from 'node:sqlite';\nexport const listHelper = [createTodosQueries, DatabaseSync];\n",
         'src/features/list/listService.test.ts':
           "import { DatabaseSync } from 'node:sqlite';\nimport { createListService } from './listService.ts';\nexport const checked = createListService(new DatabaseSync(':memory:'));\n",
       },
@@ -223,11 +221,11 @@ describe('dependency-cruiser-config', () => {
           "import { createSweepWorker } from '../features/sweep/sweepWorker.ts';\nexport const app = createSweepWorker;\n",
         'src/features/database/openDatabase.ts':
           "import pg from 'pg';\nexport const openDatabase = pg;\n",
-        'src/shared-features/todos/todosQueries.ts':
+        'src/shared/todos/todosQueries.ts':
           "import pg from 'pg';\nexport const createTodosQueries = pg;\n",
         'src/features/sweep/sweepWorker.ts':
-          "import { createTodosQueries } from '../../shared-features/todos/todosQueries.ts';\nexport const createSweepWorker = createTodosQueries;\n",
-        'src/shared-features/todos/syncClient.ts':
+          "import { createTodosQueries } from '../../shared/todos/todosQueries.ts';\nexport const createSweepWorker = createTodosQueries;\n",
+        'src/shared/todos/syncClient.ts':
           "import { request } from 'undici';\nimport https from 'node:https';\nexport const createSyncClient = [request, https];\n",
         'src/features/sweep/sweepService.ts':
           "import { createSweepWorker } from './sweepWorker.ts';\nexport const createSweepService = createSweepWorker;\n",
@@ -246,8 +244,8 @@ describe('dependency-cruiser-config', () => {
   it('the server config keeps the layer rules', () => {
     const root = project(
       {
-        'src/shared/util.ts':
-          "import { feature } from '../features/list/feature.ts';\nexport const util = feature;\n",
+        'src/shared/util/util.ts':
+          "import { feature } from '../../features/list/feature.ts';\nexport const util = feature;\n",
         'src/features/list/feature.ts': 'export const feature = 1;\n',
       },
       'server.cjs',
@@ -273,7 +271,7 @@ describe('dependency-cruiser-config', () => {
     );
     assert.deepEqual(violatedRules(root, ['src', 'third-party']), []);
     writeFileSync(
-      join(root, 'src/shared/lib.ts'),
+      join(root, 'src/shared/ui/lib.ts'),
       "import { Slot } from 'radix-ui';\nexport const lib = Slot;\n",
     );
     writeFileSync(
@@ -290,10 +288,10 @@ describe('dependency-cruiser-config', () => {
     const root = project({
       'package.json': JSON.stringify({ name: 'fixture', dependencies: { 'posthog-js': '1.0.0' } }),
       ...fakePackage('posthog-js'),
-      'src/shared/analyticsClient.ts':
+      'src/shared/analytics/analyticsClient.ts':
         "import posthog from 'posthog-js';\nexport const analyticsClient = posthog;\n",
       'src/features/list/listLayout.ts':
-        "import { analyticsClient } from '../../shared/analyticsClient.ts';\nexport const listLayout = analyticsClient;\n",
+        "import { analyticsClient } from '../../shared/analytics/analyticsClient.ts';\nexport const listLayout = analyticsClient;\n",
     });
     assert.deepEqual(violatedRules(root), []);
     writeFileSync(
@@ -323,8 +321,8 @@ describe('dependency-cruiser-config', () => {
           "import { feature } from './features/list/feature.ts';\nexport const cli = feature;\n",
         'src/cli.test.ts': "import { cli } from './cli.ts';\nexport const checked = cli;\n",
         'src/features/list/feature.ts':
-          "import { util } from '../../shared/util.ts';\nexport const feature = util;\n",
-        'src/shared/util.ts': 'export const util = 1;\n',
+          "import { util } from '../../shared/util/util.ts';\nexport const feature = util;\n",
+        'src/shared/util/util.ts': 'export const util = 1;\n',
       },
       'library.cjs',
     );
@@ -365,8 +363,8 @@ describe('dependency-cruiser-config', () => {
   it('applies the sub-feature rules below the first level under a name that carries the level', () => {
     const root = project({
       'src/features/editor/features/form/features/fields/fields.ts':
-        "import { help } from '../../shared/help.ts';\nexport const fields = help;\n",
-      'src/features/editor/features/form/shared/help.ts': 'export const help = 1;\n',
+        "import { help } from '../../shared/help/help.ts';\nexport const fields = help;\n",
+      'src/features/editor/features/form/shared/help/help.ts': 'export const help = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
     writeFileSync(
@@ -378,63 +376,58 @@ describe('dependency-cruiser-config', () => {
       join(root, 'src/features/editor/features/form/features/submit/submit.ts'),
       'export const submit = 1;\n',
     );
+    mkdirSync(join(root, 'src/features/editor/features/form/shared/check'));
     writeFileSync(
-      join(root, 'src/features/editor/features/form/shared/check.ts'),
-      "import { submit } from '../features/submit/submit.ts';\nexport const check = submit;\n",
+      join(root, 'src/features/editor/features/form/shared/check/check.ts'),
+      "import { submit } from '../../features/submit/submit.ts';\nexport const check = submit;\n",
     );
     assert.deepEqual(violatedRules(root), [
-      'feature-shared-not-to-sub-features-level-2',
       'no-cross-sub-feature-level-2',
+      'no-cross-sub-shared-level-2',
     ]);
   });
 
-  it('applies the same rules inside a shared feature, and keeps sub shared features apart', () => {
+  it('applies the same rules inside a slice of shared/, and keeps the slices of a shared/ apart', () => {
     const root = project({
       'src/features/editor/features/form/form.ts':
-        "import { draft } from '../../shared-features/draft/draft.ts';\nexport const form = draft;\n",
-      'src/features/editor/shared-features/draft/draft.ts':
-        "import { helper } from '../../shared/helper.ts';\nexport const draft = helper;\n",
-      'src/features/editor/shared/helper.ts': 'export const helper = 1;\n',
-      'src/shared-features/plan/features/steps/steps.ts':
-        "import { lock } from '../../shared-features/lock/lock.ts';\nexport const steps = lock;\n",
-      'src/shared-features/plan/shared-features/lock/lock.ts': 'export const lock = 1;\n',
-      'src/shared-features/plan/plan.ts':
+        "import { draft } from '../../shared/draft/draft.ts';\nexport const form = draft;\n",
+      'src/features/editor/shared/draft/draft.ts': 'export const draft = 1;\n',
+      'src/shared/plan/features/steps/steps.ts':
+        "import { lock } from '../../shared/lock/lock.ts';\nexport const steps = lock;\n",
+      'src/shared/plan/shared/lock/lock.ts': 'export const lock = 1;\n',
+      'src/shared/plan/plan.ts':
         "import { steps } from './features/steps/steps.ts';\nexport const plan = steps;\n",
     });
     assert.deepEqual(violatedRules(root), []);
     const imports: Record<string, string> = {
-      'src/shared-features/plan/features/budget/budget.ts':
+      'src/shared/plan/features/budget/budget.ts':
         "import { steps } from '../steps/steps.ts';\nexport const budget = steps;\n",
-      'src/shared-features/plan/features/steps/total.ts':
+      'src/shared/plan/features/steps/total.ts':
         "import { plan } from '../../plan.ts';\nexport const total = plan;\n",
-      'src/features/editor/shared-features/history/history.ts':
+      'src/features/editor/shared/history/history.ts':
         "import { draft } from '../draft/draft.ts';\nimport { form } from '../../features/form/form.ts';\nexport const history = draft + form;\n",
-      'src/shared-features/plan/shared/check.ts':
-        "import { lock } from '../shared-features/lock/lock.ts';\nexport const check = lock;\n",
+      'src/shared/plan/shared/check/check.ts':
+        "import { lock } from '../lock/lock.ts';\nexport const check = lock;\n",
     };
     for (const [path, content] of Object.entries(imports)) {
       mkdirSync(dirname(join(root, path)), { recursive: true });
       writeFileSync(join(root, path), content);
     }
-    assert.deepEqual(violatedRules(root), [
-      'feature-shared-not-to-sub-features',
-      'no-cross-sub-feature',
-      'no-cross-sub-shared-feature',
-    ]);
+    assert.deepEqual(violatedRules(root), ['no-cross-sub-feature', 'no-cross-sub-shared']);
   });
 
   it('rejects a feature nested more than 10 levels deep, and any import of it', () => {
     const nested = `src/features/f1${Array.from({ length: 10 }, (_, index) => `/features/f${index + 2}`).join('')}`;
     const tenLevels = nested.slice(0, nested.lastIndexOf('/features/'));
     const root = project({
-      'src/shared/util.ts': 'export const util = 1;\n',
-      [`${tenLevels}/leaf.ts`]: `import { util } from '${'../'.repeat(20)}shared/util.ts';\nexport const leaf = util;\n`,
+      'src/shared/util/util.ts': 'export const util = 1;\n',
+      [`${tenLevels}/leaf.ts`]: `import { util } from '${'../'.repeat(20)}shared/util/util.ts';\nexport const leaf = util;\n`,
     });
     assert.deepEqual(violatedRules(root), []);
     mkdirSync(join(root, nested), { recursive: true });
     writeFileSync(
       join(root, nested, 'deep.ts'),
-      `import { util } from '${'../'.repeat(22)}shared/util.ts';\nexport const deep = util;\n`,
+      `import { util } from '${'../'.repeat(22)}shared/util/util.ts';\nexport const deep = util;\n`,
     );
     writeFileSync(
       join(root, nested, 'deep.test.ts'),

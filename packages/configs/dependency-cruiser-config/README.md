@@ -3,11 +3,12 @@
 [dependency-cruiser](https://github.com/sverweij/dependency-cruiser) rules for an app split into layers under `src/`:
 
 ```
-src/app/              composes the features, and imports nothing else
-src/features/         one folder per feature
-src/shared-features/  business code shared by several features
-src/shared/           code with no domain
+src/app/        composes the features, and imports nothing else
+src/features/   one folder per feature
+src/shared/     the code several features use, one slice per concept
 ```
+
+A slice of `shared/` (`shared/todos/`, `shared/errors/`) never imports another one. When slice A needs code from slice B, the two merge, or the code is copied.
 
 ## Install
 
@@ -55,7 +56,7 @@ A type-only package such as `mdast` (whose types come from `@types/mdast`) does 
 
 ### Server
 
-For an API where each shared feature keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:
+For an API where each slice of `shared/` keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:
 
 ```js
 module.exports = {
@@ -72,17 +73,15 @@ Each rule has a `comment` that says what to do instead.
 
 | Rule                                 | Rejects                                                                                                                                                                         |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `shared-not-to-features`             | `src/shared/` importing `app/`, `features/` or `shared-features/`                                                                                                               |
-| `shared-features-not-to-features`    | `src/shared-features/` importing `app/` or `features/`                                                                                                                          |
-| `app-only-to-features`               | `src/app/` importing `shared-features/` or `shared/`: what it needs, like a page shell or the server setup, goes into a feature |
+| `shared-not-to-features`             | a slice of `src/shared/` importing `app/` or `features/`                                                                                                                        |
+| `no-cross-shared`                    | a slice of `src/shared/` importing another slice                                                                                                                                |
+| `app-only-to-features`               | `src/app/` importing `shared/`: what it needs, like a page shell or the server setup, goes into a feature |
 | `features-not-to-app`                | a feature importing `app/`                                                                                                                                                      |
 | `no-cross-feature`                   | a feature importing another feature                                                                                                                                             |
-| `no-cross-shared-feature`            | a shared feature importing another shared feature                                                                                                                               |
-| `no-cross-sub-feature` | a sub-feature (`features/<y>/` inside a feature or a shared feature) importing a sibling or the root of its parent instead of the parent `shared-features/` or `shared/` |
-| `no-cross-sub-shared-feature` | a sub shared feature (`shared-features/<y>/` inside a feature or a shared feature) importing a sibling, a sub-feature or the root of its parent |
-| `feature-shared-not-to-sub-features` | the `shared/` of a feature or a shared feature importing one of its sub-features or sub shared features |
-| `feature-nesting-too-deep` | a feature or a shared feature nested more than 10 levels deep                                                                                                                                       |
-| `presenters-are-pure`                | a presenter (any component not named `XContainer`, `XLayout`, `XPage`, `XContent` or `XConfig`) importing a store, a shared-feature hook, an `xClient.ts` or `@tanstack/react-query` |
+| `no-cross-sub-feature` | a sub-feature (`features/<y>/` inside a feature or a slice) importing a sibling or the root of its parent instead of a slice of the parent `shared/` |
+| `no-cross-sub-shared` | a slice of the `shared/` of a feature or a slice (`shared/<y>/`) importing another slice, a sub-feature or the root of its parent |
+| `feature-nesting-too-deep` | a feature or a slice nested more than 10 levels deep                                                                                                                                       |
+| `presenters-are-pure`                | a presenter (any component not named `XContainer`, `XLayout`, `XPage`, `XContent` or `XConfig`) importing a store, a hook of a slice of `src/shared/`, an `xClient.ts` or `@tanstack/react-query` |
 | `stores-hold-no-server-data`         | an `xStore.ts` importing an `xClient.ts`, an `xKeys.ts`, a hook or `@tanstack/react-query`                                                                                      |
 | `analytics-in-client`                | `posthog-js`, `posthog-react-native`, `@segment/analytics-next`, `mixpanel-browser`, `@amplitude/analytics-browser`, `react-ga4` or `@vercel/analytics` imported anywhere but an `analyticsClient.ts`   |
 | `stores-in-their-folder`             | an `xStore.ts` outside the root or the `stores/` folder of its level                                                                                                            |
@@ -91,7 +90,7 @@ Each rule has a `comment` that says what to do instead.
 | `no-prod-to-tests`                   | production code importing a test file, a test utility from `test-utils/` or a file from `e2e/`                                                                                  |
 | `not-to-dev-dep`                     | code under `src/` importing a devDependency                                                                                                                                     |
 
-Sub-features and sub shared features nest like the features they live in: each can hold its own `features/`, `shared-features/` and `shared/`, under a feature or a shared feature, and the same three rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
+Sub-features and slices nest like the features they live in: each can hold its own `features/` and `shared/`, under a feature or a slice, and the same two rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
 
 ### shadcn/ui
 
