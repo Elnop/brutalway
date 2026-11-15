@@ -1,5 +1,5 @@
 import { SLICE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
-import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
+import type { ImportedModule, Slice } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
 
 function slotOf(owner: string, importer: string): string {
   if (!importer.startsWith(`${owner}/`)) return importer;
@@ -18,15 +18,16 @@ function importersByModule(modules: readonly ImportedModule[]): Map<string, stri
 export function consumerSlots(modules: readonly ImportedModule[]) {
   const importers = importersByModule(modules);
   const slotsByModule = new Map<string, ReadonlySet<string>>();
-  return function slots(path: string, owner: string): ReadonlySet<string> {
-    const known = slotsByModule.get(path);
+  return function slots(path: string, slice: Slice): ReadonlySet<string> {
+    const key = `${slice.folder}:${path}`;
+    const known = slotsByModule.get(key);
     if (known !== undefined) return known;
     const found = new Set<string>();
-    slotsByModule.set(path, found);
+    slotsByModule.set(key, found);
     for (const importer of importers.get(path) ?? []) {
-      if (importer.startsWith(`${owner}/shared/`)) {
-        for (const slot of slots(importer, owner)) found.add(slot);
-      } else found.add(slotOf(owner, importer));
+      if (importer.startsWith(`${slice.folder}/`)) {
+        for (const slot of slots(importer, slice)) found.add(slot);
+      } else found.add(slotOf(slice.owner, importer));
     }
     return found;
   };

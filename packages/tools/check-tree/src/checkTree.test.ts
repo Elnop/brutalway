@@ -38,9 +38,9 @@ describe('check-tree', () => {
   it('prints nothing and exits with 0 on a conforming tree', () => {
     const root = project([
       'src/app/App.tsx',
-      'src/shared/lib/a.ts',
-      'src/shared/lib/b.ts',
-      'src/shared/lib/a.test.ts',
+      'src/features/feature/lib/a.ts',
+      'src/features/feature/lib/b.ts',
+      'src/features/feature/lib/a.test.ts',
       'src/features/feature/styles/a.css',
       'src/features/feature/styles/b.css',
     ]);
@@ -52,10 +52,10 @@ describe('check-tree', () => {
       [
         'web/a.css',
         'web/b.css',
-        'web/shared/lib/a.ts',
+        'web/shared/text/lib/a.ts',
         'web/features/feature/cartTypes.ts',
         'web/features/feature/userTypes.ts',
-        'web/shared/http/client.ts',
+        'web/shared/client.ts',
       ],
       ['web/features/empty'],
     );
@@ -66,31 +66,35 @@ describe('check-tree', () => {
         'web holds 2 styles files (a.css, b.css): move them into styles/',
         'web/features/empty is empty: delete it',
         'web/features/feature holds 2 types files (cartTypes.ts, userTypes.ts): move them into types/',
-        'web/shared/http is not a kind folder: web/shared/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature',
-        'web/shared/lib holds a single child: move it up one level and delete the folder',
+        'web/shared holds client.ts: shared/ holds one folder per slice, move each file into the slice of its concept',
+        'web/shared/text/lib holds a single child: move it up one level and delete the folder',
       ],
     });
   });
 
   it('checks src when no folder is given', () => {
-    const root = project(['src/shared/lib/a.ts']);
+    const root = project(['src/shared/text/lib/a.ts']);
     assert.deepEqual(run(root), {
       status: 1,
       stdout: '',
-      lines: ['src/shared/lib holds a single child: move it up one level and delete the folder'],
+      lines: [
+        'src/shared/text/lib holds a single child: move it up one level and delete the folder',
+      ],
     });
   });
 
   it('replaces the category folders with --categories', () => {
     const root = project([
-      'src/shared/utils/b.ts',
-      'src/shared/hooks/useA.ts',
-      'src/shared/hooks/useB.ts',
+      'src/features/text/utils/b.ts',
+      'src/features/text/hooks/useA.ts',
+      'src/features/text/hooks/useB.ts',
     ]);
     assert.deepEqual(run(root, ['src', '--categories', 'utils, hooks']), {
       status: 1,
       stdout: '',
-      lines: ['src/shared/utils holds a single child: move it up one level and delete the folder'],
+      lines: [
+        'src/features/text/utils holds a single child: move it up one level and delete the folder',
+      ],
     });
   });
   it('with --root-entries, leaves the files at the root of the checked folder where they are and checks the rest', () => {
@@ -110,26 +114,29 @@ describe('check-tree', () => {
     assert.equal(run(root, ['src']).lines.length, 3);
   });
 
-  it('reports a file of shared/ that a single feature uses', () => {
+  it('reports a file of a slice that a single feature uses, and a slice whose files never import each other', () => {
     const root = project(
       [
         'src/features/a/A.ts',
         'src/features/b/B.ts',
-        'src/shared/format.ts',
-        'src/shared/SlugTypes.ts',
+        'src/shared/text/format.ts',
+        'src/shared/text/TextTypes.ts',
+        'src/shared/slugs/SlugTypes.ts',
       ],
       [],
       {
         'src/features/a/A.ts':
-          "import '../../shared/format.ts';\nimport '../../shared/SlugTypes.ts';",
-        'src/features/b/B.ts': "import '../../shared/format.ts';",
+          "import '../../shared/text/format.ts';\nimport '../../shared/text/TextTypes.ts';\nimport '../../shared/slugs/SlugTypes.ts';",
+        'src/features/b/B.ts': "import '../../shared/text/format.ts';",
       },
     );
     assert.deepEqual(run(root, ['src']), {
       status: 1,
       stdout: '',
       lines: [
-        'src/shared/SlugTypes.ts is only used by src/features/a: move it into src/features/a',
+        'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a',
+        'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a',
+        'src/shared/text holds 2 groups of files that never import each other (format.ts) (TextTypes.ts): split it into one slice per group',
       ],
     });
   });

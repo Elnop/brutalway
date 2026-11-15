@@ -1,6 +1,6 @@
 import { cruiseImports } from '#src/features/shared-consumers/lib/cruiseImports.ts';
-import { sharedConsumerViolations } from '#src/features/shared-consumers/lib/sharedConsumerViolations.ts';
+import { sliceViolations } from '#src/features/shared-consumers/lib/sliceViolations.ts';
 
 export async function sharedViolations(root: string): Promise<string[]> {
-  return sharedConsumerViolations(root, await cruiseImports(root));
+  return sliceViolations(root, await cruiseImports(root));
 }

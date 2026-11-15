@@ -20,9 +20,9 @@ describe('treeViolations', () => {
     const root = tree([
       'app/App.tsx',
       'app/globals.css',
-      'shared/lib/a.ts',
-      'shared/lib/b.ts',
-      'shared/lib/a.test.ts',
+      'shared/ui/lib/a.ts',
+      'shared/ui/lib/b.ts',
+      'shared/ui/lib/a.test.ts',
       'features/feature/styles/a.css',
       'features/feature/styles/b.css',
       'features/feature/Feature.tsx',
@@ -37,8 +37,8 @@ describe('treeViolations', () => {
   });
 
   it('a category folder with a single child is reported, its tests aside', () => {
-    assert.deepEqual(treeViolations(tree(['shared/lib/a.ts', 'shared/lib/a.test.ts'])), [
-      'src/shared/lib holds a single child: move it up one level and delete the folder',
+    assert.deepEqual(treeViolations(tree(['shared/ui/lib/a.ts', 'shared/ui/lib/a.test.ts'])), [
+      'src/shared/ui/lib holds a single child: move it up one level and delete the folder',
     ]);
   });
 
@@ -47,8 +47,10 @@ describe('treeViolations', () => {
       'src holds 2 styles files (a.css, b.css): move them into styles/',
     ]);
     assert.deepEqual(
-      treeViolations(tree(['a.css', 'shared/a.css', 'shared/styles/b.css', 'shared/styles/c.css'])),
-      ['src/shared has a styles/ folder: move a.css into it'],
+      treeViolations(
+        tree(['a.css', 'shared/ui/a.css', 'shared/ui/styles/b.css', 'shared/ui/styles/c.css']),
+      ),
+      ['src/shared/ui has a styles/ folder: move a.css into it'],
     );
   });
 
@@ -165,35 +167,35 @@ describe('treeViolations', () => {
     assert.deepEqual(
       treeViolations(
         tree([
-          'shared/components/CartLayout.tsx',
-          'shared/components/CartPage.tsx',
-          'shared/components/Panel.tsx',
-          'shared/components/Row.tsx',
+          'shared/ui/components/CartLayout.tsx',
+          'shared/ui/components/CartPage.tsx',
+          'shared/ui/components/Panel.tsx',
+          'shared/ui/components/Row.tsx',
         ]),
       ),
       [
-        'src/shared/components holds 2 orchestrators files (CartLayout.tsx, CartPage.tsx): move them into orchestrators/',
-        'src/shared/components holds 2 presenters files (Panel.tsx, Row.tsx): move them into presenters/',
+        'src/shared/ui/components holds 2 orchestrators files (CartLayout.tsx, CartPage.tsx): move them into orchestrators/',
+        'src/shared/ui/components holds 2 presenters files (Panel.tsx, Row.tsx): move them into presenters/',
       ],
     );
     assert.deepEqual(
       treeViolations(
         tree([
-          'shared/components/CartPage.tsx',
-          'shared/components/Panel.tsx',
-          'shared/components/presenters/Row.tsx',
-          'shared/components/presenters/Cell.tsx',
+          'shared/ui/components/CartPage.tsx',
+          'shared/ui/components/Panel.tsx',
+          'shared/ui/components/presenters/Row.tsx',
+          'shared/ui/components/presenters/Cell.tsx',
         ]),
       ),
-      ['src/shared/components has a presenters/ folder: move Panel.tsx into it'],
+      ['src/shared/ui/components has a presenters/ folder: move Panel.tsx into it'],
     );
     assert.deepEqual(
       treeViolations(
         tree([
-          'shared/components/presenters/Panel.tsx',
-          'shared/components/presenters/Row.tsx',
-          'shared/components/orchestrators/PanelContainer.tsx',
-          'shared/components/orchestrators/RowContainer.tsx',
+          'shared/ui/components/presenters/Panel.tsx',
+          'shared/ui/components/presenters/Row.tsx',
+          'shared/ui/components/orchestrators/PanelContainer.tsx',
+          'shared/ui/components/orchestrators/RowContainer.tsx',
         ]),
       ),
       [],
@@ -201,15 +203,19 @@ describe('treeViolations', () => {
   });
 
   it('the category folders can be replaced', () => {
-    assert.deepEqual(treeViolations(tree(['shared/server/b.ts', 'shared/c.ts']), ['server']), [
-      'src/shared/server holds a single child: move it up one level and delete the folder',
-    ]);
-    assert.deepEqual(treeViolations(tree(['shared/lib/a.ts', 'shared/lib/b.ts']), ['server']), [
-      'src/shared/lib is not a kind folder: src/shared/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature',
-    ]);
+    assert.deepEqual(
+      treeViolations(tree(['shared/ui/server/b.ts', 'shared/ui/c.ts']), ['server']),
+      ['src/shared/ui/server holds a single child: move it up one level and delete the folder'],
+    );
+    assert.deepEqual(
+      treeViolations(tree(['shared/ui/lib/a.ts', 'shared/ui/lib/b.ts']), ['server']),
+      [
+        'src/shared/ui/lib is not a kind folder: a feature or a slice holds kind folders, features/ for its sub-features and shared/ for the slices they share, move it into features/ as a sub-feature, into shared/ as a slice, or spread its files into kind folders',
+      ],
+    );
   });
 
-  it('src/ holds app/, features/, shared-features/ and shared/, and app/ is free', () => {
+  it('src/ holds app/, features/ and shared/, and app/ is free', () => {
     assert.deepEqual(
       treeViolations(
         tree([
@@ -217,14 +223,15 @@ describe('treeViolations', () => {
           'app/screens/home/index.tsx',
           'app/locales/en/common.json',
           'features/list/List.tsx',
-          'shared-features/todos/todosStore.ts',
-          'shared/normalize.ts',
+          'shared/todos/todosStore.ts',
+          'shared/text/normalize.ts',
         ]),
       ),
       [],
     );
-    assert.deepEqual(treeViolations(tree(['utils/a.ts'])), [
-      'src/utils is not a layer: src/ holds app/, features/, shared-features/ and shared/ next to its entry files, move it into one of them',
+    assert.deepEqual(treeViolations(tree(['utils/a.ts', 'shared-features/todos/todos.ts'])), [
+      'src/shared-features is not a layer: src/ holds app/, features/ and shared/ next to its entry files, move it into one of them',
+      'src/utils is not a layer: src/ holds app/, features/ and shared/ next to its entry files, move it into one of them',
     ]);
   });
 
@@ -254,47 +261,61 @@ describe('treeViolations', () => {
     ]);
   });
 
-  it('src/shared/ holds kind folders only, at any depth', () => {
+  it('a shared/ holds one folder per slice and no file, at any depth, and a slice is laid out like a feature', () => {
     assert.deepEqual(
       treeViolations(
         tree([
           'shared/authentication/AuthenticationTypes.ts',
           'shared/authentication/signRequest.ts',
-          'shared/lib/readEnv.ts',
-          'shared/lib/createServer.ts',
+          'shared/errors/errorMessage.ts',
+          'shared/todos/hooks/useTodos.ts',
+          'shared/todos/hooks/useTodoStats.ts',
+        ]),
+      ),
+      [],
+    );
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'shared/readEnv.ts',
+          'shared/EnvTypes.ts',
+          'shared/readEnv.test.ts',
+          'shared/todos/todos.ts',
+          'features/list/shared/format.ts',
+          'features/list/shared/title/Title.tsx',
         ]),
       ),
       [
-        'src/shared/authentication is not a kind folder: src/shared/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature',
+        'src/features/list/shared holds format.ts: shared/ holds one folder per slice, move each file into the slice of its concept',
+        'src/shared holds EnvTypes.ts, readEnv.ts: shared/ holds one folder per slice, move each file into the slice of its concept',
       ],
     );
     assert.deepEqual(
-      treeViolations(tree(['shared/components/A.tsx', 'shared/components/http/client.ts'])),
+      treeViolations(tree(['shared/ui/components/A.tsx', 'shared/ui/components/http/client.ts'])),
       [
-        'src/shared/components/http is not a kind folder: src/shared/components/ holds its files and kind folders only',
+        'src/shared/ui/components/http is not a kind folder: src/shared/ui/components/ holds its files and kind folders only',
       ],
     );
   });
 
-  it('a feature or a shared feature holds kind folders, features/, shared-features/ and shared/, at any depth', () => {
+  it('a feature or a slice holds kind folders, features/ and shared/, at any depth', () => {
     assert.deepEqual(
       treeViolations(
         tree([
           'features/list/listRoutes.ts',
           'features/list/features/editor/editor.ts',
-          'features/list/shared-features/drafts/drafts.ts',
-          'features/list/shared/helper.ts',
-          'shared-features/todos/todosQueries.ts',
-          'shared-features/todos/features/locking/lock.ts',
-          'shared-features/todos/features/locking/features/renew/renew.ts',
-          'shared-features/todos/shared/types/aTypes.ts',
-          'shared-features/todos/shared/types/bTypes.ts',
+          'features/list/shared/drafts/drafts.ts',
+          'shared/todos/todosQueries.ts',
+          'shared/todos/features/locking/lock.ts',
+          'shared/todos/features/locking/features/renew/renew.ts',
+          'shared/todos/shared/types/aTypes.ts',
+          'shared/todos/shared/types/bTypes.ts',
         ]),
       ),
       [],
     );
     const reason =
-      'a feature holds kind folders, features/ for its sub-features, shared-features/ for the business code they share and shared/, move it into features/ as a sub-feature or spread its files into kind folders';
+      'a feature or a slice holds kind folders, features/ for its sub-features and shared/ for the slices they share, move it into features/ as a sub-feature, into shared/ as a slice, or spread its files into kind folders';
     assert.deepEqual(
       treeViolations(
         tree(['features/list/billing/invoice.ts', 'features/list/billing/BillingTypes.ts']),
@@ -304,11 +325,15 @@ describe('treeViolations', () => {
     assert.deepEqual(
       treeViolations(
         tree([
-          'shared-features/todos/features/locking/parts/part.ts',
-          'shared-features/todos/features/locking/lock.ts',
+          'shared/todos/features/locking/parts/part.ts',
+          'shared/todos/features/locking/lock.ts',
+          'shared/todos/shared-features/drafts/drafts.ts',
         ]),
       ),
-      [`src/shared-features/todos/features/locking/parts is not a kind folder: ${reason}`],
+      [
+        `src/shared/todos/features/locking/parts is not a kind folder: ${reason}`,
+        `src/shared/todos/shared-features is not a kind folder: ${reason}`,
+      ],
     );
   });
 
@@ -339,12 +364,12 @@ describe('treeViolations', () => {
     assert.deepEqual(
       treeViolations(
         tree([
-          'shared-features/todos/todosQueries.ts',
-          'shared-features/todos/queries/aQueries.ts',
-          'shared-features/todos/queries/bQueries.ts',
+          'shared/todos/todosQueries.ts',
+          'shared/todos/queries/aQueries.ts',
+          'shared/todos/queries/bQueries.ts',
         ]),
       ),
-      ['src/shared-features/todos has a queries/ folder: move todosQueries.ts into it'],
+      ['src/shared/todos has a queries/ folder: move todosQueries.ts into it'],
     );
     assert.deepEqual(
       treeViolations(
@@ -366,9 +391,9 @@ describe('treeViolations', () => {
     assert.deepEqual(
       treeViolations(
         tree([
-          'shared-features/todos/todosKeys.ts',
-          'shared-features/todos/todosClient.ts',
-          'shared-features/todos/todosSelectors.ts',
+          'shared/todos/todosKeys.ts',
+          'shared/todos/todosClient.ts',
+          'shared/todos/todosSelectors.ts',
         ]),
       ),
       [],
@@ -385,8 +410,8 @@ describe('treeViolations', () => {
           'features/sync/syncService.ts',
           'features/sync/todoSyncClient.ts',
           'features/sync/todoReminderWorker.ts',
-          'shared/appEnv.ts',
-          'shared/openDatabase.ts',
+          'shared/env/appEnv.ts',
+          'shared/env/openDatabase.ts',
         ]),
       ),
       [],

@@ -7,13 +7,11 @@ import type {
 const SOURCE_LAYERS = new Map<string, Layer>([
   ['app', 'router'],
   ['features', 'features'],
-  ['shared-features', 'features'],
-  ['shared', 'shared'],
+  ['shared', 'slices'],
 ]);
 const FEATURE_LAYERS = new Map<string, Layer>([
   ['features', 'features'],
-  ['shared-features', 'features'],
-  ['shared', 'shared'],
+  ['shared', 'slices'],
 ]);
 
 function kindFolder(path: string, categories: ReadonlySet<string>, reason: string): ChildLayer {
@@ -27,7 +25,7 @@ function sourceChild(path: string): ChildLayer {
   return {
     layer: 'free',
     violations: [
-      `${path} is not a layer: ${dirname(path)}/ holds app/, features/, shared-features/ and shared/ next to its entry files, move it into one of them`,
+      `${path} is not a layer: ${dirname(path)}/ holds app/, features/ and shared/ next to its entry files, move it into one of them`,
     ],
   };
 }
@@ -38,7 +36,7 @@ function featureChild(path: string, categories: ReadonlySet<string>): ChildLayer
   return kindFolder(
     path,
     categories,
-    'a feature holds kind folders, features/ for its sub-features, shared-features/ for the business code they share and shared/, move it into features/ as a sub-feature or spread its files into kind folders',
+    'a feature or a slice holds kind folders, features/ for its sub-features and shared/ for the slices they share, move it into features/ as a sub-feature, into shared/ as a slice, or spread its files into kind folders',
   );
 }
 
@@ -48,15 +46,8 @@ export function childLayer(
   categories: ReadonlySet<string>,
 ): ChildLayer {
   if (layer === 'source') return sourceChild(path);
-  if (layer === 'features') return { layer: 'feature', violations: [] };
+  if (layer === 'features' || layer === 'slices') return { layer: 'feature', violations: [] };
   if (layer === 'feature') return featureChild(path, categories);
-  if (layer === 'shared') {
-    return kindFolder(
-      path,
-      categories,
-      `${dirname(path)}/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature`,
-    );
-  }
   if (layer === 'router') return { layer: 'router', violations: [] };
   if (layer === 'kind') {
     return kindFolder(path, categories, `${dirname(path)}/ holds its files and kind folders only`);

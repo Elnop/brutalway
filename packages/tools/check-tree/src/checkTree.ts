@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { treeViolations } from '#src/features/tree-violations/treeViolations.ts';
 import { cruiseImports } from '#src/features/shared-consumers/lib/cruiseImports.ts';
-import { sharedConsumerViolations } from '#src/features/shared-consumers/lib/sharedConsumerViolations.ts';
+import { sliceViolations } from '#src/features/shared-consumers/lib/sliceViolations.ts';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -16,7 +16,7 @@ try {
     ...treeViolations(resolve(folder), categories, {
       rootEntries: values['root-entries'] === true,
     }),
-    ...sharedConsumerViolations(folder, await cruiseImports(folder)),
+    ...sliceViolations(folder, await cruiseImports(folder)),
   ];
   for (const violation of violations) console.error(violation);
   process.exitCode = violations.length === 0 ? 0 : 1;

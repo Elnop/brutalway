@@ -1,6 +1,6 @@
 # @brutalway/check-tree
 
-Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no category folder with a single child, files of one kind grouped in that kind's folder once there are two of them, and no file in a `shared/` folder that a single feature uses.
+Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no category folder with a single child, files of one kind grouped in that kind's folder once there are two of them, no file in a slice of `shared/` that a single feature uses, and no slice whose files never import each other.
 
 ## Install
 
@@ -37,7 +37,7 @@ import { treeViolations } from '@brutalway/check-tree/treeViolations';
 const violations = treeViolations('src');
 ```
 
-It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`. The check on `shared/` reads the imports, so it has its own export:
+It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`. The checks on the slices of `shared/` read the imports, so they have their own export:
 
 ```ts
 import { sharedViolations } from '@brutalway/check-tree/sharedViolations';
@@ -50,9 +50,9 @@ const violations = await sharedViolations('src');
 ### Rules
 
 - a folder has a name the layout gives it:
-  - `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, next to its entry files. `app/` belongs to the router, so its folders are not checked and its files stay where they are, whatever their kind
-  - `src/shared/` holds kind folders only (`lib/`, `types/`, `configs/`...), since it has no domain
-  - a feature (`features/<x>/`) or a shared feature (`shared-features/<x>/`), at any depth, holds kind folders, `features/` for its sub-features, `shared-features/` for the business code they share and `shared/` for the code with no domain
+  - `src/` holds `app/`, `features/` and `shared/`, next to its entry files. `app/` belongs to the router, so its folders are not checked and its files stay where they are, whatever their kind
+  - a `shared/`, at any depth, holds one folder per slice, named after its concept (`shared/todos/`, `shared/errors/`), and no file
+  - a feature (`features/<x>/`) or a slice (`shared/<x>/`), at any depth, holds kind folders, `features/` for its sub-features and `shared/` for the slices they share
   - a kind folder holds kind folders only, like `presenters/` inside `components/`
 - no empty folder
 - a category folder (`components`, `hooks`, `stores`…) does not hold a single child: move the child up and delete the folder
@@ -77,7 +77,10 @@ const violations = await sharedViolations('src');
 | `stores/`                              | `xStore.ts`                                                       |
 | `lib/`                                 | any other `.ts` file, except `xContent.ts`, `xEnv.ts` and `.d.ts` |
 
-- a file of a `shared/` folder is used by at least two consumers. For `src/shared/`, a consumer is a feature or a shared feature, a sub-feature counting as the feature it sits in. For the `shared/` of a feature or a shared feature, a consumer is one of its sub-features, one of its sub shared features, or its own files outside them. A file imported by another file of the same `shared/` gets the consumers of that file. A test counts for the feature it sits in, since moving the file would make that test import another feature, and a test next to the file in `shared/` adds no consumer. A file of `src/shared/` used only by `app/` or by the entry files of `src/` passes. A file with a single consumer gets `src/shared/lib/format.ts is only used by src/features/cart: move it into src/features/cart`.
+- a file of a slice is used by at least two consumers. For `src/shared/`, a consumer is a feature or another slice, a sub-feature counting as the feature it sits in. For the `shared/` of a feature or a slice, a consumer is one of its sub-features, another of its slices, or its own files outside them. A file imported by another file of the same slice gets the consumers of that file. A test counts for the feature it sits in, since moving the file would make that test import another feature, and a test next to the file in the slice adds no consumer. A file of `src/shared/` used only by `app/` or by the entry files of `src/` passes. A file with a single consumer gets `src/shared/dates/format.ts is only used by src/features/cart: move it into src/features/cart`, which also catches a whole slice used by one feature.
+- the files of a slice, tests aside, form one group in the import graph, whatever the direction of the imports. Since two slices never import each other, the folder then only names a boundary the graph already draws. A `shared/utils/` holding `errorMessage.ts`, `isRecord.ts` and `packageRoot.ts`, which do not import each other, gets `src/shared/utils holds 3 groups of files that never import each other (errorMessage.ts) (isRecord.ts) (packageRoot.ts): split it into one slice per group`. A slice of a single file is fine.
+
+The first of these two rules says why a file is shared, the second why files sit together. Each one lets through what the other catches: in the `shared/utils/` above, each file has two consumers.
 
 So a feature with two components puts them in `components/`, and a `components/` folder with two presenters puts them in `presenters/`. The `components/` rule does not apply inside `components/`, `orchestrators/` or `presenters/`.
 

@@ -10,8 +10,13 @@ import type {
   FolderListing,
   TreeOptions,
 } from '#src/features/tree-violations/TreeViolationsTypes.ts';
-import { childLayer } from '#src/features/tree-violations/features/layout/childLayer.ts';
-import type { Layer } from '#src/features/tree-violations/features/layout/LayoutTypes.ts';
+import { childLayer } from '#src/features/tree-violations/features/layout/lib/childLayer.ts';
+import { filesCheck } from '#src/features/tree-violations/features/layout/lib/filesCheck.ts';
+import { sliceFileViolations } from '#src/features/tree-violations/features/layout/lib/sliceFileViolations.ts';
+import type {
+  FilesCheck,
+  Layer,
+} from '#src/features/tree-violations/features/layout/LayoutTypes.ts';
 
 function groupViolations(
   name: string,
@@ -56,14 +61,15 @@ function folderViolations(
   folder: string,
   name: string,
   categoryFolders: ReadonlySet<string>,
-  groupsFiles: boolean,
+  check: FilesCheck,
 ): string[] {
   const children = readdirSync(folder, { withFileTypes: true }).filter(
     (entry) => !TEST_FILE.test(entry.name),
   );
   const violations = shapeViolations(name, children.length, categoryFolders.has(basename(folder)));
-  if (!groupsFiles) return violations;
   const listing = folderListing(children);
+  if (check === 'slices') return [...violations, ...sliceFileViolations(name, listing.files)];
+  if (check === 'none') return violations;
   return [...violations, ...groupViolations(name, basename(folder), listing, categoryFolders)];
 }
 
@@ -80,7 +86,7 @@ export function treeViolations(
         folder,
         name,
         categories,
-        layer !== 'router' && (folder !== root || options.rootEntries !== true),
+        filesCheck(layer, folder === root && options.rootEntries === true),
       ),
       ...readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
