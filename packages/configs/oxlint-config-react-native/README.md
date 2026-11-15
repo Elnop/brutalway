@@ -1,6 +1,6 @@
 # @brutalway/oxlint-config-react-native
 
-Oxlint preset for React Native and Expo apps. It extends [@brutalway/oxlint-config-react](https://www.npmjs.com/package/@brutalway/oxlint-config-react) and [@brutalway/oxlint-config-zustand](https://www.npmjs.com/package/@brutalway/oxlint-config-zustand), and checks what stylelint checks on the web: every color, size, spacing, font and shadow of a style comes from a theme object. It also loads [eslint-plugin-react-native](https://github.com/Intellicode/eslint-plugin-react-native) as a JS plugin, turns on the `jest` plugin of oxlint, and lets the route files of Expo Router export a default.
+Oxlint preset for React Native and Expo apps. It extends [@brutalway/oxlint-config-react](https://www.npmjs.com/package/@brutalway/oxlint-config-react) and [@brutalway/oxlint-config-zustand](https://www.npmjs.com/package/@brutalway/oxlint-config-zustand), and checks what stylelint checks on the web: every color, size, spacing, font and shadow of a style comes from a theme object. It also loads [eslint-plugin-react-native](https://github.com/Intellicode/eslint-plugin-react-native) as a JS plugin, turns on the `jest` plugin of oxlint, and leaves the files of Expo Router out of the rules on names and exports.
 
 ## Install
 
@@ -44,7 +44,7 @@ When a rule fires:
 - no object written in a `style` prop or a prop ending in `Style`
 - from eslint-plugin-react-native: `no-raw-text`, `no-unused-styles`, `no-single-element-style-arrays` and `split-platform-components` (a component ending in `IOS` or `Android` lives in a `.ios.tsx` or `.android.tsx` file)
 - in tests: `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives, `toHaveBeenCalledWith` over `toHaveBeenCalled`, an error message in `toThrow`, no `.only`
-- the route files of an `app/` folder (any `.tsx` whose name does not start with a capital letter: `_layout.tsx`, `index.tsx`, `[id].tsx`...) may `export default`, be named `index.tsx`, and export `unstable_settings`, `ErrorBoundary` and `generateStaticParams`. A component in PascalCase next to them keeps the usual rules
+- the files of `src/app/`, the routes of Expo Router, are left out of the rules on file names, exports and props: Expo Router picks the file name (`_layout.tsx`, `index.tsx`, `+not-found.tsx`, `hello+api.ts`, `[id].tsx`, a kebab-case route that becomes its URL), the default or named exports (`GET`, `ErrorBoundary`, `unstable_settings`, `generateStaticParams`, `redirectSystemPath`) and the props. The other rules, styles and raw text included, still apply to them. Expo Router reads its routes from `src/app/` by default, and the application code lives in `features/`, `shared-features/` and `shared/`
 - no relative imports: import through the aliases of `tsconfig.json`
 - `import/default` and `typescript/no-non-null-assertion` off
 - `.expo`, `android`, `ios`, `dist` and `expo-env.d.ts` ignored, and the `node` env for `*.config.ts`, `*.config.js` and `jest.setup.ts`

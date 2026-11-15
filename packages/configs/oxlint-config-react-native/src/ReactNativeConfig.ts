@@ -5,7 +5,7 @@ import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
 import { jestRules } from '#src/features/jest/JestConfig.ts';
 import { reactNativePluginRules } from '#src/features/react-native-plugin/ReactNativePluginConfig.ts';
-import { routeFilesOverrides } from '#src/features/route-files/RouteFilesConfig.ts';
+import { routerFilesOverrides } from '#src/features/router-files/RouterFilesConfig.ts';
 import { themeStylesRules } from '#src/features/theme-styles/ThemeStylesConfig.ts';
 
 export const reactNativeConfig: OxlintConfig = defineConfig({
@@ -42,7 +42,7 @@ export const reactNativeConfig: OxlintConfig = defineConfig({
     'typescript/no-non-null-assertion': 'off',
   },
   overrides: [
-    ...routeFilesOverrides,
+    ...routerFilesOverrides,
     { files: ['**/*.config.ts', '**/*.config.js', 'jest.setup.ts'], env: { node: true } },
   ],
 });
