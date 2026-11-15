@@ -80,7 +80,7 @@ export function treeViolations(
         folder,
         name,
         categories,
-        folder !== root || options.rootEntries !== true,
+        layer !== 'router' && (folder !== root || options.rootEntries !== true),
       ),
       ...readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())

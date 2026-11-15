@@ -50,7 +50,7 @@ const violations = await sharedViolations('src');
 ### Rules
 
 - a folder has a name the layout gives it:
-  - `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, next to its entry files, and `app/` is not checked
+  - `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, next to its entry files. `app/` belongs to the router, so its folders are not checked and its files stay where they are, whatever their kind
   - `src/shared/` holds kind folders only (`lib/`, `types/`, `configs/`...), since it has no domain
   - a feature (`features/<x>/`) or a shared feature (`shared-features/<x>/`), at any depth, holds kind folders, `features/` for its sub-features, `shared-features/` for the business code they share and `shared/` for the code with no domain
   - a kind folder holds kind folders only, like `presenters/` inside `components/`

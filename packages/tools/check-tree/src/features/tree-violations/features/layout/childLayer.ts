@@ -5,7 +5,7 @@ import type {
 } from '#src/features/tree-violations/features/layout/LayoutTypes.ts';
 
 const SOURCE_LAYERS = new Map<string, Layer>([
-  ['app', 'free'],
+  ['app', 'router'],
   ['features', 'features'],
   ['shared-features', 'features'],
   ['shared', 'shared'],
@@ -57,6 +57,7 @@ export function childLayer(
       `${dirname(path)}/ holds no domain, move its files into lib/, types/, configs/... or into a shared feature`,
     );
   }
+  if (layer === 'router') return { layer: 'router', violations: [] };
   if (layer === 'kind') {
     return kindFolder(path, categories, `${dirname(path)}/ holds its files and kind folders only`);
   }

@@ -228,6 +228,32 @@ describe('treeViolations', () => {
     ]);
   });
 
+  it('the files of app/ stay where the router reads them, whatever their kind and however many they are', () => {
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'app/layout.tsx',
+          'app/page.tsx',
+          'app/sitemap.ts',
+          'app/robots.ts',
+          'app/manifest.ts',
+          'app/globals.css',
+          'app/print.css',
+          'app/blog/[slug]/page.tsx',
+          'app/blog/[slug]/opengraph-image.tsx',
+          'app/blog/[slug]/sitemap.ts',
+          'app/+middleware.ts',
+          'app/hello+api.ts',
+          'app/todos+api.ts',
+        ]),
+      ),
+      [],
+    );
+    assert.deepEqual(treeViolations(tree(['app/page.tsx'], ['app/empty'])), [
+      'src/app/empty is empty: delete it',
+    ]);
+  });
+
   it('src/shared/ holds kind folders only, at any depth', () => {
     assert.deepEqual(
       treeViolations(
