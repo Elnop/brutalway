@@ -46,7 +46,7 @@ npm create brutal my-app -- --preset react-native.json --yes
 
 A combination from the last column stops the CLI before anything is written, with a message naming both flags.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/screens/index.tsx` only shows the project name, `src/shared-features/theme/` keeps the theme and the `Button`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` when `i18n` is off.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/index.tsx` only shows the project name, `src/shared-features/theme/` keeps the theme and the `Button`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` when `i18n` is off.
 
 Tailwind, CSS Modules, shadcn/ui and the security headers are not offered: React Native has no CSS, the styles come from the theme object, and an app sends no HTTP headers of its own. There are no e2e tests either, since they need a simulator.
 
@@ -70,7 +70,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## i18n
 
-It adds French next to English: a `fr/` folder beside `src/app/locales/en/` and a `language-switch` feature under the title. The first language comes from the device through `expo-localization`, added as a dependency, and the choice is saved in AsyncStorage. `i18next-cli status` fails when French misses a key.
+It adds French next to English: a `fr/` folder beside `locales/en/` and a `language-switch` feature under the title. The first language comes from the device through `expo-localization`, added as a dependency, and the choice is saved in AsyncStorage. `i18next-cli status` fails when French misses a key.
 
 ## react-compiler
 

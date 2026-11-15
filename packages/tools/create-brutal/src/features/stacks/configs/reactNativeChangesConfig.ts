@@ -37,11 +37,11 @@ The todos come from an API. \`src/shared-features/todos/todosClient.ts\` calls \
 
 `;
 
-export const I18N_README = `The example comes in English and French. The buttons under the title switch between them through \`src/features/language-switch/components/LanguageSwitchContainer.tsx\`, and the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`. At start, \`src/app/I18nProvider.tsx\` takes the language saved in AsyncStorage through \`src/features/language-switch/lib/languageStorage.ts\`, or else the first language of the device that the project has ([expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)), and saves each change.
+export const I18N_README = `The example comes in English and French. The buttons under the title switch between them through \`src/features/language-switch/components/LanguageSwitchContainer.tsx\`, and the languages, which the i18n setup shares with the switch, are listed in \`src/shared-features/language/LanguagesConfig.ts\`. At start, \`src/features/i18n/I18nProvider.tsx\` takes the language saved in AsyncStorage through \`src/shared-features/language/lib/languageStorage.ts\`, or else the first language of the device that the project has ([expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)), and saves each change.
 
 ## Add a language
 
-To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+To add a language, add it to \`src/shared-features/language/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
 
 export const DARK_COLORS = `const DARK = {
   ink: '#f4ede0',

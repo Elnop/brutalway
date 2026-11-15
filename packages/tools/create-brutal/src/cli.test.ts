@@ -319,7 +319,7 @@ describe('create-brutal', () => {
       'components.json',
       'devApi.ts',
       'devApiRoutes.ts',
-      'src/app/locales/fr/app.json',
+      'locales/fr/app.json',
       'src/shared/analyticsClient.ts',
       'tsconfig.third-party.json',
     ]) {
@@ -350,7 +350,7 @@ describe('create-brutal', () => {
     for (const file of [
       'src/app/page.tsx',
       'src/app/page.module.css',
-      'src/app/locales/fr/app.json',
+      'locales/fr/app.json',
       'src/features/language-switch/lib/requestLanguage.ts',
       'src/features/language-switch/components/LanguageSwitch.module.css',
       'src/shared/analyticsClient.ts',
@@ -373,7 +373,7 @@ describe('create-brutal', () => {
     const project = join(result.cwd, 'my-app');
     for (const file of [
       'src/features/query-client/queryClient.ts',
-      'src/app/locales/fr/app.json',
+      'locales/fr/app.json',
       'src/features/language-switch/components/LanguageSwitchContainer.tsx',
       'src/shared-features/todos/hooks/useTodosQuery.ts',
       'src/shared/analyticsClient.ts',

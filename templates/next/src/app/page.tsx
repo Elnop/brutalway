@@ -1,4 +1,4 @@
-import { createI18n } from '@/app/createI18n.ts';
+import { createI18n } from '@/features/i18n/createI18n.ts';
 import { TodoListLayout } from '@/features/todo-list/components/TodoListLayout.tsx';
 import { TodoStatsContainer } from '@/features/todo-stats/components/TodoStatsContainer.tsx';
 

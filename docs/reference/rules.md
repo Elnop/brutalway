@@ -65,7 +65,7 @@ src/shared holds 2 lib files (normalizeTitle.ts, percent.ts): move them into lib
 
 ## Visible text
 
-On vite, next and react-native, no text the user can read is written in JSX, nor in `aria-label`, `placeholder`, `title` or `alt`, nor on React Native in `accessibilityLabel` or `accessibilityHint`. It goes in `src/app/locales/en/` and through `t()`.
+On vite, next and react-native, no text the user can read is written in JSX, nor in `aria-label`, `placeholder`, `title` or `alt`, nor on React Native in `accessibilityLabel` or `accessibilityHint`. It goes in `locales/en/` and through `t()`.
 
 Checked by [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next), then by `i18next-cli`, which fails on a missing or an unused key.
 

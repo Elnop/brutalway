@@ -95,6 +95,7 @@
     ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1",
+      "^@locales/(.*)$": "<rootDir>/locales/$1",
       "^@test-utils/(.*)$": "<rootDir>/test-utils/$1"
     }
   },

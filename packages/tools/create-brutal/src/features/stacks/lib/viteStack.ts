@@ -37,7 +37,7 @@ const I18N_README = `The example comes in English and French. The buttons in the
 
 ## Add a language
 
-To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
 
 const REACT_COMPILER_PLUGINS = `const reactCompiler =
   process.env['VITEST'] === undefined ? [babel({ presets: [reactCompilerPreset()] })] : [];
@@ -57,7 +57,7 @@ const ANALYTICS_POSTHOG_README = `## Analytics
 const APP_OPENED: FileEdit[] = [
   {
     file: 'src/main.tsx',
-    after: "import { createI18n } from '@/app/createI18n.ts';\n",
+    after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
     insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
   },
   {
@@ -200,7 +200,7 @@ export const viteStack: Stack = {
           ...I18N_LOCALE_EDITS,
           {
             file: 'src/main.tsx',
-            after: "import { createI18n } from '@/app/createI18n.ts';\n",
+            after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
             insert:
               "import { followLanguage, preferredLanguage } from '@/features/language-switch/languageStorage.ts';\n",
           },
@@ -223,7 +223,7 @@ export const viteStack: Stack = {
           {
             file: 'docs/guides/translations.md',
             replace:
-              '## Add a language\n\nTo add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+              '## Add a language\n\nTo add a language, add its folder next to `locales/en/`, import its files in `src/features/i18n/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
             with: I18N_README,
           },
         ],

@@ -25,7 +25,7 @@ const I18N_README = `The example comes in English and French. The buttons in the
 
 ## Add a language
 
-To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`src/app/locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
 
 const REQUEST_LANGUAGE_IMPORT =
   "import { requestLanguage } from '@/features/language-switch/lib/requestLanguage.ts';\n";
@@ -107,7 +107,7 @@ export const nextStack: Stack = {
           },
           {
             file: 'src/app/layout.tsx',
-            after: "import { I18nProvider } from '@/app/I18nProvider.tsx';\n",
+            after: "import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';\n",
             insert: REQUEST_LANGUAGE_IMPORT,
           },
           {
@@ -128,7 +128,7 @@ export const nextStack: Stack = {
           },
           {
             file: 'src/app/page.tsx',
-            after: "import { createI18n } from '@/app/createI18n.ts';\n",
+            after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
             insert: `${REQUEST_LANGUAGE_IMPORT}import { LanguageSwitchContainer } from '@/features/language-switch/components/LanguageSwitchContainer.tsx';\n`,
           },
           {
@@ -151,13 +151,13 @@ export const nextStack: Stack = {
           {
             file: 'docs/guides/translations.md',
             replace:
-              '`src/app/I18nProvider.tsx` hands an instance to the client components through `useTranslation`, and the server components (`src/app/page.tsx`, the metadata in `src/app/layout.tsx`) call `createI18n().getFixedT()` themselves, since a server component cannot use a hook.',
-            with: '`src/app/I18nProvider.tsx` hands an instance in the language of the request to the client components through `useTranslation`, and the server components (`src/app/page.tsx`, the metadata in `src/app/layout.tsx`) call `createI18n(await requestLanguage()).getFixedT()` themselves, since a server component cannot use a hook.',
+              '`src/features/i18n/I18nProvider.tsx` hands an instance to the client components through `useTranslation`, and the server components (`src/app/page.tsx`, the metadata in `src/app/layout.tsx`) call `createI18n().getFixedT()` themselves, since a server component cannot use a hook.',
+            with: '`src/features/i18n/I18nProvider.tsx` hands an instance in the language of the request to the client components through `useTranslation`, and the server components (`src/app/page.tsx`, the metadata in `src/app/layout.tsx`) call `createI18n(await requestLanguage()).getFixedT()` themselves, since a server component cannot use a hook.',
           },
           {
             file: 'docs/guides/translations.md',
             replace:
-              '## Add a language\n\nTo add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+              '## Add a language\n\nTo add a language, add its folder next to `locales/en/`, import its files in `src/features/i18n/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
             with: I18N_README,
           },
         ],
@@ -169,6 +169,10 @@ export const nextStack: Stack = {
         edits: [{ file: 'docs/concepts/architecture.md', dropLines: 'like in template-vite.' }],
       },
       ...FRONTEND_TEST_SWITCHES,
+      {
+        when: { 'component-tests': false, example: false },
+        remove: ['src/features/i18n/I18nProvider.test.tsx'],
+      },
       {
         when: { e2e: false },
         edits: [

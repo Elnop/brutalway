@@ -6,6 +6,9 @@ import { securityHeaders } from './securityHeaders.ts';
 export default defineConfig({
   plugins: [react(), securityHeaders()],
   resolve: {
-    alias: [{ find: /^@\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],
+    alias: [
+      { find: /^@\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) },
+      { find: /^@locales\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) },
+    ],
   },
 });

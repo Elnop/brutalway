@@ -121,7 +121,7 @@ npm run lint
 error i18next(no-literal-string): disallow literal string: <p className="todo-stats-chip">{progress}% done</p>
 ```
 
-Every text a user reads goes through i18next, even in a project with one language. Add the message to `src/app/locales/en/todoStats.json`:
+Every text a user reads goes through i18next, even in a project with one language. Add the message to `locales/en/todoStats.json`:
 
 ```json
 "progress": "{{percent}}% done"

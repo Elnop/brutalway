@@ -3,7 +3,8 @@
   "compilerOptions": {
     "types": ["node"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@locales/*": ["./locales/*"]
     }
   },
   "include": ["src", "node_modules/.cache/i18next"],

@@ -270,12 +270,12 @@ Enforced by \`@brutalway/oxlint-config-tanstack-query\` (keys, cache windows), \
 
 export const I18N_LOCALE_EDITS: FileEdit[] = [
   {
-    file: 'src/app/locales/en/app.json',
+    file: 'locales/en/app.json',
     after: '{\n',
     insert: '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n',
   },
   {
-    file: 'src/app/createI18n.ts',
+    file: 'src/features/i18n/createI18n.ts',
     replace: '      en: {',
     with: '      fr: FRENCH,\n      en: {',
   },
@@ -376,8 +376,8 @@ export const FRONTEND_SKELETON: StackChange[] = [
       'src/shared-features/todos',
       'src/shared/normalizeTitle.ts',
       'src/shared/normalizeTitle.test.ts',
-      'src/app/locales/en/todoList.json',
-      'src/app/locales/en/todoStats.json',
+      'locales/en/todoList.json',
+      'locales/en/todoStats.json',
     ],
     edits: [
       {
@@ -530,8 +530,8 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
       {
         file: '{{aliasFile}}',
         replace:
-          "alias: [{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],",
-        with: "alias: [\n      { find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) },\n      {\n        find: /^@third-party\\//u,\n        replacement: fileURLToPath(new URL('./third-party/', import.meta.url)),\n      },\n    ],",
+          "      { find: /^@locales\\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) },\n    ],",
+        with: "      { find: /^@locales\\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) },\n      {\n        find: /^@third-party\\//u,\n        replacement: fileURLToPath(new URL('./third-party/', import.meta.url)),\n      },\n    ],",
       },
       {
         file: 'tsconfig.json',
@@ -770,7 +770,7 @@ export const FRONTEND_FORMS_EXAMPLE: StackChange[] = [
         insert: "\nexport const TITLE_ERRORS = ['blankTitle', 'longTitle'] as const;\n",
       },
       {
-        file: 'src/app/locales/en/todoList.json',
+        file: 'locales/en/todoList.json',
         replace: '"blankTitle": "The title is blank"',
         with: '"blankTitle": "The title is blank",\n    "longTitle": "The title is 200 characters at most"',
       },
@@ -784,13 +784,13 @@ export const FRONTEND_I18N_LOCALES: StackChange[] = [
     overlay: 'i18n-example',
     edits: [
       {
-        file: 'src/app/createI18n.ts',
-        after: "import todoStats from '@/app/locales/en/todoStats.json';\n",
+        file: 'src/features/i18n/createI18n.ts',
+        after: "import todoStats from '@locales/en/todoStats.json';\n",
         insert:
-          "import frApp from '@/app/locales/fr/app.json';\nimport frTodoList from '@/app/locales/fr/todoList.json';\nimport frTodoStats from '@/app/locales/fr/todoStats.json';\n",
+          "import frApp from '@locales/fr/app.json';\nimport frTodoList from '@locales/fr/todoList.json';\nimport frTodoStats from '@locales/fr/todoStats.json';\n",
       },
       {
-        file: 'src/app/createI18n.ts',
+        file: 'src/features/i18n/createI18n.ts',
         replace: 'fr: FRENCH,',
         with: 'fr: { app: frApp, todoList: frTodoList, todoStats: frTodoStats },',
       },
@@ -801,11 +801,15 @@ export const FRONTEND_I18N_LOCALES: StackChange[] = [
     overlay: 'i18n-skeleton',
     edits: [
       {
-        file: 'src/app/createI18n.ts',
-        after: "import app from '@/app/locales/en/app.json';\n",
-        insert: "import frApp from '@/app/locales/fr/app.json';\n",
+        file: 'src/features/i18n/createI18n.ts',
+        after: "import app from '@locales/en/app.json';\n",
+        insert: "import frApp from '@locales/fr/app.json';\n",
       },
-      { file: 'src/app/createI18n.ts', replace: 'fr: FRENCH,', with: 'fr: { app: frApp },' },
+      {
+        file: 'src/features/i18n/createI18n.ts',
+        replace: 'fr: FRENCH,',
+        with: 'fr: { app: frApp },',
+      },
     ],
   },
 ];
@@ -832,7 +836,7 @@ export const FRONTEND_I18N_FORMS: StackChange[] = [
     when: { i18n: true, example: true, forms: true },
     edits: [
       {
-        file: 'src/app/locales/fr/todoList.json',
+        file: 'locales/fr/todoList.json',
         replace: '"blankTitle": "Le titre est vide"',
         with: '"blankTitle": "Le titre est vide",\n    "longTitle": "Le titre fait au plus 200 caractères"',
       },

@@ -8,15 +8,7 @@
     "web": {
       "output": "single"
     },
-    "plugins": [
-      [
-        "expo-router",
-        {
-          "root": "src/app/screens"
-        }
-      ],
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-font"],
     "updates": {
       "enabled": false
     },

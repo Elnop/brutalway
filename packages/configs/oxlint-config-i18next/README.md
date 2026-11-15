@@ -22,7 +22,7 @@ export default defineConfig({
 
 The message of the plugin only says "disallow literal string". The fix is always the same:
 
-1. Add the text to the JSON of the namespace in English, `src/app/locales/en/<namespace>.json`.
+1. Add the text to the JSON of the namespace in English, `locales/en/<namespace>.json`.
 2. Render `t('key')`, or `t('key', { name })` for a string with a value in it, which the JSON writes `Remove {{name}}`.
 
 ## Rules

@@ -6,7 +6,7 @@ Everything below runs locally, in the pre-commit hook and in CI. None of it need
 
 `tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/base.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`, and add what React Native needs: the `react-native` export condition and the `@/` alias. The root `tsconfig.json` repeats the alias, because Metro, the bundler of Expo, reads it from there, and extends `expo/tsconfig.base`, which Expo CLI would otherwise add itself on each start.
 
-Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of `src/app/locales/en/` into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
+Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of `locales/en/` into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
 
 ## Lint
 
@@ -14,10 +14,10 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
 - no relative imports: `@/` in `src/`, `@test-utils/` in `test-utils/`. Root config files and `scripts/` are the only exceptions. `scripts/` runs in Node on your machine, so it may also print to the console and call `fetch`
-- no `index.ts` outside `src/app/screens/`, where Expo Router needs `index.tsx` for the first screen, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
+- no `index.ts` outside `src/app/`, where Expo Router needs `index.tsx` for the first screen, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
 - a file with a single export is named after it
-- no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `.d.ts`, and the route files of `src/app/screens/`): each module is imported under the name it exports
+- no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `.d.ts`, and the route files of `src/app/`): each module is imported under the name it exports
 - `xStore.ts` exports only `xStore` and `xActions`
 - a component types its props with a named `XProps` type, and callback props are named `onX`
 - no orchestrator (`XContainer`, `XLayout`, `XPage`) under `shared-features/`: the components that read shared state belong to a feature
@@ -26,7 +26,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - a function takes 4 parameters at most, and declares 5 local variables at most, each name of a destructuring counted. Tests have no variable limit
 - a file declares 5 top-level functions at most, exported or not: the helpers move into files of their own
-- no visible text in JSX, in `aria-label`, `accessibilityLabel`, `accessibilityHint`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `src/app/locales/en/` and through `t()`. The message only says "disallow literal string"
+- no visible text in JSX, in `aria-label`, `accessibilityLabel`, `accessibilityHint`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `locales/en/` and through `t()`. The message only says "disallow literal string"
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives
 
 ## Styles
@@ -79,7 +79,7 @@ alint checks that:
 - `styles/`, `types/` and `configs/` only hold what their name says
 - every dependency in `package.json` is pinned to an exact version
 
-The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/screens/index.tsx`.
+The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/index.tsx`.
 
 knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name. `app.json` turns off `updates`, since the template does not set up EAS Update: knip would otherwise ask for `expo-updates`. `npm run check` runs it a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the app never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 

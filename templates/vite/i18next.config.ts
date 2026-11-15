@@ -5,11 +5,11 @@ export default defineConfig({
   extract: {
     input: ['src/**/*.{ts,tsx}'],
     ignore: ['src/**/*.test.{ts,tsx}'],
-    output: 'src/app/locales/{{language}}/{{namespace}}.json',
+    output: 'locales/{{language}}/{{namespace}}.json',
     defaultNS: 'app',
   },
   types: {
-    input: ['src/app/locales/en/*.json'],
+    input: ['locales/en/*.json'],
     output: 'node_modules/.cache/i18next/i18next.d.ts',
     resourcesFile: 'node_modules/.cache/i18next/resources.d.ts',
   },

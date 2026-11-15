@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitch } from '@/features/language-switch/components/LanguageSwitch.tsx';
-import type { Language } from '@/features/language-switch/LanguagesTypes.ts';
+import type { Language } from '@/shared-features/language/LanguagesTypes.ts';
 
 export function LanguageSwitchContainer() {
   const { i18n } = useTranslation();

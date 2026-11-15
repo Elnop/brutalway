@@ -48,7 +48,7 @@ A combination from the last column stops the CLI before anything is written, wit
 
 `example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/App.tsx` only shows the project name, which is also the title of the page, and only the `app` namespace of the messages remains.
 
-Every vite project goes through i18next, whatever its options: the texts are in `src/app/locales/en/` and the components call `t()`.
+Every vite project goes through i18next, whatever its options: the texts are in `locales/en/` and the components call `t()`.
 
 ## zustand
 
@@ -87,7 +87,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## i18n
 
-It adds French next to English: a `fr/` folder beside `src/app/locales/en/`, a `language-switch` feature with English and Français buttons in the header, and the choice saved in `localStorage`. `<html lang>` and the page title follow it, and `i18next-cli status` fails when French misses a key. With `e2e` and the example, `language.spec.ts` in `e2e/` runs axe in French.
+It adds French next to English: a `fr/` folder beside `locales/en/`, a `language-switch` feature with English and Français buttons in the header, and the choice saved in `localStorage`. `<html lang>` and the page title follow it, and `i18next-cli status` fails when French misses a key. With `e2e` and the example, `language.spec.ts` in `e2e/` runs axe in French.
 
 ## react-compiler
 

@@ -61,12 +61,12 @@ function analyticsClientPath(file: string): FileEdit {
 
 const APP_OPENED: FileEdit[] = [
   {
-    file: 'src/app/screens/_layout.tsx',
+    file: 'src/app/_layout.tsx',
     before: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
     insert: "import { useAppOpened } from '@/features/analytics/useAppOpened.ts';\n",
   },
   {
-    file: 'src/app/screens/_layout.tsx',
+    file: 'src/app/_layout.tsx',
     after: 'export default function RootLayout() {\n',
     insert: '  useAppOpened();\n',
   },
@@ -185,10 +185,6 @@ export const reactNativeStack: Stack = {
         edits: [JEST_WITHOUT_TESTS],
       },
       {
-        when: { example: false, 'component-tests': true, i18n: false },
-        edits: [JEST_WITHOUT_TESTS],
-      },
-      {
         when: { example: false, i18n: false, 'component-tests': true },
         remove: ['src/shared-features/theme/Button.test.tsx'],
       },
@@ -251,16 +247,16 @@ export const reactNativeStack: Stack = {
         when: { 'server-state': true },
         edits: [
           {
-            file: 'src/app/screens/_layout.tsx',
-            before: "import { I18nProvider } from '@/app/I18nProvider.tsx';\n",
+            file: 'src/app/_layout.tsx',
+            before: "import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';\n",
             insert: "import { QueryClientProvider } from '@tanstack/react-query';\n",
           },
           {
-            file: 'src/app/screens/_layout.tsx',
+            file: 'src/app/_layout.tsx',
             after: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
             insert: "import { queryClient } from '@/features/query-client/queryClient.ts';\n",
           },
-          { file: 'src/app/screens/_layout.tsx', replace: PLAIN_LAYOUT, with: SERVER_STATE_LAYOUT },
+          { file: 'src/app/_layout.tsx', replace: PLAIN_LAYOUT, with: SERVER_STATE_LAYOUT },
         ],
       },
       {
@@ -311,20 +307,20 @@ export const reactNativeStack: Stack = {
         edits: [
           ...I18N_LOCALE_EDITS,
           {
-            file: 'src/app/screens/index.tsx',
+            file: 'src/app/index.tsx',
             before: "import { PageShell } from '@/features/page-shell/PageShell.tsx';\n",
             insert:
               "import { LanguageSwitchContainer } from '@/features/language-switch/components/LanguageSwitchContainer.tsx';\n",
           },
           {
-            file: 'src/app/screens/index.tsx',
+            file: 'src/app/index.tsx',
             replace: "<PageShell title={t('title')}",
             with: "<PageShell actions={<LanguageSwitchContainer />} title={t('title')}",
           },
           {
             file: 'docs/guides/translations.md',
             replace:
-              '## Add a language\n\nTo add a language, add its folder next to `src/app/locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+              '## Add a language\n\nTo add a language, add its folder next to `locales/en/`, import its files in `src/features/i18n/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
             with: I18N_README,
           },
         ],

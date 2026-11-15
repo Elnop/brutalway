@@ -10,7 +10,7 @@ src/
 
 Each layer only imports the layers below it. No slice name appears in two layers.
 
-`src/app/` is both the top layer and the folder Next.js reads routes from. Its route files (`layout.tsx`, `page.tsx`, and later `loading.tsx` or `error.tsx`) are the orchestrators of the app: they are server components and only lay out the features. Next to them sit `src/app/I18nProvider.tsx`, `src/app/createI18n.ts`, `src/app/globals.css`, `src/app/icon.svg` and the messages. `src/proxy.ts` sits at the root of `src/`, where Next.js looks for it.
+`src/app/` is both the top layer and the folder Next.js reads routes from. Its route files (`layout.tsx`, `page.tsx`, and later `loading.tsx` or `error.tsx`) are the orchestrators of the app: they are server components and only lay out the features. `src/app/` holds only what Next.js reads, plus `globals.css`, which `layout.tsx` imports: the i18n setup is the `src/features/i18n/` feature, and the messages are data, in `locales/` at the root of the project, imported through the `@locales/*` alias. `src/proxy.ts` sits at the root of `src/`, where Next.js looks for it.
 
 A feature or a shared feature that grows holds sub-features in `features/<y>/`, the business code several of them share in `shared-features/<y>/` and the code with no domain in `shared/`, next to its kind folders. Each of them can do the same, down to ten levels. check-tree rejects any other folder name there, and in `src/shared/`, which holds kind folders only (`lib/`, `types/`, `configs/`...).
 

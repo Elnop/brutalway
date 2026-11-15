@@ -6,7 +6,7 @@ import '@fontsource/space-grotesk/400.css';
 import '@fontsource/space-grotesk/700.css';
 import '@/app/globals.css';
 import { App } from '@/app/App.tsx';
-import { createI18n } from '@/app/createI18n.ts';
+import { createI18n } from '@/features/i18n/createI18n.ts';
 import { queryClient } from '@/features/query-client/queryClient.ts';
 
 const i18n = createI18n();
