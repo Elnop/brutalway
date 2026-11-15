@@ -29,10 +29,10 @@ When a rule fires:
 ## Rules
 
 - every rule of the `nextjs` plugin of oxlint, as errors: `<img>` instead of `next/image`, `<head>`, sync scripts, Google Fonts without `display`...
-- `'use client'` only in an orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`), a provider (`XProvider.tsx`) or an `error.tsx` of `app/`, and never under `shared/` or `presenters/`
+- `'use client'` only in an orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`), a provider (`XProvider.tsx`) or a file of `src/app/`, where Next.js decides (it asks for it on `error.tsx` and `global-error.tsx`), and never under `shared/` or `presenters/`
 - a `'use client'` file imports no `xClient.ts`, except `analyticsClient.ts`, since events happen in the browser
 - a server action lives in a `.ts` file that starts with `'use server'`, exports one async function and is named after it (`addTodo` in `addTodo.ts`). `'use server'` inside a function body is reported.
-- the route files of `app/` (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `template.tsx`, `default.tsx`...) may `export default`, and may export `generateMetadata`, `metadata`, `revalidate` and the other route segment options next to the component. `not-found.tsx`, `global-error.tsx`, `global-not-found.tsx` and `instrumentation-client.ts` keep their kebab-case names, and `route.ts` may export `GET`, `POST`... `instrumentation.ts` and `instrumentation-client.ts` export `register`, `onRequestError` or `onRouterTransitionStart` under their own name, since Next.js imposes both names
+- the files Next.js names, everything under `src/app/` and the files at the root of `src/` (`proxy.ts`, `instrumentation.ts`, `instrumentation-client.ts`, `mdx-components.tsx`), are left out of the rules on file names, exports and props: Next.js picks the file name, the default or named exports (`GET`, `generateMetadata`, `size`, `register`, `useMDXComponents`...) and the props (`params`, `error`, `reset`). The other rules still apply to them.
 - no relative imports: import through the aliases of `tsconfig.json`
 - side effect imports allowed for `.css` files only
 - `import/default`, `typescript/no-non-null-assertion` and `unicorn/prefer-add-event-listener` off
@@ -41,3 +41,5 @@ When a rule fires:
 ## Why
 
 A presenter is a function of its props, whether it runs on the server or in the browser. Keeping `'use client'` on the orchestrators means the client boundary sits where state is read, and a reader finds it from the file name. A server component can call an API client and hand the result down, which saves a request from the browser.
+
+The rules on names say how we name our own files: one export, named like the file, constants in an `XConfig.ts`. Next.js names the files of `src/app/` and of the root of `src/` itself, so those rules have nothing to say there. Leaving the whole folder out, instead of listing the files Next.js knows, means a new convention in a Next.js release needs no change here. The application code lives in `features/`, `shared-features/` and `shared/`, where the rules apply.

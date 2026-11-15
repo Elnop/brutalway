@@ -1,11 +1,12 @@
 import type { OxlintOverride } from 'oxlint';
+import { ROUTER_FILES } from '#src/shared/RouterFilesConfig.ts';
 
 const USE_CLIENT = 'ExpressionStatement[directive="use client"]';
 
 const USE_CLIENT_PLACEMENT = {
   selector: `Program > ${USE_CLIENT}`,
   message:
-    "'use client' goes on an orchestrator (XContainer, XLayout, XPage), a provider (XProvider) or an error.tsx: a presenter, a hook or a shared/ file becomes client code through the orchestrator that renders it.",
+    "'use client' goes on an orchestrator (XContainer, XLayout, XPage), a provider (XProvider) or a file of app/, where Next.js decides: a presenter, a hook or a shared/ file becomes client code through the orchestrator that renders it.",
 };
 
 const CLIENT_READS_API = {
@@ -19,8 +20,7 @@ const CLIENT_FILES = [
   '**/*Layout.tsx',
   '**/*Page.tsx',
   '**/*Provider.tsx',
-  '**/app/**/error.tsx',
-  '**/app/**/global-error.tsx',
+  ...ROUTER_FILES,
 ];
 
 export const clientBoundaryOverrides: OxlintOverride[] = [

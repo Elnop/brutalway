@@ -6,7 +6,7 @@ import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
 import { clientBoundaryOverrides } from '#src/features/client-boundary/ClientBoundaryConfig.ts';
 import { nextPluginRules } from '#src/features/next-plugin/NextPluginConfig.ts';
-import { routeFilesOverrides } from '#src/features/route-files/RouteFilesConfig.ts';
+import { routerFilesOverrides } from '#src/features/router-files/RouterFilesConfig.ts';
 import { serverActionsOverrides } from '#src/features/server-actions/ServerActionsConfig.ts';
 
 export const nextConfig: OxlintConfig = defineConfig({
@@ -44,18 +44,10 @@ export const nextConfig: OxlintConfig = defineConfig({
   overrides: [
     ...clientBoundaryOverrides,
     ...serverActionsOverrides,
-    ...routeFilesOverrides,
+    ...routerFilesOverrides,
     {
       files: ['e2e/**', '**/*.config.ts', '**/proxy.ts', '**/instrumentation.ts'],
       env: { node: true },
-    },
-    {
-      files: ['**/instrumentation.ts', '**/instrumentation-client.ts'],
-      rules: { 'file-named-after-export/file-named-after-export': 'off' },
-    },
-    {
-      files: ['**/instrumentation-client.ts'],
-      rules: { 'unicorn/filename-case': 'off' },
     },
   ],
 });
