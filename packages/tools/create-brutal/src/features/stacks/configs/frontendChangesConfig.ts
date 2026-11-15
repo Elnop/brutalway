@@ -659,8 +659,8 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
       },
       {
         file: '.claude/settings.json',
-        replace: 'brutal-agent-hook --tree src"',
-        with: 'brutal-agent-hook --tree src --vendored third-party"',
+        replace: 'brutal-agent-hook --tree src',
+        with: 'brutal-agent-hook --tree src --vendored third-party',
       },
       {
         file: 'docs/guides/work-with-an-agent.md',
