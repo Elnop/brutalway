@@ -1,3 +1,4 @@
+import { dirname, normalize } from 'node:path';
 import { SLICE, TEST_CODE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import { consumerSlots } from '#src/features/shared-consumers/lib/consumerSlots.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
@@ -5,6 +6,11 @@ import type { ImportedModule } from '#src/features/shared-consumers/SharedConsum
 function ownerOf(path: string): string | undefined {
   const index = path.lastIndexOf('/shared/');
   return index === -1 ? undefined : path.slice(0, index);
+}
+
+function fromParentOf(root: string): (path: string) => string {
+  const parent = dirname(root);
+  return (path) => (parent === '.' ? path : path.slice(parent.length + 1));
 }
 
 function violation(path: string, owner: string, slot: string): string {
@@ -15,9 +21,11 @@ function violation(path: string, owner: string, slot: string): string {
 }
 
 export function sharedConsumerViolations(
-  root: string,
+  checkedFolder: string,
   modules: readonly ImportedModule[],
 ): string[] {
+  const root = normalize(checkedFolder).replace(/\/$/u, '');
+  const shown = fromParentOf(root);
   const slots = consumerSlots(modules);
   return modules.flatMap(({ source }) => {
     const owner = ownerOf(source);
@@ -25,6 +33,6 @@ export function sharedConsumerViolations(
     const [slot, ...others] = slots(source, owner);
     if (slot === undefined || others.length > 0) return [];
     if (owner === root && !SLICE.test(slot.slice(root.length + 1))) return [];
-    return [violation(source, owner, slot)];
+    return [violation(shown(source), shown(owner), shown(slot))];
   });
 }

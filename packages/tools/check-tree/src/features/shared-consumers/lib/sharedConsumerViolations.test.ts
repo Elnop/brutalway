@@ -91,4 +91,13 @@ describe('sharedConsumerViolations', () => {
       'src/shared/lib/slug.ts is only used by src/features/a: move it into src/features/a',
     ]);
   });
+
+  it('a nested checked folder gives paths from its parent, like the folder checks', () => {
+    const modules = graph({
+      'packages/ws/src/features/a/A.tsx': ['packages/ws/src/shared/lib/format.ts'],
+    });
+    assert.deepEqual(sharedConsumerViolations('./packages/ws/src/', modules), [
+      'src/shared/lib/format.ts is only used by src/features/a: move it into src/features/a',
+    ]);
+  });
 });
