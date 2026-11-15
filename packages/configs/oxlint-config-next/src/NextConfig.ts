@@ -50,6 +50,10 @@ export const nextConfig: OxlintConfig = defineConfig({
       env: { node: true },
     },
     {
+      files: ['**/instrumentation.ts', '**/instrumentation-client.ts'],
+      rules: { 'file-named-after-export/file-named-after-export': 'off' },
+    },
+    {
       files: ['**/instrumentation-client.ts'],
       rules: { 'unicorn/filename-case': 'off' },
     },
