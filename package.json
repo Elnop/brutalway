@@ -18,9 +18,9 @@
     "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
     "packages:changeset": "npm run changeset --prefix packages",
     "version": "npm run packages:version && npm run templates:version",
-    "packages:version": "npm run version --prefix packages && node scripts/eachPackage.ts install --package-lock-only --ignore-scripts",
+    "packages:version": "node scripts/versionPending.ts packages && node scripts/eachPackage.ts install --package-lock-only --ignore-scripts",
     "templates:changeset": "npm run changeset --prefix templates",
-    "templates:version": "npm run version --prefix templates",
+    "templates:version": "node scripts/versionPending.ts templates",
     "release": "npm run build && npm run check && npm run release --prefix packages && npm run tag --prefix templates && git push --follow-tags && node scripts/createReleases.ts"
   },
   "devDependencies": {
