@@ -42,9 +42,8 @@ With each change:
 To release:
 
 1. Commit the template changes first: the CLI records the last commit that changed each template when it is built.
-2. `npm run version` bumps the versions of the packages named in the changesets, writes their changelogs and refreshes the lockfiles. The packages that depend on them keep their ranges, and get a bump only when someone raises it.
-3. `npm run templates:version` bumps the template versions and writes their `CHANGELOG.md`.
-4. `npm run release` builds, checks, publishes what changed, tags the templates as `template-vite@x.y.z` and so on, and creates every GitHub release.
+2. `npm run version` bumps the versions named in the changesets of both setups and writes their changelogs. It runs `npm run packages:version`, which bumps the packages and refreshes the lockfiles, then `npm run templates:version`, which bumps the templates and writes their `CHANGELOG.md`. Either one can run alone. The packages that depend on a bumped package keep their ranges, and get a bump only when someone raises it.
+3. `npm run release` builds, checks, publishes what changed, tags the templates as `template-vite@x.y.z` and so on, and creates every GitHub release.
 
 The site shows each template changelog on the template's page.
 
