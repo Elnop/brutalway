@@ -1,6 +1,6 @@
 # Changesets
 
-Each change to a published package comes with a changeset: run `npm run changeset` from the root, pick the packages and the bump, and describe the change. `npm run version` applies the pending changesets to the versions and changelogs, and `npm run release` publishes.
+Each change to a published package comes with a changeset: run `npm run packages:changeset` from the root, pick the packages and the bump, and describe the change. `npm run version` applies the pending changesets to the versions and changelogs, and `npm run release` publishes.
 
 `packages/lerna.json` lists the package folders for changesets, since they are not npm workspaces. `bumpVersionsWithWorkspaceProtocolOnly` keeps changesets from touching the ranges between packages: each package depends on the others through npm and raises its ranges itself.
 

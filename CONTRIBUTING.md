@@ -36,7 +36,7 @@ Versions are managed with [changesets](https://github.com/changesets/changesets)
 
 With each change:
 
-- to a published package, add a changeset with `npm run changeset`
+- to a published package, add a changeset with `npm run packages:changeset`
 - to a template, when it matters to someone starting a project, add one with `npm run templates:changeset`
 
 To release:

@@ -16,7 +16,7 @@
     "check": "node scripts/check.ts",
     "test": "node scripts/eachPackage.ts test --if-present && node --test 'scripts/**/*.test.ts'",
     "matrix": "node packages/tools/create-brutal/scripts/runMatrix.ts",
-    "changeset": "npm run changeset --prefix packages",
+    "packages:changeset": "npm run changeset --prefix packages",
     "version": "npm run packages:version && npm run templates:version",
     "packages:version": "npm run version --prefix packages && node scripts/eachPackage.ts install --package-lock-only --ignore-scripts",
     "templates:changeset": "npm run changeset --prefix templates",
