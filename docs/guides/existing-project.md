@@ -40,7 +40,7 @@ npx check-tree src
 
 ## 3. Layers
 
-[`dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) expects `src/` to be split into `app/`, `features/`, `shared-features/` and `shared/`. If your project is laid out another way, this is the step that asks the most work: move the code first, then turn the check on.
+[`dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) expects `src/` to be split into `app/`, `features/` and `shared/`, with one folder per slice in `shared/`. If your project is laid out another way, this is the step that asks the most work: move the code first, then turn the check on.
 
 ```sh
 npm install --save-dev @brutalway/dependency-cruiser-config dependency-cruiser @swc/core

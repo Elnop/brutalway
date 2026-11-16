@@ -8,7 +8,7 @@ These templates take one position: a convention exists only if a program checks 
 
 Code depends only on what is below it, and siblings never know each other.
 
-A layer imports only the layers below it: `app`, then `features`, then `shared-features`, then `shared`. Two features never import each other, nor do two shared features or two sub-features: what they have in common moves one level down. Inside a feature the same goes for roles: a presenter imports no store, a route imports no queries. A change in a feature can only break that feature and what sits above it, so an agent working on one feature cannot break another, and deleting a feature folder breaks nothing outside it.
+A layer imports only the layers below it: `app`, then `features`, then `shared`. Two features never import each other, nor do two slices of `shared/` or two sub-features: what they have in common moves one level down. Inside a feature the same goes for roles: a presenter reaches no store, a route imports no queries. A change in a feature can only break that feature and what sits above it, so an agent working on one feature cannot break another, and deleting a feature folder breaks nothing outside it.
 
 ## Reproducible
 

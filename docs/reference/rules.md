@@ -4,25 +4,25 @@ The rules every template shares, the tool that enforces each one and the message
 
 All of them run in `npm run check`, in the pre-commit hook and in CI. The messages below come from a project created with `npm create brutal`.
 
-template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared-features/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template extends it.
+template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template extends it.
 
 ## Layers
 
-`src/` has four layers: `app`, `features`, `shared-features`, `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other, nor do two shared features. Inside a feature or a shared feature, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. check-tree rejects a folder these layers do not name, like a concept folder under `src/shared/`. It also rejects a file of a `shared/` folder that a single feature uses: it moves into that feature.
+`src/` has three layers: `app`, `features` and `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other. `src/shared/` holds one folder per slice, named after its concept, and two slices never import each other. Inside a feature or a slice, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. check-tree rejects a folder these layers do not name and a file at the root of a `shared/`. It also rejects a file of a slice that a single feature uses, which moves into that feature, and a slice whose files, tests aside, form two groups that never import each other, which splits in two.
 
 Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config).
 
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
   A feature never imports another feature: move what they share down to
-  shared-features/ (business code) or src/shared/ (no domain).
+  a slice of src/shared/, named after its concept.
 ```
 
 The templates run it with `--output-type err-long`, so each error comes with the comment of its rule.
 
 ## Roles
 
-On the front end, a component is an orchestrator (`XContainer`, `XLayout`, `XPage`), which reads stores and calls hooks, or a presenter, which only gets props. A presenter imports no store, and does no formatting, sorting or filtering. No orchestrator lives under `shared-features/`.
+On the front end, a component is an orchestrator (`XContainer`, `XLayout`, `XPage`), which reads stores and calls hooks, or a presenter, which only gets props. A presenter reaches no store through any chain of imports, renders no orchestrator, and does no formatting, sorting or filtering. No orchestrator lives in a `shared/`.
 
 On the API, a route calls its service, a service calls its queries, and only queries files run SQL.
 
@@ -35,7 +35,7 @@ Function declarations, `type` over `interface`, `for...of` over `forEach`, impor
 Checked by Oxlint, with [`@brutalway/oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) and the config of each stack.
 
 ```
-error eslint(no-restricted-imports): '../../shared-features/todos/useTodos.ts' import is restricted from being used by a pattern. help: Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/, @e2e/ in e2e/).
+error eslint(no-restricted-imports): '../../shared/todos/useTodos.ts' import is restricted from being used by a pattern. help: Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/, @e2e/ in e2e/).
 error no-comments(disallowComments): Comments are forbidden
 ```
 

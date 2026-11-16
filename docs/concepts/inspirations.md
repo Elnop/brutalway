@@ -58,7 +58,7 @@ Enforced by `@brutalway/eslint-plugin-file-named-after-export` and check-tree.
 
 [Feature-Sliced Design](https://feature-sliced.design/) splits a front end into layers (`app`, `pages`, `widgets`, `features`, `entities`, `shared`), each importing only the layers below it, and slices of the same layer never import each other.
 
-We take the layers and the import rules, which are the Bounded axiom. Our four layers are `app`, `features`, `shared-features` and `shared`, and they apply to the API as well as to the front end.
+We take the layers and the import rules, which are the Bounded axiom. Our three layers are `app`, `features` and `shared`, with `shared/` split into slices named after their concept, and they apply to the API as well as to the front end.
 
 We leave out three of the layers (`pages`, `widgets`, `entities`), which are hard to tell apart in a small app, and the public API of each slice, an `index.ts` that re-exports what the slice exposes. We forbid barrel files: an import points to the file that defines the export.
 
@@ -68,7 +68,7 @@ Enforced by `@brutalway/dependency-cruiser-config`.
 
 From [Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html) (2011): the folder tree should tell what the application does, not which framework it uses.
 
-We take the domain names inside the layers: `features/todo-list/`, `shared-features/todos/`. A feature reads as one unit and can be deleted as one.
+We take the domain names inside the layers: `features/todo-list/`, `shared/todos/`. A feature reads as one unit and can be deleted as one.
 
 We leave out two things. The top level of `src/` shows the layers, not the domain. And the framework stays visible in file names (`todosStore.ts`, `TodosSchemas.ts`), because a predictable name is worth more to us than hiding the framework.
 
@@ -80,7 +80,7 @@ From [Jimmy Bogard](https://www.jimmybogard.com/vertical-slice-architecture/): g
 
 We take the cohesion of a feature: its routes, service, components and styles sit together.
 
-We leave out one handler per request and the mediator that dispatches them. Shared business code goes to `shared-features/` instead of being duplicated between slices.
+We leave out one handler per request and the mediator that dispatches them. Shared business code goes to a slice of `shared/` instead of being duplicated between slices.
 
 Enforced by `@brutalway/dependency-cruiser-config`.
 

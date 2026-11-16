@@ -41,8 +41,8 @@ src/features/todo-stats/
 The percentage needs a hook. Hooks go in `hooks/`, so create `src/features/todo-stats/hooks/useTodoProgress.ts`:
 
 ```ts
-import { selectCompletedCount } from '@/shared-features/todos/todosSelectors.ts';
-import { useTodos } from '@/shared-features/todos/useTodos.ts';
+import { selectCompletedCount } from '@/shared/todos/lib/todosSelectors.ts';
+import { useTodos } from '@/shared/todos/useTodos.ts';
 
 export function useTodoProgress() {
   const total = useTodos((state) => state.todos.length);
@@ -89,10 +89,10 @@ npm run deps
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
   A feature never imports another feature: move what they share down to
-  shared-features/ (business code) or src/shared/ (no domain).
+  a slice of src/shared/, named after its concept.
 ```
 
-Two features never import each other, so that deleting one never breaks the other. What they share lives one layer down, in `src/shared-features/todos/`, which is where the first version read the tasks. Put it back.
+Two features never import each other, so that deleting one never breaks the other. What they share lives one layer down, in `src/shared/todos/`, which is where the first version read the tasks. Put it back.
 
 ## Text in the component
 

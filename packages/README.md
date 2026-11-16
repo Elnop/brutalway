@@ -74,7 +74,7 @@ The rules these plugins hold run in both Oxlint and ESLint.
 
 | Package | What it does | npm |
 |---|---|---|
-| [`@brutalway/oxlint-config-fastify`](configs/oxlint-config-fastify) | Fastify + Zod: env read in `xEnv.ts`, no `decorate`, async handlers return, schemas in `xSchemas.ts`, no route under `shared-features/` | [npm](https://www.npmjs.com/package/@brutalway/oxlint-config-fastify) |
+| [`@brutalway/oxlint-config-fastify`](configs/oxlint-config-fastify) | Fastify + Zod: env read in `xEnv.ts`, no `decorate`, async handlers return, schemas in `xSchemas.ts`, no route in a `shared/` | [npm](https://www.npmjs.com/package/@brutalway/oxlint-config-fastify) |
 
 ### TypeScript
 

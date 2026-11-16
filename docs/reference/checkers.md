@@ -27,12 +27,12 @@ A test sits next to its source, and a helper several tests share goes in `test-u
 | Stack | Config | What it adds to the TypeScript base |
 |---|---|---|
 | vite, next | [`@brutalway/oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) | the aliases `@/` and `@e2e/`, then the configs below |
-| vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX`, no orchestrator under `shared-features/`, `fetch` only in an `xClient.ts` and never in an effect |
+| vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX`, no orchestrator in a `shared/`, `fetch` only in an `xClient.ts` and never in an effect |
 | vite, next, react-native | [`@brutalway/oxlint-config-zustand`](../../packages/configs/oxlint-config-zustand) | `xStore.ts` exports only `xStore` and `xActions`, `xSelectors.ts` only `selectX` functions |
 | vite, next | [`@brutalway/oxlint-config-vitest`](../../packages/configs/oxlint-config-vitest) | `it()` inside `describe`, `toStrictEqual`, typed mocks, `toThrow` with the expected message |
 | vite, next, react-native | [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next) | visible text in JSX, `aria-label`, `placeholder`, `title`, `alt`, `accessibilityLabel`, `accessibilityHint` or a template literal |
 | react-native | `oxlint.config.ts` | the Jest rules of oxlint: `it()` inside `describe`, `toStrictEqual`, `toBe` for primitives, `toThrow` with the expected message. The routes of `src/app/` are left out of the rules on file names, exports and props, since Expo Router picks them |
-| fastify | [`@brutalway/oxlint-config-fastify`](../../packages/configs/oxlint-config-fastify) | `process.env` read only in an `xEnv.ts`, no `app.decorate`, an `async` handler returns its value, Zod schemas in an `xSchemas.ts`, no route under `shared-features/` |
+| fastify | [`@brutalway/oxlint-config-fastify`](../../packages/configs/oxlint-config-fastify) | `process.env` read only in an `xEnv.ts`, no `app.decorate`, an `async` handler returns its value, Zod schemas in an `xSchemas.ts`, no route in a `shared/` |
 | package | [`@brutalway/oxlint-config-node`](../../packages/configs/oxlint-config-node) | the alias `#src/`, `console.error` only, `fetch` only in an `xClient.ts` |
 | fastify, package | [`@brutalway/oxlint-config-node-test`](../../packages/configs/oxlint-config-node-test) | `describe` and `it` from `node:test`, `node:assert/strict` |
 
