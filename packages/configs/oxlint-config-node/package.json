@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-node",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Oxlint config for Node code in TypeScript: the TypeScript base, the #src/ alias instead of relative imports, fetch only in xClient.ts files.",
   "keywords": [
     "oxlint",
