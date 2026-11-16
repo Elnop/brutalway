@@ -2,6 +2,18 @@
 
 Every tool `npm run check` runs in a project created with `npm create brutal`, the stacks that run it and what it rejects. The pre-commit hook and CI run the same command. The details and the messages are in each template's `verifications.md`: [vite](../../templates/vite/docs/reference/verifications.md), [next](../../templates/next/docs/reference/verifications.md), [react-native](../../templates/react-native/docs/reference/verifications.md), [fastify](../../templates/fastify/docs/reference/verifications.md), [package](../../templates/package/docs/reference/verifications.md). The rules themselves, grouped by theme, are in [Common rules](rules.md).
 
+```mermaid
+flowchart LR
+  edit["Claude Code edits a file"] --> onEdit["agent-hook: Oxlint, stylelint"]
+  create["Claude Code creates a file"] --> onCreate["agent-hook: alint, check-tree"]
+  commit["git commit"] --> check["npm run check"]
+  push["push or pull request"] --> ci["CI"] --> check
+  ci --> tests["npm test, npm run build"]
+  check --> tools["Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-*, alint, knip"]
+```
+
+The agent hook only reads the file it was given, and only with the `claude-hook` option. The pre-commit hook and CI run the whole project.
+
 ## Every stack
 
 | Checker | Config | vite | next | react-native | fastify | package | What it rejects |
@@ -24,9 +36,34 @@ A test sits next to its source, and a helper several tests share goes in `test-u
 
 ## Oxlint config of each stack
 
+An arrow from a config reads "extends", an arrow from a template reads "installs".
+
+```mermaid
+flowchart BT
+  typescript["oxlint-config-typescript"]
+  react["oxlint-config-react"] --> typescript
+  zustand["oxlint-config-zustand"] --> typescript
+  node["oxlint-config-node"] --> typescript
+  vitest["oxlint-config-vitest"]
+  reactVite["oxlint-config-react-vite"] --> react & zustand & vitest
+  next["oxlint-config-next"] --> react & zustand & vitest
+  reactNative["oxlint-config-react-native"] --> react & zustand
+  fastify["oxlint-config-fastify"] --> node
+  i18next["oxlint-config-i18next"]
+  nodeTest["oxlint-config-node-test"]
+  templateVite["template-vite"] --> reactVite & i18next
+  templateNext["template-next"] --> next & i18next
+  templateReactNative["template-react-native"] --> reactNative & i18next
+  templateFastify["template-fastify"] --> fastify & nodeTest
+  templatePackage["template-package"] --> node & nodeTest
+```
+
+The options of the front-end stacks add the configs of the last table. Every template also installs dependency-cruiser-config, check-tree, alint-config and the check-doc tools.
+
 | Stack | Config | What it adds to the TypeScript base |
 |---|---|---|
-| vite, next | [`@brutalway/oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) | the aliases `@/` and `@e2e/`, then the configs below |
+| vite | [`@brutalway/oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) | the aliases `@/` and `@e2e/`, then the configs below |
+| next | [`@brutalway/oxlint-config-next`](../../packages/configs/oxlint-config-next) | the `nextjs` plugin of oxlint, where client code and server actions go, then the configs below |
 | vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX`, no orchestrator in a `shared/`, `fetch` only in an `xClient.ts` and never in an effect |
 | vite, next, react-native | [`@brutalway/oxlint-config-zustand`](../../packages/configs/oxlint-config-zustand) | `xStore.ts` exports only `xStore` and `xActions`, `xSelectors.ts` only `selectX` functions |
 | vite, next | [`@brutalway/oxlint-config-vitest`](../../packages/configs/oxlint-config-vitest) | `it()` inside `describe`, `toStrictEqual`, typed mocks, `toThrow` with the expected message |

@@ -10,6 +10,29 @@ template-react-native has no CSS, so stylelint does not run there. The colors, s
 
 `src/` has three layers: `app`, `features` and `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other. `src/shared/` holds one folder per slice, named after its concept, and two slices never import each other. Inside a feature or a slice, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. check-tree rejects a folder these layers do not name and a file at the root of a `shared/`. It also rejects a file of a slice that a single feature uses, which moves into that feature, and a slice whose files, tests aside, form two groups that never import each other, which splits in two.
 
+The folders of template-vite, as `npm create brutal` writes them. A solid arrow is an import that passes the check, a dotted one an import that fails it.
+
+```mermaid
+flowchart TB
+  app["src/app/"]
+  list["features/todo-list/"]
+  stats["features/todo-stats/"]
+  editor["todo-list/features/todo-editor/"]
+  form["todo-list/shared/title-form/"]
+  input["todo-list/shared/title-input/"]
+  todos["src/shared/todos/"]
+  app --> list
+  app --> stats
+  list --> editor
+  editor --> form
+  editor --> input
+  form --> todos
+  stats --> todos
+  stats -. another feature .-x list
+  editor -. its parent .-x list
+  form -. another slice .-x input
+```
+
 Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config).
 
 ```
@@ -25,6 +48,18 @@ The templates run it with `--output-type err-long`, so each error comes with the
 On the front end, a component is an orchestrator (`XContainer`, `XLayout`, `XPage`), which reads stores and calls hooks, or a presenter, which only gets props. A presenter reaches no store through any chain of imports, renders no orchestrator, and does no formatting, sorting or filtering. No orchestrator lives in a `shared/`.
 
 On the API, a route calls its service, a service calls its queries, and only queries files run SQL.
+
+```mermaid
+flowchart LR
+  subgraph front["Front end"]
+    orchestrator["XContainer, XLayout, XPage"] --> hook["useX"] --> store["xStore"]
+    orchestrator --> presenter["presenter"]
+    presenter -. never .-x store
+  end
+  subgraph api["API"]
+    route["route"] --> service["service"] --> queries["queries"] --> sql[("SQL")]
+  end
+```
 
 Checked by dependency-cruiser for the imports and by [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) for the components. The API rules are in the `server` config of `@brutalway/dependency-cruiser-config`.
 

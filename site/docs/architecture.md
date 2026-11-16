@@ -8,6 +8,14 @@ From [Dan Abramov](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca
 
 We take the split, under other names. Orchestrators (`XContainer`, `XLayout`, `XPage`) read stores and pass data and callbacks down. Presenters, everything else, only get props.
 
+```mermaid
+flowchart LR
+  container["XContainer"] -- reads --> hook["useX"] --> store["xStore"]
+  container -- props and callbacks --> presenter["X"]
+  presenter -. never .-x store
+  presenter -. never .-x container
+```
+
 We leave out higher-order components, which was how containers were written in 2015. Since 2019, Abramov's post says hooks make the split unnecessary. We keep it anyway: a presenter can be tested alone through its props, and an agent knows which components may touch state from the file name alone.
 
 Enforced by `@brutalway/dependency-cruiser-config` (a presenter reaches no store through any chain of imports, and imports no orchestrator) and `@brutalway/oxlint-config-react` (no orchestrator in a `shared/`).
@@ -15,5 +23,15 @@ Enforced by `@brutalway/dependency-cruiser-config` (a presenter reaches no store
 ## Sub-features
 
 From Feature-Sliced Design, extended. A feature can hold its own features in `features/<x>/features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into a slice of the parent's `shared/`, named after its concept.
+
+```mermaid
+flowchart TB
+  parent["features/landing/"] --> hero["landing/features/hero/"]
+  parent --> grid["landing/features/axiom-grid/"]
+  hero --> axioms["landing/shared/axioms/"]
+  grid --> axioms
+  hero -. a sibling .-x grid
+  hero -. its parent .-x parent
+```
 
 Enforced by `@brutalway/dependency-cruiser-config`.

@@ -68,6 +68,19 @@ mv src/features/todo-stats/hooks/useTodoProgress.ts src/features/todo-stats/
 rmdir src/features/todo-stats/hooks
 ```
 
+Before and after the move:
+
+```
+src/features/todo-stats/          src/features/todo-stats/
+  components/                       components/
+    TodoStats.tsx                     TodoStats.tsx
+    TodoStatsContainer.tsx            TodoStatsContainer.tsx
+    TodoStats.test.tsx                TodoStats.test.tsx
+  hooks/                            useTodoProgress.ts
+    useTodoProgress.ts              todo-stats.css
+  todo-stats.css
+```
+
 ## Borrowing from another feature
 
 The `todo-list` feature already has a `useTodoList` hook that returns the tasks. It is tempting to count them from there. Import it at the top of `useTodoProgress.ts`:
@@ -93,6 +106,13 @@ error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/featu
 ```
 
 Two features never import each other, so that deleting one never breaks the other. What they share lives one layer down, in `src/shared/todos/`, which is where the first version read the tasks. Put it back.
+
+```mermaid
+flowchart LR
+  stats["todo-stats/useTodoProgress.ts"] -. no-cross-feature .-x list["todo-list/useTodoList.ts"]
+  stats --> todos["src/shared/todos/useTodos.ts"]
+  list --> todos
+```
 
 ## Text in the component
 
