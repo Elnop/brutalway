@@ -1,13 +1,23 @@
 # @brutalkit/oxlint-config-fastify
 
+## 0.3.0
+
+### Minor Changes
+
+- f38543b: `@brutalway/oxlint-config-react-vite`, `-next` and `-react-native` move to `@brutalway/oxlint-config-react` `^0.5.0` and `@brutalway/oxlint-config-zustand` `^0.3.0`, and `@brutalway/oxlint-config-fastify` to `@brutalway/oxlint-config-node` `^0.3.0`. They all reach `@brutalway/oxlint-config-typescript` 0.8.0:
+
+  - `export default` is rejected, except in the files a tool loads by their default export and the files the framework names (`src/app/` on next and react-native)
+  - no orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts` in a `shared/`, at any depth, instead of under `shared-features/`
+
 ## 0.2.1
 
 ### Patch Changes
 
 - 78d304c: New package `@brutalway/oxlint-config-node`: the TypeScript base plus the `#src/` alias instead of relative imports and `fetch` only in `xClient.ts` files. `@brutalway/oxlint-config-fastify` now extends it instead of repeating those rules.
 - 0b57e92: New `server-state` option on vite, off by default: the example reads and writes its todos through TanStack Query against the routes of template-fastify. `todosClient.ts` parses each response with Zod, query keys come from `todosKeys`, cache windows from `src/shared/QueryConfig.ts`, and the zustand store only keeps the filter. `devApi.ts` answers `/api` from an in-memory list in dev and preview, or proxies it to `API_URL`.
-  
+
   `@brutalway/oxlint-config-tanstack-query` is a new package: `query-key-factory` and `named-cache-windows`, plus `exhaustive-deps` and `stable-query-client` from `@tanstack/eslint-plugin-query`. `@brutalway/oxlint-config-react` only accepts `fetch` in an `xClient.ts` and never inside an effect. The `xSchemas.ts` convention moves from the Fastify config to the TypeScript base, so the front gets it too. dependency-cruiser keeps clients, query hooks and `@tanstack/react-query` out of presenters and stores, and check-tree learns `xKeys.ts` and the `keys/` folder.
+
 - Updated dependencies [78d304c]
   - @brutalway/oxlint-config-node@0.2.0
 

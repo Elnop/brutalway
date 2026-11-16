@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-fastify",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Oxlint config for Fastify APIs with Zod: env read in one place, dependencies passed to factories, async handlers that return, Zod schemas in XSchemas.ts, no route in a shared/.",
   "keywords": [
     "oxlint",
