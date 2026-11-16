@@ -26,12 +26,16 @@ From Feature-Sliced Design, extended. A feature can hold its own features in `fe
 
 ```mermaid
 flowchart TB
-  parent["features/landing/"] --> hero["landing/features/hero/"]
-  parent --> grid["landing/features/axiom-grid/"]
-  hero --> axioms["landing/shared/axioms/"]
-  grid --> axioms
-  hero -. a sibling .-x grid
-  hero -. its parent .-x parent
+  parent["src/features/landing/"]
+  subgraph subFeatures["landing/features/"]
+    direction LR
+    hero["hero/"] -. a sibling .-x grid["axiom-grid/"]
+  end
+  subgraph slices["landing/shared/"]
+    axioms["axioms/"]
+  end
+  parent --> subFeatures
+  subFeatures --> slices
 ```
 
 Enforced by `@brutalway/dependency-cruiser-config`.

@@ -15,22 +15,30 @@ The folders of template-vite, as `npm create brutal` writes them. A solid arrow 
 ```mermaid
 flowchart TB
   app["src/app/"]
-  list["features/todo-list/"]
-  stats["features/todo-stats/"]
-  editor["todo-list/features/todo-editor/"]
-  form["todo-list/shared/title-form/"]
-  input["todo-list/shared/title-input/"]
-  todos["src/shared/todos/"]
-  app --> list
-  app --> stats
+  subgraph features["src/features/"]
+    direction LR
+    stats["todo-stats/"] -. another feature .-x list["todo-list/"]
+  end
+  subgraph shared["src/shared/"]
+    todos["todos/"]
+  end
+  app --> features
+  features --> shared
+```
+
+One level down, inside `src/features/todo-list/`:
+
+```mermaid
+flowchart TB
+  list["src/features/todo-list/"]
+  editor["features/todo-editor/"]
+  subgraph listShared["shared/"]
+    direction LR
+    form["title-form/"] -. another slice .-x input["title-input/"]
+  end
   list --> editor
-  editor --> form
-  editor --> input
-  form --> todos
-  stats --> todos
-  stats -. another feature .-x list
+  editor --> listShared
   editor -. its parent .-x list
-  form -. another slice .-x input
 ```
 
 Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config).
@@ -51,14 +59,14 @@ On the API, a route calls its service, a service calls its queries, and only que
 
 ```mermaid
 flowchart LR
-  subgraph front["Front end"]
-    orchestrator["XContainer, XLayout, XPage"] --> hook["useX"] --> store["xStore"]
-    orchestrator --> presenter["presenter"]
-    presenter -. never .-x store
-  end
-  subgraph api["API"]
-    route["route"] --> service["service"] --> queries["queries"] --> sql[("SQL")]
-  end
+  orchestrator["XContainer, XLayout, XPage"] --> hook["useX"] --> store["xStore"]
+  orchestrator --> presenter["presenter"]
+  presenter -. never .-x store
+```
+
+```mermaid
+flowchart LR
+  route["route"] --> service["service"] --> queries["queries"] --> sql[("SQL")]
 ```
 
 Checked by dependency-cruiser for the imports and by [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) for the components. The API rules are in the `server` config of `@brutalway/dependency-cruiser-config`.
