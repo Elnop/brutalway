@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@third-party/shadcn/button';
-import { TODO_FILTERS } from '@/shared-features/todos/TodosConfig.ts';
-import type { TodoFilter } from '@/shared-features/todos/TodosTypes.ts';
+import { TODO_FILTERS } from '@/shared/todos/TodosConfig.ts';
+import type { TodoFilter } from '@/shared/todos/TodosTypes.ts';
 
 type TodoFiltersProps = {
   filter: TodoFilter;

@@ -12,7 +12,7 @@ import {
   TodoFilterSchema,
   TodoPatchSchema,
   TodoSchema,
-} from '#src/shared-features/todos/TodosSchemas.ts';
+} from '#src/shared/todos/TodosSchemas.ts';
 
 type TodoApp = Parameters<FastifyPluginAsyncZod>[0];
 

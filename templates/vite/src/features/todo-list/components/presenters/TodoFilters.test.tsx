@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { TodoFilters } from '@/features/todo-list/components/presenters/TodoFilters.tsx';
-import type { TodoFilter } from '@/shared-features/todos/TodosTypes.ts';
+import type { TodoFilter } from '@/shared/todos/TodosTypes.ts';
 
 describe('TodoFilters', () => {
   it('marks the current filter and sends the one picked', async () => {

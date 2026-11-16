@@ -1,4 +1,4 @@
-import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';
+import { createTodosQueries } from '#src/shared/todos/todosQueries.ts';
 
 export function createTodoStatsService(database: Parameters<typeof createTodosQueries>[0]) {
   const todos = createTodosQueries(database);

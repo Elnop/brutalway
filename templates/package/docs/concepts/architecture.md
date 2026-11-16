@@ -6,7 +6,7 @@ The intent behind every template of the series and the general principles they b
 
 A package has a public surface: the commands of `bin` and the paths of `exports` in `package.json`. Each one is a file at the root of `src/`, named after what it is (`src/todo.ts` for the `todo` command, `src/todos.ts` for the `"."` export), and `tsdown.config.ts` builds each of them into `dist/`.
 
-We take the role that the `app` layer plays in an app: an entry point composes the features and nothing else imports it. A feature that needs code from an entry point gets it from a shared feature instead. A file at the root of `src/` is then always part of the public surface, and moving code behind it never changes what users import.
+We take the role that the `app` layer plays in an app: an entry point composes the features and nothing else imports it. A feature that needs code from an entry point gets it from a slice of `src/shared/` instead. A file at the root of `src/` is then always part of the public surface, and moving code behind it never changes what users import.
 
 We leave out the `index.ts` that re-exports the whole tree, and the `app` layer itself, which a package does not need.
 

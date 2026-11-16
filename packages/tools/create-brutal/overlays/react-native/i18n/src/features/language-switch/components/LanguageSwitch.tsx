@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { LANGUAGES } from '@/shared-features/language/LanguagesConfig.ts';
-import type { Language } from '@/shared-features/language/LanguagesTypes.ts';
-import { Button } from '@/shared-features/theme/Button.tsx';
-import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
+import { LANGUAGES } from '@/shared/language/LanguagesConfig.ts';
+import type { Language } from '@/shared/language/LanguagesTypes.ts';
+import { Button } from '@/shared/theme/Button.tsx';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 type LanguageSwitchProps = {
   current: string | undefined;

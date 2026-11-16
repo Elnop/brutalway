@@ -204,7 +204,7 @@ const REACT_COMPILER_LINT = `      {
 
 const ANALYTICS_MODULE_README = `## Analytics
 
-\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it dispatches an \`analytics\` event on \`window\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
+\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it dispatches an \`analytics\` event on \`window\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
 
 `;
 
@@ -255,14 +255,14 @@ const CHROMIUM_DOC =
   'Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.';
 
 const SERVER_STATE_LINT_DOC = `
-\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tanstack-query\`: a query key comes from an \`xKeys\` factory, \`staleTime\` and \`gcTime\` from a profile of \`src/shared/QueryConfig.ts\`, a query key lists every variable its \`queryFn\` reads, and the \`QueryClient\` is created once, outside any component. \`fetch\` is only called from an \`xClient.ts\`, never inside an effect.
+\`oxlint.config.ts\` also extends \`@brutalway/oxlint-config-tanstack-query\`: a query key comes from an \`xKeys\` factory, \`staleTime\` and \`gcTime\` from a profile of a \`QueryConfig.ts\`, a query key lists every variable its \`queryFn\` reads, and the \`QueryClient\` is created once, outside any component. \`fetch\` is only called from an \`xClient.ts\`, never inside an effect.
 `;
 
 const SERVER_STATE_ARCHITECTURE = `## Server state
 
 From bedrock: data that comes from an API and state that only the UI owns are held by two different tools. Data from the API goes through TanStack Query, UI state goes into a zustand store, and a store never holds what the API returns.
 
-The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of \`src/shared/QueryConfig.ts\`, the \`QueryClient\` lives in \`src/features/query-client/queryClient.ts\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
+The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of a \`QueryConfig.ts\` next to the code that reads them, the \`QueryClient\` lives in \`src/features/query-client/queryClient.ts\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
 
 Enforced by \`@brutalway/oxlint-config-tanstack-query\` (keys, cache windows), \`@brutalway/oxlint-config-react\` (\`fetch\` only in an \`xClient.ts\`, never in an effect) and \`@brutalway/dependency-cruiser-config\` (no client, no query hook and no \`@tanstack/react-query\` in a presenter or a store).
 
@@ -373,9 +373,7 @@ export const FRONTEND_SKELETON: StackChange[] = [
     remove: [
       'src/features/todo-list',
       'src/features/todo-stats',
-      'src/shared-features/todos',
-      'src/shared/normalizeTitle.ts',
-      'src/shared/normalizeTitle.test.ts',
+      'src/shared/todos',
       'locales/en/todoList.json',
       'locales/en/todoStats.json',
     ],
@@ -389,7 +387,7 @@ export const FRONTEND_SKELETON: StackChange[] = [
       {
         file: 'docs/reference/layout.md',
         replace:
-          'In the example, `src/shared-features/todos/` holds the tasks and the current filter, used by both `src/features/todo-list/` (add, check, rename, delete, filter) and `src/features/todo-stats/` (counters, clear done). Renaming a task is a sub-feature: `src/features/todo-list/features/todo-editor/`.\n\n',
+          'In the example, `src/shared/todos/` holds the tasks and the current filter, used by both `src/features/todo-list/` (add, check, rename, delete, filter) and `src/features/todo-stats/` (counters, clear done). Renaming a task is a sub-feature: `src/features/todo-list/features/todo-editor/`.\n\n',
         with: '',
       },
       {
@@ -413,7 +411,7 @@ export const FRONTEND_SKELETON: StackChange[] = [
       },
       {
         file: 'docs/reference/verifications.md',
-        replace: '`src/shared/normalizeTitle.test.ts` next to its source',
+        replace: '`src/shared/todos/lib/normalizeTitle.test.ts` next to its source',
         with: 'next to its source',
       },
       {
@@ -434,12 +432,12 @@ export const FRONTEND_SKELETON: StackChange[] = [
       {
         file: 'docs/concepts/architecture.md',
         replace:
-          '`src/shared-features/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
+          '`src/shared/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared/todos/lib/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared/todos/useTodos.ts`.',
         with: 'An `xStore.ts` only exports `xStore` and `xActions`, an `xSelectors.ts` only exports `selectX` functions, and components read the store through a `useX.ts` hook.',
       },
     ],
     overlay: 'skeleton',
-    keep: ['src/features', 'src/shared-features', 'src/shared'],
+    keep: ['src/features'],
   },
 ];
 
@@ -749,6 +747,17 @@ export const FRONTEND_FORMS: StackChange[] = [
   },
 ];
 
+export const FORMS_SCHEMAS_IN_TITLE_FORM: Pick<StackChange, 'overlay' | 'edits'> = {
+  overlay: 'forms-schemas',
+  edits: [
+    {
+      file: 'src/features/todo-list/shared/title-form/useTitleForm.ts',
+      replace: "'@/shared/todos/TodosSchemas.ts'",
+      with: "'@/features/todo-list/shared/title-form/TodosSchemas.ts'",
+    },
+  ],
+};
+
 export const FRONTEND_FORMS_EXAMPLE: StackChange[] = [
   {
     when: { forms: true, example: false },
@@ -765,7 +774,7 @@ export const FRONTEND_FORMS_EXAMPLE: StackChange[] = [
     overlay: 'forms-example',
     edits: [
       {
-        file: 'src/shared-features/todos/TodosConfig.ts',
+        file: 'src/shared/todos/TodosConfig.ts',
         after: "export const TODO_FILTERS = ['all', 'active', 'completed'] as const;\n",
         insert: "\nexport const TITLE_ERRORS = ['blankTitle', 'longTitle'] as const;\n",
       },
@@ -1054,8 +1063,8 @@ export const FRONTEND_E2E_AND_REPOSITORY: StackChange[] = [
       {
         file: 'docs/guides/start-your-own-app.md',
         replace:
-          ', the files in `src/shared/` and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.',
-        with: ' and the files in `src/shared/`.',
+          ' and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.',
+        with: '.',
       },
     ],
   },
@@ -1181,7 +1190,7 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
         after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
-        insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+        insert: "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n",
       },
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
@@ -1201,7 +1210,7 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
         after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
-        insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+        insert: "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n",
       },
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
@@ -1294,7 +1303,7 @@ export const FRONTEND_AGENTS: StackChange[] = [
       {
         file: 'AGENTS.md',
         before: '- No comments,',
-        insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n',
+        insert: '- Events leave the app through `src/shared/analytics/analyticsClient.ts` only.\n',
       },
     ],
   },
@@ -1304,7 +1313,7 @@ export const FRONTEND_AGENTS: StackChange[] = [
       {
         file: 'AGENTS.md',
         before: '- No comments,',
-        insert: '- Events leave the app through `src/shared/analyticsClient.ts` only.\n',
+        insert: '- Events leave the app through `src/shared/analytics/analyticsClient.ts` only.\n',
       },
     ],
   },
@@ -1404,8 +1413,9 @@ export const FRONTEND_SERVER_STATE: StackChange[] = [
       },
       {
         file: 'docs/reference/verifications.md',
-        replace: '- a presenter imports no store and no shared-feature hook\n',
-        with: '- a presenter imports no store, no shared-feature hook, no `xClient.ts` and no `@tanstack/react-query`\n- a store imports no `xClient.ts`, no `xKeys.ts` and no hook: it only holds UI state\n',
+        after: '- a presenter imports no orchestrator\n',
+        insert:
+          '- a store imports no `xClient.ts`, no `xKeys.ts` and no hook: it only holds UI state\n',
       },
       {
         file: 'docs/concepts/architecture.md',
@@ -1416,18 +1426,6 @@ export const FRONTEND_SERVER_STATE: StackChange[] = [
     addDependencies: { '@tanstack/react-query': '5.107.1' },
     addDevDependencies: { '@brutalway/oxlint-config-tanstack-query': '0.2.0' },
   },
-  {
-    when: { 'server-state': true, example: false },
-    remove: ['src/shared/QueryConfig.ts'],
-    keep: ['src/shared'],
-    edits: ['docs/reference/verifications.md', 'docs/concepts/architecture.md'].map((file) => ({
-      file,
-      replace: '`src/shared/QueryConfig.ts`',
-      with: '`src/features/query-client/QueryConfig.ts`',
-      all: true,
-    })),
-    overlay: 'server-state-skeleton',
-  },
 ];
 
 export const FRONTEND_FORMS_SERVER_STATE: StackChange[] = [
@@ -1435,34 +1433,33 @@ export const FRONTEND_FORMS_SERVER_STATE: StackChange[] = [
     when: { forms: true, example: true, 'server-state': true },
     edits: [
       {
-        file: 'src/shared-features/todos/TodosSchemas.ts',
-        after: "import { z } from 'zod';\n",
-        insert:
-          "import { normalizeTitle } from '@/shared/normalizeTitle.ts';\nimport { TITLE_ERRORS } from '@/shared-features/todos/TodosConfig.ts';\n",
+        file: 'src/shared/todos/TodosSchemas.ts',
+        replace: "import { TODO_FILTERS } from '@/shared/todos/TodosConfig.ts';\n",
+        with: "import { normalizeTitle } from '@/shared/todos/lib/normalizeTitle.ts';\nimport { TITLE_ERRORS, TODO_FILTERS } from '@/shared/todos/TodosConfig.ts';\n",
       },
       {
-        file: 'src/shared-features/todos/TodosSchemas.ts',
+        file: 'src/shared/todos/TodosSchemas.ts',
         after: 'export const ClearedSchema = z.object({ deleted: z.number().int().min(0) });\n',
         insert:
           '\nexport const TodoDraftSchema = z.object({\n  title: z\n    .string()\n    .transform(normalizeTitle)\n    .pipe(z.string().min(1, TITLE_ERRORS[0]).max(200, TITLE_ERRORS[1])),\n});\n',
       },
       {
-        file: 'src/shared-features/todos/TodosTypes.ts',
+        file: 'src/shared/todos/TodosTypes.ts',
         replace: 'import type { TodoFilterSchema, TodoSchema } from',
-        with: 'import type {\n  TodoDraftSchema,\n  TodoFilterSchema,\n  TodoSchema,\n} from',
+        with: 'import type { TodoDraftSchema, TodoFilterSchema, TodoSchema } from',
       },
       {
-        file: 'src/shared-features/todos/TodosTypes.ts',
+        file: 'src/shared/todos/TodosTypes.ts',
         after: 'export type TodoFilter = z.infer<typeof TodoFilterSchema>;\n',
         insert: '\nexport type TodoDraft = z.output<typeof TodoDraftSchema>;\n',
       },
       {
-        file: 'src/shared-features/todos/todosClient.ts',
+        file: 'src/shared/todos/todosClient.ts',
         replace: 'import type { Todo, TodoFilter, TodoUpdate }',
-        with: 'import type {\n  Todo,\n  TodoDraft,\n  TodoFilter,\n  TodoUpdate,\n}',
+        with: 'import type { Todo, TodoDraft, TodoFilter, TodoUpdate }',
       },
       {
-        file: 'src/shared-features/todos/todosClient.ts',
+        file: 'src/shared/todos/todosClient.ts',
         replace:
           "create: async (title: string) => request(TodoSchema, 'POST', '/todos', { title }),",
         with: "create: async (draft: TodoDraft) => request(TodoSchema, 'POST', '/todos', draft),",

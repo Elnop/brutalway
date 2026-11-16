@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { selectVisibleTodos } from '@/shared-features/todos/todosSelectors.ts';
-import { todosActions } from '@/shared-features/todos/todosStore.ts';
-import { useTodos } from '@/shared-features/todos/useTodos.ts';
+import { selectVisibleTodos } from '@/shared/todos/lib/todosSelectors.ts';
+import { todosActions } from '@/shared/todos/todosStore.ts';
+import { useTodos } from '@/shared/todos/useTodos.ts';
 
 export function useTodoList() {
   const allTodos = useTodos((state) => state.todos);

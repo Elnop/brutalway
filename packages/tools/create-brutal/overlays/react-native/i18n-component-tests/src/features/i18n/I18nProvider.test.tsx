@@ -2,7 +2,7 @@ import { describe, expect, it, jest } from '@jest/globals';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
 import { render, screen } from '@testing-library/react-native';
-import { createI18n } from '@/features/i18n/createI18n.ts';
+import { createI18n } from '@/features/i18n/lib/createI18n.ts';
 import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';
 
 jest.mock('expo-localization', () => ({ getLocales: () => [{ languageCode: 'fr' }] }));

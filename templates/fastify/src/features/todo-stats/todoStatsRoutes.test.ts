@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 import { DatabaseSync } from 'node:sqlite';
 import { todoStatsRoutes } from '#src/features/todo-stats/todoStatsRoutes.ts';
 import { createTodoStatsService } from '#src/features/todo-stats/todoStatsService.ts';
-import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';
+import { createTodosQueries } from '#src/shared/todos/todosQueries.ts';
 import { createTestServer } from '#test-utils/createTestServer.ts';
 
 describe('todo stats routes', () => {

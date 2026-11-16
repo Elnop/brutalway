@@ -2,10 +2,9 @@ import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const NPM_TEST_ROW = '`node:test`: queries on an in-memory database, routes through `inject()`';
-const ROW_ID_SENTENCE =
-  " That is also why `src/shared-features/todos/todosQueries.ts` reads `row['id']`.";
+const ROW_ID_SENTENCE = " That is also why `src/shared/todos/todosQueries.ts` reads `row['id']`.";
 const TEST_FILES_OPENING_A_DATABASE = [
-  'src/shared-features/todos/todosQueries.test.ts',
+  'src/shared/todos/todosQueries.test.ts',
   'src/features/todo-list/todoListRoutes.test.ts',
   'src/features/todo-stats/todoStatsRoutes.test.ts',
 ];
@@ -60,7 +59,7 @@ export const fastifyStack: Stack = {
       remove: [
         'src/features/todo-list',
         'src/features/todo-stats',
-        'src/shared-features/todos',
+        'src/shared/todos',
         'test-utils',
         'docs/reference/endpoints.md',
       ],
@@ -83,7 +82,7 @@ export const fastifyStack: Stack = {
         {
           file: 'docs/reference/layout.md',
           replace:
-            ' `src/shared-features/todos/` holds the schemas, the types and `todosQueries.ts`, the only file that runs SQL on the todos table. `src/features/todo-list/` and `src/features/todo-stats/` both use it without knowing each other.',
+            ' `src/shared/todos/` holds the schemas, the types and `todosQueries.ts`, the only file that runs SQL on the todos table. `src/features/todo-list/` and `src/features/todo-stats/` both use it without knowing each other.',
           with: '',
         },
         {
@@ -97,8 +96,8 @@ export const fastifyStack: Stack = {
         },
         {
           file: 'docs/guides/start-your-own-api.md',
-          replace: '2. Add a shared feature',
-          with: '1. Add a shared feature',
+          replace: '2. Add a slice of `src/shared/`',
+          with: '1. Add a slice of `src/shared/`',
         },
         {
           file: 'docs/guides/start-your-own-api.md',
@@ -111,11 +110,11 @@ export const fastifyStack: Stack = {
         {
           file: 'docs/concepts/architecture.md',
           replace:
-            ' A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared-features/todos/todosQueries.ts`, and only queries run SQL.',
+            ' A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared/todos/todosQueries.ts`, and only queries run SQL.',
           with: ' Only queries run SQL.',
         },
       ],
-      keep: ['src/features', 'src/shared-features'],
+      keep: ['src/features'],
     },
     {
       when: { example: false, swagger: true },
@@ -184,15 +183,14 @@ export const fastifyStack: Stack = {
           dropLines: "import { DatabaseSync } from 'node:sqlite';",
         })),
         {
-          file: 'src/shared-features/todos/todosQueries.test.ts',
+          file: 'src/shared/todos/todosQueries.test.ts',
           replace: "  return createTodosQueries(new DatabaseSync(':memory:'));\n",
           with: `${EMPTY_MEMORY_STORE}  return todos;\n`,
         },
         {
           file: TODO_LIST_ROUTES_TEST,
           before: "import { createTestServer } from '#test-utils/createTestServer.ts';\n",
-          insert:
-            "import { createTodosQueries } from '#src/shared-features/todos/todosQueries.ts';\n",
+          insert: "import { createTodosQueries } from '#src/shared/todos/todosQueries.ts';\n",
         },
         {
           file: TODO_LIST_ROUTES_TEST,
@@ -264,12 +262,12 @@ export const fastifyStack: Stack = {
           replace: ' & { databasePath: string }',
           with: '',
         },
-        { file: 'src/shared/EnvTypes.ts', dropLines: 'databasePath' },
-        { file: 'src/shared/readEnv.ts', dropLines: 'DATABASE_PATH: z' },
-        { file: 'src/shared/readEnv.ts', dropLines: 'databasePath: env.DATABASE_PATH' },
-        { file: 'src/shared/readEnv.test.ts', dropLines: "databasePath: 'todos.db'" },
+        { file: 'src/shared/env/EnvTypes.ts', dropLines: 'databasePath' },
+        { file: 'src/shared/env/readEnv.ts', dropLines: 'DATABASE_PATH: z' },
+        { file: 'src/shared/env/readEnv.ts', dropLines: 'databasePath: env.DATABASE_PATH' },
+        { file: 'src/shared/env/readEnv.test.ts', dropLines: "databasePath: 'todos.db'" },
         {
-          file: 'src/shared/readEnv.test.ts',
+          file: 'src/shared/env/readEnv.test.ts',
           replace:
             "    assert.deepEqual(\n      readEnv({ HOST: '0.0.0.0', PORT: '8080', DATABASE_PATH: ':memory:', LOG_LEVEL: 'silent' }),\n      {\n        host: '0.0.0.0',\n        port: 8080,\n        databasePath: ':memory:',\n        logLevel: 'silent',\n      },\n    );\n",
           with: "    assert.deepEqual(readEnv({ HOST: '0.0.0.0', PORT: '8080', LOG_LEVEL: 'silent' }), {\n      host: '0.0.0.0',\n      port: 8080,\n      logLevel: 'silent',\n    });\n",

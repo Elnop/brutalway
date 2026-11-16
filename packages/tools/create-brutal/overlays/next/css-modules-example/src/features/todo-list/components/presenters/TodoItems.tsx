@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { TodoItem } from '@/features/todo-list/components/presenters/TodoItem.tsx';
-import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
+import type { Todo } from '@/shared/todos/TodosTypes.ts';
 import styles from '@/features/todo-list/components/presenters/TodoItems.module.css';
 
 type TodoItemsProps = {

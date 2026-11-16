@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@third-party/shadcn/button';
-import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
+import type { Todo } from '@/shared/todos/TodosTypes.ts';
 
 type TodoItemActionsProps = {
   todo: Todo;

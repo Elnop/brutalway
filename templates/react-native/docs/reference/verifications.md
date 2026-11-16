@@ -20,7 +20,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `.d.ts`, and the route files of `src/app/`): each module is imported under the name it exports
 - `xStore.ts` exports only `xStore` and `xActions`
 - a component types its props with a named `XProps` type, and callback props are named `onX`
-- no orchestrator (`XContainer`, `XLayout`, `XPage`) under `shared-features/`: the components that read shared state belong to a feature
+- no orchestrator (`XContainer`, `XLayout`, `XPage`) in a `shared/`, at any depth: the components that read shared state belong to a feature
 - a hook lives in a `useX.ts` that only exports hooks, a `xSelectors.ts` only exports `selectX` functions
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`, `curly` only for multi-line blocks
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
@@ -31,29 +31,30 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 ## Styles
 
-There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared-features/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules:
+There is no CSS, so stylelint has nothing to check. The colors, sizes and fonts come from `THEME` in `src/shared/theme/ThemeConfig.ts`, and the styles of a component sit in a `StyleSheet.create` in its own file. `@brutalway/oxlint-config-react-native` turns this into lint rules:
 
 - no color, size, spacing, font or shadow literal in a `StyleSheet.create`: the value is a token of `THEME`, and a missing token is added there. `0`, percentages, `transparent` and `none` stay literal
 - no style object written in JSX: the style goes in the `StyleSheet.create` of the file, and a style that depends on a prop picks one of several styles of the sheet
 - no style of the sheet left unused, no array holding a single style, no raw text outside a `<Text>`, and a component made for iOS or Android only kept in a `X.ios.tsx` or `X.android.tsx` file (from `eslint-plugin-react-native`)
 
-`no-unused-styles` only sees a style read as `styles.x`: `styles[tone]` does not count, so `src/shared-features/theme/Button.tsx` picks its style through an explicit map.
+`no-unused-styles` only sees a style read as `styles.x`: `styles[tone]` does not count, so `src/shared/theme/Button.tsx` picks its style through an explicit map.
 
 ## Dependencies
 
 dependency-cruiser checks the direction of imports. The rules come from `@brutalway/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:
 
-- `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
-- `src/app/` imports features only, neither `src/shared-features/` nor `src/shared/`
-- a feature never imports another feature, a shared feature never imports another shared feature
-- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, a sub shared feature (`shared-features/<y>/`) imports neither its siblings nor a sub-feature, and the parent `shared/` imports none of them. They nest at most ten levels deep
-- a presenter imports no store and no shared-feature hook
+- `src/shared/` imports no feature, a slice never imports another slice, no feature imports `src/app/`
+- `src/app/` imports features only, never `src/shared/`
+- a feature never imports another feature
+- inside a feature or a slice, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
+- a presenter reaches no store, no `xClient.ts`, no zustand and no react-query through any chain of imports, so a hook that reads a store is refused there and a hook of local state is fine
+- a presenter imports no orchestrator
 - a store lives at the root or in the `stores/` folder of its level
 - no cycles, no import of a test file, of `test-utils/` or of a devDependency from production code
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/`, `shared-features/` and `shared/`, `src/shared/` holds kind folders only, and a feature or a shared feature holds kind folders, `features/`, `shared-features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a `shared/` folder that a single feature uses is rejected too: it moves into that feature.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a slice that a single feature uses is rejected too, and moves into that feature. So is a slice whose files, tests aside, form two groups that never import each other: it splits into two slices.
 
 ## Messages
 
@@ -87,7 +88,7 @@ knip (`knip.json`) rejects exports nobody imports, unused files, unused dependen
 
 | Kind | What it tests | Where |
 |---|---|---|
-| Unit | a pure function, a selector, the store | `src/shared/normalizeTitle.test.ts` next to its source |
+| Unit | a pure function, a selector, the store | `src/shared/todos/lib/normalizeTitle.test.ts` next to its source |
 | Component | a presenter alone, through its props | `src/features/todo-list/components/presenters/TodoInput.test.tsx` |
 
 `npm test` runs both with Jest and the `jest-expo` preset, which mocks the native side of React Native: Vitest does not run React Native yet. The component tests use [React Native Testing Library](https://oss.callstack.com/react-native-testing-library/), whose `render` and `userEvent` are async. Only presenters get component tests, since orchestrators read stores. Find elements by role and accessible name. The tests import `describe`, `it`, `expect` and `jest` from `@jest/globals` instead of reading globals.

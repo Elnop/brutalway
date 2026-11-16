@@ -10,7 +10,7 @@ We take the split, under other names. Orchestrators (`XContainer`, `XLayout`, `X
 
 We leave out higher-order components, which was how containers were written in 2015. Since 2019, Abramov's post says hooks make the split unnecessary. We keep it anyway: a presenter can be tested alone through its props, as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does, and an agent knows which components may touch state from the file name alone.
 
-Enforced by `@brutalway/dependency-cruiser-config` (a presenter imports no store and no shared-feature hook) and `@brutalway/oxlint-config-react` (no orchestrator under `shared-features/`).
+Enforced by `@brutalway/dependency-cruiser-config` (a presenter reaches no store through any chain of imports, and imports no orchestrator) and `@brutalway/oxlint-config-react` (no orchestrator in a `shared/`).
 
 ## Server and client components
 
@@ -24,7 +24,7 @@ The todos stay in a zustand store in the browser, like in template-vite: the exa
 
 From Flux and Redux: state lives in a store, changes go through named actions, and derived data is computed by selectors.
 
-We take the three roles, each in its own file. `src/shared-features/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.
+We take the three roles, each in its own file. `src/shared/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared/todos/lib/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared/todos/useTodos.ts`.
 
 We leave out reducers, action objects and dispatch. With zustand, an action is a plain function that sets the state, and a selector is a plain function that can be tested without React.
 
@@ -32,7 +32,7 @@ Enforced by `@brutalway/oxlint-config-zustand` and `@brutalway/dependency-cruise
 
 ## Sub-features
 
-From Feature-Sliced Design, extended. A feature or a shared feature can hold its own features in `features/<y>/` and its own shared features in `shared-features/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into the parent's `shared-features/` (business code) or `shared/` (no domain).
+From Feature-Sliced Design, extended. A feature or a slice can hold its own features in `features/<y>/` and its own slices in `shared/<y>/`, with the same rules one level down: sub-features never import each other or their parent, and what they share goes into a slice of the parent's `shared/`, named after its concept.
 
 Renaming a task is a sub-feature of the list: `src/features/todo-list/features/todo-editor/`.
 

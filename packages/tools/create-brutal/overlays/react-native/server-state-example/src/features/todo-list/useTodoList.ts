@@ -1,14 +1,20 @@
-import { useTodoMutations } from '@/shared-features/todos/hooks/useTodoMutations.ts';
-import { useTodos } from '@/shared-features/todos/hooks/useTodos.ts';
-import { useTodosQuery } from '@/shared-features/todos/hooks/useTodosQuery.ts';
-import { todosActions } from '@/shared-features/todos/todosStore.ts';
-import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
+import { useQuery } from '@tanstack/react-query';
+import { useStore } from 'zustand';
+import { todosActions, todosStore } from '@/features/todo-list/todosStore.ts';
+import { todosClient } from '@/shared/todos/todosClient.ts';
+import { todosKeys } from '@/shared/todos/todosKeys.ts';
+import { useTodoMutations } from '@/shared/todos/useTodoMutations.ts';
+import type { Todo } from '@/shared/todos/TodosTypes.ts';
 
 const NO_TODOS: Todo[] = [];
 
 export function useTodoList() {
-  const filter = useTodos((state) => state.filter);
-  const todos = useTodosQuery(filter).data ?? NO_TODOS;
+  const filter = useStore(todosStore, (state) => state.filter);
+  const todos =
+    useQuery({
+      queryKey: todosKeys.list(filter),
+      queryFn: async () => todosClient.list(filter),
+    }).data ?? NO_TODOS;
   const { add, update, remove } = useTodoMutations();
 
   function toggle(id: Todo['id']) {

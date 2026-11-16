@@ -8,7 +8,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import type { Env } from '#src/shared/EnvTypes.ts';
+import type { Env } from '#src/shared/env/EnvTypes.ts';
 
 const SWAGGER_THEME = readFileSync(new URL('swaggerTheme.css', import.meta.url), 'utf8');
 

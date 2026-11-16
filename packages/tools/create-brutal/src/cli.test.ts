@@ -320,7 +320,7 @@ describe('create-brutal', () => {
       'devApi.ts',
       'devApiRoutes.ts',
       'locales/fr/app.json',
-      'src/shared/analyticsClient.ts',
+      'src/shared/analytics/analyticsClient.ts',
       'tsconfig.third-party.json',
     ]) {
       assert.equal(existsSync(join(project, file)), true, file);
@@ -353,7 +353,7 @@ describe('create-brutal', () => {
       'locales/fr/app.json',
       'src/features/language-switch/lib/requestLanguage.ts',
       'src/features/language-switch/components/LanguageSwitch.module.css',
-      'src/shared/analyticsClient.ts',
+      'src/shared/analytics/analyticsClient.ts',
     ]) {
       assert.equal(existsSync(join(project, file)), true, file);
     }
@@ -375,8 +375,8 @@ describe('create-brutal', () => {
       'src/features/query-client/queryClient.ts',
       'locales/fr/app.json',
       'src/features/language-switch/components/LanguageSwitchContainer.tsx',
-      'src/shared-features/todos/hooks/useTodosQuery.ts',
-      'src/shared/analyticsClient.ts',
+      'src/features/todo-stats/useTodoStatsQuery.ts',
+      'src/shared/analytics/analyticsClient.ts',
     ]) {
       assert.equal(existsSync(join(project, file)), true, file);
     }
@@ -401,6 +401,7 @@ describe('create-brutal', () => {
     });
     assert.equal(pkg.scripts?.['release'], 'changeset publish');
     for (const file of [
+      'src/shared',
       'src/todo.ts',
       'src/todos.ts',
       'src/features/add-todo/addTodo.ts',
@@ -438,12 +439,7 @@ describe('create-brutal', () => {
     assert.equal(pkg.scripts?.['release'], undefined);
     assert.equal(pkg.devDependencies?.['@changesets/cli'], undefined);
     assert.equal(pkg.devDependencies?.['@brutalway/agent-hook'], undefined);
-    for (const file of [
-      'src/greet.ts',
-      'src/greet.test.ts',
-      'src/features/.gitkeep',
-      'src/shared/.gitkeep',
-    ]) {
+    for (const file of ['src/greet.ts', 'src/greet.test.ts', 'src/features/.gitkeep']) {
       assert.equal(existsSync(join(project, file)), true, file);
     }
     for (const file of [

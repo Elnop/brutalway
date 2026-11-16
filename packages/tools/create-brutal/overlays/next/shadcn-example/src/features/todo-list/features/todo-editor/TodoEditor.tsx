@@ -2,9 +2,9 @@ import { useId } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@third-party/shadcn/button';
-import { TitleError } from '@/features/todo-list/shared/presenters/TitleError.tsx';
-import { TitleInput } from '@/features/todo-list/shared/presenters/TitleInput.tsx';
-import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
+import { TitleError } from '@/features/todo-list/shared/title-error/TitleError.tsx';
+import { TitleInput } from '@/features/todo-list/shared/title-input/TitleInput.tsx';
+import { useTitleForm } from '@/features/todo-list/shared/title-form/useTitleForm.ts';
 
 type TodoEditorProps = {
   title: string;

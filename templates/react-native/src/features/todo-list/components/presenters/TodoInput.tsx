@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { TitleError } from '@/features/todo-list/shared/presenters/TitleError.tsx';
-import { TitleInput } from '@/features/todo-list/shared/presenters/TitleInput.tsx';
-import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
-import { Button } from '@/shared-features/theme/Button.tsx';
-import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
+import { TitleError } from '@/features/todo-list/shared/title-error/TitleError.tsx';
+import { TitleInput } from '@/features/todo-list/shared/title-input/TitleInput.tsx';
+import { useTitleForm } from '@/features/todo-list/shared/title-form/useTitleForm.ts';
+import { Button } from '@/shared/theme/Button.tsx';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 type TodoInputProps = {
   onAdd: (title: string) => void;

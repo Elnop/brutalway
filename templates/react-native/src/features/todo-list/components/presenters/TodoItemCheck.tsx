@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
-import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
+import type { Todo } from '@/shared/todos/TodosTypes.ts';
 
 type TodoItemCheckProps = {
   todo: Todo;

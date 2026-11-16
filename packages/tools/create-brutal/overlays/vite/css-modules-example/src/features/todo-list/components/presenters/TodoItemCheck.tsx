@@ -1,5 +1,5 @@
 import styles from '@/features/todo-list/components/presenters/TodoItemCheck.module.css';
-import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
+import type { Todo } from '@/shared/todos/TodosTypes.ts';
 
 type TodoItemCheckProps = {
   todo: Todo;

@@ -1,7 +1,7 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import { render, screen, userEvent } from '@testing-library/react-native';
 import { LanguageSwitch } from '@/features/language-switch/components/LanguageSwitch.tsx';
-import type { Language } from '@/shared-features/language/LanguagesTypes.ts';
+import type { Language } from '@/shared/language/LanguagesTypes.ts';
 
 describe('LanguageSwitch', () => {
   it('marks the current language and sends the one picked', async () => {

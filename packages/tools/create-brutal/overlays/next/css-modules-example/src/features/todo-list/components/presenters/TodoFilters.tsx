@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { TODO_FILTERS } from '@/shared-features/todos/TodosConfig.ts';
-import type { TodoFilter } from '@/shared-features/todos/TodosTypes.ts';
+import { TODO_FILTERS } from '@/shared/todos/TodosConfig.ts';
+import type { TodoFilter } from '@/shared/todos/TodosTypes.ts';
 import styles from '@/features/todo-list/components/presenters/TodoFilters.module.css';
 
 type TodoFiltersProps = {

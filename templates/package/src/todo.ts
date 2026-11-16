@@ -3,7 +3,7 @@ import { parseArgs } from 'node:util';
 import { addTodo } from '#src/features/add-todo/addTodo.ts';
 import { completeTodo } from '#src/features/complete-todo/completeTodo.ts';
 import { listTodos } from '#src/features/list-todos/listTodos.ts';
-import type { Todo } from '#src/shared-features/todos/TodosTypes.ts';
+import type { Todo } from '#src/shared/todos/TodosTypes.ts';
 
 const USAGE =
   'Usage: todo add <text> | todo list | todo done <id>, with --file <path> (default: todos.json)';

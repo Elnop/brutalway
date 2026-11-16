@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { analyticsClient } from '@/shared/analyticsClient.ts';
+import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';
 
 export function useAppOpened(): void {
   useEffect(() => {

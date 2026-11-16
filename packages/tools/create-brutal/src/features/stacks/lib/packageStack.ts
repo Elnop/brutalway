@@ -1,3 +1,4 @@
+import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
@@ -106,7 +107,6 @@ export const packageStack: Stack = {
       when: { example: false },
       remove: [
         'src/features',
-        'src/shared-features',
         'src/shared',
         'src/todo.ts',
         'src/todo.test.ts',
@@ -133,7 +133,7 @@ export const packageStack: Stack = {
         {
           file: 'docs/reference/layout.md',
           replace:
-            ' `src/shared-features/todos/` holds the `Todo` type and `todosFile.ts`, the only file that reads and writes the todos. `src/features/add-todo/`, `src/features/list-todos/` and `src/features/complete-todo/` all use it without knowing each other.',
+            ' `src/shared/todos/` holds the `Todo` type and `todosFile.ts`, the only file that reads and writes the todos. `src/features/add-todo/`, `src/features/list-todos/` and `src/features/complete-todo/` all use it without knowing each other.',
           with: '',
         },
         { file: 'docs/guides/start-your-own-package.md', dropLines: '1. Delete `src/features/`' },
@@ -159,7 +159,7 @@ export const packageStack: Stack = {
           with: ' `src/greet.test.ts` checks the names the export offers and calls them.',
         },
         { file: 'docs/reference/verifications.md', dropLines: '| Feature |' },
-        { file: 'docs/reference/verifications.md', dropLines: '| Shared feature |' },
+        { file: 'docs/reference/verifications.md', dropLines: '| Slice |' },
         {
           file: 'docs/reference/verifications.md',
           replace: 'the names the export offers, called together on one file | `src/todos.test.ts`',
@@ -167,8 +167,15 @@ export const packageStack: Stack = {
         },
       ],
       overlay: 'skeleton',
-      keep: ['src/features', 'src/shared-features', 'src/shared'],
+      keep: ['src/features'],
     },
+    sharedFolderDocs([
+      'AGENTS.md',
+      'docs/reference/layout.md',
+      'docs/reference/verifications.md',
+      'docs/concepts/architecture.md',
+      'docs/guides/start-your-own-package.md',
+    ]),
     {
       when: { example: false, bin: true },
       overlay: 'skeleton-bin',

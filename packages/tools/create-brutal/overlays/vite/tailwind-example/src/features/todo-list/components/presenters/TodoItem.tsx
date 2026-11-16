@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { TodoItemActions } from '@/features/todo-list/components/presenters/TodoItemActions.tsx';
 import { TodoItemCheck } from '@/features/todo-list/components/presenters/TodoItemCheck.tsx';
 import { TodoEditor } from '@/features/todo-list/features/todo-editor/TodoEditor.tsx';
-import type { Todo } from '@/shared-features/todos/TodosTypes.ts';
+import type { Todo } from '@/shared/todos/TodosTypes.ts';
 
 type TodoItemProps = {
   todo: Todo;

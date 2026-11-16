@@ -9,7 +9,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 ## Conventions worth knowing first
 
 - Each entry point is a file at the root of `src/`, one per bin or export of `package.json`, also listed in `tsdown.config.ts`. Nothing but a test imports it.
-- `src/features/` holds one folder per feature, `src/shared-features/` the business code several features use, `src/shared/` the code with no domain. Each layer only imports the layers below it, and a feature never imports another feature.
+- `src/features/` holds one folder per feature, `src/shared/` one folder per slice of code that several features use. Each layer only imports the layers below it, and a feature never imports another feature.
 - Each entry point has a test that uses it end to end, the way a user does.
 - A change worth a release comes with a changeset (`npx changeset`).
 - `devDependencies` are pinned to exact versions, `dependencies` and `peerDependencies` keep ranges.

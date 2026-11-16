@@ -36,7 +36,7 @@ npm create brutal my-lib -- --preset lib.json --yes
 
 Every combination works.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/features/`, `src/shared-features/`, `src/shared/` and the `todo` files go, and the `"."` export is a `greet.ts` in `src/`: a single `greet` function to replace, since the lint rules refuse an empty module.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/features/`, `src/shared/` and the `todo` files go, and the `"."` export is a `greet.ts` in `src/`: a single `greet` function to replace, since the lint rules refuse an empty module.
 
 ## bin
 

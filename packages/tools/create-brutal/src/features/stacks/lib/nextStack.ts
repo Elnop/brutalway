@@ -1,5 +1,5 @@
+import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
-import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
   FRONTEND_FEATURE_OPTIONS,
@@ -11,6 +11,7 @@ import {
   FRONTEND_COMPILER,
   FRONTEND_E2E_AND_REPOSITORY,
   FRONTEND_FORMS,
+  FORMS_SCHEMAS_IN_TITLE_FORM,
   FRONTEND_FORMS_EXAMPLE,
   FRONTEND_I18N_AND_TESTS,
   FRONTEND_NO_ZUSTAND,
@@ -36,7 +37,7 @@ const REACT_COMPILER_DOC = `\`next.config.ts\` turns on the [React Compiler](htt
 
 const ANALYTICS_POSTHOG_README = `## Analytics
 
-\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`NEXT_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`NEXT_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Next.js writes both into the client code at build time. Without a key nothing is sent, in dev, in \`next start\` or in the e2e tests, and nothing is sent during server rendering. Autocapture and the scripts PostHog loads from its servers are off, and \`src/proxy.ts\` lets the PostHog hosts through \`connect-src\`.
+\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`NEXT_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`NEXT_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Next.js writes both into the client code at build time. Without a key nothing is sent, in dev, in \`next start\` or in the e2e tests, and nothing is sent during server rendering. Autocapture and the scripts PostHog loads from its servers are off, and \`src/proxy.ts\` lets the PostHog hosts through \`connect-src\`.
 
 `;
 
@@ -65,6 +66,11 @@ export const nextStack: Stack = {
     [
       ...FRONTEND_BASE,
       ...FRONTEND_SKELETON,
+      sharedFolderDocs([
+        'AGENTS.md',
+        'docs/reference/layout.md',
+        'docs/reference/verifications.md',
+      ]),
       {
         when: { example: false },
         edits: [
@@ -92,9 +98,8 @@ export const nextStack: Stack = {
       ...FRONTEND_FORMS_EXAMPLE,
       {
         when: { forms: true, example: true },
-        overlay: 'forms-schemas',
+        ...FORMS_SCHEMAS_IN_TITLE_FORM,
       },
-      ...normalizeTitleChanges(['docs/reference/verifications.md'], false),
       {
         when: { i18n: true },
         overlay: 'i18n',

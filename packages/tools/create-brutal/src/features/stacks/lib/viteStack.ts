@@ -1,3 +1,4 @@
+import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { FileEdit, Stack } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
@@ -11,6 +12,7 @@ import {
   FRONTEND_COMPILER,
   FRONTEND_E2E_AND_REPOSITORY,
   FRONTEND_FORMS,
+  FORMS_SCHEMAS_IN_TITLE_FORM,
   FRONTEND_FORMS_EXAMPLE,
   FRONTEND_I18N_AND_TESTS,
   FRONTEND_NO_ZUSTAND,
@@ -27,7 +29,7 @@ import {
 
 const SERVER_STATE_README = `## API
 
-The todos come from an API. \`src/shared-features/todos/todosClient.ts\` calls \`/api/todos\` and \`/api/stats\` and parses each response with \`src/shared-features/todos/TodosSchemas.ts\`, the query hooks in \`src/shared-features/todos/hooks/\` cache the answers, and each change invalidates them through \`src/shared-features/todos/todosKeys.ts\`.
+The todos come from an API. \`src/shared/todos/todosClient.ts\` calls \`/api/todos\` and \`/api/stats\` and parses each response with \`src/shared/todos/TodosSchemas.ts\`, the queries of \`src/features/todo-list/useTodoList.ts\` and \`src/features/todo-stats/useTodoStatsQuery.ts\` cache the answers, and each change invalidates them through \`src/shared/todos/todosKeys.ts\`.
 
 Without \`API_URL\`, \`devApi.ts\` answers these routes from an in-memory list, in \`npm run dev\` and in the \`vite preview\` the e2e tests run against, with one list per browser. To use [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) instead, start it and run \`API_URL=http://localhost:3000 npm run dev\`: \`/api\` is then proxied to it. In production, serve the API under \`/api\` next to the built files.
 
@@ -50,7 +52,7 @@ const REACT_COMPILER_DOC = `\`vite.config.ts\` runs the [React Compiler](https:/
 
 const ANALYTICS_POSTHOG_README = `## Analytics
 
-\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`VITE_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`VITE_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev, in preview or in the e2e tests. Autocapture and the scripts PostHog loads from its servers are off, and \`securityHeaders.ts\` lets the PostHog hosts through \`connect-src\`.
+\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`VITE_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`VITE_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev, in preview or in the e2e tests. Autocapture and the scripts PostHog loads from its servers are off, and \`securityHeaders.ts\` lets the PostHog hosts through \`connect-src\`.
 
 `;
 
@@ -58,7 +60,7 @@ const APP_OPENED: FileEdit[] = [
   {
     file: 'src/main.tsx',
     after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
-    insert: "import { analyticsClient } from '@/shared/analyticsClient.ts';\n",
+    insert: "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n",
   },
   {
     file: 'src/main.tsx',
@@ -100,6 +102,11 @@ export const viteStack: Stack = {
     [
       ...FRONTEND_BASE,
       ...FRONTEND_SKELETON,
+      sharedFolderDocs([
+        'AGENTS.md',
+        'docs/reference/layout.md',
+        'docs/reference/verifications.md',
+      ]),
       {
         when: { example: false },
         edits: [
@@ -133,9 +140,11 @@ export const viteStack: Stack = {
         when: { 'server-state': true, example: true },
         overlay: 'server-state-example',
         remove: [
-          'src/shared-features/todos/useTodos.ts',
-          'src/shared-features/todos/todosSelectors.ts',
-          'src/shared-features/todos/todosSelectors.test.ts',
+          'src/shared/todos/useTodos.ts',
+          'src/shared/todos/todosStore.ts',
+          'src/shared/todos/todosStore.test.ts',
+          'src/shared/todos/lib/todosSelectors.ts',
+          'src/shared/todos/lib/todosSelectors.test.ts',
         ],
         edits: [
           {
@@ -151,14 +160,14 @@ export const viteStack: Stack = {
           { file: 'README.md', before: '## Documentation', insert: SERVER_STATE_README },
           {
             file: 'docs/reference/layout.md',
-            replace: '`src/shared-features/todos/` holds the tasks and the current filter,',
-            with: '`src/shared-features/todos/` holds the client of the todo API, its query hooks and the current filter,',
+            replace: '`src/shared/todos/` holds the tasks and the current filter,',
+            with: '`src/shared/todos/` holds the client of the todo API, its schemas and its mutations,',
           },
           {
             file: 'docs/concepts/architecture.md',
             replace:
-              ', `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
-            with: ', and components read the store through `src/shared-features/todos/hooks/useTodos.ts`. The store only holds the filter: the todos and the counters come from the API (see Server state below).',
+              '`src/shared/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared/todos/lib/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared/todos/useTodos.ts`.',
+            with: '`src/features/todo-list/todosStore.ts` only exports `todosStore` and `todosActions`, and `src/features/todo-list/useTodoList.ts` reads it. The store only holds the filter of the list: the todos and the counters come from the API (see Server state below).',
           },
         ],
         addDependencies: { zod: '4.6.7' },
@@ -189,7 +198,7 @@ export const viteStack: Stack = {
       ...FRONTEND_FORMS_EXAMPLE,
       {
         when: { forms: true, example: true, 'server-state': false },
-        overlay: 'forms-schemas',
+        ...FORMS_SCHEMAS_IN_TITLE_FORM,
       },
       ...FRONTEND_FORMS_SERVER_STATE,
       ...normalizeTitleChanges(['docs/reference/verifications.md']),

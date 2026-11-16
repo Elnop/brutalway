@@ -1,4 +1,5 @@
-import type { FileEdit, Stack, StackOption } from '#src/shared/stack/StackTypes.ts';
+import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
+import type { FileEdit, Stack, StackChange, StackOption } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
@@ -10,6 +11,7 @@ import {
   FRONTEND_E2E_AND_REPOSITORY,
   FRONTEND_FEATURE_OPTIONS,
   FRONTEND_FORMS,
+  FORMS_SCHEMAS_IN_TITLE_FORM,
   FRONTEND_FORMS_EXAMPLE,
   FRONTEND_FORMS_SERVER_STATE,
   FRONTEND_I18N_FORMS,
@@ -53,7 +55,7 @@ const JEST_WITHOUT_TESTS: FileEdit = {
 function analyticsClientPath(file: string): FileEdit {
   return {
     file,
-    replace: '`src/shared/analyticsClient.ts`',
+    replace: '`src/shared/analytics/analyticsClient.ts`',
     with: '`src/features/analytics/analyticsClient.ts`',
     all: true,
   };
@@ -77,7 +79,7 @@ const ANALYTICS_HOME = 'src/features/analytics';
 const ANALYTICS_HOME_IMPORTS: FileEdit[] = [
   {
     file: `${ANALYTICS_HOME}/useAppOpened.ts`,
-    replace: "'@/shared/analyticsClient.ts'",
+    replace: "'@/shared/analytics/analyticsClient.ts'",
     with: "'@/features/analytics/analyticsClient.ts'",
   },
   analyticsClientPath('README.md'),
@@ -116,6 +118,153 @@ function sharedOption(id: string): StackOption {
 
 const COMPONENT_TESTS_COMMAND =
   'Jest with the `jest-expo` preset: unit tests and component tests, all in Node';
+
+const CREATE_I18N = 'src/features/i18n/createI18n.ts';
+const CREATE_I18N_LIB = 'src/features/i18n/lib/createI18n.ts';
+
+const I18N_LIB_CHANGES: StackChange[] = [
+  {
+    when: { i18n: true },
+    move: { [CREATE_I18N]: CREATE_I18N_LIB },
+    edits: [
+      {
+        file: 'docs/guides/translations.md',
+        replace: `\`${CREATE_I18N}\``,
+        with: `\`${CREATE_I18N_LIB}\``,
+        all: true,
+      },
+      {
+        file: 'jest.setup.ts',
+        replace: "'@/features/i18n/createI18n.ts'",
+        with: "'@/features/i18n/lib/createI18n.ts'",
+      },
+    ],
+  },
+  {
+    when: { i18n: true, example: true },
+    edits: [
+      {
+        file: 'docs/guides/start-your-own-app.md',
+        replace: `\`${CREATE_I18N}\``,
+        with: `\`${CREATE_I18N_LIB}\``,
+      },
+    ],
+  },
+];
+
+const THEME_CONFIG = 'src/shared/theme/ThemeConfig.ts';
+const PAGE_SHELL_CONFIGS = 'src/features/page-shell/configs';
+const SWITCH_PRESENTERS = 'src/features/language-switch/components/presenters';
+const THEME_SENTENCE =
+  '`src/shared/theme/` holds the theme (`ThemeConfig.ts`) and the `Button` every feature uses.';
+
+function importEdit(file: string, from: string, to: string): FileEdit {
+  return {
+    file,
+    replace: `'${from.replace(/^src\//u, '@/')}'`,
+    with: `'${to.replace(/^src\//u, '@/')}'`,
+  };
+}
+
+function docPathEdits(files: string[], from: string, to: string): FileEdit[] {
+  return files.map((file) => ({ file, replace: `\`${from}\``, with: `\`${to}\``, all: true }));
+}
+
+const THEME_SKELETON_CHANGES: StackChange[] = [
+  {
+    when: { example: false, i18n: false },
+    move: {
+      [THEME_CONFIG]: `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+      'src/features/page-shell/StackConfig.ts': `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
+    },
+    edits: [
+      importEdit(
+        'src/features/page-shell/PageShell.tsx',
+        THEME_CONFIG,
+        `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+      ),
+      importEdit(
+        `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
+        THEME_CONFIG,
+        `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+      ),
+      importEdit(
+        'src/app/_layout.tsx',
+        'src/features/page-shell/StackConfig.ts',
+        `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
+      ),
+      ...docPathEdits(
+        [
+          'README.md',
+          'AGENTS.md',
+          'docs/concepts/architecture.md',
+          'docs/reference/verifications.md',
+        ],
+        THEME_CONFIG,
+        `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+      ),
+      {
+        file: 'docs/reference/layout.md',
+        replace: THEME_SENTENCE,
+        with: `The theme sits in \`${PAGE_SHELL_CONFIGS}/ThemeConfig.ts\`, next to the page frame, its only user.`,
+      },
+    ],
+  },
+  {
+    when: { example: false, i18n: true },
+    move: {
+      'src/shared/theme/Button.tsx': `${SWITCH_PRESENTERS}/Button.tsx`,
+      'src/shared/theme/ThemeTypes.ts': 'src/features/language-switch/ThemeTypes.ts',
+      'src/features/language-switch/components/LanguageSwitch.tsx': `${SWITCH_PRESENTERS}/LanguageSwitch.tsx`,
+    },
+    edits: [
+      importEdit(
+        'src/features/language-switch/components/LanguageSwitchContainer.tsx',
+        'src/features/language-switch/components/LanguageSwitch.tsx',
+        `${SWITCH_PRESENTERS}/LanguageSwitch.tsx`,
+      ),
+      importEdit(
+        `${SWITCH_PRESENTERS}/LanguageSwitch.tsx`,
+        'src/shared/theme/Button.tsx',
+        `${SWITCH_PRESENTERS}/Button.tsx`,
+      ),
+      importEdit(
+        `${SWITCH_PRESENTERS}/Button.tsx`,
+        'src/shared/theme/ThemeTypes.ts',
+        'src/features/language-switch/ThemeTypes.ts',
+      ),
+      ...docPathEdits(
+        ['docs/concepts/architecture.md', 'docs/reference/verifications.md'],
+        'src/shared/theme/Button.tsx',
+        `${SWITCH_PRESENTERS}/Button.tsx`,
+      ),
+      {
+        file: 'docs/reference/layout.md',
+        replace: THEME_SENTENCE,
+        with: `\`src/shared/theme/\` holds the theme (\`ThemeConfig.ts\`). The \`Button\` of the series sits in \`${SWITCH_PRESENTERS}/Button.tsx\`, next to the language switch, its only user.`,
+      },
+    ],
+  },
+  {
+    when: { example: false, i18n: true, 'component-tests': true },
+    move: {
+      'src/shared/theme/Button.test.tsx': `${SWITCH_PRESENTERS}/Button.test.tsx`,
+      'src/features/language-switch/components/LanguageSwitch.test.tsx': `${SWITCH_PRESENTERS}/LanguageSwitch.test.tsx`,
+    },
+    edits: [
+      importEdit(
+        `${SWITCH_PRESENTERS}/Button.test.tsx`,
+        'src/shared/theme/Button.tsx',
+        `${SWITCH_PRESENTERS}/Button.tsx`,
+      ),
+      importEdit(
+        `${SWITCH_PRESENTERS}/LanguageSwitch.test.tsx`,
+        'src/features/language-switch/components/LanguageSwitch.tsx',
+        `${SWITCH_PRESENTERS}/LanguageSwitch.tsx`,
+      ),
+    ],
+  },
+];
 
 export const reactNativeStack: Stack = {
   id: 'react-native',
@@ -186,16 +335,16 @@ export const reactNativeStack: Stack = {
       },
       {
         when: { example: false, i18n: false, 'component-tests': true },
-        remove: ['src/shared-features/theme/Button.test.tsx'],
+        remove: ['src/shared/theme/Button.test.tsx'],
       },
       {
         when: { example: false, i18n: false },
-        remove: ['src/shared-features/theme/Button.tsx', 'src/shared-features/theme/ThemeTypes.ts'],
+        remove: ['src/shared/theme/Button.tsx', 'src/shared/theme/ThemeTypes.ts'],
         edits: [
           {
             file: 'docs/concepts/architecture.md',
             replace:
-              ' The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared-features/theme/Button.tsx`.',
+              ' The pressable look of the series (border, hard shadow, the press that moves the button onto its shadow) is written once, in `src/shared/theme/Button.tsx`.',
             with: '',
           },
           {
@@ -218,12 +367,12 @@ export const reactNativeStack: Stack = {
         when: { 'dark-theme': true },
         edits: [
           {
-            file: 'src/shared-features/theme/ThemeConfig.ts',
+            file: 'src/shared/theme/ThemeConfig.ts',
             replace: 'const COLORS = {',
             with: "import { Appearance } from 'react-native';\n\nconst LIGHT = {",
           },
           {
-            file: 'src/shared-features/theme/ThemeConfig.ts',
+            file: 'src/shared/theme/ThemeConfig.ts',
             replace: '} as const;\n\nexport const THEME',
             with: `} as const;\n\n${DARK_COLORS}export const THEME`,
           },
@@ -237,7 +386,7 @@ export const reactNativeStack: Stack = {
             file: 'AGENTS.md',
             before: '- No comments,',
             insert:
-              '- Colors follow the theme of the system: a color token gets its dark value in the `DARK` set of `src/shared-features/theme/ThemeConfig.ts`, never in a component.\n',
+              '- Colors follow the theme of the system: a color token gets its dark value in the `DARK` set of `src/shared/theme/ThemeConfig.ts`, never in a component.\n',
           },
         ],
         addDependencies: { 'expo-system-ui': '58.0.7' },
@@ -263,23 +412,25 @@ export const reactNativeStack: Stack = {
         when: { 'server-state': true, example: true },
         overlay: 'server-state-example',
         remove: [
-          'src/shared-features/todos/useTodos.ts',
-          'src/shared-features/todos/todosSelectors.ts',
-          'src/shared-features/todos/todosSelectors.test.ts',
+          'src/shared/todos/useTodos.ts',
+          'src/shared/todos/todosStore.ts',
+          'src/shared/todos/todosStore.test.ts',
+          'src/shared/todos/lib/todosSelectors.ts',
+          'src/shared/todos/lib/todosSelectors.test.ts',
         ],
         edits: [
           { file: 'docs/concepts/architecture.md', replace: PERSISTENCE_DOC, with: '' },
           { file: 'README.md', before: '## Documentation', insert: SERVER_STATE_README },
           {
             file: 'docs/reference/layout.md',
-            replace: '`src/shared-features/todos/` holds the tasks and the current filter,',
-            with: '`src/shared-features/todos/` holds the client of the todo API, its query hooks and the current filter,',
+            replace: '`src/shared/todos/` holds the tasks and the current filter,',
+            with: '`src/shared/todos/` holds the client of the todo API, its schemas and its mutations,',
           },
           {
             file: 'docs/concepts/architecture.md',
             replace:
-              ', `src/shared-features/todos/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared-features/todos/useTodos.ts`.',
-            with: ', and components read the store through `src/shared-features/todos/hooks/useTodos.ts`. The store only holds the filter: the todos and the counters come from the API (see Server state below).',
+              '`src/shared/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared/todos/lib/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared/todos/useTodos.ts`.',
+            with: '`src/features/todo-list/todosStore.ts` only exports `todosStore` and `todosActions`, and `src/features/todo-list/useTodoList.ts` reads it. The store only holds the filter of the list: the todos and the counters come from the API (see Server state below).',
           },
         ],
         removeDependencies: ['expo-crypto'],
@@ -294,13 +445,10 @@ export const reactNativeStack: Stack = {
       ...FRONTEND_FORMS_EXAMPLE,
       {
         when: { forms: true, example: true, 'server-state': false },
-        overlay: 'forms-schemas',
+        ...FORMS_SCHEMAS_IN_TITLE_FORM,
       },
       ...FRONTEND_FORMS_SERVER_STATE,
-      ...normalizeTitleChanges([
-        'docs/reference/verifications.md',
-        'docs/guides/start-your-own-app.md',
-      ]),
+      ...normalizeTitleChanges(['docs/reference/verifications.md']),
       {
         when: { i18n: true },
         overlay: 'i18n',
@@ -487,30 +635,37 @@ export const reactNativeStack: Stack = {
       { when: { analytics: 'posthog' }, edits: APP_OPENED, overlay: 'analytics-app-opened' },
       {
         when: { analytics: 'module', example: false },
-        move: { 'src/shared/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts` },
+        move: { 'src/shared/analytics/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts` },
         edits: ANALYTICS_HOME_IMPORTS,
-        keep: ['src/shared'],
       },
       {
         when: { analytics: 'posthog', example: false },
         move: {
-          'src/shared/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts`,
-          'src/shared/AnalyticsTypes.ts': `${ANALYTICS_HOME}/AnalyticsTypes.ts`,
+          'src/shared/analytics/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts`,
+          'src/shared/analytics/AnalyticsTypes.ts': `${ANALYTICS_HOME}/AnalyticsTypes.ts`,
         },
         edits: [
           ...ANALYTICS_HOME_IMPORTS,
           {
             file: `${ANALYTICS_HOME}/analyticsClient.ts`,
-            replace: "'@/shared/AnalyticsTypes.ts'",
+            replace: "'@/shared/analytics/AnalyticsTypes.ts'",
             with: "'@/features/analytics/AnalyticsTypes.ts'",
           },
         ],
-        keep: ['src/shared'],
       },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS,
       { when: { analytics: 'module', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
       { when: { analytics: 'posthog', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
+      ...I18N_LIB_CHANGES,
+      ...THEME_SKELETON_CHANGES,
+      sharedFolderDocs(
+        ['AGENTS.md', 'docs/reference/layout.md', 'docs/reference/verifications.md'],
+        {
+          example: false,
+          i18n: false,
+        },
+      ),
     ],
     ANCHORS,
   ),

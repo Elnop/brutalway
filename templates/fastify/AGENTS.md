@@ -8,7 +8,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 
 ## Conventions worth knowing first
 
-- `src/app/` composes the features and imports nothing else, `src/features/` holds one folder per feature (the server and the database connection are features too), `src/shared-features/` the business code several features use, `src/shared/` the code with no domain. Each layer only imports the layers below it, a feature never imports another feature, and a file of a `shared/` folder that a single feature uses moves into it.
+- `src/app/` composes the features and imports nothing else, `src/features/` holds one folder per feature (the server and the database connection are features too), `src/shared/` one folder per slice of code that several features use. Each layer only imports the layers below it, a feature never imports another feature, and a file of a slice that a single feature uses moves into it.
 - A request goes `xRoutes.ts` to `xService.ts` to `xQueries.ts`: a route never runs a query, and only an `xQueries.ts` touches the storage.
 - Services get the database as a parameter and build their queries from it, and `src/app/buildApp.ts` is the one place that opens it and passes it.
 - Requests and responses are Zod schemas in an `xSchemas.ts`, and the environment is read once, at startup.

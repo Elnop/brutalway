@@ -31,17 +31,17 @@ export const PLAIN_LAYOUT = `    <I18nProvider>
 
 export const SERVER_STATE_README = `## API
 
-The todos come from an API. \`src/shared-features/todos/todosClient.ts\` calls \`/todos\` and \`/stats\` on \`EXPO_PUBLIC_API_URL\`, \`http://localhost:3000\` when it is not set, and parses each response with \`src/shared-features/todos/TodosSchemas.ts\`. The query hooks in \`src/shared-features/todos/hooks/\` cache the answers, and each change invalidates them through \`src/shared-features/todos/todosKeys.ts\`.
+The todos come from an API. \`src/shared/todos/todosClient.ts\` calls \`/todos\` and \`/stats\` on \`EXPO_PUBLIC_API_URL\`, \`http://localhost:3000\` when it is not set, and parses each response with \`src/shared/todos/TodosSchemas.ts\`. The queries of \`src/features/todo-list/useTodoList.ts\` and \`src/features/todo-stats/useTodoStatsQuery.ts\` cache the answers, and each change invalidates them through \`src/shared/todos/todosKeys.ts\`.
 
 [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify) serves these routes: start it, then the app. On an Android emulator or a USB phone, \`adb reverse tcp:3000 tcp:3000\` makes \`localhost:3000\` reach your machine. Elsewhere, set \`EXPO_PUBLIC_API_URL\` in \`.env.local\` to the address of your machine on the network. Expo writes the value into the bundle when Metro starts, so restart it after a change.
 
 `;
 
-export const I18N_README = `The example comes in English and French. The buttons under the title switch between them through \`src/features/language-switch/components/LanguageSwitchContainer.tsx\`, and the languages, which the i18n setup shares with the switch, are listed in \`src/shared-features/language/LanguagesConfig.ts\`. At start, \`src/features/i18n/I18nProvider.tsx\` takes the language saved in AsyncStorage through \`src/shared-features/language/lib/languageStorage.ts\`, or else the first language of the device that the project has ([expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)), and saves each change.
+export const I18N_README = `The example comes in English and French. The buttons under the title switch between them through \`src/features/language-switch/components/LanguageSwitchContainer.tsx\`, and the languages, which the i18n setup shares with the switch, are listed in \`src/shared/language/LanguagesConfig.ts\`. At start, \`src/features/i18n/I18nProvider.tsx\` takes the language saved in AsyncStorage through \`src/features/i18n/lib/languageStorage.ts\`, or else the first language of the device that the project has ([expo-localization](https://docs.expo.dev/versions/latest/sdk/localization/)), and saves each change.
 
 ## Add a language
 
-To add a language, add it to \`src/shared-features/language/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+To add a language, add it to \`src/shared/language/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/lib/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
 
 export const DARK_COLORS = `const DARK = {
   ink: '#f4ede0',
@@ -58,7 +58,7 @@ const COLORS = Appearance.getColorScheme() === 'dark' ? DARK : LIGHT;
 
 `;
 
-export const DARK_THEME_README = `The colors follow the theme of the system when the app starts. \`src/shared-features/theme/ThemeConfig.ts\` holds a light and a dark set of the same color tokens and picks one through \`Appearance\`, so a component never picks a color per theme. The pastel accents carry dark text in both themes (\`onAccent\`) and the other surfaces the ink of the theme, so text keeps a contrast of at least 4.5:1 everywhere. A theme change while the app runs shows at the next start.
+export const DARK_THEME_README = `The colors follow the theme of the system when the app starts. \`src/shared/theme/ThemeConfig.ts\` holds a light and a dark set of the same color tokens and picks one through \`Appearance\`, so a component never picks a color per theme. The pastel accents carry dark text in both themes (\`onAccent\`) and the other surfaces the ink of the theme, so text keeps a contrast of at least 4.5:1 everywhere. A theme change while the app runs shows at the next start.
 
 `;
 
@@ -68,13 +68,13 @@ export const REACT_COMPILER_DOC = `\`app.json\` turns on the [React Compiler](ht
 
 export const ANALYTICS_MODULE_README = `## Analytics
 
-\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it emits an \`analytics\` event on \`DeviceEventEmitter\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
+\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it emits an \`analytics\` event on \`DeviceEventEmitter\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
 
 `;
 
 export const ANALYTICS_POSTHOG_README = `## Analytics
 
-\`src/shared/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-react-native\`. Set \`EXPO_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`EXPO_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev or in the tests. Expo writes these values into the bundle when Metro starts, so restart it after a change.
+\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-react-native\`. Set \`EXPO_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`EXPO_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev or in the tests. Expo writes these values into the bundle when Metro starts, so restart it after a change.
 
 `;
 

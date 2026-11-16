@@ -8,10 +8,10 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 
 ## Conventions worth knowing first
 
-- `src/app/` is the app layer: the Expo Router routes in `src/app/` compose the features and import nothing else (the page frame and the themed stack live in `src/features/page-shell/`), `src/features/` holds one folder per feature, `src/shared-features/` the business code several features use, `src/shared/` the code with no domain. Each layer only imports the layers below it, a feature never imports another feature, and a file of a `shared/` folder that a single feature uses moves into it.
+- `src/app/` is the app layer: the Expo Router routes in `src/app/` compose the features and import nothing else (the page frame and the themed stack live in `src/features/page-shell/`), `src/features/` holds one folder per feature, `src/shared/` one folder per slice of code that several features use. Each layer only imports the layers below it, a feature never imports another feature, and a file of a slice that a single feature uses moves into it.
 - A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`) that reads state through hooks, or a presenter that only gets props.
 - Every visible string goes through `t()`, with its English text in `locales/en/`.
-- Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared-features/theme/ThemeConfig.ts`.
+- Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared/theme/ThemeConfig.ts`.
 - A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `@test-utils/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`@/` instead), no `index.ts` and no `export default` outside the route files and the configs.
 

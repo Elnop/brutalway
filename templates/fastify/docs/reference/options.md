@@ -44,4 +44,4 @@ Without it, there is no Swagger UI on `/docs`: `src/features/http-server/swagger
 
 ## database
 
-Without it, `src/features/database/` and the `DATABASE_PATH` variable are removed, and nothing uses `node:sqlite`. The example keeps its todos in a `Map` at the top of `src/shared-features/todos/todosQueries.ts`, which has the same functions: both services call `createTodosQueries()` and see the same todos, and the routes do not change.
+Without it, `src/features/database/` and the `DATABASE_PATH` variable are removed, and nothing uses `node:sqlite`. The example keeps its todos in a `Map` at the top of `src/shared/todos/todosQueries.ts`, which has the same functions: both services call `createTodosQueries()` and see the same todos, and the routes do not change.

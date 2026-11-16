@@ -6,7 +6,7 @@ The intent behind every template of the series and the general principles they b
 
 The classic layered backend, described by Martin Fowler as [Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html) and [Repository](https://martinfowler.com/eaaCatalog/repository.html): the controller handles HTTP, the service holds the business logic, the repository talks to the database.
 
-We take the three roles under the names `xRoutes.ts`, `xService.ts` and `xQueries.ts`. A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared-features/todos/todosQueries.ts`, and only queries run SQL.
+We take the three roles under the names `xRoutes.ts`, `xService.ts` and `xQueries.ts`. A request goes `src/features/todo-list/todoListRoutes.ts` → `src/features/todo-list/todoListService.ts` → `src/shared/todos/todosQueries.ts`, and only queries run SQL.
 
 We leave out classes, base repositories and generic CRUD. Queries are plain functions written in SQL, grouped by `createTodosQueries()` behind the `TodosQueries` type, which is all the abstraction the in-memory version needs.
 
@@ -34,7 +34,7 @@ Enforced by `@brutalway/oxlint-config-fastify` (schemas in an `XSchemas.ts` that
 
 From [The Twelve-Factor App](https://12factor.net/config): configuration that changes between deploys comes from environment variables.
 
-We take it, and add one rule: `process.env` is read in a single file, `src/shared/readEnv.ts`, which validates every variable with Zod at startup. An invalid value stops the server before it listens.
+We take it, and add one rule: `process.env` is read in a single file, `src/shared/env/readEnv.ts`, which validates every variable with Zod at startup. An invalid value stops the server before it listens.
 
 We leave out the rest of the twelve factors, which are about deployment and out of scope for a template.
 

@@ -1,4 +1,4 @@
-import { THEME } from '@/shared-features/theme/ThemeConfig.ts';
+import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
 export const STACK_SCREEN_OPTIONS = {
   headerShown: false,

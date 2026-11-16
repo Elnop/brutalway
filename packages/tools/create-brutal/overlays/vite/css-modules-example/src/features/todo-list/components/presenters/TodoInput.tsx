@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { TitleError } from '@/features/todo-list/shared/presenters/TitleError.tsx';
-import { TitleInput } from '@/features/todo-list/shared/presenters/TitleInput.tsx';
-import { useTitleForm } from '@/features/todo-list/shared/useTitleForm.ts';
+import { TitleError } from '@/features/todo-list/shared/title-error/TitleError.tsx';
+import { TitleInput } from '@/features/todo-list/shared/title-input/TitleInput.tsx';
+import { useTitleForm } from '@/features/todo-list/shared/title-form/useTitleForm.ts';
 import styles from '@/features/todo-list/components/presenters/TodoInput.module.css';
 
 type TodoInputProps = {

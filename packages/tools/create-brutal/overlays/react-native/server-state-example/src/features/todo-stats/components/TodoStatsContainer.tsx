@@ -1,6 +1,6 @@
 import { TodoStats } from '@/features/todo-stats/components/TodoStats.tsx';
-import { useTodoMutations } from '@/shared-features/todos/hooks/useTodoMutations.ts';
-import { useTodoStatsQuery } from '@/shared-features/todos/hooks/useTodoStatsQuery.ts';
+import { useTodoMutations } from '@/shared/todos/useTodoMutations.ts';
+import { useTodoStatsQuery } from '@/features/todo-stats/useTodoStatsQuery.ts';
 
 export function TodoStatsContainer() {
   const stats = useTodoStatsQuery().data;
