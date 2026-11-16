@@ -1,6 +1,6 @@
-import { NEW_ISSUE_URL, PULL_REQUESTS_URL } from '@/shared/configs/LinksConfig.ts';
-import { CommandLine } from '@/shared/presenters/CommandLine.tsx';
-import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
+import { NEW_ISSUE_URL, PULL_REQUESTS_URL } from '@/shared/links/LinksConfig.ts';
+import { CommandLine } from '@/shared/command-line/CommandLine.tsx';
+import { SiteLink } from '@/shared/site-link/SiteLink.tsx';
 import '@/features/site/features/footer/footer.css';
 
 export function SiteFooter() {

@@ -17,7 +17,7 @@ Everything below runs locally and in the pre-commit hook.
 - a file with a single export is named after it
 - `xStore.ts` exports only `xStore` and `xActions`
 - a component types its props with a named `XProps` type, and callback props are named `onX`
-- no orchestrator (`XContainer`, `XLayout`, `XPage`) under `shared-features/`: the components that read shared state belong to a feature
+- no orchestrator (`XContainer`, `XLayout`, `XPage`) in a `shared/`, at any depth: the components that read shared state belong to a feature
 - a hook lives in a `useX.ts` that only exports hooks, a `xSelectors.ts` only exports `selectX` functions
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`, `curly` only for multi-line blocks
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)
@@ -26,16 +26,16 @@ Everything below runs locally and in the pre-commit hook.
 
 dependency-cruiser checks the direction of imports. The rules come from `@brutalway/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:
 
-- `src/shared/` imports neither `src/shared-features/` nor features, `src/shared-features/` imports no feature, no feature imports `src/app/`
-- a feature never imports another feature, a shared feature never imports another shared feature
-- a sub-feature imports neither its siblings nor its feature root, only its feature `shared/`, at every nesting level, and features nest at most ten levels deep
-- a presenter imports no store and no shared-feature hook
+- `src/shared/` imports no feature, a slice never imports another slice, no feature imports `src/app/`
+- a feature never imports another feature
+- a sub-feature imports neither its siblings nor its feature root, only the slices of its feature `shared/`, at every nesting level, and features nest at most ten levels deep
+- a presenter reaches no store, no `xClient.ts`, no zustand and no react-query through any chain of imports, and imports no orchestrator
 - a store lives at the root or in the `stores/` folder of its level
 - no cycles, no import of a test file or a devDependency from production code
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. It also rejects two CSS files outside a `styles/` folder.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. `src/shared/` holds one folder per slice: a file of a slice that a single feature uses is rejected, and so is a slice whose files, tests aside, form two groups that never import each other. It also rejects two CSS files outside a `styles/` folder.
 
 ## Repository
 

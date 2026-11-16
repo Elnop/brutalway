@@ -1,4 +1,4 @@
-import type { Axiom } from '@/features/landing/shared/AxiomsTypes.ts';
+import type { Axiom } from '@/features/landing/shared/axioms/AxiomsTypes.ts';
 
 export const AXIOMS: Axiom[] = [
   {

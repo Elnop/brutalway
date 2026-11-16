@@ -1,5 +1,5 @@
-import type { CopyStatus } from '@/shared/ClipboardTypes.ts';
-import { useCopyToClipboard } from '@/shared/hooks/useCopyToClipboard.ts';
+import type { CopyStatus } from '@/shared/command-line/ClipboardTypes.ts';
+import { useCopyToClipboard } from '@/shared/command-line/useCopyToClipboard.ts';
 
 const COMMAND = 'npm create brutal my-app';
 

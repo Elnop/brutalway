@@ -7,9 +7,9 @@ import {
   PACKAGES_ROUTE,
   REPOSITORY_URL,
   TEMPLATES_ROUTE,
-} from '@/shared/configs/LinksConfig.ts';
+} from '@/shared/links/LinksConfig.ts';
 import '@/features/site/features/header/header.css';
-import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
+import { SiteLink } from '@/shared/site-link/SiteLink.tsx';
 
 type SiteHeaderProps = {
   actions: ReactNode;

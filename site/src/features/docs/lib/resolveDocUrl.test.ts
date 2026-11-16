@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES } from '@/features/docs/configs/DocsConfig.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 
 const [source, templates, template] = DOC_SOURCES;

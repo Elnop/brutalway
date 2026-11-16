@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { CopyStatus } from '@/shared/ClipboardTypes.ts';
+import type { CopyStatus } from '@/shared/command-line/ClipboardTypes.ts';
 
 const STATUS_DURATION_MS = 2000;
 

@@ -1,5 +1,5 @@
 import type { DocSource, RoadmapStatus } from '@/features/docs/DocsTypes.ts';
-import { DOCS_ROUTE, PACKAGES_ROUTE, TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
+import { DOCS_ROUTE, PACKAGES_ROUTE, TEMPLATES_ROUTE } from '@/shared/links/LinksConfig.ts';
 
 export const DOCS_BRANCH = 'main';
 

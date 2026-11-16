@@ -1,4 +1,4 @@
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES } from '@/features/docs/configs/DocsConfig.ts';
 import type { DocEntry, DocSource } from '@/features/docs/DocsTypes.ts';
 import { listRepositoryFiles } from '@/features/docs/githubClient.ts';
 import { docTitle } from '@/features/docs/lib/docTitle.ts';

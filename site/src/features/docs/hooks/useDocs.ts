@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { DOC_SOURCES, PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES, PACKAGES_INDEX } from '@/features/docs/configs/DocsConfig.ts';
 import type { DocEntry, DocSource, LoadState, PackageCategory } from '@/features/docs/DocsTypes.ts';
 import { docsKeys } from '@/features/docs/docsKeys.ts';
 import { contentQuery, roadmapQuery } from '@/features/docs/docsQueries.ts';
@@ -8,7 +8,7 @@ import { docMainTitle } from '@/features/docs/lib/docHeadings.ts';
 import { fixedEntries, loadDocList } from '@/features/docs/lib/docList.ts';
 import { packageCategories } from '@/features/docs/lib/packageCategories.ts';
 import { rawFileUrl } from '@/features/docs/lib/githubUrls.ts';
-import { QUERY_CACHE } from '@/shared/configs/QueryConfig.ts';
+import { QUERY_CACHE } from '@/features/docs/configs/QueryConfig.ts';
 
 export function useDocList(): DocEntry[] {
   const query = useQuery({

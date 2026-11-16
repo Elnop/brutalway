@@ -1,4 +1,4 @@
-import { AXIOMS } from '@/features/landing/shared/AxiomsConfig.ts';
+import { AXIOMS } from '@/features/landing/shared/axioms/AxiomsConfig.ts';
 import '@/features/landing/features/axiom-grid/axiom-grid.css';
 
 export function AxiomGrid() {

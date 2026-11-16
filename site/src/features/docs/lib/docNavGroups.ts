@@ -1,4 +1,4 @@
-import { DOC_SOURCES, PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES, PACKAGES_INDEX } from '@/features/docs/configs/DocsConfig.ts';
 import type {
   DocEntry,
   DocHeading,

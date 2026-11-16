@@ -1,20 +1,9 @@
-import { useEffect } from 'react';
 import { DocsPage } from '@/features/docs/components/DocsPage.tsx';
 import { LandingPage } from '@/features/landing/LandingPage.tsx';
 import { SiteFrame } from '@/features/site/SiteFrame.tsx';
-import { PAGE_ROUTES } from '@/shared/configs/LinksConfig.ts';
-import { useHash } from '@/shared/hooks/useHash.ts';
+import { useHashRoute } from '@/features/site/useHashRoute.ts';
 
 export function App() {
-  const hash = useHash();
-  const isDocs = PAGE_ROUTES.some((route) => hash.startsWith(route));
-  useEffect(() => {
-    if (isDocs) return;
-    if (hash.length <= 1) {
-      window.scrollTo(0, 0);
-      return;
-    }
-    document.getElementById(hash.slice(1))?.scrollIntoView();
-  }, [hash, isDocs]);
+  const { isDocs } = useHashRoute();
   return <SiteFrame>{isDocs ? <DocsPage /> : <LandingPage />}</SiteFrame>;
 }

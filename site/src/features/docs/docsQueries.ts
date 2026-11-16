@@ -2,7 +2,7 @@ import { queryOptions } from '@tanstack/react-query';
 import { docsKeys } from '@/features/docs/docsKeys.ts';
 import { fetchDocText, listIssues } from '@/features/docs/githubClient.ts';
 import { roadmapMarkdown } from '@/features/docs/lib/roadmapMarkdown.ts';
-import { QUERY_CACHE } from '@/shared/configs/QueryConfig.ts';
+import { QUERY_CACHE } from '@/features/docs/configs/QueryConfig.ts';
 
 export function roadmapQuery(repo: string) {
   return queryOptions({

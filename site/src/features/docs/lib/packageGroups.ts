@@ -1,4 +1,4 @@
-import { DOC_SOURCES, PACKAGES_INDEX, README_FILE } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES, PACKAGES_INDEX, README_FILE } from '@/features/docs/configs/DocsConfig.ts';
 import type {
   DocNavGroup,
   DocNavNode,

@@ -1,4 +1,4 @@
-import { DOCS_BRANCH } from '@/features/docs/DocsConfig.ts';
+import { DOCS_BRANCH } from '@/features/docs/configs/DocsConfig.ts';
 import type { DocSource } from '@/features/docs/DocsTypes.ts';
 
 export function repositoryPath(source: DocSource, path: string): string {

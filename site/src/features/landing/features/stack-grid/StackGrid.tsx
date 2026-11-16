@@ -1,6 +1,6 @@
 import '@/features/landing/features/stack-grid/stack-grid.css';
-import { TEMPLATES_ROUTE } from '@/shared/configs/LinksConfig.ts';
-import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
+import { TEMPLATES_ROUTE } from '@/shared/links/LinksConfig.ts';
+import { SiteLink } from '@/shared/site-link/SiteLink.tsx';
 
 const stacks = [
   {

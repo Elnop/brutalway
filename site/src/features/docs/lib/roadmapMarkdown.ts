@@ -1,4 +1,4 @@
-import { OPEN_STATUSES, REJECTED_LABELS } from '@/features/docs/DocsConfig.ts';
+import { OPEN_STATUSES, REJECTED_LABELS } from '@/features/docs/configs/DocsConfig.ts';
 import type {
   IssueTree,
   PlacedIssue,

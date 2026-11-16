@@ -6,8 +6,8 @@ import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
 import { docSourceUrl } from '@/features/docs/lib/docsUrls.ts';
 import { repositoryPath } from '@/features/docs/lib/githubUrls.ts';
 import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
-import { NEW_ISSUE_URL, NPM_PACKAGE_URL } from '@/shared/configs/LinksConfig.ts';
-import { SiteLink } from '@/shared/presenters/SiteLink.tsx';
+import { NEW_ISSUE_URL, NPM_PACKAGE_URL } from '@/shared/links/LinksConfig.ts';
+import { SiteLink } from '@/shared/site-link/SiteLink.tsx';
 
 const markdownComponents: Components = {
   a: ({ node: _node, ...props }) => <SiteLink {...props} />,

@@ -1,4 +1,4 @@
-import { README_FILE } from '@/features/docs/DocsConfig.ts';
+import { README_FILE } from '@/features/docs/configs/DocsConfig.ts';
 import type { DocEntry, DocNavNode, DocSource, NavContext } from '@/features/docs/DocsTypes.ts';
 import { docHref } from '@/features/docs/lib/docsUrls.ts';
 import { holdsCurrent, sectionNodes } from '@/features/docs/lib/sectionNodes.ts';

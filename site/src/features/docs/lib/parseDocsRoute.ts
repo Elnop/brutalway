@@ -1,4 +1,4 @@
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES } from '@/features/docs/configs/DocsConfig.ts';
 import type { DocsRoute } from '@/features/docs/DocsTypes.ts';
 
 type SourcePath = { source: DocsRoute['source']; path: string };

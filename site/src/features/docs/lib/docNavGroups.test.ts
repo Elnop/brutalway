@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DocNavNode } from '@/features/docs/DocsTypes.ts';
-import { DOC_SOURCES } from '@/features/docs/DocsConfig.ts';
+import { DOC_SOURCES } from '@/features/docs/configs/DocsConfig.ts';
 import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
 
 const [brutalway, , vite] = DOC_SOURCES;

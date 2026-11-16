@@ -1,5 +1,5 @@
-import { AXIOMS } from '@/features/landing/shared/AxiomsConfig.ts';
-import { CommandLine } from '@/shared/presenters/CommandLine.tsx';
+import { AXIOMS } from '@/features/landing/shared/axioms/AxiomsConfig.ts';
+import { CommandLine } from '@/shared/command-line/CommandLine.tsx';
 import '@/features/landing/features/hero/hero.css';
 
 function HeroLetters() {

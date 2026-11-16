@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { DocEntry, DocsRoute } from '@/features/docs/DocsTypes.ts';
 import { DocsArticle } from '@/features/docs/components/presenters/DocsArticle.tsx';
 import { DocsNav } from '@/features/docs/components/presenters/DocsNav.tsx';
-import { PACKAGES_INDEX } from '@/features/docs/DocsConfig.ts';
+import { PACKAGES_INDEX } from '@/features/docs/configs/DocsConfig.ts';
 import {
   useDocContent,
   useDocList,
@@ -14,7 +14,7 @@ import { useSectionTracking } from '@/features/docs/hooks/useSectionTracking.ts'
 import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
 import { docNavGroups } from '@/features/docs/lib/docNavGroups.ts';
 import { parseDocsRoute } from '@/features/docs/lib/parseDocsRoute.ts';
-import { useHash } from '@/shared/hooks/useHash.ts';
+import { useHash } from '@/shared/hash/useHash.ts';
 import '@/features/docs/docs.css';
 
 type DocsViewProps = {
