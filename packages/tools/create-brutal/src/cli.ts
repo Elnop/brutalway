@@ -14,7 +14,7 @@ import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.t
 import { templateSource } from '#src/features/scaffolding/lib/templateSource.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
-import { errorMessage } from '#src/shared/lib/errorMessage.ts';
+import { errorMessage } from '#src/shared/error-message/errorMessage.ts';
 
 async function createProject(dir: string, plan: () => ScaffoldPlan): Promise<void> {
   const existed = existsSync(dir);

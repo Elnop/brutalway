@@ -2,8 +2,8 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { applyFileEdit } from '#src/features/scaffolding/lib/applyFileEdit.ts';
 import { fillProjectTokens } from '#src/features/scaffolding/lib/fillProjectTokens.ts';
-import { errorMessage } from '#src/shared/lib/errorMessage.ts';
-import type { FileEdit } from '#src/shared-features/stack/StackTypes.ts';
+import { errorMessage } from '#src/shared/error-message/errorMessage.ts';
+import type { FileEdit } from '#src/shared/stack/StackTypes.ts';
 
 function withProjectName(edit: FileEdit, projectName: string): FileEdit {
   if ('with' in edit) {

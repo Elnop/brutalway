@@ -1,6 +1,6 @@
 import { defineRule } from '@oxlint/plugins';
 import type { ESTree } from '@oxlint/plugins';
-import { isClassAttribute } from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
+import { isClassAttribute } from '#src/shared/tailwind-classes/lib/classStrings.ts';
 import { oklabDistance } from '@brutalway/lint-utils/oklab';
 import { readColorTokens, readPalette } from '#src/features/color-tokens/lib/readColorTokens.ts';
 import { reportClassOffenses } from '#src/features/color-tokens/lib/reportClassOffenses.ts';

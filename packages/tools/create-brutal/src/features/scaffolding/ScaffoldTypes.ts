@@ -1,4 +1,4 @@
-import type { Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { Answers, Stack } from '#src/shared/stack/StackTypes.ts';
 
 export type TemplateSource = { kind: 'local'; root: string } | { kind: 'github'; ref: string };
 

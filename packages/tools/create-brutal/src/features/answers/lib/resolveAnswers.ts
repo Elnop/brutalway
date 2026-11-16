@@ -1,7 +1,7 @@
-import { flag } from '#src/shared-features/stack/lib/flag.ts';
-import { blockerOf } from '#src/shared-features/stack/lib/optionRules.ts';
-import { candidateValues, isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { AnswerValue, Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { flag } from '#src/shared/stack/lib/flag.ts';
+import { blockerOf } from '#src/shared/stack/lib/optionRules.ts';
+import { candidateValues, isChoice } from '#src/shared/stack/lib/optionValues.ts';
+import type { AnswerValue, Answers, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 type AskOption = (option: StackOption, allowed: AnswerValue[]) => Promise<AnswerValue>;
 

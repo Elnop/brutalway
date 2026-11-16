@@ -3,7 +3,7 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfmFromMarkdown } from 'mdast-util-gfm';
 import { gfm } from 'micromark-extension-gfm';
 import type { MarkdownFile } from '#src/features/markdown-links/MarkdownLinksTypes.ts';
-import type { ExternalLink } from '#src/shared-features/links/LinksTypes.ts';
+import type { ExternalLink } from '#src/shared/links/LinksTypes.ts';
 
 function urlNodes(node: Nodes): Nodes[] {
   const own =

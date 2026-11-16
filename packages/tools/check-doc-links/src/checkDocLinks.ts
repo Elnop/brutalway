@@ -3,7 +3,7 @@ import { projectContext } from '#src/features/local-links/lib/projectContext.ts'
 import { resolveLocally } from '#src/features/local-links/lib/resolveLocally.ts';
 import { linksToCheck } from '#src/features/markdown-links/lib/linksToCheck.ts';
 import { checkRemoteLinks } from '#src/features/remote-links/lib/checkRemoteLinks.ts';
-import type { ExternalLink, LinkResult } from '#src/shared-features/links/LinksTypes.ts';
+import type { ExternalLink, LinkResult } from '#src/shared/links/LinksTypes.ts';
 
 function report(link: ExternalLink, result: LinkResult): string {
   if (result.verdict === 'dead') {

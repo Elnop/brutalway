@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { longDocs } from '#src/features/length-check/longDocs.ts';
-import { DEFAULT_SETTINGS } from '#src/shared-features/docs/DocLengthConfig.ts';
+import { DEFAULT_SETTINGS } from '#src/shared/docs/DocLengthConfig.ts';
 
 describe('longDocs', () => {
   it('reports only the files above the limit, with their number of lines', () => {

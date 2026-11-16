@@ -1,4 +1,4 @@
-import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const BIN_SENTENCE =

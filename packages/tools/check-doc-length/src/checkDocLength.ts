@@ -5,9 +5,9 @@ import { parseArgs } from 'node:util';
 import { longDocs } from '#src/features/length-check/longDocs.ts';
 import { splitDoc } from '#src/features/split/lib/splitDoc.ts';
 import type { SplitPlan } from '#src/features/split/SplitTypes.ts';
-import type { DocLengthSettings } from '#src/shared-features/docs/DocLengthTypes.ts';
-import { markdownFiles } from '#src/shared-features/docs/lib/markdownFiles.ts';
-import { readSettings } from '#src/shared-features/docs/lib/readSettings.ts';
+import type { DocLengthSettings } from '#src/shared/docs/DocLengthTypes.ts';
+import { markdownFiles } from '#src/shared/docs/lib/markdownFiles.ts';
+import { readSettings } from '#src/shared/docs/lib/readSettings.ts';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,

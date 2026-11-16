@@ -1,8 +1,8 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import type { ProjectContext } from '#src/features/local-links/LocalLinksTypes.ts';
-import type { LinkResult } from '#src/shared-features/links/LinksTypes.ts';
-import { npmPackageName } from '#src/shared-features/links/npmPackageName.ts';
+import type { LinkResult } from '#src/shared/links/LinksTypes.ts';
+import { npmPackageName } from '#src/shared/npm-package/npmPackageName.ts';
 
 const GITHUB_FILE =
   /^https:\/\/github\.com\/([^/]+\/[^/]+)\/(?:blob|tree)\/(?:main|master|HEAD)\/([^?#]*)/iu;

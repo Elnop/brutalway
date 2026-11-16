@@ -1,4 +1,4 @@
-import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { isRecord } from '#src/shared/is-record/isRecord.ts';
 
 const PRINT_WIDTH = 100;
 const INDENT = '  ';

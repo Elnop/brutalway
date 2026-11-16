@@ -2,7 +2,7 @@ import { appendFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from '
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
-import { errorMessage } from '#src/shared/lib/errorMessage.ts';
+import { errorMessage } from '#src/shared/error-message/errorMessage.ts';
 import { formatDuration } from '#src/features/matrix/lib/formatDuration.ts';
 import { matrixLabel } from '#src/features/matrix/lib/matrixLabel.ts';
 import { onlyAnswers } from '#src/features/matrix/lib/onlyAnswers.ts';
@@ -12,7 +12,7 @@ import { matrixCombinations } from '#src/features/matrix/lib/matrixCombinations.
 import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.ts';
 import { LOCAL_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
 import { SHADCN_ADDED_AFTER_SCAFFOLD } from '#src/features/stacks/configs/shadcnConfig.ts';
-import type { Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { Answers, Stack } from '#src/shared/stack/StackTypes.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
 import {
   withLocalPackages,

@@ -1,6 +1,6 @@
 import { isCancel, select } from '@clack/prompts';
 import { stopCancelled } from '#src/features/prompts/lib/stopCancelled.ts';
-import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { Stack } from '#src/shared/stack/StackTypes.ts';
 
 export async function pickStack(
   stacks: Stack[],

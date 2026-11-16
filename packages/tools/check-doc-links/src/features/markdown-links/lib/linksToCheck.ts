@@ -1,7 +1,7 @@
 import { externalLinks } from '#src/features/markdown-links/lib/externalLinks.ts';
 import { markdownFiles } from '#src/features/markdown-links/lib/markdownFiles.ts';
 import { readSettings } from '#src/features/markdown-links/lib/readSettings.ts';
-import type { ExternalLink } from '#src/shared-features/links/LinksTypes.ts';
+import type { ExternalLink } from '#src/shared/links/LinksTypes.ts';
 
 export function linksToCheck(cwd: string): ExternalLink[] {
   const settings = readSettings(cwd);

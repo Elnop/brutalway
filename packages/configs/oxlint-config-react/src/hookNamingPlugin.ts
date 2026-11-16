@@ -1,3 +1,3 @@
-import { restrictedSyntaxPlugin } from '#src/shared/restrictedSyntaxPlugin.ts';
+import { restrictedSyntaxPlugin } from '#src/shared/restricted-syntax/restrictedSyntaxPlugin.ts';
 
 export default restrictedSyntaxPlugin('hook-naming');

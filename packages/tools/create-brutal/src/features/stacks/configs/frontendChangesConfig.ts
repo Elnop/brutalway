@@ -1,4 +1,4 @@
-import type { FileEdit, StackChange, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import type { FileEdit, StackChange, StackOption } from '#src/shared/stack/StackTypes.ts';
 import { SHADCN_DEPENDENCIES, SHADCN_VERSION } from '#src/features/stacks/configs/shadcnConfig.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 

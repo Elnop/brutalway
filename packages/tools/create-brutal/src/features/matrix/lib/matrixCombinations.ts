@@ -1,7 +1,7 @@
 import { coveringRows } from '#src/features/matrix/lib/coveringRows.ts';
-import { satisfiesRules } from '#src/shared-features/stack/lib/optionRules.ts';
-import { candidateValues } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { satisfiesRules } from '#src/shared/stack/lib/optionRules.ts';
+import { candidateValues } from '#src/shared/stack/lib/optionValues.ts';
+import type { Answers, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 function crossAll(options: StackOption[]): Answers[] {
   let combinations: Answers[] = [{}];

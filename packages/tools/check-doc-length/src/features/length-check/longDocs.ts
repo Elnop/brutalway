@@ -1,5 +1,5 @@
 import type { LongDoc } from '#src/features/length-check/LengthCheckTypes.ts';
-import type { DocLengthSettings, WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
+import type { DocLengthSettings, WrittenFile } from '#src/shared/docs/DocLengthTypes.ts';
 
 export function longDocs(files: WrittenFile[], settings: DocLengthSettings): LongDoc[] {
   return files

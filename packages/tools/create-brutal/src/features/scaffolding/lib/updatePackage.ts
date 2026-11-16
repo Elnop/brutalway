@@ -1,5 +1,5 @@
 import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
-import type { StackChange } from '#src/shared-features/stack/StackTypes.ts';
+import type { StackChange } from '#src/shared/stack/StackTypes.ts';
 
 function sortedRecord(record: Record<string, string>): Record<string, string> {
   return Object.fromEntries(Object.entries(record).toSorted(([a], [b]) => a.localeCompare(b)));

@@ -1,4 +1,4 @@
-import type { Answers } from '#src/shared-features/stack/StackTypes.ts';
+import type { Answers } from '#src/shared/stack/StackTypes.ts';
 
 export type CliArgs = {
   dir: string | undefined;

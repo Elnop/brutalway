@@ -4,7 +4,7 @@ import { downloadTemplate } from 'giget';
 import { runCommand } from '#src/features/scaffolding/lib/runCommand.ts';
 import { TEMPLATES_REPOSITORY } from '#src/features/scaffolding/ScaffoldConfig.ts';
 import type { TemplateSource } from '#src/features/scaffolding/ScaffoldTypes.ts';
-import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { Stack } from '#src/shared/stack/StackTypes.ts';
 
 function copyWorkingTree(from: string, to: string): void {
   const files = runCommand(

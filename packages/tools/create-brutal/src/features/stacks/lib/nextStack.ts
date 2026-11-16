@@ -1,4 +1,4 @@
-import type { Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {

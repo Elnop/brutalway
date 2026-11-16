@@ -2,7 +2,7 @@ import { posix } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { sectionEnd } from '#src/features/split/lib/sectionEnd.ts';
 import type { Piece, PlanRange, Section } from '#src/features/split/SplitTypes.ts';
-import type { DocLengthSettings } from '#src/shared-features/docs/DocLengthTypes.ts';
+import type { DocLengthSettings } from '#src/shared/docs/DocLengthTypes.ts';
 
 type PlanStep = { sections: Section[]; range: PlanRange; settings: DocLengthSettings };
 

@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { packageRoot } from '#src/shared/lib/packageRoot.ts';
+import { packageRoot } from '#src/shared/package-root/packageRoot.ts';
 
 const PACKAGE_ROOT = packageRoot(import.meta.dirname);
 

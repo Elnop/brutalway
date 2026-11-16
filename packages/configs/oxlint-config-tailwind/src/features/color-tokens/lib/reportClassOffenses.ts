@@ -1,11 +1,8 @@
 import type { ESTree } from '@oxlint/plugins';
 import { oklab } from '@brutalway/lint-utils/oklab';
 import type { ColorToken } from '@brutalway/lint-utils/ColorTypes';
-import {
-  classNames,
-  classStrings,
-} from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
-import { tailwindClass } from '#src/shared-features/tailwind-classes/lib/tailwindClass.ts';
+import { classNames, classStrings } from '#src/shared/tailwind-classes/lib/classStrings.ts';
+import { tailwindClass } from '#src/shared/tailwind-classes/lib/tailwindClass.ts';
 import { COLOR_LITERAL } from '#src/features/color-tokens/ColorTokensConfig.ts';
 import type { Offense, Report } from '#src/features/color-tokens/ColorTokensTypes.ts';
 

@@ -1,5 +1,5 @@
 import type { ESTree } from '@oxlint/plugins';
-import type { ExportEntry } from '#src/shared/types/ExportTypes.ts';
+import type { ExportEntry } from '#src/shared/exports/ExportTypes.ts';
 
 function declaredNames(declaration: ESTree.Declaration): string[] {
   if (declaration.type === 'VariableDeclaration') {

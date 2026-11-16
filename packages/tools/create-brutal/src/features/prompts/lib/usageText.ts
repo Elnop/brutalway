@@ -1,5 +1,5 @@
-import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { Stack, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { isChoice } from '#src/shared/stack/lib/optionValues.ts';
+import type { Stack, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 function defaultLabel(option: StackOption): string {
   if (isChoice(option)) return option.default;

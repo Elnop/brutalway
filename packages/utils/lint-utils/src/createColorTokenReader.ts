@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import type { ColorToken } from '#src/shared/types/ColorTokenTypes.ts';
+import type { ColorToken } from '#src/shared/oklab/types/ColorTokenTypes.ts';
 
 export function createColorTokenReader(
   parse: (css: string) => ColorToken[],

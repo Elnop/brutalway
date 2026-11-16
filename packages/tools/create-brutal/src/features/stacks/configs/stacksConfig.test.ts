@@ -2,12 +2,12 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
-import { flag } from '#src/shared-features/stack/lib/flag.ts';
+import { flag } from '#src/shared/stack/lib/flag.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
-import { packageRoot } from '#src/shared/lib/packageRoot.ts';
-import { satisfiesRules } from '#src/shared-features/stack/lib/optionRules.ts';
-import { candidateValues, isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { AnswerValue, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { packageRoot } from '#src/shared/package-root/packageRoot.ts';
+import { satisfiesRules } from '#src/shared/stack/lib/optionRules.ts';
+import { candidateValues, isChoice } from '#src/shared/stack/lib/optionValues.ts';
+import type { AnswerValue, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 const OPTIONS_DOC = 'docs/reference/options.md';
 const REPOSITORY_ROOT = join(packageRoot(import.meta.dirname), '..', '..', '..');

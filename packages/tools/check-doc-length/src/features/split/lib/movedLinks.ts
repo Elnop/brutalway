@@ -3,7 +3,7 @@ import { applyEdits } from '#src/features/split/lib/applyEdits.ts';
 import { linkEdits } from '#src/features/split/lib/linkEdits.ts';
 import { markdownTree } from '#src/features/split/lib/markdownTree.ts';
 import type { MovedDoc, Target } from '#src/features/split/SplitTypes.ts';
-import type { WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
+import type { WrittenFile } from '#src/shared/docs/DocLengthTypes.ts';
 
 function linkTo(from: string, target: Target): string {
   const anchor = target.slug === undefined ? '' : `#${target.slug}`;

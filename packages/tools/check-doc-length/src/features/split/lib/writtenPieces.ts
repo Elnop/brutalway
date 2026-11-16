@@ -10,7 +10,7 @@ import type {
   SplitSource,
   TextEdit,
 } from '#src/features/split/SplitTypes.ts';
-import type { WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
+import type { WrittenFile } from '#src/shared/docs/DocLengthTypes.ts';
 
 function headingEdit(source: string, section: Section, shift: number): TextEdit | undefined {
   const depth = Math.max(section.depth - shift, 1);

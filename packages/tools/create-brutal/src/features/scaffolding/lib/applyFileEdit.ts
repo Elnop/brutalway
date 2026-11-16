@@ -1,5 +1,5 @@
 import { dropSection } from '#src/features/scaffolding/lib/dropSection.ts';
-import type { FileEdit } from '#src/shared-features/stack/StackTypes.ts';
+import type { FileEdit } from '#src/shared/stack/StackTypes.ts';
 
 function dropLines(text: string, needle: string): string {
   const lines = text.split('\n');

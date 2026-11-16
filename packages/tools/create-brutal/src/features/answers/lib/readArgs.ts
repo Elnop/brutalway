@@ -2,9 +2,9 @@ import { readFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import type { ParseArgsOptionsConfig } from 'node:util';
 import type { CliArgs, Preset } from '#src/features/answers/CliTypes.ts';
-import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { isRecord } from '#src/shared/is-record/isRecord.ts';
 import { stackAnswers, stackOptionsConfig } from '#src/features/answers/lib/stackOptionArgs.ts';
-import type { AnswerValue, Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
+import type { AnswerValue, Answers, Stack } from '#src/shared/stack/StackTypes.ts';
 
 const BASE_OPTIONS: ParseArgsOptionsConfig = {
   stack: { type: 'string' },

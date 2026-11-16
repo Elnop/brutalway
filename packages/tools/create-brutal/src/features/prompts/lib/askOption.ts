@@ -1,7 +1,7 @@
 import { confirm, isCancel, select } from '@clack/prompts';
 import { stopCancelled } from '#src/features/prompts/lib/stopCancelled.ts';
-import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { AnswerValue, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { isChoice } from '#src/shared/stack/lib/optionValues.ts';
+import type { AnswerValue, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 export async function askOption(option: StackOption, allowed: AnswerValue[]): Promise<AnswerValue> {
   if (!isChoice(option)) {

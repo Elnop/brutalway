@@ -1,6 +1,6 @@
 import type { ParseArgsOptionsConfig } from 'node:util';
-import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { Answers, Stack } from '#src/shared-features/stack/StackTypes.ts';
+import { isChoice } from '#src/shared/stack/lib/optionValues.ts';
+import type { Answers, Stack } from '#src/shared/stack/StackTypes.ts';
 
 export function stackOptionsConfig(stack: Stack | undefined): ParseArgsOptionsConfig {
   return Object.fromEntries(

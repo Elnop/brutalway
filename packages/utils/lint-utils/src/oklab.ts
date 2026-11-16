@@ -1,6 +1,6 @@
-import type { Oklab } from '#src/shared/types/OklabTypes.ts';
-import { fromHex } from '#src/shared/lib/fromHex.ts';
-import { fromRgbChannels } from '#src/shared/lib/fromRgbChannels.ts';
+import type { Oklab } from '#src/shared/oklab/types/OklabTypes.ts';
+import { fromHex } from '#src/shared/oklab/lib/fromHex.ts';
+import { fromRgbChannels } from '#src/shared/oklab/lib/fromRgbChannels.ts';
 
 function channels(body: string): number[] {
   return body

@@ -1,4 +1,4 @@
-import type { Answers } from '#src/shared-features/stack/StackTypes.ts';
+import type { Answers } from '#src/shared/stack/StackTypes.ts';
 
 export function matrixLabel(answers: Answers): string {
   return Object.entries(answers)

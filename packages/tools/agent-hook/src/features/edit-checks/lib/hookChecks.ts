@@ -4,8 +4,8 @@ import type { HookCheck, HookScope } from '#src/features/edit-checks/EditChecksT
 import { insideProject } from '#src/features/edit-checks/lib/insideProject.ts';
 import { oxlintCheck } from '#src/features/edit-checks/lib/oxlintCheck.ts';
 import { stylelintCheck } from '#src/features/edit-checks/lib/stylelintCheck.ts';
-import type { HookEdit } from '#src/shared-features/hook-edit/HookEditTypes.ts';
-import { vendoredFolder } from '#src/shared-features/vendored/vendoredFolder.ts';
+import type { HookEdit } from '#src/shared/hook-edit/HookEditTypes.ts';
+import { vendoredFolder } from '#src/shared/vendored/vendoredFolder.ts';
 
 function isVendored(root: string, file: string, vendored: string[]) {
   return vendoredFolder(relative(root, file), vendored) !== undefined;

@@ -2,7 +2,7 @@ import { readCache, writeCache } from '#src/features/remote-links/lib/linkCache.
 import { linkClient } from '#src/features/remote-links/linkClient.ts';
 import { CONCURRENCY } from '#src/features/remote-links/RemoteLinksConfig.ts';
 import type { RemoteCheck } from '#src/features/remote-links/RemoteLinksTypes.ts';
-import type { LinkResult } from '#src/shared-features/links/LinksTypes.ts';
+import type { LinkResult } from '#src/shared/links/LinksTypes.ts';
 import { inPool } from '#src/features/remote-links/lib/inPool.ts';
 
 function resultsByUrl(

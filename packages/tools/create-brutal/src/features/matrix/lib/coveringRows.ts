@@ -1,6 +1,6 @@
 import { targetGroups, targetsOf } from '#src/features/matrix/lib/pairTargets.ts';
-import { satisfiesRules } from '#src/shared-features/stack/lib/optionRules.ts';
-import type { Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { satisfiesRules } from '#src/shared/stack/lib/optionRules.ts';
+import type { Answers, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 function defaults(options: StackOption[]): Answers {
   return Object.fromEntries(options.map((option) => [option.id, option.default]));

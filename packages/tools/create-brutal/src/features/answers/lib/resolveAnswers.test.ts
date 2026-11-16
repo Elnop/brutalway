@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { resolveAnswers } from '#src/features/answers/lib/resolveAnswers.ts';
-import type { StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import type { StackOption } from '#src/shared/stack/StackTypes.ts';
 
 const OPTIONS: StackOption[] = [
   { id: 'example', message: 'example', default: true, requires: { store: true } },

@@ -1,4 +1,4 @@
-import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { isRecord } from '#src/shared/is-record/isRecord.ts';
 
 function pointToTarballs(dependencies: unknown, tarballs: Map<string, string>): unknown {
   if (!isRecord(dependencies)) return dependencies;

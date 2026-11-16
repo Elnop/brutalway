@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { isRecord } from '#src/shared/is-record/isRecord.ts';
 import { STACK_REFS_URL } from '#src/features/scaffolding/ScaffoldConfig.ts';
 
 export function readStackRefs(): Map<string, string> {

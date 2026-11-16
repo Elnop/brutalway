@@ -1,5 +1,5 @@
 import type { OxlintOverride } from 'oxlint';
-import { ROUTER_FILES } from '#src/shared/RouterFilesConfig.ts';
+import { ROUTER_FILES } from '#src/shared/router-files/RouterFilesConfig.ts';
 
 export const routerFilesOverrides: OxlintOverride[] = [
   {

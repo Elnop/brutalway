@@ -6,7 +6,7 @@ import { sectionsOf } from '#src/features/split/lib/sectionsOf.ts';
 import { targetsOf } from '#src/features/split/lib/targetsOf.ts';
 import { writtenPieces } from '#src/features/split/lib/writtenPieces.ts';
 import type { MovedDoc, Piece, Section, SplitPlan } from '#src/features/split/SplitTypes.ts';
-import type { DocLengthSettings, WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
+import type { DocLengthSettings, WrittenFile } from '#src/shared/docs/DocLengthTypes.ts';
 
 function splitDir(docPath: string): string {
   return posix.join(posix.dirname(docPath), posix.basename(docPath, '.md'));

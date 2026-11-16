@@ -1,5 +1,5 @@
-import { isChoice } from '#src/shared-features/stack/lib/optionValues.ts';
-import type { Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import { isChoice } from '#src/shared/stack/lib/optionValues.ts';
+import type { Answers, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 function targetKey(answers: Answers, ids: string[]): string {
   return ids.map((id) => `${id}=${String(answers[id])}`).join(' ');

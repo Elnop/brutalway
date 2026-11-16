@@ -1,4 +1,4 @@
-import type { Answers, StackChange } from '#src/shared-features/stack/StackTypes.ts';
+import type { Answers, StackChange } from '#src/shared/stack/StackTypes.ts';
 
 const SCHEMAS = 'src/shared-features/todos/TodosSchemas.ts';
 const TODOS = 'src/shared-features/todos';

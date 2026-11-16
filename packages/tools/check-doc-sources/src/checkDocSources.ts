@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util';
-import { changedFiles } from '#src/shared/changedFiles.ts';
+import { changedFiles } from '#src/shared/changed-files/changedFiles.ts';
 import { citations } from '#src/features/citations/lib/citations.ts';
 import { markdownFiles } from '#src/features/citations/lib/markdownFiles.ts';
 import { readSettings } from '#src/features/citations/lib/readSettings.ts';

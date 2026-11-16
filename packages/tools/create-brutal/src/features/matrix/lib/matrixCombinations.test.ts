@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { matrixCombinations } from '#src/features/matrix/lib/matrixCombinations.ts';
-import type { Answers, StackOption } from '#src/shared-features/stack/StackTypes.ts';
+import type { Answers, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 const TOGGLES: StackOption[] = [
   { id: 'example', message: '', default: true, requires: { store: true } },

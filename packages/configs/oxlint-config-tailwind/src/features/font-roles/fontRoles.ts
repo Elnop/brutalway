@@ -4,8 +4,8 @@ import {
   classNames,
   classStrings,
   isClassAttribute,
-} from '#src/shared-features/tailwind-classes/lib/classStrings.ts';
-import { tailwindClass } from '#src/shared-features/tailwind-classes/lib/tailwindClass.ts';
+} from '#src/shared/tailwind-classes/lib/classStrings.ts';
+import { tailwindClass } from '#src/shared/tailwind-classes/lib/tailwindClass.ts';
 
 const ROLES = new Map([
   ['h1', 'font-display'],

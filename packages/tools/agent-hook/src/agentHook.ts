@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { UPSTREAM_REPORT_HINT } from '#src/features/edit-checks/EditChecksConfig.ts';
 import { hookChecks } from '#src/features/edit-checks/lib/hookChecks.ts';
-import { readHookEdit } from '#src/shared-features/hook-edit/readHookEdit.ts';
+import { readHookEdit } from '#src/shared/hook-edit/readHookEdit.ts';
 import { vendoredEditMessage } from '#src/features/vendored-refusal/vendoredEditMessage.ts';
 
 const { values } = parseArgs({

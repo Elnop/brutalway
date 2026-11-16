@@ -1,5 +1,5 @@
 import { basename, extname, relative } from 'node:path';
-import { vendoredFolder } from '#src/shared-features/vendored/vendoredFolder.ts';
+import { vendoredFolder } from '#src/shared/vendored/vendoredFolder.ts';
 
 export function vendoredEditMessage(
   root: string,

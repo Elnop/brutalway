@@ -1,5 +1,5 @@
 import type { Heading, Root } from 'mdast';
-import type { WrittenFile } from '#src/shared-features/docs/DocLengthTypes.ts';
+import type { WrittenFile } from '#src/shared/docs/DocLengthTypes.ts';
 
 export type SplitPlan = {
   removed: string;

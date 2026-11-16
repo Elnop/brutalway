@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { PackageJson } from '#src/features/scaffolding/ScaffoldTypes.ts';
-import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { isRecord } from '#src/shared/is-record/isRecord.ts';
 
 export function updatePackageJson(dir: string, update: (pkg: PackageJson) => void): void {
   const path = join(dir, 'package.json');

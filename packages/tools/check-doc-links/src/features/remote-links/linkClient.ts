@@ -3,8 +3,8 @@ import {
   ONLINE_PROBE_URL,
   REQUEST_TIMEOUT_MS,
 } from '#src/features/remote-links/RemoteLinksConfig.ts';
-import type { LinkResult, LinkVerdict } from '#src/shared-features/links/LinksTypes.ts';
-import { npmPackageName } from '#src/shared-features/links/npmPackageName.ts';
+import type { LinkResult, LinkVerdict } from '#src/shared/links/LinksTypes.ts';
+import { npmPackageName } from '#src/shared/npm-package/npmPackageName.ts';
 
 const HEADERS = {
   'user-agent': 'check-doc-links (+https://github.com/Elnop/brutalway)',

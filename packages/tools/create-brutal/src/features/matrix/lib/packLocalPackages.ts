@@ -1,7 +1,7 @@
 import { globSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { runProcess } from '#src/features/matrix/lib/runProcess.ts';
-import { isRecord } from '#src/shared/lib/isRecord.ts';
+import { isRecord } from '#src/shared/is-record/isRecord.ts';
 
 function brutalwayPackageFolders(root: string): string[] {
   return globSync('packages/{configs,plugins,tools,utils}/*/package.json', { cwd: root }).flatMap(

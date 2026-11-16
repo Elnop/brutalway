@@ -1,4 +1,4 @@
-import type { FileEdit } from '#src/shared-features/stack/StackTypes.ts';
+import type { FileEdit } from '#src/shared/stack/StackTypes.ts';
 
 export const PERSISTENCE_DOC =
   'The todos are kept on the device through the `persist` middleware of zustand, on [AsyncStorage](https://docs.expo.dev/versions/latest/sdk/async-storage/), which falls back to `localStorage` on the web build. The filter is left out of what is saved.\n\n';
