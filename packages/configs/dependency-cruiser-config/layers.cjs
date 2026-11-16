@@ -2,6 +2,13 @@ const MAX_FEATURE_DEPTH = 10;
 const TEST_CODE = ['\\.test\\.tsx?$', '^(test-utils|e2e)/'];
 const SLICE = '(?:features|shared)/[^/]+';
 
+function presenter() {
+  return {
+    path: '^src/(features|shared)/.+\\.tsx$',
+    pathNot: ['(Container|Layout|Page|Content|Config)\\.tsx$', '\\.test\\.tsx$'],
+  };
+}
+
 function featureAtDepth(depth) {
   return `src/${SLICE}` + `/${SLICE}`.repeat(depth - 1);
 }
@@ -187,14 +194,20 @@ module.exports = {
       name: 'presenters-are-pure',
       severity: 'error',
       comment:
-        'A presenter reads no store and no server data: its orchestrator passes everything through props. Any component whose name does not end with Container, Layout or Page is a presenter.',
-      from: {
-        path: '^src/(features|shared)/.+\\.tsx$',
-        pathNot: ['(Container|Layout|Page|Content|Config)\\.tsx$', '\\.test\\.tsx$'],
-      },
+        'A presenter reads no store and no server data, through no chain of imports: its orchestrator passes everything through props. A hook of local state stays fine. Any component whose name does not end with Container, Layout or Page is a presenter.',
+      from: presenter(),
       to: {
-        path: '(Store\\.ts$|Client\\.ts$|node_modules/zustand/|node_modules/@tanstack/react-query/|^src/shared/[^/]+/(hooks/)?use[^/]+\\.ts$)',
+        path: '(Store\\.ts$|Client\\.ts$|node_modules/zustand/|node_modules/@tanstack/react-query/)',
+        reachable: true,
       },
+    },
+    {
+      name: 'presenters-render-presenters',
+      severity: 'error',
+      comment:
+        'A presenter renders presenters only: the orchestrator that reads state sits above it, so render the orchestrator from its parent orchestrator, or rename the presenter into an orchestrator.',
+      from: presenter(),
+      to: { path: '(Container|Layout|Page)\\.tsx$' },
     },
     {
       name: 'stores-hold-no-server-data',

@@ -77,7 +77,12 @@ describe('dependency-cruiser-config', () => {
         "import { list } from '../../features/list/list.ts';\nexport const helper = list;\n",
       'src/features/editor/components/Card.tsx':
         "import { useOther } from '../../../shared/other/useOther.ts';\nexport const Card = useOther;\n",
-      'src/shared/other/useOther.ts': 'export const useOther = 1;\n',
+      'src/shared/other/useOther.ts':
+        "import { otherStore } from './otherStore.ts';\nexport const useOther = otherStore;\n",
+      'src/shared/other/otherStore.ts': 'export const otherStore = 1;\n',
+      'src/features/editor/components/Panel.tsx':
+        "import { EditorContainer } from './EditorContainer.tsx';\nexport const Panel = EditorContainer;\n",
+      'src/features/editor/components/EditorContainer.tsx': 'export const EditorContainer = 1;\n',
       'src/features/summary/lib/cartStore.ts': 'export const cartStore = 1;\n',
       'src/features/summary/lib/useCart.ts':
         "import { cartStore } from './cartStore.ts';\nexport const useCart = cartStore;\n",
@@ -103,6 +108,7 @@ describe('dependency-cruiser-config', () => {
         'no-unresolvable',
         'not-to-dev-dep',
         'presenters-are-pure',
+        'presenters-render-presenters',
         'shared-not-to-features',
         'stores-in-their-folder',
       ].toSorted(),
@@ -177,6 +183,29 @@ describe('dependency-cruiser-config', () => {
       "import { todosClient } from './todosClient.ts';\nexport const todosStore = todosClient;\n",
     );
     assert.deepEqual(violatedRules(root), ['presenters-are-pure', 'stores-hold-no-server-data']);
+  });
+
+  it('a presenter calls hooks of local state, and nothing it imports reaches a store, at any depth', () => {
+    const root = project({
+      'src/shared/clipboard/useCopy.ts': 'export const useCopy = 1;\n',
+      'src/shared/clipboard/CommandLine.tsx':
+        "import { useCopy } from './useCopy.ts';\nexport const CommandLine = useCopy;\n",
+      'src/shared/todos/todosStore.ts': 'export const todosStore = 1;\n',
+      'src/shared/todos/useTodos.ts':
+        "import { todosStore } from './todosStore.ts';\nexport const useTodos = todosStore;\n",
+      'src/features/list/useList.ts':
+        "import { useTodos } from '../../shared/todos/useTodos.ts';\nexport const useList = useTodos;\n",
+      'src/features/list/components/ListContainer.tsx':
+        "import { useList } from '../useList.ts';\nimport { Item } from './Item.tsx';\nexport const ListContainer = [useList, Item];\n",
+      'src/features/list/components/Item.tsx':
+        "import { CommandLine } from '../../../shared/clipboard/CommandLine.tsx';\nexport const Item = CommandLine;\n",
+    });
+    assert.deepEqual(violatedRules(root), []);
+    writeFileSync(
+      join(root, 'src/features/list/components/Row.tsx'),
+      "import { useList } from '../useList.ts';\nexport const Row = useList;\n",
+    );
+    assert.deepEqual(violatedRules(root), ['presenters-are-pure']);
   });
 
   it('the server rules keep queries behind services and SQLite inside queries, the database feature and tests', () => {
