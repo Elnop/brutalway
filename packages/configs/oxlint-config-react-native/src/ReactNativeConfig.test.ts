@@ -15,6 +15,7 @@ describe('reactNativeConfig', () => {
   it('takes styles from the theme and keeps them out of JSX', () => {
     assert.deepEqual(diagnostics('rules', 'src/features/'), [
       'src/features/i18n/I18nProvider.tsx:5 file-named-after-export(file-named-after-export)',
+      'src/features/i18n/I18nProvider.tsx:5 import(no-default-export)',
       'src/features/profile/Avatar.test.tsx:5 jest(prefer-strict-equal)',
       'src/features/profile/Avatar.tsx:1 react-native(split-platform-components)',
       'src/features/profile/Avatar.tsx:8 react-native(no-single-element-style-arrays)',

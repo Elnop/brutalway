@@ -12,8 +12,8 @@ describe('fastifyConfig', () => {
       'helper.ts:1 export-placement(no-restricted-syntax)',
       'port.ts:2 fastify-conventions(no-restricted-syntax)',
       'relative.ts:1 eslint(no-restricted-imports)',
-      'shared-features/todos/todosRoutes.ts:1 check-file(filename-blocklist)',
-      'shared-features/todos/TodosSchemas.ts:6 export-placement(no-restricted-syntax)',
+      'shared/todos/todosRoutes.ts:1 check-file(filename-blocklist)',
+      'shared/todos/TodosSchemas.ts:6 export-placement(no-restricted-syntax)',
     ]);
   });
 });

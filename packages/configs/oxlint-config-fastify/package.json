@@ -1,7 +1,7 @@
 {
   "name": "@brutalway/oxlint-config-fastify",
   "version": "0.2.1",
-  "description": "Oxlint config for Fastify APIs with Zod: env read in one place, dependencies passed to factories, async handlers that return, Zod schemas in XSchemas.ts, no route in shared-features/.",
+  "description": "Oxlint config for Fastify APIs with Zod: env read in one place, dependencies passed to factories, async handlers that return, Zod schemas in XSchemas.ts, no route in a shared/.",
   "keywords": [
     "oxlint",
     "oxlint-config",
@@ -39,7 +39,7 @@
     "unused": "knip"
   },
   "dependencies": {
-    "@brutalway/oxlint-config-node": "^0.2.1",
+    "@brutalway/oxlint-config-node": "^0.3.0",
     "oxlint-plugin-eslint": "^1.91.0"
   },
   "peerDependencies": {

@@ -22,6 +22,7 @@ describe('nextConfig', () => {
         'src/features/todo-list/components/TodoForm.tsx:2 server-actions(no-restricted-syntax)',
         'src/features/todo-list/todoActions.ts:7 server-actions(no-restricted-syntax)',
         'src/features/todo-list/todoActions.ts:7 server-actions(no-restricted-syntax)',
+        'src/shared/ThemeContainer.tsx:1 check-file(filename-blocklist)',
         'src/shared/ThemeContainer.tsx:1 client-boundary(no-restricted-syntax)',
       ],
     );
