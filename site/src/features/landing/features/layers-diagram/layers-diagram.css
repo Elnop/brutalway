@@ -1,0 +1,77 @@
+.layers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-block: 6rem 3rem;
+}
+
+.layers-intro {
+  max-width: 46rem;
+}
+
+.layers-figure {
+  padding: 1.5rem;
+  border: var(--border);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.layers-svg {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  height: auto;
+  margin-inline: auto;
+}
+
+.layers-box {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.layers-box-yellow {
+  fill: var(--yellow);
+}
+
+.layers-box-pink {
+  fill: var(--pink);
+}
+
+.layers-box-blue {
+  fill: var(--blue);
+}
+
+.layers-label {
+  fill: var(--on-accent);
+  font-family: var(--mono);
+  font-size: 21px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.layers-arrow {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.layers-arrow-head {
+  fill: var(--ink);
+}
+
+.layers-forbidden {
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-dasharray: 6 6;
+}
+
+.layers-cross {
+  stroke: var(--ink);
+  stroke-width: 5;
+}
+
+@media (max-width: 40rem) {
+  .layers-figure {
+    padding: 0.75rem;
+  }
+}
