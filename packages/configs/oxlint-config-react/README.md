@@ -37,7 +37,7 @@ When a rule fires:
 - a hook lives in a `useX.ts` file, and a `useX.ts` file only exports hooks
 - `fetch` is only called from an `xClient.ts` file, and never inside `useEffect` or `useLayoutEffect`
 - no braces around a plain string in JSX: `className="card"`, not `className={'card'}`
-- no orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) under `shared-features/`
+- no orchestrator (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) in a `shared/`, at any depth
 - an orchestrator calls at least one hook
 - a presenter (any other component) does no formatting: no `toLocaleString`, `toLocaleDateString`, `toLocaleTimeString`, `toFixed` or `Intl`, and no `sort`, `toSorted`, `filter` or `reduce`. `map` stays fine for rendering.
 - a component takes at most 6 props
@@ -47,4 +47,4 @@ When a rule fires:
 
 ## Why
 
-`shared-features/` holds business code shared by several features, and the components that read it belong to a feature, so orchestrators stay out of it. An orchestrator that only wraps JSX is a presenter with the wrong name.
+A slice of `shared/` holds code that several features use, and the components that read state belong to a feature, so orchestrators stay out of it. An orchestrator that only wraps JSX is a presenter with the wrong name.
