@@ -1,5 +1,11 @@
 # template-next
 
+## 0.7.1
+
+### Patch Changes
+
+- 356f65f: The options page describes the three values of `i18n`: `none`, `en` and `en-fr`.
+
 ## 0.7.0
 
 ### Minor Changes

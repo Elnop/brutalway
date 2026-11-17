@@ -1,5 +1,11 @@
 # template-vite
 
+## 0.10.1
+
+### Patch Changes
+
+- 356f65f: The options page describes the three values of `i18n`: `none`, `en` and `en-fr`.
+
 ## 0.10.0
 
 ### Minor Changes
