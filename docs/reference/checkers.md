@@ -88,7 +88,8 @@ The options of the front-end stacks add their own Oxlint config:
 |---|---|---|---|
 | `styling=tailwind` | [`@brutalway/oxlint-config-tailwind`](../../packages/configs/oxlint-config-tailwind) | vite, next | a color that is not a `@theme` token, a heading without `font-display`, code without `font-mono`, `dark:`. Prettier also sorts the classes |
 | `ui=shadcn` | [`@brutalway/oxlint-config-shadcn`](../../packages/configs/oxlint-config-shadcn) | vite, next | a raw `<button>`, `<input>`, `<select>` or `<textarea>` when a primitive does the job, an icon outside `lucide-react` |
-| `server-state` | [`@brutalway/oxlint-config-tanstack-query`](../../packages/configs/oxlint-config-tanstack-query) | vite, react-native | a query key outside an `xKeys` factory, a `staleTime` or `gcTime` outside a named profile, a key missing a variable of its `queryFn`, a `QueryClient` created in a component |
+| `server-state` | [`@brutalway/oxlint-config-tanstack-query`](../../packages/configs/oxlint-config-tanstack-query) | vite, next, react-native | a query key outside an `xKeys` factory, a `staleTime` or `gcTime` outside a named profile, a key missing a variable of its `queryFn`, a `QueryClient` created in a component |
+| `server-state` | `noServerFunctionsConfig` of [`@brutalway/oxlint-config-next`](../../packages/configs/oxlint-config-next) | next | a `'use server'` or a `'use cache'`, in a file or in a function |
 | `forms` | [`@brutalway/oxlint-config-react-hook-form`](../../packages/configs/oxlint-config-react-hook-form) | vite, next, react-native | a `useForm` without `zodResolver`, validation passed to `register` or a `Controller` |
 
 ## With Claude Code

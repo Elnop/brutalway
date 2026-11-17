@@ -44,6 +44,7 @@ next
   --styling css|css-modules|tailwind default: css
   --ui none|shadcn               default: none
   --[no-]dark-theme              default: no
+  --[no-]server-state            default: no
   --[no-]forms                   default: no
   --[no-]i18n                    default: no
   --[no-]react-compiler          default: no

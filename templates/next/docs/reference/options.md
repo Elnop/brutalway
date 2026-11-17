@@ -33,6 +33,7 @@ npm create brutal my-app -- --preset next.json --yes
 | `--styling` | `css`, `css-modules`, `tailwind` | `css` | `--styling css` with `--ui shadcn`, `--styling css-modules` with `--ui shadcn` |
 | `--ui` | `none`, `shadcn` | `none` | `--ui shadcn` with `--styling css`, `--ui shadcn` with `--styling css-modules` |
 | `--[no-]dark-theme` | yes, no | no |  |
+| `--[no-]server-state` | yes, no | no |  |
 | `--[no-]forms` | yes, no | no |  |
 | `--[no-]i18n` | yes, no | no |  |
 | `--[no-]react-compiler` | yes, no | no |  |
@@ -47,7 +48,7 @@ A combination from the last column stops the CLI before anything is written, wit
 
 `example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/page.tsx` only shows the project name, which is also the title of the page, and only the `app` namespace of the messages remains.
 
-Every next project goes through i18next, whatever its options: the texts are in `locales/en/` and the components call `t()`. There is no `server-state` option: on Next.js a server component can read the data itself and hand it to the client components, so the example keeps its todos in the browser, in zustand.
+Every next project goes through i18next, whatever its options: the texts are in `locales/en/` and the components call `t()`. Without `server-state`, a server component can read the data itself and hand it to the client components, and the example keeps its todos in the browser, in zustand.
 
 ## zustand
 
@@ -73,6 +74,14 @@ With `shadcn`, the Button, Input, Checkbox and Card of [shadcn/ui](https://ui.sh
 ## dark-theme
 
 `src/app/globals.css` gives each color token a dark value under `@media (prefers-color-scheme: dark)`, so the classes and stylesheets stay the same. With `e2e`, `darkTheme.spec.ts` in `e2e/` runs axe in dark mode.
+
+## server-state
+
+Take it when every read and write goes through an API, a route handler of the project or another server, and the client reads it with TanStack Query. It adds `@tanstack/react-query`, a `QueryProvider` in `src/app/layout.tsx`, the `QueryClient` in a `query-client` feature, the cache profiles of `QueryConfig.ts` next to the client and `@brutalway/oxlint-config-tanstack-query`.
+
+`oxlint.config.ts` also extends `noServerFunctionsConfig` of `@brutalway/oxlint-config-next`, which rejects every `'use server'` and every `'use cache'`. A server action would be a second way to the data, outside the API, and `'use cache'` a second cache next to the one of TanStack Query.
+
+With the example, the todos come from a catch-all route handler, `app/api/[...path]/route.ts`, which keeps them in memory with one list per browser through the `todo-api` feature. A client parses each response with Zod (added as a dependency), the API filters the list and gives the counters, and the zustand store only keeps the filter of the list, so it moves into `src/features/todo-list/` and `src/shared/todos/lib/todosSelectors.ts` goes.
 
 ## forms
 

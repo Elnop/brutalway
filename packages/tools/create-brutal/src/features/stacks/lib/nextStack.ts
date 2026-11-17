@@ -1,6 +1,8 @@
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
+import { nextServerStateExtends } from '#src/features/stacks/lib/nextServerStateExtends.ts';
+import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import {
   FRONTEND_FEATURE_OPTIONS,
   FRONTEND_LOOK_OPTIONS,
@@ -13,6 +15,9 @@ import {
   FRONTEND_FORMS,
   FORMS_SCHEMAS_IN_TITLE_FORM,
   FRONTEND_FORMS_EXAMPLE,
+  FRONTEND_FORMS_SERVER_STATE,
+  FRONTEND_SERVER_STATE,
+  FRONTEND_SERVER_STATE_AGENTS,
   FRONTEND_I18N_AND_TESTS,
   FRONTEND_NO_ZUSTAND,
   FRONTEND_SKELETON,
@@ -27,6 +32,17 @@ const I18N_README = `The example comes in English and French. The buttons in the
 ## Add a language
 
 To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+
+const SERVER_STATE_README = `## API
+
+The todos come from an API. \`src/shared/todos/todosClient.ts\` calls \`/api/todos\` and \`/api/stats\` and parses each response with \`src/shared/todos/TodosSchemas.ts\`, the queries of \`src/features/todo-list/useTodoList.ts\` and \`src/features/todo-stats/useTodoStatsQuery.ts\` cache the answers, and each change invalidates them through \`src/shared/todos/todosKeys.ts\`.
+
+The API is a catch-all route handler of the project in \`src/app/api/\`, which hands each request to \`src/features/todo-api/lib/todoApi.ts\`. It keeps the todos in memory, one list per browser, so a restart of the server starts over. Replace \`src/features/todo-api/\` with your own storage, or point \`src/shared/todos/todosClient.ts\` to another API such as [template-fastify](https://github.com/Elnop/brutalway/tree/main/templates/fastify).
+
+`;
+
+const SERVER_STATE_VERIFICATION =
+  "- no `'use server'` and no `'use cache'`, in a file or in a function: the data goes through the API and the cache of TanStack Query (`@brutalway/oxlint-config-next/no-server-functions`)";
 
 const REQUEST_LANGUAGE_IMPORT =
   "import { requestLanguage } from '@/features/language-switch/lib/requestLanguage.ts';\n";
@@ -61,7 +77,15 @@ export const nextStack: Stack = {
   id: 'next',
   label: 'Next.js + React',
   directory: 'templates/next',
-  options: [...FRONTEND_LOOK_OPTIONS, ...FRONTEND_FEATURE_OPTIONS],
+  options: [
+    ...FRONTEND_LOOK_OPTIONS,
+    {
+      id: 'server-state',
+      message: 'Read and write the data through an API with TanStack Query?',
+      default: false,
+    },
+    ...FRONTEND_FEATURE_OPTIONS,
+  ],
   changes: fillAnchors(
     [
       ...FRONTEND_BASE,
@@ -94,12 +118,85 @@ export const nextStack: Stack = {
         addDevDependencies: { '@tailwindcss/postcss': '4.3.5' },
       },
       ...FRONTEND_UI_AND_STYLING,
+      ...FRONTEND_SERVER_STATE,
+      {
+        when: { 'server-state': true },
+        edits: [
+          {
+            file: 'oxlint.config.ts',
+            after: '{{presetImport}}\n',
+            insert:
+              "import { noServerFunctionsConfig } from '@brutalway/oxlint-config-next/no-server-functions';\n",
+          },
+          {
+            file: 'oxlint.config.ts',
+            replace: 'extends: [{{preset}}, tanstackQueryConfig',
+            with: 'extends: [{{preset}}, noServerFunctionsConfig, tanstackQueryConfig',
+          },
+          {
+            file: 'src/app/layout.tsx',
+            after: "import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';\n",
+            insert: "import { QueryProvider } from '@/features/query-client/QueryProvider.tsx';\n",
+          },
+          {
+            file: 'src/app/layout.tsx',
+            replace: '>{children}</I18nProvider>',
+            with: '>\n          <QueryProvider>{children}</QueryProvider>\n        </I18nProvider>',
+          },
+          {
+            file: 'docs/concepts/architecture.md',
+            replace: 'the `QueryClient` lives in `src/features/query-client/queryClient.ts`,',
+            with: 'the `QueryClient` is created in `src/features/query-client/QueryProvider.tsx`, once in the browser and once per request on the server,',
+          },
+          {
+            file: 'docs/reference/verifications.md',
+            replace:
+              "- a server action lives in a `.ts` file of its own that starts with `'use server'` and exports one async function",
+            with: SERVER_STATE_VERIFICATION,
+          },
+        ],
+      },
+      {
+        when: { 'server-state': true, example: true },
+        overlay: 'server-state-example',
+        remove: [
+          'src/shared/todos/useTodos.ts',
+          'src/shared/todos/todosStore.ts',
+          'src/shared/todos/todosStore.test.ts',
+          'src/shared/todos/lib/todosSelectors.ts',
+          'src/shared/todos/lib/todosSelectors.test.ts',
+        ],
+        edits: [
+          { file: 'README.md', before: '## Documentation', insert: SERVER_STATE_README },
+          {
+            file: 'docs/reference/layout.md',
+            replace: '`src/shared/todos/` holds the tasks and the current filter,',
+            with: '`src/shared/todos/` holds the client of the todo API, its schemas and its mutations,',
+          },
+          {
+            file: 'docs/concepts/architecture.md',
+            replace:
+              '`src/shared/todos/todosStore.ts` only exports `todosStore` and `todosActions`, `src/shared/todos/lib/todosSelectors.ts` only exports `selectX` functions, and components read the store through `src/shared/todos/useTodos.ts`.',
+            with: '`src/features/todo-list/todosStore.ts` only exports `todosStore` and `todosActions`, and `src/features/todo-list/useTodoList.ts` reads it. The store only holds the filter of the list: the todos and the counters come from the API (see Server state below).',
+          },
+          {
+            file: 'docs/concepts/architecture.md',
+            replace:
+              'The todos stay in a zustand store in the browser, like in template-vite: the example app has no server data. We leave out server actions and route handlers until an app needs them.',
+            with: "The todos come from a catch-all route handler in `src/app/api/`, through TanStack Query, like in template-vite with its `server-state` option. Server actions and `'use cache'` are rejected, so the API stays the only way to the data.",
+          },
+        ],
+        addDependencies: { zod: '4.6.7' },
+      },
       ...FRONTEND_FORMS,
       ...FRONTEND_FORMS_EXAMPLE,
       {
-        when: { forms: true, example: true },
+        when: { forms: true, example: true, 'server-state': false },
         ...FORMS_SCHEMAS_IN_TITLE_FORM,
       },
+      ...FRONTEND_FORMS_SERVER_STATE,
+      ...normalizeTitleChanges(['docs/reference/verifications.md']),
+      ...nextServerStateExtends(),
       {
         when: { i18n: true },
         overlay: 'i18n',
@@ -128,8 +225,8 @@ export const nextStack: Stack = {
           },
           {
             file: 'src/app/layout.tsx',
-            replace: '<I18nProvider>{children}</I18nProvider>',
-            with: '<I18nProvider language={language}>{children}</I18nProvider>',
+            replace: '<I18nProvider>',
+            with: '<I18nProvider language={language}>',
           },
           {
             file: 'src/app/page.tsx',
@@ -179,6 +276,21 @@ export const nextStack: Stack = {
         remove: ['src/features/i18n/I18nProvider.test.tsx'],
       },
       {
+        when: { 'server-state': true, coverage: true },
+        edits: [
+          {
+            file: 'vitest.config.ts',
+            after: "          'src/proxy.ts',\n",
+            insert: "          'src/features/query-client/QueryProvider.tsx',\n",
+          },
+          {
+            file: 'docs/reference/verifications.md',
+            replace: ' and the `requestX.ts` files that read the request are left out',
+            with: ', the `requestX.ts` files that read the request and `src/features/query-client/QueryProvider.tsx` are left out',
+          },
+        ],
+      },
+      {
         when: { e2e: false },
         edits: [
           {
@@ -213,7 +325,7 @@ export const nextStack: Stack = {
         addDevDependencies: { 'babel-plugin-react-compiler': '1.0.0' },
       },
       {
-        when: { 'react-compiler': true, example: true },
+        when: { 'react-compiler': true, example: true, 'server-state': false },
         edits: [
           {
             file: 'src/features/todo-list/useTodoList.ts',
@@ -238,6 +350,7 @@ export const nextStack: Stack = {
       ...FRONTEND_ANALYTICS_AND_AGENTS,
       { when: { analytics: 'module' }, overlay: 'analytics-home' },
       { when: { analytics: 'posthog' }, overlay: 'analytics-home' },
+      ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
     ],
     ANCHORS,
