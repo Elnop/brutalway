@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-next
 
+## 0.4.0
+
+### Minor Changes
+
+- 42158d4: `@brutalway/oxlint-config-next/no-server-functions` exports `noServerFunctionsConfig`, for an app that reads and writes its data through an API with TanStack Query. Extended after `nextConfig`, it reports every `'use server'` and every `'use cache'`, at the top of a file or in a function, in place of the rules on where a server action goes.
+
 ## 0.3.0
 
 ### Minor Changes
