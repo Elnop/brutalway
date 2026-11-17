@@ -5,7 +5,7 @@ const SLICE = '(?:features|shared)/[^/]+';
 function presenter() {
   return {
     path: '^src/(features|shared)/.+\\.tsx$',
-    pathNot: ['(Container|Layout|Page|Content|Config)\\.tsx$', '\\.test\\.tsx$'],
+    pathNot: ['(Container|Layout|Page|Content|Config|Provider)\\.tsx$', '\\.test\\.tsx$'],
   };
 }
 
@@ -194,7 +194,7 @@ module.exports = {
       name: 'presenters-are-pure',
       severity: 'error',
       comment:
-        'A presenter reads no store and no server data, through no chain of imports: its orchestrator passes everything through props. A hook of local state stays fine. Any component whose name does not end with Container, Layout or Page is a presenter.',
+        'A presenter reads no store and no server data, through no chain of imports: its orchestrator passes everything through props. A hook of local state stays fine. Any component whose name does not end with Container, Layout, Page, Content, Config or Provider is a presenter.',
       from: presenter(),
       to: {
         path: '(Store\\.ts$|Client\\.ts$|node_modules/zustand/|node_modules/@tanstack/react-query/)',

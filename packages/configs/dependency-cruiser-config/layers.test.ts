@@ -468,11 +468,11 @@ describe('dependency-cruiser-config', () => {
     ]);
   });
 
-  it('lets a Container, Layout, Page, Content or Config component read a store, and no other component', () => {
+  it('lets a Container, Layout, Page, Content, Config or Provider component read a store, and no other component', () => {
     const root = project({
       'src/features/list/listStore.ts': 'export const listStore = 1;\n',
       ...Object.fromEntries(
-        ['Container', 'Layout', 'Page', 'Content', 'Config'].map((suffix) => [
+        ['Container', 'Layout', 'Page', 'Content', 'Config', 'Provider'].map((suffix) => [
           `src/features/list/components/List${suffix}.tsx`,
           `import { listStore } from '../listStore.ts';\nexport const List${suffix} = listStore;\n`,
         ]),
