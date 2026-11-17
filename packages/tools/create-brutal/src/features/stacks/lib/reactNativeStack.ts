@@ -1,3 +1,14 @@
+import {
+  FRONTEND_NO_I18N,
+  FRONTEND_NO_I18N_FORMS,
+  FRONTEND_NO_I18N_LINT,
+  FRONTEND_NO_I18N_LOOKS,
+} from '#src/features/stacks/configs/frontendNoI18nConfig.ts';
+import {
+  NATIVE_NO_I18N,
+  NATIVE_NO_I18N_LAYOUT,
+  NATIVE_NO_I18N_SERVER_STATE,
+} from '#src/features/stacks/configs/nativeNoI18nConfig.ts';
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { FileEdit, Stack, StackChange, StackOption } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
@@ -301,6 +312,8 @@ export const reactNativeStack: Stack = {
   changes: fillAnchors(
     [
       ...FRONTEND_BASE,
+      ...FRONTEND_NO_I18N_LINT,
+      ...NATIVE_NO_I18N_LAYOUT,
       {
         when: {},
         edits: [
@@ -319,6 +332,7 @@ export const reactNativeStack: Stack = {
         ],
       },
       ...FRONTEND_SKELETON,
+      ...FRONTEND_NO_I18N_LOOKS,
       {
         when: { example: false },
         edits: [{ file: 'docs/concepts/architecture.md', replace: PERSISTENCE_DOC, with: '' }],
@@ -392,8 +406,9 @@ export const reactNativeStack: Stack = {
         addDependencies: { 'expo-system-ui': '58.0.7' },
       },
       ...FRONTEND_SERVER_STATE,
+      ...NATIVE_NO_I18N_SERVER_STATE,
       {
-        when: { 'server-state': true },
+        when: { 'server-state': true, i18n: ['en', 'en-fr'] },
         edits: [
           {
             file: 'src/app/_layout.tsx',
@@ -443,6 +458,7 @@ export const reactNativeStack: Stack = {
       },
       ...FRONTEND_FORMS,
       ...FRONTEND_FORMS_EXAMPLE,
+      ...FRONTEND_NO_I18N_FORMS,
       {
         when: { forms: true, example: true, 'server-state': false },
         ...FORMS_SCHEMAS_IN_TITLE_FORM,
@@ -659,6 +675,8 @@ export const reactNativeStack: Stack = {
       { when: { analytics: 'posthog', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
       ...I18N_LIB_CHANGES,
       ...THEME_SKELETON_CHANGES,
+      ...FRONTEND_NO_I18N,
+      ...NATIVE_NO_I18N,
       sharedFolderDocs(
         ['AGENTS.md', 'docs/reference/layout.md', 'docs/reference/verifications.md'],
         {

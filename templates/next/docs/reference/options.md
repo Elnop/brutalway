@@ -48,7 +48,7 @@ A combination from the last column stops the CLI before anything is written, wit
 
 `example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/page.tsx` only shows the project name, which is also the title of the page, and only the `app` namespace of the messages remains.
 
-Every next project goes through i18next, whatever its options: the texts are in `locales/en/` and the components call `t()`. Without `server-state`, a server component can read the data itself and hand it to the client components, and the example keeps its todos in the browser, in zustand.
+Unless `i18n` is `none`, the texts are in `locales/en/` and the components call `t()` through i18next. Without `server-state`, a server component can read the data itself and hand it to the client components, and the example keeps its todos in the browser, in zustand.
 
 ## zustand
 
@@ -89,7 +89,11 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## i18n
 
-It adds French next to English: a `fr/` folder beside `locales/en/` and a `language-switch` feature with English and Français buttons. The language is saved in a `language` cookie. On the server, `requestLanguage.ts` reads it, or the first language of `Accept-Language` the project has, so the page, `<html lang>` and the title come in that language. The switch sets the cookie and calls `router.refresh()`. `i18next-cli status` fails when French misses a key, and with `e2e` and the example, `language.spec.ts` in `e2e/` runs axe in French.
+`en`, the default, goes through i18next in English only: the texts are in `locales/en/` and the components call `t()`, so adding a language later means adding its folder.
+
+`none` leaves i18next out, for an app that will only ever speak one language: the components hold their English text, to replace with the language of the app, and there is no `locales/`, no `npm run messages` and no lint rule against text written in JSX.
+
+`en-fr` adds French next to English: a `fr/` folder beside `locales/en/` and a `language-switch` feature with English and Français buttons. The language is saved in a `language` cookie. On the server, `requestLanguage.ts` reads it, or the first language of `Accept-Language` the project has, so the page, `<html lang>` and the title come in that language. The switch sets the cookie and calls `router.refresh()`. `i18next-cli status` fails when French misses a key, and with `e2e` and the example, `language.spec.ts` in `e2e/` runs axe in French.
 
 ## react-compiler
 

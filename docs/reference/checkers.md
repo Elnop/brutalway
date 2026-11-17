@@ -67,7 +67,7 @@ The options of the front-end stacks add the configs of the last table. Every tem
 | vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX`, no orchestrator in a `shared/`, `fetch` only in an `xClient.ts` and never in an effect |
 | vite, next, react-native | [`@brutalway/oxlint-config-zustand`](../../packages/configs/oxlint-config-zustand) | `xStore.ts` exports only `xStore` and `xActions`, `xSelectors.ts` only `selectX` functions |
 | vite, next | [`@brutalway/oxlint-config-vitest`](../../packages/configs/oxlint-config-vitest) | `it()` inside `describe`, `toStrictEqual`, typed mocks, `toThrow` with the expected message |
-| vite, next, react-native | [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next) | visible text in JSX, `aria-label`, `placeholder`, `title`, `alt`, `accessibilityLabel`, `accessibilityHint` or a template literal |
+| vite, next, react-native, unless `i18n` is `none` | [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next) | visible text in JSX, `aria-label`, `placeholder`, `title`, `alt`, `accessibilityLabel`, `accessibilityHint` or a template literal |
 | react-native | `oxlint.config.ts` | the Jest rules of oxlint: `it()` inside `describe`, `toStrictEqual`, `toBe` for primitives, `toThrow` with the expected message. The routes of `src/app/` are left out of the rules on file names, exports and props, since Expo Router picks them |
 | fastify | [`@brutalway/oxlint-config-fastify`](../../packages/configs/oxlint-config-fastify) | `process.env` read only in an `xEnv.ts`, no `app.decorate`, an `async` handler returns its value, Zod schemas in an `xSchemas.ts`, no route in a `shared/` |
 | package | [`@brutalway/oxlint-config-node`](../../packages/configs/oxlint-config-node) | the alias `#src/`, `console.error` only, `fetch` only in an `xClient.ts` |
@@ -78,7 +78,7 @@ The options of the front-end stacks add the configs of the last table. Every tem
 | Checker | Config | Stacks | What it rejects |
 |---|---|---|---|
 | stylelint | [`@brutalway/stylelint-config`](../../packages/configs/stylelint-config) | vite, next | a color outside the custom properties of `src/app/globals.css`, with the closest tokens in the message, an `X.module.css` away from its `X.tsx` or holding an unused class |
-| i18next-cli | `i18next.config.ts` | vite, next, react-native | a key missing from a language, a key no code uses, and through `i18next-cli types`, an unknown key or a missing `{{name}}` in a call to `t()` |
+| i18next-cli | `i18next.config.ts` | vite, next, react-native, unless `i18n` is `none` | a key missing from a language, a key no code uses, and through `i18next-cli types`, an unknown key or a missing `{{name}}` in a call to `t()` |
 
 On vite and next, with the `e2e` option, `npm run e2e` runs Playwright with [`@brutalway/playwright-fixtures`](../../packages/tools/playwright-fixtures), which fails a test when the page throws, when axe-core finds a violation or when the browser reports a CSP violation.
 
