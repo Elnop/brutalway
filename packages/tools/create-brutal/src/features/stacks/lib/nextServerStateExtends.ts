@@ -9,26 +9,37 @@ const LOOKS = [
   { when: { styling: 'tailwind', ui: 'shadcn' }, configs: ['shadcnConfig', 'tailwindConfig'] },
 ];
 
-function extendsChange(forms: boolean, look: (typeof LOOKS)[number]): StackChange[] {
+const LANGUAGES = [
+  { when: { i18n: ['en', 'en-fr'] }, configs: ['i18nextConfig'] },
+  { when: { i18n: 'none' }, configs: [] },
+];
+
+type Variant = { when: StackChange['when']; configs: string[] };
+
+function extendsChange(forms: boolean, look: Variant, languages: Variant): StackChange[] {
   const configs = [
     'nextConfig',
     ...(forms ? ['reactHookFormConfig'] : []),
     'noServerFunctionsConfig',
     'tanstackQueryConfig',
     ...look.configs,
-    'i18nextConfig',
+    ...languages.configs,
   ];
   const line = `extends: [${configs.join(', ')}],`;
   if (`  ${line}`.length <= PRINT_WIDTH) return [];
   const wrapped = `extends: [\n${configs.map((config) => `    ${config},\n`).join('')}  ],`;
   return [
     {
-      when: { 'server-state': true, forms, ...look.when },
+      when: { 'server-state': true, forms, ...look.when, ...languages.when },
       edits: [{ file: 'oxlint.config.ts', replace: line, with: wrapped }],
     },
   ];
 }
 
 export function nextServerStateExtends(): StackChange[] {
-  return [true, false].flatMap((forms) => LOOKS.flatMap((look) => extendsChange(forms, look)));
+  return [true, false].flatMap((forms) =>
+    LOOKS.flatMap((look) =>
+      LANGUAGES.flatMap((languages) => extendsChange(forms, look, languages)),
+    ),
+  );
 }

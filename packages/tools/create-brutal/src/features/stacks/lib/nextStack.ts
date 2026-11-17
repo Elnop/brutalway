@@ -26,6 +26,13 @@ import {
   FRONTEND_UI_AND_STYLING,
   I18N_LOCALE_EDITS,
 } from '#src/features/stacks/configs/frontendChangesConfig.ts';
+import {
+  FRONTEND_NO_I18N,
+  FRONTEND_NO_I18N_FORMS,
+  FRONTEND_NO_I18N_LINT,
+  FRONTEND_NO_I18N_LOOKS,
+  WEB_NO_I18N,
+} from '#src/features/stacks/configs/frontendNoI18nConfig.ts';
 
 const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/components/LanguageSwitchContainer.tsx\`, which saves the choice in a \`language\` cookie and asks the server to render the page again. The languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`. On each request, \`src/features/language-switch/lib/requestLanguage.ts\` reads the cookie, or else the first language of the browser that the project has, so the server renders the texts, \`<html lang>\` and the title of the page in that language from the start.
 
@@ -43,6 +50,9 @@ The API is a catch-all route handler of the project in \`src/app/api/\`, which h
 
 const SERVER_STATE_VERIFICATION =
   "- no `'use server'` and no `'use cache'`, in a file or in a function: the data goes through the API and the cache of TanStack Query (`@brutalway/oxlint-config-next/no-server-functions`)";
+
+const QUERY_PROVIDER_IMPORT =
+  "import { QueryProvider } from '@/features/query-client/QueryProvider.tsx';\n";
 
 const REQUEST_LANGUAGE_IMPORT =
   "import { requestLanguage } from '@/features/language-switch/lib/requestLanguage.ts';\n";
@@ -69,8 +79,10 @@ const ANCHORS = {
     'oxlint --type-aware src test-utils oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
   testsLintLine:
     '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)',
-  coverageEntries: "          'src/proxy.ts',\n          '**/request[A-Z]*.ts',\n",
-  coverageLeftOut: ', `src/app/`, `src/proxy.ts` and the `requestX.ts` files that read the request',
+  coverageEntries:
+    "          'src/proxy.ts',\n          'src/instrumentation*.ts',\n          '**/request[A-Z]*.ts',\n",
+  coverageLeftOut:
+    ', `src/app/`, `src/proxy.ts`, the instrumentation files that Next.js loads and the `requestX.ts` files that read the request',
 };
 
 export const nextStack: Stack = {
@@ -89,6 +101,7 @@ export const nextStack: Stack = {
   changes: fillAnchors(
     [
       ...FRONTEND_BASE,
+      ...FRONTEND_NO_I18N_LINT,
       ...FRONTEND_SKELETON,
       sharedFolderDocs([
         'AGENTS.md',
@@ -118,6 +131,7 @@ export const nextStack: Stack = {
         addDevDependencies: { '@tailwindcss/postcss': '4.3.5' },
       },
       ...FRONTEND_UI_AND_STYLING,
+      ...FRONTEND_NO_I18N_LOOKS,
       ...FRONTEND_SERVER_STATE,
       {
         when: { 'server-state': true },
@@ -134,16 +148,6 @@ export const nextStack: Stack = {
             with: 'extends: [{{preset}}, noServerFunctionsConfig, tanstackQueryConfig',
           },
           {
-            file: 'src/app/layout.tsx',
-            after: "import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';\n",
-            insert: "import { QueryProvider } from '@/features/query-client/QueryProvider.tsx';\n",
-          },
-          {
-            file: 'src/app/layout.tsx',
-            replace: '>{children}</I18nProvider>',
-            with: '>\n          <QueryProvider>{children}</QueryProvider>\n        </I18nProvider>',
-          },
-          {
             file: 'docs/concepts/architecture.md',
             replace: 'the `QueryClient` lives in `src/features/query-client/queryClient.ts`,',
             with: 'the `QueryClient` is created in `src/features/query-client/QueryProvider.tsx`, once in the browser and once per request on the server,',
@@ -153,6 +157,36 @@ export const nextStack: Stack = {
             replace:
               "- a server action lives in a `.ts` file of its own that starts with `'use server'` and exports one async function",
             with: SERVER_STATE_VERIFICATION,
+          },
+        ],
+      },
+      {
+        when: { 'server-state': true, i18n: ['en', 'en-fr'] },
+        edits: [
+          {
+            file: 'src/app/layout.tsx',
+            after: "import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';\n",
+            insert: QUERY_PROVIDER_IMPORT,
+          },
+          {
+            file: 'src/app/layout.tsx',
+            replace: '>{children}</I18nProvider>',
+            with: '>\n          <QueryProvider>{children}</QueryProvider>\n        </I18nProvider>',
+          },
+        ],
+      },
+      {
+        when: { 'server-state': true, i18n: 'none' },
+        edits: [
+          {
+            file: 'src/app/layout.tsx',
+            after: "import '@/app/globals.css';\n",
+            insert: QUERY_PROVIDER_IMPORT,
+          },
+          {
+            file: 'src/app/layout.tsx',
+            replace: '<body>{children}</body>',
+            with: '<body>\n        <QueryProvider>{children}</QueryProvider>\n      </body>',
           },
         ],
       },
@@ -190,6 +224,7 @@ export const nextStack: Stack = {
       },
       ...FRONTEND_FORMS,
       ...FRONTEND_FORMS_EXAMPLE,
+      ...FRONTEND_NO_I18N_FORMS,
       {
         when: { forms: true, example: true, 'server-state': false },
         ...FORMS_SCHEMAS_IN_TITLE_FORM,
@@ -352,6 +387,24 @@ export const nextStack: Stack = {
       { when: { analytics: 'posthog' }, overlay: 'analytics-home' },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
+      ...FRONTEND_NO_I18N,
+      ...WEB_NO_I18N,
+      {
+        when: { i18n: 'none' },
+        edits: [
+          {
+            file: 'docs/reference/layout.md',
+            replace:
+              ': the i18n setup is the `src/features/i18n/` feature, and the messages are data, in `locales/` at the root of the project, imported through the `@locales/*` alias.',
+            with: '.',
+          },
+          {
+            file: 'docs/reference/verifications.md',
+            replace: ', then the i18next config.',
+            with: '.',
+          },
+        ],
+      },
     ],
     ANCHORS,
   ),

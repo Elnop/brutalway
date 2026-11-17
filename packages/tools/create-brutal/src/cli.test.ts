@@ -369,6 +369,34 @@ describe('create-brutal', () => {
     );
   });
 
+  it('leaves i18next out of a next project in English only', () => {
+    const result = run([
+      'app',
+      '--stack',
+      'next',
+      '-y',
+      ...OFFLINE,
+      '--i18n',
+      'none',
+      '--no-e2e',
+      '--no-component-tests',
+    ]);
+    assert.deepEqual(outcome(result), { status: 0, stdout: CREATED_WITHOUT_GIT, stderr: '' });
+    const project = join(result.cwd, 'app');
+    for (const file of ['i18next.config.ts', 'locales', 'src/features/i18n', 'vitest.setup.ts']) {
+      assert.equal(existsSync(join(project, file)), false, file);
+    }
+    const manifest = readFileSync(join(project, 'package.json'), 'utf8');
+    assert.doesNotMatch(manifest, /i18next/u);
+    assert.match(
+      readFileSync(
+        join(project, 'src/features/todo-list/components/presenters/TodoInput.tsx'),
+        'utf8',
+      ),
+      /label="New task"/u,
+    );
+  });
+
   it('copies the react-native overlays, names the app after its folder and keeps Expo Go when asked', () => {
     const options = ['--i18n', 'en-fr', '--server-state', '--analytics', 'module', '--expo-go'];
     const result = run(['my-app', '--stack', 'react-native', '-y', ...OFFLINE, ...options]);
