@@ -1,7 +1,7 @@
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
-import { nextServerStateExtends } from '#src/features/stacks/lib/nextServerStateExtends.ts';
+import { serverStateExtends } from '#src/features/stacks/lib/serverStateExtends.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import {
   FRONTEND_FEATURE_OPTIONS,
@@ -231,7 +231,10 @@ export const nextStack: Stack = {
       },
       ...FRONTEND_FORMS_SERVER_STATE,
       ...normalizeTitleChanges(['docs/reference/verifications.md']),
-      ...nextServerStateExtends(),
+      ...serverStateExtends({
+        preset: 'nextConfig',
+        serverState: ['noServerFunctionsConfig', 'tanstackQueryConfig'],
+      }),
       {
         when: { i18n: 'en-fr' },
         overlay: 'i18n',

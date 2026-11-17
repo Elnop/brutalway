@@ -96,6 +96,20 @@ export const FRONTEND_NO_I18N: StackChange[] = [
     ],
   },
   {
+    when: { i18n: 'none', example: true },
+    edits: [
+      {
+        file: 'docs/guides/start-your-own-app.md',
+        replace:
+          ', the `todoList` and `todoStats` namespaces (their JSON in `locales/en/` and their lines in `src/features/i18n/createI18n.ts`)',
+        with: '',
+      },
+    ],
+  },
+];
+
+export const WEB_NO_I18N: StackChange[] = [
+  {
     when: { i18n: 'none', styling: ['css', 'tailwind'] },
     edits: [{ file: 'package.json', replace: ' && i18next-cli types --quiet"', with: '"' }],
   },
@@ -117,20 +131,6 @@ export const FRONTEND_NO_I18N: StackChange[] = [
       { file: '{{aliasFile}}', replace: `      ${LOCALES_ALIAS},\n`, with: '' },
     ],
   },
-  {
-    when: { i18n: 'none', example: true },
-    edits: [
-      {
-        file: 'docs/guides/start-your-own-app.md',
-        replace:
-          ', the `todoList` and `todoStats` namespaces (their JSON in `locales/en/` and their lines in `src/features/i18n/createI18n.ts`)',
-        with: '',
-      },
-    ],
-  },
-];
-
-export const WEB_NO_I18N: StackChange[] = [
   {
     when: { i18n: 'none' },
     remove: ['vitest.setup.ts'],

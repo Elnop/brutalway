@@ -1,5 +1,5 @@
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
-import type { FileEdit, Stack } from '#src/shared/stack/StackTypes.ts';
+import type { FileEdit, Stack, StackChange } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import {
@@ -26,6 +26,14 @@ import {
   FRONTEND_SERVER_STATE_AGENTS,
   I18N_LOCALE_EDITS,
 } from '#src/features/stacks/configs/frontendChangesConfig.ts';
+import {
+  FRONTEND_NO_I18N,
+  FRONTEND_NO_I18N_FORMS,
+  FRONTEND_NO_I18N_LINT,
+  FRONTEND_NO_I18N_LOOKS,
+  WEB_NO_I18N,
+} from '#src/features/stacks/configs/frontendNoI18nConfig.ts';
+import { serverStateExtends } from '#src/features/stacks/lib/serverStateExtends.ts';
 
 const SERVER_STATE_README = `## API
 
@@ -56,12 +64,33 @@ const ANALYTICS_POSTHOG_README = `## Analytics
 
 `;
 
-const APP_OPENED: FileEdit[] = [
+const ANALYTICS_IMPORT =
+  "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n";
+
+const APP_OPENED_IMPORTS: StackChange[] = [
   {
-    file: 'src/main.tsx',
-    after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
-    insert: "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n",
+    when: { analytics: ['module', 'posthog'], i18n: ['en', 'en-fr'] },
+    edits: [
+      {
+        file: 'src/main.tsx',
+        after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
+        insert: ANALYTICS_IMPORT,
+      },
+    ],
   },
+  {
+    when: { analytics: ['module', 'posthog'], i18n: 'none' },
+    edits: [
+      {
+        file: 'src/main.tsx',
+        after: "import { App } from '@/app/App.tsx';\n",
+        insert: ANALYTICS_IMPORT,
+      },
+    ],
+  },
+];
+
+const APP_OPENED: FileEdit[] = [
   {
     file: 'src/main.tsx',
     after: '  </StrictMode>,\n);\n',
@@ -101,6 +130,7 @@ export const viteStack: Stack = {
   changes: fillAnchors(
     [
       ...FRONTEND_BASE,
+      ...FRONTEND_NO_I18N_LINT,
       ...FRONTEND_SKELETON,
       sharedFolderDocs([
         'AGENTS.md',
@@ -135,7 +165,9 @@ export const viteStack: Stack = {
         addDevDependencies: { '@tailwindcss/vite': '4.3.5' },
       },
       ...FRONTEND_UI_AND_STYLING,
+      ...FRONTEND_NO_I18N_LOOKS,
       ...FRONTEND_SERVER_STATE,
+      { when: { 'server-state': true, i18n: 'none' }, overlay: 'no-i18n-server-state' },
       {
         when: { 'server-state': true, example: true },
         overlay: 'server-state-example',
@@ -173,35 +205,15 @@ export const viteStack: Stack = {
         addDependencies: { zod: '4.6.7' },
       },
       ...FRONTEND_FORMS,
-      {
-        when: { forms: true, 'server-state': true, styling: 'tailwind', ui: 'none' },
-        edits: [
-          {
-            file: 'oxlint.config.ts',
-            replace:
-              'extends: [reactViteConfig, reactHookFormConfig, tanstackQueryConfig, tailwindConfig, i18nextConfig],',
-            with: 'extends: [\n    reactViteConfig,\n    reactHookFormConfig,\n    tanstackQueryConfig,\n    tailwindConfig,\n    i18nextConfig,\n  ],',
-          },
-        ],
-      },
-      {
-        when: { forms: true, 'server-state': true, styling: 'tailwind', ui: 'shadcn' },
-        edits: [
-          {
-            file: 'oxlint.config.ts',
-            replace:
-              'extends: [reactViteConfig, reactHookFormConfig, tanstackQueryConfig, shadcnConfig, tailwindConfig, i18nextConfig],',
-            with: 'extends: [\n    reactViteConfig,\n    reactHookFormConfig,\n    tanstackQueryConfig,\n    shadcnConfig,\n    tailwindConfig,\n    i18nextConfig,\n  ],',
-          },
-        ],
-      },
       ...FRONTEND_FORMS_EXAMPLE,
+      ...FRONTEND_NO_I18N_FORMS,
       {
         when: { forms: true, example: true, 'server-state': false },
         ...FORMS_SCHEMAS_IN_TITLE_FORM,
       },
       ...FRONTEND_FORMS_SERVER_STATE,
       ...normalizeTitleChanges(['docs/reference/verifications.md']),
+      ...serverStateExtends({ preset: 'reactViteConfig', serverState: ['tanstackQueryConfig'] }),
       {
         when: { i18n: 'en-fr' },
         overlay: 'i18n',
@@ -322,10 +334,27 @@ export const viteStack: Stack = {
         ],
       },
       ...FRONTEND_ANALYTICS_AND_AGENTS,
-      { when: { analytics: 'module' }, edits: APP_OPENED },
-      { when: { analytics: 'posthog' }, edits: APP_OPENED },
+      ...APP_OPENED_IMPORTS,
+      { when: { analytics: ['module', 'posthog'] }, edits: APP_OPENED },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS_AND_THEME,
+      ...FRONTEND_NO_I18N,
+      ...WEB_NO_I18N,
+      {
+        when: { i18n: 'none' },
+        edits: [
+          {
+            file: 'docs/reference/layout.md',
+            dropLines: 'The messages are data, so they live outside `src/`',
+          },
+          {
+            file: 'docs/reference/verifications.md',
+            replace:
+              'base, the React, zustand and Vitest configs, and `@brutalway/oxlint-config-i18next`.',
+            with: 'base and the React, zustand and Vitest configs.',
+          },
+        ],
+      },
     ],
     ANCHORS,
   ),

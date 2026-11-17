@@ -16,12 +16,18 @@ const LANGUAGES = [
 
 type Variant = { when: StackChange['when']; configs: string[] };
 
-function extendsChange(forms: boolean, look: Variant, languages: Variant): StackChange[] {
+type Head = { preset: string; serverState: string[] };
+
+function extendsChange(
+  head: Head,
+  forms: boolean,
+  look: Variant,
+  languages: Variant,
+): StackChange[] {
   const configs = [
-    'nextConfig',
+    head.preset,
     ...(forms ? ['reactHookFormConfig'] : []),
-    'noServerFunctionsConfig',
-    'tanstackQueryConfig',
+    ...head.serverState,
     ...look.configs,
     ...languages.configs,
   ];
@@ -36,10 +42,10 @@ function extendsChange(forms: boolean, look: Variant, languages: Variant): Stack
   ];
 }
 
-export function nextServerStateExtends(): StackChange[] {
+export function serverStateExtends(head: Head): StackChange[] {
   return [true, false].flatMap((forms) =>
     LOOKS.flatMap((look) =>
-      LANGUAGES.flatMap((languages) => extendsChange(forms, look, languages)),
+      LANGUAGES.flatMap((languages) => extendsChange(head, forms, look, languages)),
     ),
   );
 }
