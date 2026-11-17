@@ -19,7 +19,7 @@ npm create brutal my-app -- --stack react-native --expo-go --dark-theme --yes
 A preset file holds the same answers, and flags override it:
 
 ```json
-{ "stack": "react-native", "git": true, "install": true, "options": { "server-state": true, "i18n": true } }
+{ "stack": "react-native", "git": true, "install": true, "options": { "server-state": true, "i18n": "en-fr" } }
 ```
 
 ```sh
@@ -35,7 +35,7 @@ npm create brutal my-app -- --preset react-native.json --yes
 | `--[no-]dark-theme` | yes, no | no |  |
 | `--[no-]server-state` | yes, no | no |  |
 | `--[no-]forms` | yes, no | no |  |
-| `--[no-]i18n` | yes, no | no |  |
+| `--i18n` | `none`, `en`, `en-fr` | `en` |  |
 | `--[no-]react-compiler` | yes, no | no |  |
 | `--analytics` | `none`, `module`, `posthog` | `none` |  |
 | `--[no-]component-tests` | yes, no | yes | `--no-component-tests` with `--coverage` |
@@ -46,7 +46,7 @@ npm create brutal my-app -- --preset react-native.json --yes
 
 A combination from the last column stops the CLI before anything is written, with a message naming both flags.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/index.tsx` only shows the project name, the theme moves next to the page frame in `src/features/page-shell/`, or stays in `src/shared/theme/` with the `Button` going into the language switch when `i18n` is on, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` when `i18n` is off.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/index.tsx` only shows the project name, the theme moves next to the page frame in `src/features/page-shell/`, or stays in `src/shared/theme/` with the `Button` going into the language switch when `i18n` is `en-fr`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` unless `i18n` is `en-fr`.
 
 Tailwind, CSS Modules, shadcn/ui and the security headers are not offered: React Native has no CSS, the styles come from the theme object, and an app sends no HTTP headers of its own. There are no e2e tests either, since they need a simulator.
 
@@ -62,7 +62,7 @@ Without it, the `zustand` dependency is removed. The example needs the store, so
 
 It adds `@tanstack/react-query`, a query client in a `query-client` feature, the cache profiles of `QueryConfig.ts` next to the client, and `@brutalway/oxlint-config-tanstack-query`.
 
-With the example, the todos are read and written through the routes of template-fastify, at `EXPO_PUBLIC_API_URL` or `http://localhost:3000`: there is no dev server to mock the API from, as Vite does. A client parses each response with Zod (added as a dependency), the API filters the list and gives the counters, and the zustand store only keeps the filter of the list, so it moves into `src/features/todo-list/` and `src/shared/todos/lib/todosSelectors.ts` goes. `expo-crypto` is removed, and `@react-native-async-storage/async-storage` too when `i18n` is off.
+With the example, the todos are read and written through the routes of template-fastify, at `EXPO_PUBLIC_API_URL` or `http://localhost:3000`: there is no dev server to mock the API from, as Vite does. A client parses each response with Zod (added as a dependency), the API filters the list and gives the counters, and the zustand store only keeps the filter of the list, so it moves into `src/features/todo-list/` and `src/shared/todos/lib/todosSelectors.ts` goes. `expo-crypto` is removed, and `@react-native-async-storage/async-storage` too unless `i18n` is `en-fr`.
 
 ## forms
 

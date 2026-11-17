@@ -9,6 +9,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { join } from 'node:path';
+import { changeApplies } from '#src/features/scaffolding/lib/changeApplies.ts';
 import { finishProject } from '#src/features/scaffolding/lib/finishProject.ts';
 import { editFiles } from '#src/features/scaffolding/lib/editFiles.ts';
 import { movePaths } from '#src/features/scaffolding/lib/movePaths.ts';
@@ -49,9 +50,7 @@ function keepFolders(dir: string, folders: string[]): void {
 type StackTarget = Pick<ScaffoldPlan, 'dir' | 'stack' | 'answers' | 'projectName'>;
 
 export function applyStackChanges(target: StackTarget, overlaysRoot: string): void {
-  const changes = target.stack.changes.filter((change) =>
-    Object.entries(change.when).every(([id, value]) => target.answers[id] === value),
-  );
+  const changes = target.stack.changes.filter((change) => changeApplies(change, target.answers));
   for (const change of changes) {
     movePaths(target.dir, change.move ?? {});
     removePaths(target.dir, change.remove ?? []);

@@ -198,7 +198,7 @@ export const nextStack: Stack = {
       ...normalizeTitleChanges(['docs/reference/verifications.md']),
       ...nextServerStateExtends(),
       {
-        when: { i18n: true },
+        when: { i18n: 'en-fr' },
         overlay: 'i18n',
         edits: [
           ...I18N_LOCALE_EDITS,

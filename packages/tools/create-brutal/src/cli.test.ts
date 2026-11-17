@@ -29,7 +29,7 @@ vite
   --[no-]dark-theme              default: no
   --[no-]server-state            default: no
   --[no-]forms                   default: no
-  --[no-]i18n                    default: no
+  --i18n none|en|en-fr           default: en
   --[no-]react-compiler          default: no
   --analytics none|module|posthog default: none
   --[no-]component-tests         default: yes
@@ -46,7 +46,7 @@ next
   --[no-]dark-theme              default: no
   --[no-]server-state            default: no
   --[no-]forms                   default: no
-  --[no-]i18n                    default: no
+  --i18n none|en|en-fr           default: en
   --[no-]react-compiler          default: no
   --analytics none|module|posthog default: none
   --[no-]component-tests         default: yes
@@ -61,7 +61,7 @@ react-native
   --[no-]dark-theme              default: no
   --[no-]server-state            default: no
   --[no-]forms                   default: no
-  --[no-]i18n                    default: no
+  --i18n none|en|en-fr           default: en
   --[no-]react-compiler          default: no
   --analytics none|module|posthog default: none
   --[no-]component-tests         default: yes
@@ -306,6 +306,7 @@ describe('create-brutal', () => {
       '--server-state',
       '--forms',
       '--i18n',
+      'en-fr',
       '--react-compiler',
       '--analytics',
       'posthog',
@@ -340,6 +341,7 @@ describe('create-brutal', () => {
       '--styling',
       'css-modules',
       '--i18n',
+      'en-fr',
       '--analytics',
       'posthog',
       '--no-e2e',
@@ -368,7 +370,7 @@ describe('create-brutal', () => {
   });
 
   it('copies the react-native overlays, names the app after its folder and keeps Expo Go when asked', () => {
-    const options = ['--i18n', '--server-state', '--analytics', 'module', '--expo-go'];
+    const options = ['--i18n', 'en-fr', '--server-state', '--analytics', 'module', '--expo-go'];
     const result = run(['my-app', '--stack', 'react-native', '-y', ...OFFLINE, ...options]);
     assert.equal(result.status, 0, result.stdout);
     const project = join(result.cwd, 'my-app');

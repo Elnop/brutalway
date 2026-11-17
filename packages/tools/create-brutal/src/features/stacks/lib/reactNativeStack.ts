@@ -124,7 +124,7 @@ const CREATE_I18N_LIB = 'src/features/i18n/lib/createI18n.ts';
 
 const I18N_LIB_CHANGES: StackChange[] = [
   {
-    when: { i18n: true },
+    when: { i18n: 'en-fr' },
     move: { [CREATE_I18N]: CREATE_I18N_LIB },
     edits: [
       {
@@ -141,7 +141,7 @@ const I18N_LIB_CHANGES: StackChange[] = [
     ],
   },
   {
-    when: { i18n: true, example: true },
+    when: { i18n: 'en-fr', example: true },
     edits: [
       {
         file: 'docs/guides/start-your-own-app.md',
@@ -172,7 +172,7 @@ function docPathEdits(files: string[], from: string, to: string): FileEdit[] {
 
 const THEME_SKELETON_CHANGES: StackChange[] = [
   {
-    when: { example: false, i18n: false },
+    when: { example: false, i18n: ['none', 'en'] },
     move: {
       [THEME_CONFIG]: `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
       'src/features/page-shell/StackConfig.ts': `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
@@ -211,7 +211,7 @@ const THEME_SKELETON_CHANGES: StackChange[] = [
     ],
   },
   {
-    when: { example: false, i18n: true },
+    when: { example: false, i18n: 'en-fr' },
     move: {
       'src/shared/theme/Button.tsx': `${SWITCH_PRESENTERS}/Button.tsx`,
       'src/shared/theme/ThemeTypes.ts': 'src/features/language-switch/ThemeTypes.ts',
@@ -246,7 +246,7 @@ const THEME_SKELETON_CHANGES: StackChange[] = [
     ],
   },
   {
-    when: { example: false, i18n: true, 'component-tests': true },
+    when: { example: false, i18n: 'en-fr', 'component-tests': true },
     move: {
       'src/shared/theme/Button.test.tsx': `${SWITCH_PRESENTERS}/Button.test.tsx`,
       'src/features/language-switch/components/LanguageSwitch.test.tsx': `${SWITCH_PRESENTERS}/LanguageSwitch.test.tsx`,
@@ -325,7 +325,7 @@ export const reactNativeStack: Stack = {
         removeDependencies: ['expo-crypto'],
       },
       {
-        when: { example: false, i18n: false },
+        when: { example: false, i18n: ['none', 'en'] },
         edits: WITHOUT_ASYNC_STORAGE,
         removeDependencies: ['@react-native-async-storage/async-storage'],
       },
@@ -334,11 +334,11 @@ export const reactNativeStack: Stack = {
         edits: [JEST_WITHOUT_TESTS],
       },
       {
-        when: { example: false, i18n: false, 'component-tests': true },
+        when: { example: false, i18n: ['none', 'en'], 'component-tests': true },
         remove: ['src/shared/theme/Button.test.tsx'],
       },
       {
-        when: { example: false, i18n: false },
+        when: { example: false, i18n: ['none', 'en'] },
         remove: ['src/shared/theme/Button.tsx', 'src/shared/theme/ThemeTypes.ts'],
         edits: [
           {
@@ -354,7 +354,7 @@ export const reactNativeStack: Stack = {
         ],
       },
       {
-        when: { example: false, i18n: false },
+        when: { example: false, i18n: ['none', 'en'] },
         edits: [
           {
             file: 'knip.json',
@@ -437,7 +437,7 @@ export const reactNativeStack: Stack = {
         addDependencies: { zod: '4.6.7' },
       },
       {
-        when: { 'server-state': true, example: true, i18n: false },
+        when: { 'server-state': true, example: true, i18n: ['none', 'en'] },
         edits: WITHOUT_ASYNC_STORAGE,
         removeDependencies: ['@react-native-async-storage/async-storage'],
       },
@@ -450,7 +450,7 @@ export const reactNativeStack: Stack = {
       ...FRONTEND_FORMS_SERVER_STATE,
       ...normalizeTitleChanges(['docs/reference/verifications.md']),
       {
-        when: { i18n: true },
+        when: { i18n: 'en-fr' },
         overlay: 'i18n',
         edits: [
           ...I18N_LOCALE_EDITS,
@@ -477,7 +477,7 @@ export const reactNativeStack: Stack = {
       ...FRONTEND_I18N_LOCALES,
       ...FRONTEND_I18N_FORMS,
       {
-        when: { i18n: true, 'component-tests': true },
+        when: { i18n: 'en-fr', 'component-tests': true },
         overlay: 'i18n-component-tests',
       },
       {
@@ -663,7 +663,7 @@ export const reactNativeStack: Stack = {
         ['AGENTS.md', 'docs/reference/layout.md', 'docs/reference/verifications.md'],
         {
           example: false,
-          i18n: false,
+          i18n: ['none', 'en'],
         },
       ),
     ],

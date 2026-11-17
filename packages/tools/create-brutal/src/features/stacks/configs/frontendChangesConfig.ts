@@ -322,7 +322,16 @@ export const FRONTEND_LOOK_OPTIONS: StackOption[] = [
 
 export const FRONTEND_FEATURE_OPTIONS: StackOption[] = [
   { id: 'forms', message: 'Validate the forms with react-hook-form and Zod?', default: false },
-  { id: 'i18n', message: 'Add French and a language switch?', default: false },
+  {
+    id: 'i18n',
+    message: 'Which languages should the app speak?',
+    default: 'en',
+    values: [
+      { id: 'none', label: 'English only, written in the components, without i18next' },
+      { id: 'en', label: 'English, through i18next' },
+      { id: 'en-fr', label: 'English and French, with a language switch' },
+    ],
+  },
   {
     id: 'react-compiler',
     message: 'Memoize with the React Compiler instead of useMemo and useCallback?',
@@ -789,7 +798,7 @@ export const FRONTEND_FORMS_EXAMPLE: StackChange[] = [
 
 export const FRONTEND_I18N_LOCALES: StackChange[] = [
   {
-    when: { i18n: true, example: true },
+    when: { i18n: 'en-fr', example: true },
     overlay: 'i18n-example',
     edits: [
       {
@@ -806,7 +815,7 @@ export const FRONTEND_I18N_LOCALES: StackChange[] = [
     ],
   },
   {
-    when: { i18n: true, example: false },
+    when: { i18n: 'en-fr', example: false },
     overlay: 'i18n-skeleton',
     edits: [
       {
@@ -825,24 +834,24 @@ export const FRONTEND_I18N_LOCALES: StackChange[] = [
 
 const FRONTEND_I18N_STYLING: StackChange[] = [
   {
-    when: { i18n: true, styling: 'css-modules' },
+    when: { i18n: 'en-fr', styling: 'css-modules' },
     remove: ['src/features/language-switch/language-switch.css'],
     overlay: 'i18n-css-modules',
   },
   {
-    when: { i18n: true, styling: 'tailwind' },
+    when: { i18n: 'en-fr', styling: 'tailwind' },
     remove: ['src/features/language-switch/language-switch.css'],
     overlay: 'i18n-tailwind',
   },
   {
-    when: { i18n: true, ui: 'shadcn' },
+    when: { i18n: 'en-fr', ui: 'shadcn' },
     overlay: 'i18n-shadcn',
   },
 ];
 
 export const FRONTEND_I18N_FORMS: StackChange[] = [
   {
-    when: { i18n: true, example: true, forms: true },
+    when: { i18n: 'en-fr', example: true, forms: true },
     edits: [
       {
         file: 'locales/fr/todoList.json',
@@ -855,7 +864,7 @@ export const FRONTEND_I18N_FORMS: StackChange[] = [
 
 const FRONTEND_I18N_E2E_AND_COVERAGE: StackChange[] = [
   {
-    when: { i18n: true, example: true, e2e: true },
+    when: { i18n: 'en-fr', example: true, e2e: true },
     overlay: 'i18n-e2e',
     edits: [
       {
@@ -894,7 +903,7 @@ const FRONTEND_I18N_E2E_AND_COVERAGE: StackChange[] = [
     addDevDependencies: { '@vitest/coverage-v8': '5.1.0' },
   },
   {
-    when: { i18n: true, 'component-tests': true },
+    when: { i18n: 'en-fr', 'component-tests': true },
     overlay: 'i18n-component-tests',
   },
   {
@@ -1276,7 +1285,7 @@ export const FRONTEND_AGENTS: StackChange[] = [
     ],
   },
   {
-    when: { i18n: true },
+    when: { i18n: 'en-fr' },
     edits: [
       {
         file: 'AGENTS.md',

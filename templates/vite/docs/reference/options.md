@@ -17,7 +17,7 @@ npm create brutal my-app -- --stack vite --styling tailwind --ui shadcn --no-e2e
 A preset file holds the same answers, and flags override it:
 
 ```json
-{ "stack": "vite", "git": true, "install": true, "options": { "styling": "tailwind", "i18n": true } }
+{ "stack": "vite", "git": true, "install": true, "options": { "styling": "tailwind", "i18n": "en-fr" } }
 ```
 
 ```sh
@@ -35,7 +35,7 @@ npm create brutal my-app -- --preset vite.json --yes
 | `--[no-]dark-theme` | yes, no | no |  |
 | `--[no-]server-state` | yes, no | no |  |
 | `--[no-]forms` | yes, no | no |  |
-| `--[no-]i18n` | yes, no | no |  |
+| `--i18n` | `none`, `en`, `en-fr` | `en` |  |
 | `--[no-]react-compiler` | yes, no | no |  |
 | `--analytics` | `none`, `module`, `posthog` | `none` |  |
 | `--[no-]component-tests` | yes, no | yes | `--no-component-tests` with `--coverage` |

@@ -2,6 +2,8 @@ export type AnswerValue = boolean | string;
 
 export type Answers = Record<string, AnswerValue>;
 
+export type ChangeCondition = Record<string, AnswerValue | AnswerValue[]>;
+
 export type Blocker = { id: string; value: AnswerValue };
 
 export type OptionRules = {
@@ -39,7 +41,7 @@ export type FileEdit =
   | { file: string; before: string; insert: string };
 
 export type StackChange = {
-  when: Answers;
+  when: ChangeCondition;
   move?: Record<string, string>;
   remove?: string[];
   edits?: FileEdit[];

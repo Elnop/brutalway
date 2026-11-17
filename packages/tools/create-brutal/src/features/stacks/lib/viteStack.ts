@@ -203,7 +203,7 @@ export const viteStack: Stack = {
       ...FRONTEND_FORMS_SERVER_STATE,
       ...normalizeTitleChanges(['docs/reference/verifications.md']),
       {
-        when: { i18n: true },
+        when: { i18n: 'en-fr' },
         overlay: 'i18n',
         edits: [
           ...I18N_LOCALE_EDITS,

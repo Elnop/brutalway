@@ -11,7 +11,7 @@ npm create brutal my-app -- --stack next
 A yes/no option takes `--<option>` or `--no-<option>`, an option with several values takes `--<option> <value>`, and `--yes` takes the default of every question left:
 
 ```sh
-npm create brutal my-app -- --stack next --styling tailwind --i18n --no-e2e --yes
+npm create brutal my-app -- --stack next --styling tailwind --i18n en-fr --no-e2e --yes
 ```
 
 A preset file holds the same answers, and flags override it:
@@ -35,7 +35,7 @@ npm create brutal my-app -- --preset next.json --yes
 | `--[no-]dark-theme` | yes, no | no |  |
 | `--[no-]server-state` | yes, no | no |  |
 | `--[no-]forms` | yes, no | no |  |
-| `--[no-]i18n` | yes, no | no |  |
+| `--i18n` | `none`, `en`, `en-fr` | `en` |  |
 | `--[no-]react-compiler` | yes, no | no |  |
 | `--analytics` | `none`, `module`, `posthog` | `none` |  |
 | `--[no-]component-tests` | yes, no | yes | `--no-component-tests` with `--coverage` |
