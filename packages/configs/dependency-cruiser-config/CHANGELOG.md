@@ -1,5 +1,11 @@
 # @brutalkit/dependency-cruiser-config
 
+## 0.12.0
+
+### Minor Changes
+
+- e5ab8b9: `presenters-are-pure` no longer counts an `XProvider.tsx` as a presenter, as `@brutalway/oxlint-config-next` already does: a provider wires a context, so it may import `@tanstack/react-query` or a store, like the `QueryProvider` of template-next with its `server-state` option.
+
 ## 0.11.0
 
 ### Minor Changes
