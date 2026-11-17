@@ -29,7 +29,10 @@
   "imports": {
     "#src/*": "./src/*"
   },
-  "exports": "./dist/NextConfig.js",
+  "exports": {
+    ".": "./dist/NextConfig.js",
+    "./no-server-functions": "./dist/NoServerFunctionsConfig.js"
+  },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p .",

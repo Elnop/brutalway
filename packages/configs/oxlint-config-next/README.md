@@ -17,6 +17,22 @@ export default defineConfig({
 });
 ```
 
+## An app that reads its data through an API
+
+When every read and write goes through route handlers or another API, called from the client with TanStack Query, extend `noServerFunctionsConfig` after `nextConfig`:
+
+```ts
+import { nextConfig } from '@brutalway/oxlint-config-next';
+import { noServerFunctionsConfig } from '@brutalway/oxlint-config-next/no-server-functions';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [nextConfig, noServerFunctionsConfig],
+});
+```
+
+It reports every `'use server'` and every `'use cache'` (`'use cache: remote'` and `'use cache: private'` included), at the top of a file or in a function. A server action would be a second way to the data, outside the API, and `'use cache'` a second cache on top of TanStack Query's. The rules on server actions below have nothing left to check, so it replaces them. template-next turns it on with its `server-state` option.
+
 ## Usage
 
 When a rule fires:
