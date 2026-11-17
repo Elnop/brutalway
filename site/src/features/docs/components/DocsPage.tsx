@@ -9,6 +9,7 @@ import {
   useDocTitles,
   usePackageCategories,
 } from '@/features/docs/hooks/useDocs.ts';
+import { useDiagrams } from '@/features/docs/hooks/useDiagrams.ts';
 import { useNavDrawer } from '@/features/docs/hooks/useNavDrawer.ts';
 import { useSectionTracking } from '@/features/docs/hooks/useSectionTracking.ts';
 import { docHeadings } from '@/features/docs/lib/docHeadings.ts';
@@ -49,21 +50,20 @@ function DocsNavPanel({ route, entries, markdown }: DocsNavPanelProps) {
 function DocsView({ route }: DocsViewProps) {
   const entries = useDocTitles(useDocList(), route.source.route);
   const content = useDocContent(route.source, route.path);
+  const markdown = content.status === 'ready' ? content.value : undefined;
+  const diagrams = useDiagrams(markdown);
   const knownPaths = entries
     .filter((entry) => entry.sourceKey === route.source.key)
     .map((entry) => entry.path);
   return (
     <div className="docs">
-      <DocsNavPanel
-        route={route}
-        entries={entries}
-        markdown={content.status === 'ready' ? content.value : undefined}
-      />
+      <DocsNavPanel route={route} entries={entries} markdown={markdown} />
       <DocsArticle
         content={content}
         source={route.source}
         path={route.path}
         knownPaths={knownPaths}
+        diagrams={diagrams}
       />
     </div>
   );

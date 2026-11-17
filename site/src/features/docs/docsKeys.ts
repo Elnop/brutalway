@@ -3,4 +3,5 @@ export const docsKeys = {
   list: () => [...docsKeys.all, 'list'],
   roadmap: (repo: string) => [...docsKeys.all, 'roadmap', repo],
   content: (url: string) => [...docsKeys.all, 'content', url],
+  diagram: (source: string) => [...docsKeys.all, 'diagram', source],
 };

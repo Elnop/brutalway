@@ -2,6 +2,7 @@ import Markdown, { defaultUrlTransform } from 'react-markdown';
 import type { Components } from 'react-markdown';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import { DocsCodeBlock } from '@/features/docs/components/presenters/DocsCodeBlock.tsx';
 import type { DocSource, LoadState } from '@/features/docs/DocsTypes.ts';
 import { docSourceUrl } from '@/features/docs/lib/docsUrls.ts';
 import { repositoryPath } from '@/features/docs/lib/githubUrls.ts';
@@ -9,15 +10,19 @@ import { resolveDocUrl } from '@/features/docs/lib/resolveDocUrl.ts';
 import { NEW_ISSUE_URL, NPM_PACKAGE_URL } from '@/shared/links/LinksConfig.ts';
 import { SiteLink } from '@/shared/site-link/SiteLink.tsx';
 
-const markdownComponents: Components = {
-  a: ({ node: _node, ...props }) => <SiteLink {...props} />,
-};
+function markdownComponents(diagrams: Map<string, string>): Components {
+  return {
+    a: ({ node: _node, ...props }) => <SiteLink {...props} />,
+    pre: (props) => <DocsCodeBlock {...props} diagrams={diagrams} />,
+  };
+}
 
 type DocsArticleProps = {
   content: LoadState<string>;
   source: DocSource;
   path: string;
   knownPaths: string[];
+  diagrams: Map<string, string>;
 };
 
 type DocsMarkdownProps = {
@@ -25,14 +30,15 @@ type DocsMarkdownProps = {
   source: DocSource;
   path: string;
   knownPaths: string[];
+  diagrams: Map<string, string>;
 };
 
-function DocsMarkdown({ markdown, source, path, knownPaths }: DocsMarkdownProps) {
+function DocsMarkdown({ markdown, source, path, knownPaths, diagrams }: DocsMarkdownProps) {
   return (
     <Markdown
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeSlug]}
-      components={markdownComponents}
+      components={markdownComponents(diagrams)}
       urlTransform={(url, attribute) =>
         defaultUrlTransform(resolveDocUrl({ url, attribute, source, docPath: path, knownPaths }))
       }
@@ -75,7 +81,7 @@ function DocsArticleFooter({ source, path }: DocsArticleFooterProps) {
   );
 }
 
-export function DocsArticle({ content, source, path, knownPaths }: DocsArticleProps) {
+export function DocsArticle({ content, source, path, knownPaths, diagrams }: DocsArticleProps) {
   const sourceUrl = docSourceUrl(source, path);
   return (
     <article className="docs-article">
@@ -91,6 +97,7 @@ export function DocsArticle({ content, source, path, knownPaths }: DocsArticlePr
           source={source}
           path={path}
           knownPaths={knownPaths}
+          diagrams={diagrams}
         />
       )}
       <DocsArticleFooter source={source} path={path} />

@@ -347,3 +347,18 @@
     transition: none;
   }
 }
+
+.docs-diagram {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border: var(--border);
+  background: var(--paper);
+  overflow-x: auto;
+}
+
+.docs-diagram svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
