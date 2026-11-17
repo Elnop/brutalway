@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.14.0
+
+### Minor Changes
+
+- 70cf121: `--server-state` on the next stack: TanStack Query, a `QueryProvider` in `src/app/layout.tsx`, and an Oxlint config that rejects `'use server'` and `'use cache'`. With the example, the todos go through a route handler under `src/app/api/` instead of a zustand store.
+
 ## 0.13.0
 
 ### Minor Changes
