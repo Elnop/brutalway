@@ -1,5 +1,11 @@
 # template-next
 
+## 0.7.2
+
+### Patch Changes
+
+- 01e6370: Moves to `@brutalway/check-tree` 0.9.0, which reads `.check-tree-known-violations.json` when it exists. The templates have no violation to list, so nothing else changes.
+
 ## 0.7.1
 
 ### Patch Changes

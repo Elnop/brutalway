@@ -1,5 +1,11 @@
 # template-react-native
 
+## 0.6.2
+
+### Patch Changes
+
+- 01e6370: Moves to `@brutalway/check-tree` 0.9.0, which reads `.check-tree-known-violations.json` when it exists. The templates have no violation to list, so nothing else changes.
+
 ## 0.6.1
 
 ### Patch Changes
