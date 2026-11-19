@@ -1,5 +1,11 @@
 # @brutalkit/check-tree
 
+## 0.9.0
+
+### Minor Changes
+
+- ddfff38: check-tree reads `.check-tree-known-violations.json` from the current folder when it exists, and stops reporting the violations listed there. A violation missing from the list still fails, and so does an entry that no longer happens, so the list can only shrink. `--write-known-violations` writes the current violations to that file.
+
 ## 0.8.0
 
 ### Minor Changes
