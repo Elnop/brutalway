@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
@@ -137,6 +137,54 @@ describe('check-tree', () => {
         'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a',
         'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a',
         'src/shared/text holds 2 groups of files that never import each other (format.ts) (TextTypes.ts): split it into one slice per group',
+      ],
+    });
+  });
+
+  it('with --write-known-violations, writes the violations to the known-violations file and exits with 0', () => {
+    const root = project(['src/shared/text/lib/a.ts'], ['src/features/empty']);
+    assert.deepEqual(run(root, ['src', '--write-known-violations']), {
+      status: 0,
+      stdout: '',
+      lines: [],
+    });
+    assert.deepEqual(
+      JSON.parse(readFileSync(join(root, '.check-tree-known-violations.json'), 'utf8')),
+      [
+        'src/features/empty is empty: delete it',
+        'src/shared/text/lib holds a single child: move it up one level and delete the folder',
+      ],
+    );
+    assert.deepEqual(run(root, ['src']), { status: 0, stdout: '', lines: [] });
+  });
+
+  it('reports a violation missing from the known-violations file, and an entry that no longer happens', () => {
+    const root = project(['src/shared/text/lib/a.ts'], ['src/features/empty']);
+    writeFileSync(
+      join(root, '.check-tree-known-violations.json'),
+      JSON.stringify([
+        'src/features/empty is empty: delete it',
+        'src/features/gone is empty: delete it',
+      ]),
+    );
+    assert.deepEqual(run(root, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: [
+        'src/shared/text/lib holds a single child: move it up one level and delete the folder',
+        '.check-tree-known-violations.json lists a violation that no longer happens: src/features/gone is empty: delete it',
+      ],
+    });
+  });
+
+  it('stops with a message when the known-violations file is not a list of strings', () => {
+    const root = project(['src/app/App.tsx']);
+    writeFileSync(join(root, '.check-tree-known-violations.json'), '{"a": 1}');
+    assert.deepEqual(run(root, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: [
+        '.check-tree-known-violations.json holds a JSON array with one string per known violation',
       ],
     });
   });

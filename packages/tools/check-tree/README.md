@@ -29,6 +29,22 @@ A published package keeps its entry points at the root of `src/`, one file per b
 npx check-tree src --root-entries
 ```
 
+### Keep the violations of an existing tree
+
+On a codebase that did not follow the layout, the first run prints a lot. Write the current violations to `.check-tree-known-violations.json` and commit it:
+
+```sh
+npx check-tree src --write-known-violations
+```
+
+check-tree then skips the violations listed in that file, which it reads from the current folder. It still fails on a violation that is not in the list, and on an entry that no longer happens, which you delete from the file. The file is a JSON array of the messages check-tree prints:
+
+```json
+["src/features/player/hooks holds a single child: move it up one level and delete the folder"]
+```
+
+A message that names a count, like `holds 3 groups of files`, changes when the count changes: run `--write-known-violations` again and check the diff.
+
 ### Run the check from code
 
 ```ts
@@ -88,7 +104,7 @@ Test files (`*.test.ts`, `*.test.tsx`) are not counted.
 
 ### Output
 
-It prints one line per problem and exits with code 1 if it found any.
+It prints one line per problem and exits with code 1 if it found any. The violations listed in `.check-tree-known-violations.json` are left out.
 
 ### Options
 
@@ -97,3 +113,4 @@ It prints one line per problem and exits with code 1 if it found any.
 | folder                | `src`                                                                                                                                                                    |
 | `--categories <list>` | `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers`, `lib` |
 | `--root-entries`      | off                                                                                                                                                                      |
+| `--write-known-violations` | off |

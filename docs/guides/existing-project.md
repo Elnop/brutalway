@@ -95,7 +95,37 @@ rules:
 npx alint check
 ```
 
-## 5. One command
+## 5. Exceptions
+
+On a large codebase, fixing every violation before turning a rule on means one huge pull request, and the rule never gets turned on. Each checker lets you write the exceptions down in a committed file instead, so they show up in review and new code gets the rule from day one. Keep them few and delete them as you fix the code.
+
+Oxlint: a directive on the line above, with the rule name. The `no-comments` rule lets these comments through.
+
+```ts
+// oxlint-disable-next-line max-lines-per-function
+```
+
+check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, a JSON array of the printed messages. check-tree skips them, and fails on a new violation and on an entry that no longer happens.
+
+dependency-cruiser: `npx depcruise --baseline src` writes `.dependency-cruiser-known-violations.json`, and `--ignore-known` skips what it lists:
+
+```sh
+npx depcruise --output-type err-long --ignore-known src
+```
+
+knip: `ignoreFiles` and `ignoreDependencies` in `knip.json`, and `ignoreIssues` to skip one kind of issue in some files.
+
+```json
+{ "ignoreIssues": { "src/legacy/**": ["exports", "types"] } }
+```
+
+jscpd: the `ignore` list of `.jscpd.json`, made of globs.
+
+```json
+{ "ignore": ["**/*.test.ts", "src/legacy/**"] }
+```
+
+## 6. One command
 
 Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing:
 
