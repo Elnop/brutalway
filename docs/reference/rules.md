@@ -8,7 +8,7 @@ template-react-native has no CSS, so stylelint does not run there. The colors, s
 
 ## Layers
 
-`src/` has three layers: `app`, `features` and `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other. `src/shared/` holds one folder per slice, named after its concept, and two slices never import each other. Inside a feature or a slice, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. check-tree rejects a folder these layers do not name and a file at the root of a `shared/`. It also rejects a file of a slice that a single feature uses, which moves into that feature, and a slice whose files, tests aside, form two groups that never import each other, which splits in two.
+`src/` has three layers: `app`, `features` and `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other. `src/shared/` holds one folder per slice, named after its concept, and two slices never import each other. Inside a feature or a slice, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. check-tree rejects a folder these layers do not name and a file at the root of a `shared/`. It also rejects a file of a slice that a single feature uses, tests not counted, which moves into that feature, and a slice whose files, tests aside, form two groups that never import each other, which splits in two.
 
 The folders of template-vite, as `npm create brutal` writes them. A solid arrow is an import that passes the check, a dotted one an import that fails it.
 
@@ -122,7 +122,7 @@ error i18next(no-literal-string): disallow literal string: <p className="todo-st
 
 Every dependency in `package.json` is pinned to an exact version. Every path in backticks, link and anchor of the README and of `docs/` exists. No export, file or dependency goes unused.
 
-Checked by alint, with [`@brutalway/alint-config`](../../packages/configs/alint-config), for the versions and the paths, and by knip for the dead code.
+Checked by alint, with [`@brutalway/alint-config`](../../packages/configs/alint-config), for the versions and the paths, and by knip for the dead code. knip runs twice, the second time with `--production`, which leaves the tests out: a file or an export that only tests use is reported too.
 
 ```
 Unused files (1)

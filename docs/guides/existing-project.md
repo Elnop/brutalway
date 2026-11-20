@@ -29,7 +29,7 @@ npx oxlint --type-aware
 
 ## 2. Tree
 
-[`check-tree`](../../packages/tools/check-tree) needs no config. It rejects empty folders, category folders holding a single file and folders the layout of `src/` does not name, so a project laid out another way gets one message per such folder.
+[`check-tree`](../../packages/tools/check-tree) needs no config. It rejects empty folders, category folders holding a single file and folders the layout of `src/` does not name, so a project laid out another way gets one message per such folder. It also rejects a file of a slice of `shared/` that a single feature uses. A test never counts as a consumer there, and a file that only tests import is the job of `knip --production`.
 
 ```sh
 npm install --save-dev @brutalway/check-tree

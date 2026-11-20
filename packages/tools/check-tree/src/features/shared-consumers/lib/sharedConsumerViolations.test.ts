@@ -101,13 +101,14 @@ describe('sharedConsumerViolations', () => {
     assert.deepEqual(sharedConsumerViolations('src', modules), []);
   });
 
-  it('a test counts for the feature it sits in, a test next to the file adds no consumer, an unused file passes', () => {
+  it('a test is never a consumer, wherever it sits, and a file only tests import is left to knip --production', () => {
     const modules = graph({
       'src/features/a/A.tsx': ['src/shared/text/format.ts', 'src/shared/text/slug.ts'],
       'src/features/b/B.test.tsx': ['src/shared/text/format.ts'],
       'src/shared/text/slug.test.ts': ['src/shared/text/slug.ts', 'src/shared/text/unused.ts'],
     });
     assert.deepEqual(sharedConsumerViolations('src', modules), [
+      'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a',
       'src/shared/text/slug.ts is only used by src/features/a: move it into src/features/a',
     ]);
   });

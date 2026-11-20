@@ -2,19 +2,22 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
-import { flag } from '#src/shared/stack/lib/flag.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
-import { packageRoot } from '#src/shared/package-root/packageRoot.ts';
 import { satisfiesRules } from '#src/shared/stack/lib/optionRules.ts';
 import { candidateValues, isChoice } from '#src/shared/stack/lib/optionValues.ts';
 import type { AnswerValue, StackOption } from '#src/shared/stack/StackTypes.ts';
 
 const OPTIONS_DOC = 'docs/reference/options.md';
-const REPOSITORY_ROOT = join(packageRoot(import.meta.dirname), '..', '..', '..');
+const REPOSITORY_ROOT = join(import.meta.dirname, '..', '..', '..', '..', '..', '..', '..');
 
 function shownValue(value: AnswerValue): string {
   if (typeof value === 'string') return `\`${value}\``;
   return value ? 'yes' : 'no';
+}
+
+function shownFlag(id: string, value: AnswerValue): string {
+  if (typeof value === 'string') return `--${id} ${value}`;
+  return value ? `--${id}` : `--no-${id}`;
 }
 
 function incompatibleFlags(option: StackOption, options: StackOption[]): string {
@@ -30,7 +33,7 @@ function incompatibleFlags(option: StackOption, options: StackOption[]): string 
             )
             .map(
               (otherValue) =>
-                `\`${flag(option.id, value)}\` with \`${flag(other.id, otherValue)}\``,
+                `\`${shownFlag(option.id, value)}\` with \`${shownFlag(other.id, otherValue)}\``,
             ),
         ),
     )

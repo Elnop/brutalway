@@ -15,7 +15,7 @@
     "deps": "depcruise --output-type err-long src",
     "tree": "check-tree src",
     "format": "prettier --write .",
-    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && alint check && knip",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && alint check && knip && knip --production",
     "test": "vitest run",
     "test:unit": "vitest run --project unit",
     "test:watch": "vitest"

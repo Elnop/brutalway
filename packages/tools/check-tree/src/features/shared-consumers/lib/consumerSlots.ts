@@ -1,5 +1,5 @@
 import { basename, dirname } from 'node:path';
-import { SLICE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
+import { SLICE, TEST_CODE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import type { ImportedModule, Slice } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
 import { platformBase } from '#src/shared/platform-variants/platformBase.ts';
 
@@ -19,6 +19,7 @@ function importersByUnit(
 ): Map<string, string[]> {
   const importers = new Map<string, string[]>();
   for (const { source, imports } of modules) {
+    if (TEST_CODE.test(source)) continue;
     for (const target of imports) {
       const unit = unitOf(target, platforms);
       importers.set(unit, [...(importers.get(unit) ?? []), source]);

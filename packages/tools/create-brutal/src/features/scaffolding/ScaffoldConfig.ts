@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { packageRoot } from '#src/shared/package-root/packageRoot.ts';
+import { packageRoot } from '#src/features/scaffolding/lib/packageRoot.ts';
 
 const PACKAGE_ROOT = packageRoot(import.meta.dirname);
 
