@@ -35,7 +35,7 @@ or declare the hook in `.claude/settings.json`, to share it with everyone who cl
 }
 ```
 
-Pass `--tree` once per source folder: `--tree web/src --tree server/src`.
+Pass `--tree` once per source folder: `--tree web/src --tree server/src`. The hook runs check-tree from the project root with no other flag, and check-tree reads its options from the `"check-tree"` key of `package.json`, as it does in `npm run check`.
 
 ## When a check is wrong
 

@@ -36,7 +36,16 @@ npm install --save-dev @brutalway/check-tree
 npx check-tree src
 ```
 
-`--categories components,hooks,utils` replaces the list of category folder names with yours.
+Its options go in the `"check-tree"` key of `package.json`, so `npm run check` and the agent hook read the same ones. `categories` replaces the list of category folder names with yours. On a React Native or Expo app, a platform variant such as `useScreenTitle.web.ts` goes with `useScreenTitle.ts`: it has its kind and counts as one file with it, so the variants stay next to their base. `platforms` replaces the platforms check-tree knows, `web`, `ios`, `android` and `native`.
+
+```json
+{
+  "check-tree": {
+    "categories": ["components", "hooks", "utils"],
+    "platforms": ["web", "ios", "android", "native"]
+  }
+}
+```
 
 ## 3. Layers
 
