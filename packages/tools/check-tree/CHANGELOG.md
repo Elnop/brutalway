@@ -1,5 +1,11 @@
 # @brutalkit/check-tree
 
+## 0.10.1
+
+### Patch Changes
+
+- a942769: A platform variant gets the consumers of its base in the rule on `shared/`. dependency-cruiser resolves `@/shared/theme/lib/alert` to `alert.ts`, so `alert.web.ts` had no importer, and a file that only `alert.web.ts` imported was reported as used by the one feature that imported it elsewhere: `src/shared/theme/alertStore.ts is only used by features/shell`.
+
 ## 0.10.0
 
 ### Minor Changes
