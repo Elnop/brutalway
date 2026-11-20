@@ -59,7 +59,7 @@
     "@brutalway/check-doc-length": "0.2.1",
     "@brutalway/check-doc-links": "0.2.1",
     "@brutalway/check-doc-sources": "0.2.1",
-    "@brutalway/check-tree": "0.10.0",
+    "@brutalway/check-tree": "0.10.1",
     "@brutalway/dependency-cruiser-config": "0.11.0",
     "@brutalway/oxlint-config-node": "0.3.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
