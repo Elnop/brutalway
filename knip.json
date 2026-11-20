@@ -1,5 +1,12 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "scripts/check.ts!",
+    "scripts/createReleases.ts!",
+    "scripts/eachPackage.ts!",
+    "scripts/versionPending.ts!",
+    "scripts/syncIssueStatus.ts!"
+  ],
   "ignore": ["packages/**", "templates/**", "site/**"],
   "ignoreBinaries": ["playwright"]
 }

@@ -22,7 +22,7 @@ npm run build
 npm run check
 ```
 
-`npm run bootstrap` runs `npm ci` at the root, in `packages/`, in `templates/` and in each package. Some tests load their package through its built `exports`, so `npm run build` comes first. `npm run check` runs Prettier, tsc and oxlint on the root scripts, then `npm run check` in each package, the doc checks, knip and every test. A step that passes prints one line, such as `knip ok` or `packages/tools/check-tree test ok`, whatever it printed: the checkers are set to fail instead of warning. A step that fails prints its whole output and stops the check. check-doc-sources is the exception, since it lists the docs to read again and still passes: whatever it prints shows up.
+`npm run bootstrap` runs `npm ci` at the root, in `packages/`, in `templates/` and in each package. Some tests load their package through its built `exports`, so `npm run build` comes first. `npm run check` runs Prettier, tsc and oxlint on the root scripts, then `npm run check` in each package, the doc checks, knip twice (the second time with `--production`, from the entry points `knip.json` marks with `!`) and every test. A step that passes prints one line, such as `knip ok` or `packages/tools/check-tree test ok`, whatever it printed: the checkers are set to fail instead of warning. A step that fails prints its whole output and stops the check. check-doc-sources is the exception, since it lists the docs to read again and still passes: whatever it prints shows up.
 
 To work on a single package, run the same commands from its folder: `npm ci`, `npm run build`, `npm run check`, `npm test`.
 

@@ -23,6 +23,7 @@ const steps: Step[] = [
   },
   { label: 'check-doc-links', command: 'check-doc-links', args: [] },
   { label: 'knip', command: 'knip', args: [] },
+  { label: 'knip production', command: 'knip', args: ['--production'] },
   ...folders.map((folder) => ({
     label: `${folder} test`,
     command: 'npm',
