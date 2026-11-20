@@ -32,7 +32,7 @@ function subFeatureRules() {
     name: ruleName('no-cross-sub-feature', level),
     severity: 'error',
     comment:
-      'A sub-feature (features/<y>/ inside a feature or a slice of shared/, at any depth) imports neither its siblings nor the root of its parent: move what several of them use into a slice of the parent shared/, named after its concept.',
+      'A sub-feature (features/<y>/ inside a feature or a shared feature, at any depth) imports neither its siblings nor the root of its parent: move what several of them use into a shared feature in the shared/ of the parent, named after its concept.',
     from: {
       path: `^(${feature})/features/([^/]+)/`,
     },
@@ -48,7 +48,7 @@ function subSharedRules() {
     name: ruleName('no-cross-sub-shared', level),
     severity: 'error',
     comment:
-      'A slice of the shared/ of a feature or of a slice (shared/<y>/, at any depth) imports neither another slice, nor a sub-feature, nor the root of its parent: merge the two slices, or copy the code it needs.',
+      'A shared feature nested in a feature or in another shared feature (shared/<y>/, at any depth) imports neither another shared feature, nor a sub-feature, nor the root of its parent: merge the two shared features, or copy the code it needs.',
     from: {
       path: `^(${feature})/shared/([^/]+)/`,
     },
@@ -61,7 +61,7 @@ function subSharedRules() {
 
 function tooDeepRules() {
   const tooDeep = `^${featureAtDepth(MAX_FEATURE_DEPTH + 1)}/`;
-  const comment = `Features and slices of shared/ nest at most ${MAX_FEATURE_DEPTH} levels deep: move the deepest sub-features up into their own feature.`;
+  const comment = `Features and shared features nest at most ${MAX_FEATURE_DEPTH} levels deep: move the deepest sub-features up into their own feature.`;
   return [
     {
       name: 'feature-nesting-too-deep',
@@ -130,7 +130,7 @@ module.exports = {
       name: 'shared-not-to-features',
       severity: 'error',
       comment:
-        'src/shared/ sits below the features: a slice of shared/ imports no feature and not app/.',
+        'src/shared/ sits below the features: a shared feature imports no feature and not app/.',
       from: {
         path: '^src/shared/',
       },
@@ -142,7 +142,7 @@ module.exports = {
       name: 'no-cross-shared',
       severity: 'error',
       comment:
-        'A slice of shared/ never imports another slice: merge the two slices, or copy the code it needs.',
+        'A shared feature never imports another shared feature: merge the two shared features, or copy the code it needs.',
       from: {
         path: '^src/shared/([^/]+)/',
       },
@@ -166,7 +166,7 @@ module.exports = {
       name: 'app-only-to-features',
       severity: 'error',
       comment:
-        'app/ composes the features: it imports no slice of shared/. Wrap what it needs in a feature, like a page shell or the server setup.',
+        'app/ composes the features: it imports no shared feature. Wrap what it needs in a feature, like a page shell or the server setup.',
       from: {
         path: '^src/app/',
       },
@@ -178,7 +178,7 @@ module.exports = {
       name: 'no-cross-feature',
       severity: 'error',
       comment:
-        'A feature never imports another feature: move what they share down to a slice of src/shared/, named after its concept.',
+        'A feature never imports another feature: move what they share down to a shared feature in src/shared/, named after its concept.',
       from: {
         path: '^src/features/([^/]+)/',
       },
@@ -233,7 +233,7 @@ module.exports = {
       name: 'stores-in-their-folder',
       severity: 'error',
       comment:
-        'A store lives at the root or in the stores/ folder of a feature or a slice of shared/, at any depth.',
+        'A store lives at the root or in the stores/ folder of a feature or a shared feature, at any depth.',
       from: {},
       to: {
         path: 'Store\\.ts$',

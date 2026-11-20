@@ -159,7 +159,7 @@ export const packageStack: Stack = {
           with: ' `src/greet.test.ts` checks the names the export offers and calls them.',
         },
         { file: 'docs/reference/verifications.md', dropLines: '| Feature |' },
-        { file: 'docs/reference/verifications.md', dropLines: '| Slice |' },
+        { file: 'docs/reference/verifications.md', dropLines: '| Shared feature |' },
         {
           file: 'docs/reference/verifications.md',
           replace: 'the names the export offers, called together on one file | `src/todos.test.ts`',

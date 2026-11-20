@@ -8,7 +8,7 @@ function graph(edges: Record<string, string[]>) {
 }
 
 describe('sliceGroupViolations', () => {
-  it('a slice whose files are linked by their imports, whatever their direction, passes', () => {
+  it('a shared feature whose files are linked by their imports, whatever their direction, passes', () => {
     const modules = graph({
       'src/shared/todos/todosStore.ts': ['src/shared/todos/TodosTypes.ts'],
       'src/shared/todos/todosSelectors.ts': ['src/shared/todos/TodosTypes.ts'],
@@ -18,7 +18,7 @@ describe('sliceGroupViolations', () => {
     assert.deepEqual(sliceGroupViolations('src', modules), []);
   });
 
-  it('a slice holding files that never import each other is reported, one group per set of linked files', () => {
+  it('a shared feature holding files that never import each other is reported, one group per set of linked files', () => {
     const modules = graph({
       'src/features/a/A.ts': [
         'src/shared/utils/errorMessage.ts',
@@ -30,8 +30,8 @@ describe('sliceGroupViolations', () => {
       'src/shared/links/lib/linkKind.ts': ['src/shared/links/LinksTypes.ts'],
     });
     assert.deepEqual(sliceGroupViolations('src', modules), [
-      'src/shared/links holds 2 groups of files that never import each other (lib/linkKind.ts, LinksTypes.ts) (npmPackageName.ts): split it into one slice per group',
-      'src/shared/utils holds 3 groups of files that never import each other (errorMessage.ts) (isRecord.ts) (packageRoot.ts): split it into one slice per group',
+      'src/shared/links holds 2 groups of files that never import each other (lib/linkKind.ts, LinksTypes.ts) (npmPackageName.ts): split it into one shared feature per group',
+      'src/shared/utils holds 3 groups of files that never import each other (errorMessage.ts) (isRecord.ts) (packageRoot.ts): split it into one shared feature per group',
     ]);
   });
 
@@ -42,11 +42,11 @@ describe('sliceGroupViolations', () => {
       'src/shared/text/text.test.ts': ['src/shared/text/slug.ts', 'src/shared/text/pad.ts'],
     });
     assert.deepEqual(sliceGroupViolations('src', modules), [
-      'src/shared/text holds 2 groups of files that never import each other (pad.ts) (slug.ts): split it into one slice per group',
+      'src/shared/text holds 2 groups of files that never import each other (pad.ts) (slug.ts): split it into one shared feature per group',
     ]);
   });
 
-  it('a slice of the shared/ of a feature or of a slice is checked on its own, and its sub-features belong to it', () => {
+  it('a shared feature of the shared/ of a feature or of a shared feature is checked on its own, and its sub-features belong to it', () => {
     const modules = graph({
       'src/features/a/shared/title/TitleInput.tsx': [],
       'src/features/a/shared/title/TitleError.tsx': [],
@@ -55,7 +55,7 @@ describe('sliceGroupViolations', () => {
       'src/shared/plan/shared/lock/lock.ts': [],
     });
     assert.deepEqual(sliceGroupViolations('src', modules), [
-      'src/features/a/shared/title holds 2 groups of files that never import each other (TitleError.tsx) (TitleInput.tsx): split it into one slice per group',
+      'src/features/a/shared/title holds 2 groups of files that never import each other (TitleError.tsx) (TitleInput.tsx): split it into one shared feature per group',
     ]);
   });
   it('a platform variant is in the group of its base, and the variants of a base that does not exist are in one group', () => {
@@ -68,7 +68,7 @@ describe('sliceGroupViolations', () => {
       'src/shared/alert/alert.tv.ts': [],
     });
     assert.deepEqual(sliceGroupViolations('src', modules), [
-      'src/shared/alert holds 2 groups of files that never import each other (alert.ts) (alert.tv.ts): split it into one slice per group',
+      'src/shared/alert holds 2 groups of files that never import each other (alert.ts) (alert.tv.ts): split it into one shared feature per group',
     ]);
     assert.deepEqual(sliceGroupViolations('src', modules, ['tv', 'web', 'native']), []);
   });

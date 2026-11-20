@@ -62,7 +62,7 @@ export function sliceGroupViolations(
     if (groups.size < 2) return [];
     const listed = [...groups.values()].map((files) => `(${files.join(', ')})`).join(' ');
     return [
-      `${shown(folder)} holds ${groups.size} groups of files that never import each other ${listed}: split it into one slice per group`,
+      `${shown(folder)} holds ${groups.size} groups of files that never import each other ${listed}: split it into one shared feature per group`,
     ];
   });
 }

@@ -96,8 +96,8 @@ export const fastifyStack: Stack = {
         },
         {
           file: 'docs/guides/start-your-own-api.md',
-          replace: '2. Add a slice of `src/shared/`',
-          with: '1. Add a slice of `src/shared/`',
+          replace: '2. Add a shared feature in `src/shared/`',
+          with: '1. Add a shared feature in `src/shared/`',
         },
         {
           file: 'docs/guides/start-your-own-api.md',

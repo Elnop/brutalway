@@ -24,7 +24,7 @@ The same hook importing from another feature:
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
   A feature never imports another feature: move what they share down to
-  a slice of src/shared/, named after its concept.
+  a shared feature in src/shared/, named after its concept.
 ```
 
 A text written straight in a component:
@@ -61,6 +61,7 @@ Before asking to drop a rule, read [why the rules exist](docs/concepts/intent.md
 
 - [Getting started](docs/getting-started.md): create a project, add a feature, and see what each check answers
 - [Guides](docs/guides/README.md): add the checks to an existing project, set up the Claude Code hook
+- [Glossary](docs/reference/glossary.md): the words the docs and the messages use, such as feature, shared feature and kind folder
 - [Common rules](docs/reference/rules.md): every rule, the tool that checks it and the message it prints
 - [create-brutal](packages/tools/create-brutal/README.md): the options of the CLI and the flags to run it without questions
 - [Packages](packages/README.md): the `@brutalway/*` lint configs, plugins and checks, usable without a template

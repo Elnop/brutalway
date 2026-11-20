@@ -35,7 +35,7 @@ flowchart TB
     axioms["axioms/"]
   end
   parent --> subFeatures
-  subFeatures --> slices
+  subFeatures --> shared features
 ```
 
 Enforced by `@brutalway/dependency-cruiser-config`.

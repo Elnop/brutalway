@@ -29,14 +29,14 @@ npx oxlint --type-aware
 
 ## 2. Tree
 
-[`check-tree`](../../packages/tools/check-tree) needs no config. It rejects empty folders, category folders holding a single file and folders the layout of `src/` does not name, so a project laid out another way gets one message per such folder. It also rejects a file of a slice of `shared/` that a single feature uses. A test never counts as a consumer there, and a file that only tests import is the job of `knip --production`.
+[`check-tree`](../../packages/tools/check-tree) needs no config. It rejects empty folders, kind folders holding a single file and folders the layout of `src/` does not name, so a project laid out another way gets one message per such folder. It also rejects a file of a shared feature that a single feature uses. A test never counts as a consumer there, and a file that only tests import is the job of `knip --production`.
 
 ```sh
 npm install --save-dev @brutalway/check-tree
 npx check-tree src
 ```
 
-Its options go in the `"check-tree"` key of `package.json`, so `npm run check` and the agent hook read the same ones. `categories` replaces the list of category folder names with yours. On a React Native or Expo app, a platform variant such as `useScreenTitle.web.ts` goes with `useScreenTitle.ts`: it has its kind and counts as one file with it, so the variants stay next to their base. `platforms` replaces the platforms check-tree knows, `web`, `ios`, `android` and `native`.
+Its options go in the `"check-tree"` key of `package.json`, so `npm run check` and the agent hook read the same ones. `categories` replaces the list of kind folder names with yours. On a React Native or Expo app, a platform variant such as `useScreenTitle.web.ts` goes with `useScreenTitle.ts`: it has its kind and counts as one file with it, so the variants stay next to their base. `platforms` replaces the platforms check-tree knows, `web`, `ios`, `android` and `native`.
 
 ```json
 {
@@ -49,7 +49,7 @@ Its options go in the `"check-tree"` key of `package.json`, so `npm run check` a
 
 ## 3. Layers
 
-[`dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) expects `src/` to be split into `app/`, `features/` and `shared/`, with one folder per slice in `shared/`. If your project is laid out another way, this is the step that asks the most work: move the code first, then turn the check on.
+[`dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) expects `src/` to be split into `app/`, `features/` and `shared/`, with one folder per shared feature in `shared/`. If your project is laid out another way, this is the step that asks the most work: move the code first, then turn the check on.
 
 ```sh
 npm install --save-dev @brutalway/dependency-cruiser-config dependency-cruiser @swc/core
@@ -80,7 +80,7 @@ npx depcruise --output-type err-long src
 
 ## 4. Repository
 
-[`alint-config`](../../packages/configs/alint-config) checks the pinned versions, the content of category folders and the paths cited in the docs.
+[`alint-config`](../../packages/configs/alint-config) checks the pinned versions, the content of kind folders and the paths cited in the docs.
 
 ```sh
 npm install --save-dev @brutalway/alint-config @asamarts/alint

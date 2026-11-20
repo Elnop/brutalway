@@ -23,7 +23,7 @@ Each one installs on its own, in a project that did not start from a template: `
 
 | Package | What it does | npm |
 |---|---|---|
-| [`@brutalway/check-tree`](tools/check-tree) | no folder the layout does not name, no empty folder, no category folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component | [npm](https://www.npmjs.com/package/@brutalway/check-tree) |
+| [`@brutalway/check-tree`](tools/check-tree) | no folder the layout does not name, no empty folder, no kind folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component | [npm](https://www.npmjs.com/package/@brutalway/check-tree) |
 
 ### Docs
 
@@ -99,7 +99,7 @@ The rules these plugins hold run in both Oxlint and ESLint.
 | Package | What it does | npm |
 |---|---|---|
 | [`@brutalway/dependency-cruiser-config`](configs/dependency-cruiser-config) | the four layers, route, service and query rules for servers, no import between features, pure presenters, stores in their folder and holding no server data | [npm](https://www.npmjs.com/package/@brutalway/dependency-cruiser-config) |
-| [`@brutalway/alint-config`](configs/alint-config) | category folders hold only their kind, pinned dependencies, doc links and anchors resolve | [npm](https://www.npmjs.com/package/@brutalway/alint-config) |
+| [`@brutalway/alint-config`](configs/alint-config) | kind folders hold only their kind, pinned dependencies, doc links and anchors resolve | [npm](https://www.npmjs.com/package/@brutalway/alint-config) |
 
 ## Shared helpers
 

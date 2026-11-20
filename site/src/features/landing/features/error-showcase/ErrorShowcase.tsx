@@ -14,7 +14,7 @@ export function ErrorShowcase() {
         {'$ npm run check\n\n'}
         <span className="terminal-error">error</span>
         {
-          ' no-cross-feature\n  src/features/todo-stats/TodoStats.tsx\n  → src/features/todo-list/components/presenters/TodoItem.tsx\n\n  A feature never imports another feature: move what they share\n  down to a slice of src/shared/, named after its concept.'
+          ' no-cross-feature\n  src/features/todo-stats/TodoStats.tsx\n  → src/features/todo-list/components/presenters/TodoItem.tsx\n\n  A feature never imports another feature: move what they share\n  down to a shared feature in src/shared/, named after its concept.'
         }
       </pre>
     </section>

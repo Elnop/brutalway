@@ -47,4 +47,4 @@ When a rule fires:
 
 ## Why
 
-A slice of `shared/` holds code that several features use, and the components that read state belong to a feature, so orchestrators stay out of it. An orchestrator that only wraps JSX is a presenter with the wrong name.
+A shared feature holds code that several features use, and the components that read state belong to a feature, so orchestrators stay out of it. An orchestrator that only wraps JSX is a presenter with the wrong name.

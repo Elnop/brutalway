@@ -1,7 +1,7 @@
 import type { DummyRuleMap, OxlintOverride } from 'oxlint';
 
 const STORAGE_MESSAGE =
-  'Only an xStorage.ts file reads and writes the browser storage: move this call into the storage file of its slice, and import its functions.';
+  'Only an xStorage.ts file reads and writes the browser storage: move this call into the xStorage.ts file of its feature or shared feature, and import its functions.';
 
 export const storageRules: DummyRuleMap = {
   'no-restricted-globals': [

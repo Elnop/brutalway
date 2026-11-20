@@ -59,7 +59,7 @@ function Diagram() {
   return (
     <svg className="layers-svg" viewBox="0 0 440 360" role="img" aria-labelledby="layers-title">
       <title id="layers-title">
-        src/app imports the features todo-list and todo-stats, both import the slice
+        src/app imports the features todo-list and todo-stats, both import the shared feature
         src/shared/todos, and they never import each other
       </title>
       <defs>
@@ -94,7 +94,7 @@ export function LayersDiagram() {
       <h2 className="section-title reveal reveal-from-left">Imports only go down</h2>
       <p className="layers-intro">
         <code>src/</code> has three layers. A layer imports only the layers below it, two features
-        never import each other, and what they share goes down into a slice of{' '}
+        never import each other, and what they share goes down into a shared feature, a folder of{' '}
         <code>src/shared/</code>. dependency-cruiser fails the check on any other import.
       </p>
       <div className="layers-figure reveal reveal-stamp">

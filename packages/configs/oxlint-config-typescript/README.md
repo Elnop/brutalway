@@ -46,7 +46,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - no comments, except tool directives (`oxlint-`, `eslint-`, `@ts-expect-error`, triple-slash references, shebang)
 - no `index.ts` and no barrel file
 - no `types.ts`: name it `xTypes.ts`
-- nothing in a slice of `shared/`, at any depth, that belongs to a feature: no orchestrator component (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts`
+- nothing in a shared feature, at any depth, that belongs to a feature: no orchestrator component (`XContainer.tsx`, `XLayout.tsx`, `XPage.tsx`) and no `xRoutes.ts`
 - no `xConfig.tsx`: a config is plain data in `xConfig.ts`, and its JSX goes in a component. `xContent.tsx` stays allowed for content written in JSX.
 - file names in camelCase or PascalCase
 - a file with a single export is named after it ([@brutalway/eslint-plugin-file-named-after-export](https://www.npmjs.com/package/@brutalway/eslint-plugin-file-named-after-export))

@@ -25,7 +25,7 @@ function sourceChild(path: string): ChildLayer {
   return {
     layer: 'free',
     violations: [
-      `${path} is not a layer: ${dirname(path)}/ holds app/, features/ and shared/ next to its entry files, move it into one of them`,
+      `${path} is not a layer: ${dirname(path)}/ holds app/, features/ and shared/ next to its entry points, move it into one of them`,
     ],
   };
 }
@@ -36,7 +36,7 @@ function featureChild(path: string, categories: ReadonlySet<string>): ChildLayer
   return kindFolder(
     path,
     categories,
-    'a feature or a slice holds kind folders, features/ for its sub-features and shared/ for the slices they share, move it into features/ as a sub-feature, into shared/ as a slice, or spread its files into kind folders',
+    'a feature or a shared feature holds kind folders, features/ for its sub-features and shared/ for the shared features they have in common, move it into features/ as a sub-feature, into shared/ as a shared feature, or spread its files into kind folders',
   );
 }
 

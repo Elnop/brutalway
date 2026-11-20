@@ -58,7 +58,7 @@ Enforced by `@brutalway/eslint-plugin-file-named-after-export` and check-tree.
 
 [Feature-Sliced Design](https://feature-sliced.design/) splits a front end into layers (`app`, `pages`, `widgets`, `features`, `entities`, `shared`), each importing only the layers below it, and slices of the same layer never import each other.
 
-We take the layers and the import rules, which are the Bounded axiom. Our three layers are `app`, `features` and `shared`, with `shared/` split into slices named after their concept, and they apply to the API as well as to the front end.
+We take the layers and the import rules, which are the Bounded axiom. Our three layers are `app`, `features` and `shared`, and they apply to the API as well as to the front end. An FSD slice of `features` is what we call a feature, and an FSD slice of `shared` is a shared feature: a folder of `shared/` named after its concept. We use the word slice only when we talk about FSD itself, see the [glossary](../reference/glossary.md).
 
 We leave out three of the layers (`pages`, `widgets`, `entities`), which are hard to tell apart in a small app, and the public API of each slice, an `index.ts` that re-exports what the slice exposes. We forbid barrel files: an import points to the file that defines the export.
 
@@ -80,7 +80,7 @@ From [Jimmy Bogard](https://www.jimmybogard.com/vertical-slice-architecture/): g
 
 We take the cohesion of a feature: its routes, service, components and styles sit together.
 
-We leave out one handler per request and the mediator that dispatches them. Shared business code goes to a slice of `shared/` instead of being duplicated between slices.
+We leave out one handler per request and the mediator that dispatches them. Shared business code goes to a shared feature instead of being duplicated between features.
 
 Enforced by `@brutalway/dependency-cruiser-config`.
 

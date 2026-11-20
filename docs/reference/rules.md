@@ -2,13 +2,15 @@
 
 The rules every template shares, the tool that enforces each one and the message it prints. The rules that belong to one stack are in that template's `docs/reference/verifications.md`: [template-vite](../../templates/vite/docs/reference/verifications.md), [template-next](../../templates/next/docs/reference/verifications.md), [template-react-native](../../templates/react-native/docs/reference/verifications.md), [template-fastify](../../templates/fastify/docs/reference/verifications.md), [template-package](../../templates/package/docs/reference/verifications.md).
 
+The words feature, sub-feature, shared feature, kind folder and consumer are defined in the [glossary](glossary.md).
+
 All of them run in `npm run check`, in the pre-commit hook and in CI. The messages below come from a project created with `npm create brutal`.
 
 template-react-native has no CSS, so stylelint does not run there. The colors, sizes and fonts come from the theme object of `src/shared/theme/ThemeConfig.ts`, and [`@brutalway/oxlint-config-react-native`](../../packages/configs/oxlint-config-react-native) rejects a literal in a `StyleSheet.create` and a style object written in JSX. The template extends it.
 
 ## Layers
 
-`src/` has three layers: `app`, `features` and `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other. `src/shared/` holds one folder per slice, named after its concept, and two slices never import each other. Inside a feature or a slice, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. check-tree rejects a folder these layers do not name and a file at the root of a `shared/`. It also rejects a file of a slice that a single feature uses, tests not counted, which moves into that feature, and a slice whose files, tests aside, form two groups that never import each other, which splits in two.
+`src/` has three layers: `app`, `features` and `shared`. A layer imports only the layers below it, and `app` imports features only: what it needs, like a page frame or the server setup, is a feature. Two features never import each other. `src/shared/` holds one folder per shared feature, named after its concept, and two shared features never import each other. Inside a feature or a shared feature, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a shared feature of its `shared/` (`shared/<y>/`) imports neither another shared feature, nor a sub-feature, nor the root of its parent. check-tree rejects a folder these layers do not name and a file at the root of a `shared/`. It also rejects a file of a shared feature that a single feature uses, tests not counted, which moves into that feature, and a shared feature whose files, tests aside, form two groups that never import each other, which splits in two.
 
 The folders of template-vite, as `npm create brutal` writes them. A solid arrow is an import that passes the check, a dotted one an import that fails it.
 
@@ -34,7 +36,7 @@ flowchart TB
   editor["features/todo-editor/"]
   subgraph listShared["shared/"]
     direction LR
-    form["title-form/"] -. another slice .-x input["title-input/"]
+    form["title-form/"] -. another shared feature .-x input["title-input/"]
   end
   list --> editor
   editor --> listShared
@@ -46,7 +48,7 @@ Checked by dependency-cruiser, with [`@brutalway/dependency-cruiser-config`](../
 ```
 error no-cross-feature: src/features/todo-stats/useTodoProgress.ts → src/features/todo-list/useTodoList.ts
   A feature never imports another feature: move what they share down to
-  a slice of src/shared/, named after its concept.
+  a shared feature in src/shared/, named after its concept.
 ```
 
 The templates run it with `--output-type err-long`, so each error comes with the comment of its rule.

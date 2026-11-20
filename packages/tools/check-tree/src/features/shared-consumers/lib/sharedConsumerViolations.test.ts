@@ -8,7 +8,7 @@ function graph(edges: Record<string, string[]>) {
 }
 
 describe('sharedConsumerViolations', () => {
-  it('a file of a slice of src/shared/ used by two features passes', () => {
+  it('a file of a shared feature in src/shared/ used by two features passes', () => {
     const modules = graph({
       'src/features/a/A.tsx': ['src/shared/dates/formatDate.ts'],
       'src/features/b/B.tsx': ['src/shared/dates/formatDate.ts'],
@@ -16,7 +16,7 @@ describe('sharedConsumerViolations', () => {
     assert.deepEqual(sharedConsumerViolations('src', modules), []);
   });
 
-  it('a file of a slice used by a single feature or a single other slice is reported, however many of its files import it', () => {
+  it('a file of a shared feature used by a single feature or a single other shared feature is reported, however many of its files import it', () => {
     const modules = graph({
       'src/features/a/A.tsx': ['src/shared/dates/formatDate.ts'],
       'src/features/a/lib/b.ts': ['src/shared/dates/formatDate.ts'],
@@ -28,7 +28,7 @@ describe('sharedConsumerViolations', () => {
     ]);
   });
 
-  it('a whole slice used by a single feature is reported, which the slices of shared-features/ used to escape', () => {
+  it('a whole shared feature used by a single feature is reported, which the folders of shared-features/ used to escape', () => {
     const modules = graph({
       'src/features/list/List.tsx': ['src/shared/todos/todosStore.ts'],
       'src/shared/todos/todosStore.ts': ['src/shared/todos/TodosTypes.ts'],
@@ -39,7 +39,7 @@ describe('sharedConsumerViolations', () => {
     ]);
   });
 
-  it('a file used by another file of the same slice counts the consumers of that file, a file of another slice does not pass them on', () => {
+  it('a file used by another file of the same shared feature counts the consumers of that file, a file of another shared feature does not pass them on', () => {
     const modules = graph({
       'src/features/a/A.tsx': ['src/shared/dates/formatDate.ts', 'src/shared/slugs/slugify.ts'],
       'src/features/b/B.tsx': ['src/shared/dates/formatDate.ts', 'src/shared/slugs/slugify.ts'],
@@ -61,7 +61,7 @@ describe('sharedConsumerViolations', () => {
     ]);
   });
 
-  it('a slice of the shared/ of a feature used by a single sub-feature is reported', () => {
+  it('a shared feature of the shared/ of a feature used by a single sub-feature is reported', () => {
     const modules = graph({
       'src/features/a/features/x/X.tsx': ['src/features/a/shared/form/useForm.ts'],
       'src/features/a/features/x/features/deep/Deep.tsx': ['src/features/a/shared/title/Title.tsx'],
@@ -72,7 +72,7 @@ describe('sharedConsumerViolations', () => {
     ]);
   });
 
-  it('a slice of the shared/ of a feature used only by the files of the feature outside its sub-features is reported', () => {
+  it('a shared feature of the shared/ of a feature used only by the files of the feature outside its sub-features is reported', () => {
     const modules = graph({
       'src/features/a/A.tsx': ['src/features/a/shared/dates/format.ts'],
       'src/features/a/lib/b.ts': ['src/features/a/shared/dates/format.ts'],
@@ -82,7 +82,7 @@ describe('sharedConsumerViolations', () => {
     ]);
   });
 
-  it('a slice nested in a slice counts the sub-features of its parent slice', () => {
+  it('a shared feature nested in a shared feature counts the sub-features of its parent shared feature', () => {
     const modules = graph({
       'src/shared/plan/features/steps/steps.ts': ['src/shared/plan/shared/lock/lock.ts'],
       'src/shared/plan/features/budget/budget.ts': ['src/shared/plan/shared/lock/lock.ts'],
@@ -93,7 +93,7 @@ describe('sharedConsumerViolations', () => {
     ]);
   });
 
-  it('a file of src/shared/ used only by app/ or by the entry files of src/ passes', () => {
+  it('a file of src/shared/ used only by app/ or by the entry points of src/ passes', () => {
     const modules = graph({
       'src/main.tsx': ['src/shared/env/readEnv.ts'],
       'src/app/App.tsx': ['src/shared/theme/theme.ts'],

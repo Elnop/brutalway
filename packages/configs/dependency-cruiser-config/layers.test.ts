@@ -416,7 +416,7 @@ describe('dependency-cruiser-config', () => {
     ]);
   });
 
-  it('applies the same rules inside a slice of shared/, and keeps the slices of a shared/ apart', () => {
+  it('applies the same rules inside a shared feature, and keeps the shared features of a shared/ apart', () => {
     const root = project({
       'src/features/editor/features/form/form.ts':
         "import { draft } from '../../shared/draft/draft.ts';\nexport const form = draft;\n",

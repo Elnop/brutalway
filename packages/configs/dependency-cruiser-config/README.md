@@ -5,10 +5,10 @@
 ```
 src/app/        composes the features, and imports nothing else
 src/features/   one folder per feature
-src/shared/     the code several features use, one slice per concept
+src/shared/     the code several features use, one shared feature per concept
 ```
 
-A slice of `shared/` (`shared/todos/`, `shared/errors/`) never imports another one. When slice A needs code from slice B, the two merge, or the code is copied.
+A shared feature (`shared/todos/`, `shared/errors/`) never imports another one. When shared feature A needs code from shared feature B, the two merge, or the code is copied.
 
 ## Install
 
@@ -56,7 +56,7 @@ A type-only package such as `mdast` (whose types come from `@types/mdast`) does 
 
 ### Server
 
-For an API where each slice of `shared/` keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:
+For an API where each shared feature keeps its SQL in an `xQueries.ts` file, its calls to other HTTP APIs in an `xClient.ts` file and its background loops in an `xWorker.ts` file:
 
 ```js
 module.exports = {
@@ -73,14 +73,14 @@ Each rule has a `comment` that says what to do instead.
 
 | Rule                                 | Rejects                                                                                                                                                                         |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `shared-not-to-features`             | a slice of `src/shared/` importing `app/` or `features/`                                                                                                                        |
-| `no-cross-shared`                    | a slice of `src/shared/` importing another slice                                                                                                                                |
+| `shared-not-to-features`             | a shared feature in `src/shared/` importing `app/` or `features/`                                                                                                                        |
+| `no-cross-shared`                    | a shared feature in `src/shared/` importing another shared feature                                                                                                                                |
 | `app-only-to-features`               | `src/app/` importing `shared/`: what it needs, like a page shell or the server setup, goes into a feature |
 | `features-not-to-app`                | a feature importing `app/`                                                                                                                                                      |
 | `no-cross-feature`                   | a feature importing another feature                                                                                                                                             |
-| `no-cross-sub-feature` | a sub-feature (`features/<y>/` inside a feature or a slice) importing a sibling or the root of its parent instead of a slice of the parent `shared/` |
-| `no-cross-sub-shared` | a slice of the `shared/` of a feature or a slice (`shared/<y>/`) importing another slice, a sub-feature or the root of its parent |
-| `feature-nesting-too-deep` | a feature or a slice nested more than 10 levels deep                                                                                                                                       |
+| `no-cross-sub-feature` | a sub-feature (`features/<y>/` inside a feature or a shared feature) importing a sibling or the root of its parent instead of a shared feature of the parent `shared/` |
+| `no-cross-sub-shared` | a shared feature of the `shared/` of a feature or a shared feature (`shared/<y>/`) importing another shared feature, a sub-feature or the root of its parent |
+| `feature-nesting-too-deep` | a feature or a shared feature nested more than 10 levels deep                                                                                                                                       |
 | `presenters-are-pure`                | a presenter (any component not named `XContainer`, `XLayout`, `XPage`, `XContent`, `XConfig` or `XProvider`) that reaches a store, an `xClient.ts`, `zustand` or `@tanstack/react-query` through any chain of imports. A presenter that calls `useTodoList`, which reads the store through `useTodos`, is reported. A hook of local state, like a `useCopyToClipboard` built on `useState`, stays allowed |
 | `presenters-render-presenters`       | a presenter importing an `XContainer`, `XLayout` or `XPage`: render the orchestrator from the orchestrator above, so a presenter never reaches the store of a child |
 | `stores-hold-no-server-data`         | an `xStore.ts` importing an `xClient.ts`, an `xKeys.ts`, a hook or `@tanstack/react-query`                                                                                      |
@@ -91,7 +91,7 @@ Each rule has a `comment` that says what to do instead.
 | `no-prod-to-tests`                   | production code importing a test file, a test utility from `test-utils/` or a file from `e2e/`                                                                                  |
 | `not-to-dev-dep`                     | code under `src/` importing a devDependency                                                                                                                                     |
 
-Sub-features and slices nest like the features they live in: each can hold its own `features/` and `shared/`, under a feature or a slice, and the same two rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
+Sub-features and shared features nest like the features they live in: each can hold its own `features/` and `shared/`, under a feature or a shared feature, and the same two rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
 
 ### shadcn/ui
 

@@ -66,7 +66,7 @@ describe('check-tree', () => {
         'web holds 2 styles files (a.css, b.css): move them into styles/',
         'web/features/empty is empty: delete it',
         'web/features/feature holds 2 types files (cartTypes.ts, userTypes.ts): move them into types/',
-        'web/shared holds client.ts: shared/ holds one folder per slice, move each file into the slice of its concept',
+        'web/shared holds client.ts: shared/ holds one folder per shared feature, move each file into the shared feature of its concept',
         'web/shared/text/lib holds a single child: move it up one level and delete the folder',
       ],
     });
@@ -83,7 +83,7 @@ describe('check-tree', () => {
     });
   });
 
-  it('replaces the category folders with --categories', () => {
+  it('replaces the kind folders with --categories', () => {
     const root = project([
       'src/features/text/utils/b.ts',
       'src/features/text/hooks/useA.ts',
@@ -163,7 +163,7 @@ describe('check-tree', () => {
     assert.equal(run(root, ['src']).lines.length, 3);
   });
 
-  it('reports a file of a slice that a single feature uses, and a slice whose files never import each other', () => {
+  it('reports a file of a shared feature that a single feature uses, and a shared feature whose files never import each other', () => {
     const root = project(
       [
         'src/features/a/A.ts',
@@ -185,7 +185,7 @@ describe('check-tree', () => {
       lines: [
         'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a',
         'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a',
-        'src/shared/text holds 2 groups of files that never import each other (format.ts) (TextTypes.ts): split it into one slice per group',
+        'src/shared/text holds 2 groups of files that never import each other (format.ts) (TextTypes.ts): split it into one shared feature per group',
       ],
     });
   });
