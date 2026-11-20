@@ -48,10 +48,10 @@ stylelint checks the stylesheets with `@brutalway/stylelint-config`, declared un
 
 dependency-cruiser checks the direction of imports. The rules come from `@brutalway/dependency-cruiser-config`, and `.dependency-cruiser.cjs` only adds the parser options:
 
-- `src/shared/` imports no feature, a slice never imports another slice, no feature imports `src/app/`
+- `src/shared/` imports no feature, a shared feature never imports another shared feature, no feature imports `src/app/`
 - `src/app/` imports features only, never `src/shared/`
 - a feature never imports another feature
-- inside a feature or a slice, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
+- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a shared feature of its `shared/` (`shared/<y>/`) imports neither another shared feature, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
 - a presenter reaches no store, no `xClient.ts`, no zustand and no react-query through any chain of imports, so a hook that reads a store is refused there and a hook of local state is fine
 - a presenter imports no orchestrator
 - a store lives at the root or in the `stores/` folder of its level
@@ -59,7 +59,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/` next to the files Next.js looks for at its root (`proxy.ts`, `instrumentation.ts`, `instrumentation-client.ts`), which `"rootEntries": true` in the `"check-tree"` key of `package.json` leaves there whatever their kind, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a slice that a single feature uses is rejected too, and moves into that feature. So is a slice whose files, tests aside, form two groups that never import each other: it splits into two slices. It also rejects two CSS files outside a `styles/` folder.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/` next to the files Next.js looks for at its root (`proxy.ts`, `instrumentation.ts`, `instrumentation-client.ts`), which `"rootEntries": true` in the `"check-tree"` key of `package.json` leaves there whatever their kind, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a shared feature that a single feature uses is rejected too, and moves into that feature. So is a shared feature whose files, tests aside, form two groups that never import each other: it splits into two shared features. It also rejects two CSS files outside a `styles/` folder.
 
 ## Messages
 

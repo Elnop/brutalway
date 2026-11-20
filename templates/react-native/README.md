@@ -35,7 +35,7 @@ npm run android
 - [Translations](docs/guides/translations.md): how the texts go through i18next, and how to add a language
 - [Working with an agent](docs/guides/work-with-an-agent.md): the Claude Code hook that sends the errors back to the agent
 - [Commands](docs/reference/commands.md): the npm scripts and what CI runs
-- [Layout](docs/reference/layout.md): the layers, the slices and where each file goes
+- [Layout](docs/reference/layout.md): the layers, the shared features and where each file goes
 - [Options](docs/reference/options.md): what each option of `npm create brutal` adds or removes
 - [Verifications](docs/reference/verifications.md): every rule and the tool that enforces it
 - [Architecture](docs/concepts/architecture.md): the patterns this template borrows from, with what it takes and what it leaves out

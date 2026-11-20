@@ -8,7 +8,7 @@ Run `npm run check`: Prettier, tsc, Oxlint, stylelint, dependency-cruiser, check
 
 ## Conventions worth knowing first
 
-- `src/app/` is the App Router folder: `layout.tsx` and `page.tsx` compose the features, `src/features/` holds one folder per feature, `src/shared/` one folder per slice of code that several features use. Each layer only imports the layers below it, and a feature never imports another feature.
+- `src/app/` is the App Router folder: `layout.tsx` and `page.tsx` compose the features, `src/features/` holds one folder per feature, `src/shared/` one folder per shared feature, for the code several features use. Each layer only imports the layers below it, and a feature never imports another feature.
 - A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`) that reads state through hooks, or a presenter that only gets props. The orchestrators that use hooks start with `'use client'`, the route files stay server components.
 - Every visible string goes through `t()`, with its English text in `locales/en/`.
 - Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.

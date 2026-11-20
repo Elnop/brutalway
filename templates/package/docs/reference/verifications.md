@@ -27,16 +27,16 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/library`:
 
 - a file at the root of `src/` is an entry point, and nothing but a test imports it
 - there is no `app` folder under `src/`: the entry points compose the features
-- `src/shared/` imports no feature, a slice never imports another slice
+- `src/shared/` imports no feature, a shared feature never imports another shared feature
 - a feature never imports another feature
-- inside a feature or a slice, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
+- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a shared feature of its `shared/` (`shared/<y>/`) imports neither another shared feature, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
 - no cycles, no import of a test file or of `test-utils/`, no devDependency in the code of `src/` unless it is also a peerDependency
 
 `.dependency-cruiser.cjs` resolves packages through their `exports` field, so an import of a path a package does not export fails.
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `features/` and `shared/` next to the entry points, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `types/`, `configs/`, `clients/` or `lib/`, among others. `"rootEntries": true`, in the `"check-tree"` key of `package.json`, leaves the files at the root of `src/` where they are, whatever their kind, since each one is an entry point.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `features/` and `shared/` next to the entry points, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `types/`, `configs/`, `clients/` or `lib/`, among others. `"rootEntries": true`, in the `"check-tree"` key of `package.json`, leaves the files at the root of `src/` where they are, whatever their kind, since each one is an entry point.
 
 ## Duplicates
 
@@ -52,14 +52,14 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Repository
 
-alint extends `library.yml` of `@brutalway/alint-config`: every path in backticks, link and anchor of the README, `AGENTS.md` and `docs/` exists, category folders only hold their kind, and every devDependency is pinned to an exact version, while `dependencies` and `peerDependencies` keep their ranges. knip rejects unused exports, files and dependencies, and reads the entry points from `package.json`. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since no entry point never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
+alint extends `library.yml` of `@brutalway/alint-config`: every path in backticks, link and anchor of the README, `AGENTS.md` and `docs/` exists, kind folders only hold their kind, and every devDependency is pinned to an exact version, while `dependencies` and `peerDependencies` keep their ranges. knip rejects unused exports, files and dependencies, and reads the entry points from `package.json`. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since no entry point reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 
 ## Tests
 
 | Kind | What it tests | Example |
 |---|---|---|
 | Feature | one function on a JSON file in a temporary folder | `src/features/add-todo/addTodo.test.ts` |
-| Slice | reading and writing the file, refusal of a file that is not a list of todos | `src/shared/todos/todosFile.test.ts` |
+| Shared feature | reading and writing the file, refusal of a file that is not a list of todos | `src/shared/todos/todosFile.test.ts` |
 | Bin | `node src/todo.ts` in a temporary folder: exact output, exit code | `src/todo.test.ts` |
 | Export | the names the export offers, called together on one file | `src/todos.test.ts` |
 

@@ -99,7 +99,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## analytics
 
-Both values add `analyticsClient.ts` to an `analytics` slice of `src/shared/`, the only place where events leave the app, and `@brutalway/dependency-cruiser-config` keeps analytics SDKs inside it. Every project sends `app_opened` from `src/main.tsx` at startup, and the example also calls `analyticsClient.track('todo_added')`.
+Both values add `analyticsClient.ts` to an `analytics` shared feature in `src/shared/`, the only place where events leave the app, and `@brutalway/dependency-cruiser-config` keeps analytics SDKs inside it. Every project sends `app_opened` from `src/main.tsx` at startup, and the example also calls `analyticsClient.track('todo_added')`.
 
 - `module`: the client dispatches an `analytics` event on `window`, for whatever tool you plug in
 - `posthog`: it adds `posthog-js`, the client sends the events when `VITE_POSTHOG_KEY` is set, and `securityHeaders.ts` lets the PostHog hosts through

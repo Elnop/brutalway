@@ -28,10 +28,10 @@ Everything below runs locally, in the pre-commit hook and in CI.
 
 dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
-- `src/shared/` imports no feature, a slice never imports another slice, no feature imports `src/app/`
+- `src/shared/` imports no feature, a shared feature never imports another shared feature, no feature imports `src/app/`
 - `src/app/` imports features only, never `src/shared/`
 - a feature never imports another feature
-- inside a feature or a slice, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a slice of its `shared/` (`shared/<y>/`) imports neither another slice, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
+- inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a shared feature of its `shared/` (`shared/<y>/`) imports neither another shared feature, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
 - a route never imports queries, queries are only imported by a service, a worker, other queries or a test
 - the database driver (`node:sqlite`, `pg`…) is only imported by queries, `src/features/database/` and the tests
 - an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server, so it lives in a feature
@@ -40,7 +40,7 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. A file of a slice that a single feature uses is rejected too, and moves into that feature. So is a slice whose files, tests aside, form two groups that never import each other: it splits into two slices. That is why the server factory lives in `src/features/http-server/`.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. A file of a shared feature that a single feature uses is rejected too, and moves into that feature. So is a shared feature whose files, tests aside, form two groups that never import each other: it splits into two shared features. That is why the server factory lives in `src/features/http-server/`.
 
 ## Duplicates
 
@@ -56,7 +56,7 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Repository
 
-alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, category folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the server never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
+alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, kind folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the server never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
 
 ## Tests
 

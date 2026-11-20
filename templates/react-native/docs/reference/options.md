@@ -82,7 +82,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## analytics
 
-Both values add `analyticsClient.ts` to an `analytics` slice of `src/shared/`, the only place where events leave the app, and the root layout sends `app_opened` at startup through the `useAppOpened` hook of an `analytics` feature. The example also calls `analyticsClient.track('todo_added')`. Without it, the hook is the only user of `analyticsClient.ts`, which then moves next to it.
+Both values add `analyticsClient.ts` to an `analytics` shared feature in `src/shared/`, the only place where events leave the app, and the root layout sends `app_opened` at startup through the `useAppOpened` hook of an `analytics` feature. The example also calls `analyticsClient.track('todo_added')`. Without it, the hook is the only user of `analyticsClient.ts`, which then moves next to it.
 
 - `module`: the client emits an event on `DeviceEventEmitter`, for whatever tool you plug in
 - `posthog`: it adds `posthog-react-native` and the Expo modules it needs (`expo-application`, `expo-device`, `expo-file-system`, `expo-localization`), and the client sends the events when `EXPO_PUBLIC_POSTHOG_KEY` is set
