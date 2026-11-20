@@ -1090,7 +1090,7 @@ export const FRONTEND_E2E_AND_REPOSITORY: StackChange[] = [
   },
   {
     when: { e2e: false, 'component-tests': true },
-    addDevDependencies: { playwright: '1.65.0' },
+    addDevDependencies: { playwright: '1.65.1' },
     edits: [
       {
         file: 'docs/reference/verifications.md',
