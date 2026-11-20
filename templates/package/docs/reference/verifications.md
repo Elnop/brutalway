@@ -36,7 +36,7 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/library`:
 
 ## Tree
 
-`check-tree --root-entries` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `features/` and `shared/` next to the entry points, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `types/`, `configs/`, `clients/` or `lib/`, among others. `--root-entries` leaves the files at the root of `src/` where they are, whatever their kind, since each one is an entry point.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `features/` and `shared/` next to the entry points, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `types/`, `configs/`, `clients/` or `lib/`, among others. `"rootEntries": true`, in the `"check-tree"` key of `package.json`, leaves the files at the root of `src/` where they are, whatever their kind, since each one is an entry point.
 
 ## Duplicates
 

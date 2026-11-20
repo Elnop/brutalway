@@ -13,8 +13,7 @@ function treeArgsOfHook(template: string): string[] {
     .map((hook) => hook.command)
     .find((line) => line.includes('brutal-agent-hook'));
   const words = command?.split(' ') ?? [];
-  const folder = words[words.indexOf('--tree') + 1];
-  return words.includes('--root-entries') ? [folder, '--root-entries'] : [folder];
+  return [words[words.indexOf('--tree') + 1] ?? ''];
 }
 
 function treeArgsOfScript(template: string): string[] {
@@ -29,7 +28,7 @@ const templates = globSync('templates/*/package.json')
   .filter((template) => existsSync(join(template, '.claude/settings.json')));
 
 for (const template of templates) {
-  test(`the agent hook of ${template} checks the tree like its tree script`, () => {
+  test(`the agent hook of ${template} checks the folder of its tree script, which takes its options from package.json`, () => {
     assert.deepEqual(treeArgsOfHook(template), treeArgsOfScript(template));
   });
 }

@@ -10,7 +10,7 @@ We take the role that the `app` layer plays in an app: an entry point composes t
 
 We leave out the `index.ts` that re-exports the whole tree, and the `app` layer itself, which a package does not need.
 
-Enforced by `@brutalway/dependency-cruiser-config/library` (nothing but a test imports a file at the root of `src/`, no `app` folder under `src/`) and `check-tree --root-entries`, which leaves those files where they are whatever their kind.
+Enforced by `@brutalway/dependency-cruiser-config/library` (nothing but a test imports a file at the root of `src/`, no `app` folder under `src/`) and check-tree with `"rootEntries": true` in `package.json`, which leaves those files where they are whatever their kind.
 
 ## Ranges for users, exact versions for the repository
 

@@ -7,6 +7,9 @@
     "node": ">=26"
   },
   "prettier": "@brutalway/prettier-config",
+  "check-tree": {
+    "rootEntries": true
+  },
   "stylelint": {
     "extends": "@brutalway/stylelint-config"
   },
@@ -18,7 +21,7 @@
     "lint": "oxlint --type-aware src test-utils e2e oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts",
     "styles": "stylelint 'src/**/*.css'",
     "deps": "depcruise --output-type err-long src",
-    "tree": "check-tree src --root-entries",
+    "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
     "messages": "i18next-cli status && i18next-cli status --unused",
@@ -43,12 +46,12 @@
   "devDependencies": {
     "@asamarts/alint": "0.22.0",
     "@axe-core/playwright": "4.14.0",
-    "@brutalway/agent-hook": "0.2.1",
+    "@brutalway/agent-hook": "0.4.0",
     "@brutalway/alint-config": "0.2.2",
     "@brutalway/check-doc-length": "0.2.1",
     "@brutalway/check-doc-links": "0.2.1",
     "@brutalway/check-doc-sources": "0.2.1",
-    "@brutalway/check-tree": "0.9.0",
+    "@brutalway/check-tree": "0.10.0",
     "@brutalway/dependency-cruiser-config": "0.12.0",
     "@brutalway/oxlint-config-i18next": "0.3.0",
     "@brutalway/oxlint-config-next": "0.4.0",

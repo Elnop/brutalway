@@ -54,7 +54,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a slice that a single feature uses is rejected too, and moves into that feature. So is a slice whose files, tests aside, form two groups that never import each other: it splits into two slices.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and category folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per slice, and a feature or a slice holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the category folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A platform variant such as `AvatarPhoto.web.tsx` counts as one file with `AvatarPhoto.tsx`, and has its kind. A file of a slice that a single feature uses is rejected too, and moves into that feature. So is a slice whose files, tests aside, form two groups that never import each other: it splits into two slices.
 
 ## Messages
 

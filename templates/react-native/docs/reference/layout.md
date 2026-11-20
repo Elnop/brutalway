@@ -22,3 +22,5 @@ In the example, `src/shared/todos/` holds the tasks and the current filter, used
 Components are orchestrators (`XContainer`, `XLayout`, `XPage`), which read stores, or presenters (everything else), which only get props.
 
 One file of a kind stays at the root of its folder. From two on, they move into `components/`, `hooks/`, `types/`, `configs/`, `stores/` or `lib/`.
+
+Code that differs on the web goes in a platform variant next to its base: Metro picks `useScreenTitle.web.ts` in place of `useScreenTitle.ts` on the web, and nothing imports the variant. Write a variant when the two versions import different modules, so that the native build never bundles a web-only package, and keep `Platform.select` for a value that changes. A variant (`.web`, `.ios`, `.android`, `.native`) has the kind of its base and counts as one file with it, whether the base exists or not.

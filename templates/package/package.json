@@ -25,12 +25,15 @@
     "#test-utils/*": "./test-utils/*"
   },
   "prettier": "@brutalway/prettier-config",
+  "check-tree": {
+    "rootEntries": true
+  },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware src test-utils oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise --output-type err-long src",
-    "tree": "check-tree src --root-entries",
+    "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
     "format": "prettier --write .",
@@ -51,12 +54,12 @@
   },
   "devDependencies": {
     "@asamarts/alint": "0.22.0",
-    "@brutalway/agent-hook": "0.2.1",
+    "@brutalway/agent-hook": "0.4.0",
     "@brutalway/alint-config": "0.2.2",
     "@brutalway/check-doc-length": "0.2.1",
     "@brutalway/check-doc-links": "0.2.1",
     "@brutalway/check-doc-sources": "0.2.1",
-    "@brutalway/check-tree": "0.9.0",
+    "@brutalway/check-tree": "0.10.0",
     "@brutalway/dependency-cruiser-config": "0.11.0",
     "@brutalway/oxlint-config-node": "0.3.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
