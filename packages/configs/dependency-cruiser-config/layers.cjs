@@ -1,6 +1,6 @@
 const MAX_FEATURE_DEPTH = 10;
 const TEST_CODE = ['\\.test\\.tsx?$', '^(test-utils|e2e)/'];
-const SLICE = '(?:features|shared)/[^/]+';
+const SUB_FEATURE_OR_SHARED_FEATURE = '(?:features|shared)/[^/]+';
 
 function presenter() {
   return {
@@ -10,7 +10,9 @@ function presenter() {
 }
 
 function featureAtDepth(depth) {
-  return `src/${SLICE}` + `/${SLICE}`.repeat(depth - 1);
+  return (
+    `src/${SUB_FEATURE_OR_SHARED_FEATURE}` + `/${SUB_FEATURE_OR_SHARED_FEATURE}`.repeat(depth - 1)
+  );
 }
 
 function ruleName(base, level) {

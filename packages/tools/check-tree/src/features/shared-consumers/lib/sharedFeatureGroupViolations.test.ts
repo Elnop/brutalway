@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { sliceGroupViolations } from '#src/features/shared-consumers/lib/sliceGroupViolations.ts';
+import { sharedFeatureGroupViolations } from '#src/features/shared-consumers/lib/sharedFeatureGroupViolations.ts';
 
 function graph(edges: Record<string, string[]>) {
   const sources = new Set([...Object.keys(edges), ...Object.values(edges).flat()]);
   return [...sources].map((source) => ({ source, imports: edges[source] ?? [] }));
 }
 
-describe('sliceGroupViolations', () => {
+describe('sharedFeatureGroupViolations', () => {
   it('a shared feature whose files are linked by their imports, whatever their direction, passes', () => {
     const modules = graph({
       'src/shared/todos/todosStore.ts': ['src/shared/todos/TodosTypes.ts'],
@@ -15,7 +15,7 @@ describe('sliceGroupViolations', () => {
       'src/shared/todos/hooks/useTodos.ts': ['src/shared/todos/todosStore.ts'],
       'src/shared/errors/errorMessage.ts': [],
     });
-    assert.deepEqual(sliceGroupViolations('src', modules), []);
+    assert.deepEqual(sharedFeatureGroupViolations('src', modules), []);
   });
 
   it('a shared feature holding files that never import each other is reported, one group per set of linked files', () => {
@@ -29,7 +29,7 @@ describe('sliceGroupViolations', () => {
       'src/shared/links/LinksTypes.ts': [],
       'src/shared/links/lib/linkKind.ts': ['src/shared/links/LinksTypes.ts'],
     });
-    assert.deepEqual(sliceGroupViolations('src', modules), [
+    assert.deepEqual(sharedFeatureGroupViolations('src', modules), [
       'src/shared/links holds 2 groups of files that never import each other (lib/linkKind.ts, LinksTypes.ts) (npmPackageName.ts): split it into one shared feature per group',
       'src/shared/utils holds 3 groups of files that never import each other (errorMessage.ts) (isRecord.ts) (packageRoot.ts): split it into one shared feature per group',
     ]);
@@ -41,7 +41,7 @@ describe('sliceGroupViolations', () => {
       'src/shared/text/pad.ts': [],
       'src/shared/text/text.test.ts': ['src/shared/text/slug.ts', 'src/shared/text/pad.ts'],
     });
-    assert.deepEqual(sliceGroupViolations('src', modules), [
+    assert.deepEqual(sharedFeatureGroupViolations('src', modules), [
       'src/shared/text holds 2 groups of files that never import each other (pad.ts) (slug.ts): split it into one shared feature per group',
     ]);
   });
@@ -54,7 +54,7 @@ describe('sliceGroupViolations', () => {
       'src/shared/plan/features/steps/steps.ts': ['src/shared/plan/shared/lock/lock.ts'],
       'src/shared/plan/shared/lock/lock.ts': [],
     });
-    assert.deepEqual(sliceGroupViolations('src', modules), [
+    assert.deepEqual(sharedFeatureGroupViolations('src', modules), [
       'src/features/a/shared/title holds 2 groups of files that never import each other (TitleError.tsx) (TitleInput.tsx): split it into one shared feature per group',
     ]);
   });
@@ -67,9 +67,9 @@ describe('sliceGroupViolations', () => {
       'src/shared/alert/alert.ts': [],
       'src/shared/alert/alert.tv.ts': [],
     });
-    assert.deepEqual(sliceGroupViolations('src', modules), [
+    assert.deepEqual(sharedFeatureGroupViolations('src', modules), [
       'src/shared/alert holds 2 groups of files that never import each other (alert.ts) (alert.tv.ts): split it into one shared feature per group',
     ]);
-    assert.deepEqual(sliceGroupViolations('src', modules, ['tv', 'web', 'native']), []);
+    assert.deepEqual(sharedFeatureGroupViolations('src', modules, ['tv', 'web', 'native']), []);
   });
 });

@@ -13,7 +13,7 @@ import type {
 } from '#src/features/tree-violations/TreeViolationsTypes.ts';
 import { childLayer } from '#src/features/tree-violations/features/layout/lib/childLayer.ts';
 import { filesCheck } from '#src/features/tree-violations/features/layout/lib/filesCheck.ts';
-import { sliceFileViolations } from '#src/features/tree-violations/features/layout/lib/sliceFileViolations.ts';
+import { sharedRootFileViolations } from '#src/features/tree-violations/features/layout/lib/sharedRootFileViolations.ts';
 import type {
   FilesCheck,
   Layer,
@@ -73,7 +73,9 @@ function folderViolations(
   const units =
     new Set(listing.files.map(listing.baseOf)).size + children.length - listing.files.length;
   const violations = shapeViolations(name, units, scan.categories.has(basename(folder)));
-  if (check === 'slices') return [...violations, ...sliceFileViolations(name, listing.files)];
+  if (check === 'sharedFeatures') {
+    return [...violations, ...sharedRootFileViolations(name, listing.files)];
+  }
   if (check === 'none') return violations;
   return [...violations, ...groupViolations(name, basename(folder), listing, scan.categories)];
 }

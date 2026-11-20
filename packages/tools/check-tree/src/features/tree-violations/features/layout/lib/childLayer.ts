@@ -7,11 +7,11 @@ import type {
 const SOURCE_LAYERS = new Map<string, Layer>([
   ['app', 'router'],
   ['features', 'features'],
-  ['shared', 'slices'],
+  ['shared', 'sharedFeatures'],
 ]);
 const FEATURE_LAYERS = new Map<string, Layer>([
   ['features', 'features'],
-  ['shared', 'slices'],
+  ['shared', 'sharedFeatures'],
 ]);
 
 function kindFolder(path: string, categories: ReadonlySet<string>, reason: string): ChildLayer {
@@ -46,7 +46,9 @@ export function childLayer(
   categories: ReadonlySet<string>,
 ): ChildLayer {
   if (layer === 'source') return sourceChild(path);
-  if (layer === 'features' || layer === 'slices') return { layer: 'feature', violations: [] };
+  if (layer === 'features' || layer === 'sharedFeatures') {
+    return { layer: 'feature', violations: [] };
+  }
   if (layer === 'feature') return featureChild(path, categories);
   if (layer === 'router') return { layer: 'router', violations: [] };
   if (layer === 'kind') {

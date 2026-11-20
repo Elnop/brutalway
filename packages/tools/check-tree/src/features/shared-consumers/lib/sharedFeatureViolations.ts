@@ -1,14 +1,14 @@
 import { sharedConsumerViolations } from '#src/features/shared-consumers/lib/sharedConsumerViolations.ts';
-import { sliceGroupViolations } from '#src/features/shared-consumers/lib/sliceGroupViolations.ts';
+import { sharedFeatureGroupViolations } from '#src/features/shared-consumers/lib/sharedFeatureGroupViolations.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
 
-export function sliceViolations(
+export function sharedFeatureViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
   platforms?: readonly string[],
 ): string[] {
   return [
     ...sharedConsumerViolations(checkedFolder, modules, platforms),
-    ...sliceGroupViolations(checkedFolder, modules, platforms),
+    ...sharedFeatureGroupViolations(checkedFolder, modules, platforms),
   ];
 }

@@ -1,5 +1,6 @@
-export type Layer = 'source' | 'free' | 'router' | 'features' | 'feature' | 'slices' | 'kind';
+export type Layer =
+  'source' | 'free' | 'router' | 'features' | 'feature' | 'sharedFeatures' | 'kind';
 
 export type ChildLayer = { layer: Layer; violations: string[] };
 
-export type FilesCheck = 'groups' | 'slices' | 'none';
+export type FilesCheck = 'groups' | 'sharedFeatures' | 'none';

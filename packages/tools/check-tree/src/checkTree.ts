@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { treeViolations } from '#src/features/tree-violations/treeViolations.ts';
 import { cruiseImports } from '#src/features/shared-consumers/lib/cruiseImports.ts';
-import { sliceViolations } from '#src/features/shared-consumers/lib/sliceViolations.ts';
+import { sharedFeatureViolations } from '#src/features/shared-consumers/lib/sharedFeatureViolations.ts';
 import { KNOWN_VIOLATIONS_FILE } from '#src/features/known-violations/KnownViolationsConfig.ts';
 import {
   unknownViolations,
@@ -33,7 +33,7 @@ try {
       rootEntries: values['root-entries'] === true || settings.rootEntries === true,
       platforms,
     }),
-    ...sliceViolations(folder, await cruiseImports(folder), platforms),
+    ...sharedFeatureViolations(folder, await cruiseImports(folder), platforms),
   ];
   if (values['write-known-violations'] === true) {
     writeKnownViolations(violations, KNOWN_VIOLATIONS_FILE);

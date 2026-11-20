@@ -1,15 +1,18 @@
 import { TEST_CODE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import { checkedPaths } from '#src/features/shared-consumers/lib/checkedPaths.ts';
-import { sliceOf } from '#src/features/shared-consumers/lib/sliceOf.ts';
+import { sharedFeatureOf } from '#src/features/shared-consumers/lib/sharedFeatureOf.ts';
 import { variantLinks } from '#src/features/shared-consumers/lib/variantLinks.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
 
-function sliceFolders(root: string, modules: readonly ImportedModule[]): Map<string, string> {
+function sharedFeatureFolders(
+  root: string,
+  modules: readonly ImportedModule[],
+): Map<string, string> {
   const folders = new Map<string, string>();
   for (const { source } of modules) {
-    const slice = sliceOf(source);
-    if (slice !== undefined && !TEST_CODE.test(source) && source.startsWith(`${root}/`)) {
-      folders.set(source, slice.folder);
+    const sharedFeature = sharedFeatureOf(source);
+    if (sharedFeature !== undefined && !TEST_CODE.test(source) && source.startsWith(`${root}/`)) {
+      folders.set(source, sharedFeature.folder);
     }
   }
   return folders;
@@ -39,26 +42,29 @@ function linkedGroups(files: Iterable<string>, links: readonly [string, string][
   return head;
 }
 
-function groupsBySlice(folders: ReadonlyMap<string, string>, head: (file: string) => string) {
-  const slices = new Map<string, Map<string, string[]>>();
+function groupsBySharedFeature(
+  folders: ReadonlyMap<string, string>,
+  head: (file: string) => string,
+) {
+  const sharedFeatures = new Map<string, Map<string, string[]>>();
   for (const [file, folder] of [...folders].toSorted(([a], [b]) => a.localeCompare(b))) {
-    const groups = slices.get(folder) ?? new Map<string, string[]>();
+    const groups = sharedFeatures.get(folder) ?? new Map<string, string[]>();
     groups.set(head(file), [...(groups.get(head(file)) ?? []), file.slice(folder.length + 1)]);
-    slices.set(folder, groups);
+    sharedFeatures.set(folder, groups);
   }
-  return slices;
+  return sharedFeatures;
 }
 
-export function sliceGroupViolations(
+export function sharedFeatureGroupViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
   platforms?: readonly string[],
 ): string[] {
   const { root, shown } = checkedPaths(checkedFolder);
-  const folders = sliceFolders(root, modules);
+  const folders = sharedFeatureFolders(root, modules);
   const links = [...importLinks(modules, folders), ...variantLinks(folders.keys(), platforms)];
-  const slices = groupsBySlice(folders, linkedGroups(folders.keys(), links));
-  return [...slices].flatMap(([folder, groups]) => {
+  const sharedFeatures = groupsBySharedFeature(folders, linkedGroups(folders.keys(), links));
+  return [...sharedFeatures].flatMap(([folder, groups]) => {
     if (groups.size < 2) return [];
     const listed = [...groups.values()].map((files) => `(${files.join(', ')})`).join(' ');
     return [
