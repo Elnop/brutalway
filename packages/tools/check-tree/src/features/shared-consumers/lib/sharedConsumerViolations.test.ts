@@ -125,4 +125,29 @@ describe('sharedConsumerViolations', () => {
       'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a',
     ]);
   });
+
+  it('a platform variant gets the consumers of its base, which dependency-cruiser resolves the imports to', () => {
+    const modules = graph({
+      'src/features/a/A.tsx': ['src/shared/theme/lib/alert.ts'],
+      'src/features/b/B.tsx': ['src/shared/theme/lib/alert.ts'],
+      'src/shared/theme/lib/alert.web.ts': ['src/shared/theme/alertStore.ts'],
+      'src/features/shell/Shell.tsx': ['src/shared/theme/AlertHost.tsx'],
+      'src/shared/theme/AlertHost.tsx': ['src/shared/theme/alertStore.ts'],
+    });
+    assert.deepEqual(sharedConsumerViolations('src', modules), [
+      'src/shared/theme/AlertHost.tsx is only used by src/features/shell: move it into src/features/shell',
+    ]);
+  });
+
+  it('a variant of a platform outside the list keeps its own consumers', () => {
+    const modules = graph({
+      'src/features/a/A.tsx': ['src/shared/theme/lib/alert.ts'],
+      'src/features/b/B.tsx': ['src/shared/theme/lib/alert.ts'],
+      'src/shared/theme/lib/alert.tv.ts': ['src/shared/theme/alertStore.ts'],
+      'src/features/shell/Shell.tsx': ['src/shared/theme/alertStore.ts'],
+    });
+    assert.deepEqual(sharedConsumerViolations('src', modules, ['web']), [
+      'src/shared/theme/alertStore.ts is only used by src/features/shell: move it into src/features/shell',
+    ]);
+  });
 });

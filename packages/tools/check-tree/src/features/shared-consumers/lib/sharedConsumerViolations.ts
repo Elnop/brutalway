@@ -14,9 +14,10 @@ function violation(path: string, owner: string, slot: string): string {
 export function sharedConsumerViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
+  platforms?: readonly string[],
 ): string[] {
   const { root, shown } = checkedPaths(checkedFolder);
-  const slots = consumerSlots(modules);
+  const slots = consumerSlots(modules, platforms);
   return modules.flatMap(({ source }) => {
     const slice = sliceOf(source);
     if (slice === undefined || TEST_CODE.test(source) || !source.startsWith(`${root}/`)) return [];

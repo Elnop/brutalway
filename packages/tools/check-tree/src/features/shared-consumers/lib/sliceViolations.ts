@@ -8,7 +8,7 @@ export function sliceViolations(
   platforms?: readonly string[],
 ): string[] {
   return [
-    ...sharedConsumerViolations(checkedFolder, modules),
+    ...sharedConsumerViolations(checkedFolder, modules, platforms),
     ...sliceGroupViolations(checkedFolder, modules, platforms),
   ];
 }
