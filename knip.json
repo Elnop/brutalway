@@ -3,6 +3,7 @@
   "entry": [
     "scripts/check.ts!",
     "scripts/createReleases.ts!",
+    "scripts/release.ts!",
     "scripts/eachPackage.ts!",
     "scripts/versionPending.ts!",
     "scripts/syncIssueStatus.ts!"

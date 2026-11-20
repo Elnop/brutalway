@@ -21,7 +21,7 @@
     "packages:version": "node scripts/versionPending.ts packages && node scripts/eachPackage.ts install --package-lock-only --ignore-scripts",
     "templates:changeset": "npm run changeset --prefix templates",
     "templates:version": "node scripts/versionPending.ts templates",
-    "release": "npm run build && npm run check && npm run release --prefix packages && npm run tag --prefix templates && git push --follow-tags && node scripts/createReleases.ts"
+    "release": "node scripts/release.ts"
   },
   "devDependencies": {
     "@brutalway/check-doc-length": "0.2.1",

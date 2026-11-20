@@ -11,7 +11,7 @@ How to build, check and release this repository. To use brutalway in a project, 
 | `site/` | the landing page and the docs, made from template-vite and deployed to GitHub Pages at [brutalway.elnop.dev](https://brutalway.elnop.dev/) |
 | `docs/` | the guides, the reference and the concepts, also shown on the site |
 | `plugins/`, `.claude-plugin/` | the Claude Code plugin and its marketplace |
-| `scripts/` | the scripts run from the root: one runs `npm run check`, one runs an npm command in every package, one creates a GitHub release for each published version and each template version, and one keeps the issue labels and the project board in sync |
+| `scripts/` | the scripts run from the root: one runs `npm run check`, one runs an npm command in every package, one runs the release, one creates a GitHub release for each published version and each template version, and one keeps the issue labels and the project board in sync |
 
 ## Build and check
 
@@ -42,8 +42,10 @@ With each change:
 To release:
 
 1. Commit the template changes first: the CLI records the last commit that changed each template when it is built.
-2. `npm run version` bumps the versions named in the changesets of both setups and writes their changelogs. It runs `npm run packages:version`, which bumps the packages and refreshes the lockfiles, then `npm run templates:version`, which bumps the templates and writes their `CHANGELOG.md`. Either one can run alone. The packages that depend on a bumped package keep their ranges, and get a bump only when someone raises it.
-3. `npm run release` builds, checks, publishes what changed, tags the templates as `template-vite@x.y.z` and so on, and creates every GitHub release.
+2. `npm run release` refuses to start on a working tree with changes. If changesets are pending in either setup, it runs `npm run version` and commits the result as `chore: release`. `npm run version` runs `npm run packages:version`, which bumps the packages and refreshes the lockfiles, then `npm run templates:version`, which bumps the templates and writes their `CHANGELOG.md`. Either one can run alone. The packages that depend on a bumped package keep their ranges, and get a bump only when someone raises it.
+3. It then lists what to release: each package and each template whose version has no tag yet, such as `@brutalway/check-tree@0.12.0`, `create-brutal@0.15.0` or `template-vite@0.10.5`. It builds those packages, runs the checks of the root and the `check` and `test` scripts of those packages and templates only, publishes with `changeset publish`, which asks for the npm one-time password once, tags the templates, pushes, and creates every GitHub release.
+
+`npm run release -- --all` builds and checks every package and every template, for a release after a change to the root scripts or to a config every package shares. A template that depends on a package being released is not checked again: it installs the version on npm, so it only meets the new one when its dependency is raised, in a change of its own.
 
 The site shows each template changelog on the template's page.
 
