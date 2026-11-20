@@ -32,7 +32,7 @@
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise --output-type err-long src",
-    "tree": "check-tree src --root-entries",
+    "tree": "check-tree src",
     "duplicates": "jscpd src",
     "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
     "test": "node --test 'src/**/*.test.ts'",
@@ -47,7 +47,7 @@
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.8.0",
+    "@brutalway/check-tree": "0.10.0",
     "@brutalway/dependency-cruiser-config": "0.10.0",
     "@brutalway/lint-utils": "0.2.0",
     "@brutalway/oxlint-config-node": "0.2.1",
@@ -66,6 +66,9 @@
     "typescript": "7.0.2"
   },
   "prettier": "@brutalway/prettier-config",
+  "check-tree": {
+    "rootEntries": true
+  },
   "allowScripts": {
     "@swc/core": false
   },

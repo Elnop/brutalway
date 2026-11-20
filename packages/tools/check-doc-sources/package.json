@@ -33,7 +33,7 @@
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise --output-type err-long src",
-    "tree": "check-tree src --root-entries",
+    "tree": "check-tree src",
     "duplicates": "jscpd src",
     "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
     "test": "node --test 'src/**/*.test.ts'",
@@ -46,7 +46,7 @@
     "micromark-extension-gfm": "^3.0.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.8.0",
+    "@brutalway/check-tree": "0.10.0",
     "@brutalway/dependency-cruiser-config": "0.10.0",
     "@brutalway/oxlint-config-node": "0.2.1",
     "@brutalway/oxlint-config-node-test": "0.1.0",
@@ -68,6 +68,9 @@
     "#src/*": "./src/*"
   },
   "prettier": "@brutalway/prettier-config",
+  "check-tree": {
+    "rootEntries": true
+  },
   "allowScripts": {
     "@swc/core": false
   },
