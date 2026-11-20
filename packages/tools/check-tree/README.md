@@ -13,29 +13,33 @@ check-tree runs from the folder that holds the dependency-cruiser config (`.depe
 
 ## Usage
 
-### Use your own category folders
+### Set the options in package.json
 
-```sh
-npx check-tree src --categories components,hooks,utils
+check-tree reads its options from the `"check-tree"` key of the `package.json` in the current folder. `npm run check`, the agent hook and a manual run then check the tree the same way:
+
+```json
+{
+  "check-tree": {
+    "categories": ["components", "hooks", "utils"],
+    "rootEntries": true,
+    "platforms": ["web", "tv"]
+  }
+}
 ```
 
-These are the kind folders the layout accepts, and the grouping rule only applies to the kinds listed in the table below that are also in this list.
+Each key has a flag, `--categories`, `--root-entries` and `--platforms`, which wins over the key for one run.
+
+### Use your own category folders
+
+`categories` lists the kind folders the layout accepts, and the grouping rule only applies to the kinds listed in the table below that are also in this list.
 
 ### Keep the entry points of a published package
 
-A published package keeps its entry points at the root of `src/`, one file per bin or export, whatever their kind. `--root-entries` leaves the files at the root of the checked folder where they are, and checks everything below as usual:
-
-```sh
-npx check-tree src --root-entries
-```
+A published package keeps its entry points at the root of `src/`, one file per bin or export, whatever their kind. `"rootEntries": true` leaves the files at the root of the checked folder where they are, and checks everything below as usual.
 
 ### Use your own platforms
 
-A platform variant (`X.web.ts`, `X.ios.tsx`) is the file that Metro and Expo pick in place of `X.ts` for one platform. check-tree knows `web`, `ios`, `android` and `native`. `--platforms` replaces that list:
-
-```sh
-npx check-tree src --platforms web,tv
-```
+A platform variant (`X.web.ts`, `X.ios.tsx`) is the file that Metro and Expo pick in place of `X.ts` for one platform. check-tree knows `web`, `ios`, `android` and `native`, and `platforms` replaces that list.
 
 ### Keep the violations of an existing tree
 
@@ -118,10 +122,12 @@ It prints one line per problem and exits with code 1 if it found any. The violat
 
 ### Options
 
-| Option                | Default                                                                                                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| folder                | `src`                                                                                                                                                                    |
-| `--categories <list>` | `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers`, `lib` |
-| `--platforms <list>`  | `web`, `ios`, `android`, `native` |
-| `--root-entries`      | off                                                                                                                                                                      |
-| `--write-known-violations` | off |
+| Flag                       | Key in `"check-tree"` | Default                                                                                                                                                                  |
+| -------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| folder                     |                       | `src`                                                                                                                                                                    |
+| `--categories <list>`      | `categories`          | `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers`, `lib` |
+| `--platforms <list>`       | `platforms`           | `web`, `ios`, `android`, `native`                                                                                                                                        |
+| `--root-entries`           | `rootEntries`         | off                                                                                                                                                                      |
+| `--write-known-violations` |                       | off                                                                                                                                                                      |
+
+A flag wins over its key. A key that is not one of these, or a value of the wrong type, stops check-tree with a message.

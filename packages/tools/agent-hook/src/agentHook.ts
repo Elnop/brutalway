@@ -13,7 +13,6 @@ const { values } = parseArgs({
     tree: { type: 'string', multiple: true, default: ['src'] },
     vendored: { type: 'string', multiple: true, default: [] },
     root: { type: 'string' },
-    'root-entries': { type: 'boolean', default: false },
   },
 });
 const root = resolve(values.root ?? process.env['CLAUDE_PROJECT_DIR'] ?? process.cwd());
@@ -27,11 +26,7 @@ const refusal =
   edit.before && file !== '' ? vendoredEditMessage(root, file, values.vendored) : undefined;
 for (const check of edit.before
   ? []
-  : hookChecks(
-      root,
-      { ...edit, file },
-      { trees: values.tree, vendored: values.vendored, rootEntries: values['root-entries'] },
-    )) {
+  : hookChecks(root, { ...edit, file }, { trees: values.tree, vendored: values.vendored })) {
   const args = ['--no-install', check.command, ...check.args];
   const result = spawnSync('npx', args, { cwd: check.cwd, encoding: 'utf8' });
   if (result.error !== undefined) {

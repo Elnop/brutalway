@@ -37,9 +37,9 @@ Pass `--tree` once per source folder:
 npx --no-install brutal-agent-hook --tree web/src --tree server/src
 ```
 
-### Keep the entry points of a published package
+### Options of check-tree
 
-A published package keeps one entry point per bin or export at the root of `src/`. Add `--root-entries`: the hook passes the same flag to `check-tree`, which then leaves those files where they are.
+The hook runs `check-tree <folder>` from the project root, with no other flag. check-tree reads its options, such as `rootEntries` for a published package or `platforms` for a React Native app, from the `"check-tree"` key of `package.json`, so the hook checks the tree the way `npm run check` does.
 
 ### Vendored code
 
@@ -85,5 +85,4 @@ If one of them fails, the hook prints their output and exits with code 2: Claude
 | --------------------- | --------------------- | -------------------------------------------------------------- |
 | `--tree <folder>`     | `src`                 | folder checked by `check-tree`, once per folder                |
 | `--root <folder>`     | `$CLAUDE_PROJECT_DIR` | root of the project                                            |
-| `--root-entries`      | off                   | passed to `check-tree`, which leaves the files at the root     |
 | `--vendored <folder>` | none                  | folder of vendored code: no check after an edit, refused before |

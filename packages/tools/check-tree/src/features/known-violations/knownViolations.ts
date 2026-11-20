@@ -1,8 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-
-function isStringList(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((entry) => typeof entry === 'string');
-}
+import { isStringList } from '#src/shared/string-lists/isStringList.ts';
 
 function readKnownViolations(file: string): string[] {
   if (!existsSync(file)) return [];

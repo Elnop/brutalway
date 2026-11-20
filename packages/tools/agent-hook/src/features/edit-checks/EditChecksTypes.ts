@@ -5,4 +5,4 @@ export type HookCheck = {
   cwd: string;
 };
 
-export type HookScope = { trees: string[]; vendored?: string[]; rootEntries?: boolean };
+export type HookScope = { trees: string[]; vendored?: string[] };

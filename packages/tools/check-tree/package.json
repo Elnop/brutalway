@@ -36,7 +36,7 @@
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise --output-type err-long src",
-    "tree": "node src/checkTree.ts src --root-entries",
+    "tree": "node src/checkTree.ts src",
     "duplicates": "jscpd src",
     "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
     "test": "node --test 'src/**/*.test.ts'",
@@ -64,6 +64,9 @@
     "#src/*": "./src/*"
   },
   "prettier": "@brutalway/prettier-config",
+  "check-tree": {
+    "rootEntries": true
+  },
   "allowScripts": {
     "@swc/core": false
   },

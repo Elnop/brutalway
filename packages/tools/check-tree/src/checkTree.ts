@@ -9,6 +9,7 @@ import {
   unknownViolations,
   writeKnownViolations,
 } from '#src/features/known-violations/knownViolations.ts';
+import { readTreeSettings } from '#src/features/tree-settings/readTreeSettings.ts';
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -20,12 +21,16 @@ const { values, positionals } = parseArgs({
   },
 });
 const folder = positionals[0] ?? 'src';
-const categories = values.categories?.split(',').map((category) => category.trim());
-const platforms = values.platforms?.split(',').map((platform) => platform.trim());
+function listFlag(flag: string | undefined): string[] | undefined {
+  return flag?.split(',').map((entry) => entry.trim());
+}
 try {
+  const settings = readTreeSettings('package.json');
+  const categories = listFlag(values.categories) ?? settings.categories;
+  const platforms = listFlag(values.platforms) ?? settings.platforms;
   const violations = [
     ...treeViolations(resolve(folder), categories, {
-      rootEntries: values['root-entries'] === true,
+      rootEntries: values['root-entries'] === true || settings.rootEntries === true,
       platforms,
     }),
     ...sliceViolations(folder, await cruiseImports(folder), platforms),

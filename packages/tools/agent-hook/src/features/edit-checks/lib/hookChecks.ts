@@ -23,17 +23,13 @@ function alintCheck(root: string, file: string, created: boolean): HookCheck[] {
   ];
 }
 
-function treeChecks(
-  root: string,
-  fromRoot: string,
-  { trees, rootEntries = false }: HookScope,
-): HookCheck[] {
+function treeChecks(root: string, fromRoot: string, { trees }: HookScope): HookCheck[] {
   return trees
     .filter((folder) => fromRoot.startsWith(`${folder}/`))
     .map((tree) => ({
       label: `check-tree found problems in ${tree}`,
       command: 'check-tree',
-      args: rootEntries ? [tree, '--root-entries'] : [tree],
+      args: [tree],
       cwd: root,
     }));
 }

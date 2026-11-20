@@ -111,6 +111,41 @@ describe('check-tree', () => {
     });
   });
 
+  it('reads its options from the "check-tree" key of package.json, and a flag wins over the key', () => {
+    const root = project(
+      [
+        'package.json',
+        'src/cli.ts',
+        'src/plugin.ts',
+        'src/features/a/alert.ts',
+        'src/features/a/alert.tv.ts',
+      ],
+      [],
+      {
+        'package.json': JSON.stringify({ 'check-tree': { rootEntries: true, platforms: ['tv'] } }),
+      },
+    );
+    assert.deepEqual(run(root, ['src']), { status: 0, stdout: '', lines: [] });
+    assert.deepEqual(run(root, ['src', '--platforms', 'web']), {
+      status: 1,
+      stdout: '',
+      lines: ['src/features/a holds 2 lib files (alert.ts, alert.tv.ts): move them into lib/'],
+    });
+  });
+
+  it('stops with a message when the "check-tree" key of package.json is not a valid config', () => {
+    const root = project(['package.json', 'src/app/App.tsx'], [], {
+      'package.json': JSON.stringify({ 'check-tree': { rootEntries: 'yes' } }),
+    });
+    assert.deepEqual(run(root, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: [
+        'the "check-tree" key of package.json holds an object with categories (a list of strings), rootEntries (a boolean) and platforms (a list of strings), all optional',
+      ],
+    });
+  });
+
   it('with --root-entries, leaves the files at the root of the checked folder where they are and checks the rest', () => {
     const root = project([
       'src/cli.ts',

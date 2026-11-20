@@ -62,22 +62,6 @@ describe('hookChecks', () => {
     );
   });
 
-  it('passes --root-entries to check-tree when asked, for a package keeping its entry points at the root of src/', () => {
-    const root = project(['oxlint.config.ts', 'src/features/a/a.ts']);
-    const checks = hookChecks(
-      root,
-      { file: join(root, 'src/features/a/a.ts'), created: true },
-      { trees: ['src'], rootEntries: true },
-    );
-    assert.deepEqual(
-      checks.map((check) => [check.command, ...check.args]),
-      [
-        ['oxlint', '--type-aware', 'src/features/a/a.ts'],
-        ['check-tree', 'src', '--root-entries'],
-      ],
-    );
-  });
-
   it('an edited Markdown file runs alint only, and only when the project has a config', () => {
     const withAlint = project(['.alint.yml', 'docs/a.md']);
     assert.deepEqual(
