@@ -5,6 +5,7 @@
 ### Minor Changes
 
 - 8c8730f: A platform variant (`X.web.ts`, `X.ios.tsx`, `X.android.ts`, `X.native.ts`) goes with `X.ts`, whether that file exists or not: it has the kind of `X.ts`, counts as one file with it in the grouping and single-child rules, and sits in its group in the import graph of a slice. `--platforms`, and the `platforms` option of `treeViolations` and `sharedViolations`, replace the list of platforms.
+- 381f15b: check-tree reads its options from the `"check-tree"` key of the `package.json` in the current folder: `categories`, `rootEntries` and `platforms`. A flag wins over its key. `npm run check` and the agent hook then check the tree with the same options without repeating them in two commands.
 
 ## 0.9.0
 

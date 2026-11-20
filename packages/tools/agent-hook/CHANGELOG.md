@@ -1,5 +1,11 @@
 # @brutalkit/agent-hook
 
+## 0.4.0
+
+### Minor Changes
+
+- 381f15b: Breaking: `--root-entries` is gone. The hook runs `check-tree <folder>` with no other flag, and check-tree reads `rootEntries`, `platforms` and `categories` from the `"check-tree"` key of `package.json` (check-tree 0.10.0 and up). Move the flag from `.claude/settings.json` to that key, and drop `--root-entries` from the `tree` script as well.
+
 ## 0.3.0
 
 ### Minor Changes
