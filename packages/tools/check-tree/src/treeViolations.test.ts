@@ -462,4 +462,31 @@ describe('treeViolations', () => {
       ],
     );
   });
+  it('a platform variant has the kind of its base and counts once with it, with or without the base', () => {
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'features/avatar/components/Avatar.tsx',
+          'features/avatar/components/AvatarPhoto.tsx',
+          'features/avatar/components/AvatarPhoto.web.tsx',
+          'features/avatar/useScreenTitle.native.ts',
+          'features/avatar/useScreenTitle.web.ts',
+          'features/avatar/alert.ts',
+          'features/avatar/alert.ios.ts',
+          'features/avatar/alert.android.ts',
+          'features/device/lib/deviceIdentity.ts',
+          'features/device/lib/deviceIdentity.web.ts',
+        ]),
+      ),
+      ['src/features/device/lib holds a single child: move it up one level and delete the folder'],
+    );
+  });
+
+  it('the platforms can be replaced', () => {
+    const root = tree(['features/a/alert.ts', 'features/a/alert.tv.ts']);
+    assert.deepEqual(treeViolations(root), [
+      'src/features/a holds 2 lib files (alert.ts, alert.tv.ts): move them into lib/',
+    ]);
+    assert.deepEqual(treeViolations(root, undefined, { platforms: ['tv'] }), []);
+  });
 });

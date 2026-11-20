@@ -58,4 +58,18 @@ describe('sliceGroupViolations', () => {
       'src/features/a/shared/title holds 2 groups of files that never import each other (TitleError.tsx) (TitleInput.tsx): split it into one slice per group',
     ]);
   });
+  it('a platform variant is in the group of its base, and the variants of a base that does not exist are in one group', () => {
+    const modules = graph({
+      'src/shared/screen-title/useScreenTitle.ts': [],
+      'src/shared/screen-title/useScreenTitle.web.ts': [],
+      'src/shared/device/deviceIdentity.native.ts': [],
+      'src/shared/device/deviceIdentity.web.ts': [],
+      'src/shared/alert/alert.ts': [],
+      'src/shared/alert/alert.tv.ts': [],
+    });
+    assert.deepEqual(sliceGroupViolations('src', modules), [
+      'src/shared/alert holds 2 groups of files that never import each other (alert.ts) (alert.tv.ts): split it into one slice per group',
+    ]);
+    assert.deepEqual(sliceGroupViolations('src', modules, ['tv', 'web', 'native']), []);
+  });
 });

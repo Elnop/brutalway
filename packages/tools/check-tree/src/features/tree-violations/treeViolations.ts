@@ -9,6 +9,7 @@ import {
 import type {
   FolderListing,
   TreeOptions,
+  TreeScan,
 } from '#src/features/tree-violations/TreeViolationsTypes.ts';
 import { childLayer } from '#src/features/tree-violations/features/layout/lib/childLayer.ts';
 import { filesCheck } from '#src/features/tree-violations/features/layout/lib/filesCheck.ts';
@@ -17,6 +18,7 @@ import type {
   FilesCheck,
   Layer,
 } from '#src/features/tree-violations/features/layout/LayoutTypes.ts';
+import { platformBase } from '#src/shared/platform-variants/platformBase.ts';
 
 function groupViolations(
   name: string,
@@ -27,25 +29,26 @@ function groupViolations(
   const holdsFilesOnly = categoryFolders.has(folderName) && listing.folders.size === 0;
   return FILE_GROUPS.flatMap(({ folder, belongs, appliesIn }) => {
     if (!categoryFolders.has(folder) || !appliesIn(folderName)) return [];
-    const loose = listing.files.filter(belongs);
+    const loose = listing.files.filter((file) => belongs(listing.baseOf(file)));
     if (loose.length === 0 || (holdsFilesOnly && loose.length === listing.files.length)) return [];
     if (listing.folders.has(folder)) {
       return [`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`];
     }
-    if (loose.length === 1) return [];
+    if (new Set(loose.map(listing.baseOf)).size === 1) return [];
     return [
       `${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`,
     ];
   });
 }
 
-function folderListing(entries: Dirent[]): FolderListing {
+function folderListing(entries: Dirent[], platforms: readonly string[] | undefined): FolderListing {
   return {
     files: entries
       .filter((entry) => entry.isFile())
       .map((entry) => entry.name)
       .toSorted(),
     folders: new Set(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name)),
+    baseOf: (fileName) => platformBase(fileName, platforms),
   };
 }
 
@@ -60,17 +63,19 @@ function shapeViolations(name: string, count: number, isCategory: boolean): stri
 function folderViolations(
   folder: string,
   name: string,
-  categoryFolders: ReadonlySet<string>,
+  scan: TreeScan,
   check: FilesCheck,
 ): string[] {
   const children = readdirSync(folder, { withFileTypes: true }).filter(
     (entry) => !TEST_FILE.test(entry.name),
   );
-  const violations = shapeViolations(name, children.length, categoryFolders.has(basename(folder)));
-  const listing = folderListing(children);
+  const listing = folderListing(children, scan.platforms);
+  const units =
+    new Set(listing.files.map(listing.baseOf)).size + children.length - listing.files.length;
+  const violations = shapeViolations(name, units, scan.categories.has(basename(folder)));
   if (check === 'slices') return [...violations, ...sliceFileViolations(name, listing.files)];
   if (check === 'none') return violations;
-  return [...violations, ...groupViolations(name, basename(folder), listing, categoryFolders)];
+  return [...violations, ...groupViolations(name, basename(folder), listing, scan.categories)];
 }
 
 export function treeViolations(
@@ -78,20 +83,20 @@ export function treeViolations(
   categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS,
   options: TreeOptions = {},
 ): string[] {
-  const categories = new Set(categoryFolders);
+  const scan = { categories: new Set(categoryFolders), platforms: options.platforms };
   function walk(folder: string, layer: Layer): string[] {
     const name = relative(join(root, '..'), folder);
     return [
       ...folderViolations(
         folder,
         name,
-        categories,
+        scan,
         filesCheck(layer, folder === root && options.rootEntries === true),
       ),
       ...readdirSync(folder, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .flatMap((entry) => {
-          const child = childLayer(layer, `${name}/${entry.name}`, categories);
+          const child = childLayer(layer, `${name}/${entry.name}`, scan.categories);
           return [...child.violations, ...walk(join(folder, entry.name), child.layer)];
         }),
     ];

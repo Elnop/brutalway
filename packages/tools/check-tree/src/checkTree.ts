@@ -14,18 +14,21 @@ const { values, positionals } = parseArgs({
   allowPositionals: true,
   options: {
     categories: { type: 'string' },
+    platforms: { type: 'string' },
     'root-entries': { type: 'boolean' },
     'write-known-violations': { type: 'boolean' },
   },
 });
 const folder = positionals[0] ?? 'src';
 const categories = values.categories?.split(',').map((category) => category.trim());
+const platforms = values.platforms?.split(',').map((platform) => platform.trim());
 try {
   const violations = [
     ...treeViolations(resolve(folder), categories, {
       rootEntries: values['root-entries'] === true,
+      platforms,
     }),
-    ...sliceViolations(folder, await cruiseImports(folder)),
+    ...sliceViolations(folder, await cruiseImports(folder), platforms),
   ];
   if (values['write-known-violations'] === true) {
     writeKnownViolations(violations, KNOWN_VIOLATIONS_FILE);

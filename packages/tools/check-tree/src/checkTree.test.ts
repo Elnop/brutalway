@@ -97,6 +97,20 @@ describe('check-tree', () => {
       ],
     });
   });
+  it('replaces the platforms of the variants with --platforms', () => {
+    const root = project(['src/features/a/alert.ts', 'src/features/a/alert.tv.ts']);
+    assert.deepEqual(run(root, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: ['src/features/a holds 2 lib files (alert.ts, alert.tv.ts): move them into lib/'],
+    });
+    assert.deepEqual(run(root, ['src', '--platforms', 'tv, web']), {
+      status: 0,
+      stdout: '',
+      lines: [],
+    });
+  });
+
   it('with --root-entries, leaves the files at the root of the checked folder where they are and checks the rest', () => {
     const root = project([
       'src/cli.ts',

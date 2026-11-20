@@ -99,6 +99,8 @@ A file with a single export is named after it. Nothing is exported by default, e
 
 Files are placed by kind. One file of a kind stays at the root of its folder. Two or more move into the folder of their kind: `components/`, `hooks/`, `lib/`, `routes/` and so on. No folder is empty, and none holds a single child.
 
+On react-native, code that differs on one platform goes in a variant next to its base, `useScreenTitle.web.ts` beside `useScreenTitle.ts`, when the two versions import different modules, so that a native build never bundles a web-only package. When only a value changes, `Platform.select` stays in the file. A variant has the kind of its base and counts as one file with it.
+
 Checked by [`@brutalway/eslint-plugin-file-named-after-export`](../../packages/plugins/eslint-plugin-file-named-after-export) for the names and by [`@brutalway/check-tree`](../../packages/tools/check-tree) for the tree.
 
 ```

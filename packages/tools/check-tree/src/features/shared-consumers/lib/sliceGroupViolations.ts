@@ -1,6 +1,7 @@
 import { TEST_CODE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import { checkedPaths } from '#src/features/shared-consumers/lib/checkedPaths.ts';
 import { sliceOf } from '#src/features/shared-consumers/lib/sliceOf.ts';
+import { variantLinks } from '#src/features/shared-consumers/lib/variantLinks.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
 
 function sliceFolders(root: string, modules: readonly ImportedModule[]): Map<string, string> {
@@ -14,8 +15,19 @@ function sliceFolders(root: string, modules: readonly ImportedModule[]): Map<str
   return folders;
 }
 
-function linkedGroups(modules: readonly ImportedModule[], folders: ReadonlyMap<string, string>) {
-  const parents = new Map<string, string>([...folders.keys()].map((file) => [file, file]));
+function importLinks(
+  modules: readonly ImportedModule[],
+  folders: ReadonlyMap<string, string>,
+): [string, string][] {
+  return modules.flatMap(({ source, imports }) =>
+    imports
+      .filter((target) => folders.has(source) && folders.get(target) === folders.get(source))
+      .map((target): [string, string] => [source, target]),
+  );
+}
+
+function linkedGroups(files: Iterable<string>, links: readonly [string, string][]) {
+  const parents = new Map<string, string>([...files].map((file) => [file, file]));
   function head(file: string): string {
     const parent = parents.get(file) ?? file;
     if (parent === file) return file;
@@ -23,14 +35,7 @@ function linkedGroups(modules: readonly ImportedModule[], folders: ReadonlyMap<s
     parents.set(file, found);
     return found;
   }
-  for (const { source, imports } of modules) {
-    const folder = folders.get(source);
-    for (const target of imports) {
-      if (folder !== undefined && folders.get(target) === folder) {
-        parents.set(head(source), head(target));
-      }
-    }
-  }
+  for (const [from, to] of links) parents.set(head(from), head(to));
   return head;
 }
 
@@ -47,10 +52,12 @@ function groupsBySlice(folders: ReadonlyMap<string, string>, head: (file: string
 export function sliceGroupViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
+  platforms?: readonly string[],
 ): string[] {
   const { root, shown } = checkedPaths(checkedFolder);
   const folders = sliceFolders(root, modules);
-  const slices = groupsBySlice(folders, linkedGroups(modules, folders));
+  const links = [...importLinks(modules, folders), ...variantLinks(folders.keys(), platforms)];
+  const slices = groupsBySlice(folders, linkedGroups(folders.keys(), links));
   return [...slices].flatMap(([folder, groups]) => {
     if (groups.size < 2) return [];
     const listed = [...groups.values()].map((files) => `(${files.join(', ')})`).join(' ');

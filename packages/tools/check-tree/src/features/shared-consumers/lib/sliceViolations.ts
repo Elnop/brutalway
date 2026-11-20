@@ -5,9 +5,10 @@ import type { ImportedModule } from '#src/features/shared-consumers/SharedConsum
 export function sliceViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
+  platforms?: readonly string[],
 ): string[] {
   return [
     ...sharedConsumerViolations(checkedFolder, modules),
-    ...sliceGroupViolations(checkedFolder, modules),
+    ...sliceGroupViolations(checkedFolder, modules, platforms),
   ];
 }

@@ -29,6 +29,14 @@ A published package keeps its entry points at the root of `src/`, one file per b
 npx check-tree src --root-entries
 ```
 
+### Use your own platforms
+
+A platform variant (`X.web.ts`, `X.ios.tsx`) is the file that Metro and Expo pick in place of `X.ts` for one platform. check-tree knows `web`, `ios`, `android` and `native`. `--platforms` replaces that list:
+
+```sh
+npx check-tree src --platforms web,tv
+```
+
 ### Keep the violations of an existing tree
 
 On a codebase that did not follow the layout, the first run prints a lot. Write the current violations to `.check-tree-known-violations.json` and commit it:
@@ -53,7 +61,7 @@ import { treeViolations } from '@brutalway/check-tree/treeViolations';
 const violations = treeViolations('src');
 ```
 
-It takes the category folders as second argument and `{ rootEntries: true }` as third, like `--categories` and `--root-entries`. The checks on the slices of `shared/` read the imports, so they have their own export:
+It takes the category folders as second argument and `{ rootEntries: true, platforms: ['web'] }` as third, like `--categories`, `--root-entries` and `--platforms`. The checks on the slices of `shared/` read the imports, so they have their own export, which takes the platforms as second argument:
 
 ```ts
 import { sharedViolations } from '@brutalway/check-tree/sharedViolations';
@@ -102,6 +110,8 @@ So a feature with two components puts them in `components/`, and a `components/`
 
 Test files (`*.test.ts`, `*.test.tsx`) are not counted.
 
+The files of a folder named `X.<platform>.<ext>`, like `useScreenTitle.web.ts` and `useScreenTitle.native.ts`, go with `X.<ext>`, whether that file exists or not. The bundler picks them by name and nothing imports them, so the variants and their base count as one file: they have the kind of `X.<ext>` (`AvatarPhoto.web.tsx` is a presenter), a `lib/` holding only `alert.ts` and `alert.web.ts` holds a single child, and they belong to one group in the import graph of a slice. check-tree does not compare their exports: TypeScript checks the base only, unless `moduleSuffixes` in the tsconfig points it at a variant.
+
 ### Output
 
 It prints one line per problem and exits with code 1 if it found any. The violations listed in `.check-tree-known-violations.json` are left out.
@@ -112,5 +122,6 @@ It prints one line per problem and exits with code 1 if it found any. The violat
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | folder                | `src`                                                                                                                                                                    |
 | `--categories <list>` | `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers`, `lib` |
+| `--platforms <list>`  | `web`, `ios`, `android`, `native` |
 | `--root-entries`      | off                                                                                                                                                                      |
 | `--write-known-violations` | off |
