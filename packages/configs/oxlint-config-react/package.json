@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-react",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Oxlint config for React with TypeScript: hooks rules and named XProps types for components.",
   "keywords": [
     "oxlint",
