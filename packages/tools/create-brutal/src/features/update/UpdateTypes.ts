@@ -13,6 +13,7 @@ export type UpdatePlan = {
 export type FileComparison = { total: number; present: number; identical: number };
 
 export type UpdateResult = {
+  changed: boolean;
   conflicts: string[];
   packageConflicts: string[];
   attached: FileComparison | undefined;

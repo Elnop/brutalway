@@ -1,3 +1,5 @@
+import { log } from '@clack/prompts';
+import { isUpToDate } from '#src/features/update/lib/isUpToDate.ts';
 import { checkProject } from '#src/features/update/lib/checkProject.ts';
 import { npxRenderer } from '#src/features/update/lib/npxRenderer.ts';
 import { readUpdateArgs } from '#src/features/update/lib/readUpdateArgs.ts';
@@ -46,6 +48,10 @@ export async function runUpdateCommand(
   const dir = process.cwd();
   const { from, to, attach, render } = await planOf(command, argv, dir, tools);
   if (command === 'check') return checkProject(from, to, render);
+  if (isUpToDate(from, to, attach)) {
+    log.success(`already up to date with create-brutal ${to.createBrutal}`);
+    return 0;
+  }
   reportUpdate(await updateProject({ projectDir: dir, from, to, render, attach }), from, to);
   return 0;
 }

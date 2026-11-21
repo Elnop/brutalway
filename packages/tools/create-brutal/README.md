@@ -50,7 +50,7 @@ Every project gets a `.brutalway.json` at its root with the version of create-br
 npx create-brutal@latest update
 ```
 
-`update` generates the project as the recorded version made it and as this version makes it, both with the recorded answers, commits the two in a temporary repository and cherry-picks the second into the project without committing. git does a 3-way merge with the first generation as base: the project's own changes stay, a file the template renamed keeps them, and the lines both sides changed hold conflict markers. `package.json` is merged key by key instead, keeping the project's value when both sides changed a key, and the lockfile is left to `npm install`. It refuses a working tree with changes, and rewrites `.brutalway.json` once the merge is in the working tree.
+`update` generates the project as the recorded version made it and as this version makes it, both with the recorded answers, commits the two in a temporary repository and cherry-picks the second into the project without committing. git does a 3-way merge with the first generation as base: the project's own changes stay, a file the template renamed keeps them, and the lines both sides changed hold conflict markers. `package.json` is merged key by key instead, keeping the project's value when both sides changed a key, and the lockfile is left to `npm install`. It refuses a working tree with changes, and rewrites `.brutalway.json` once the merge is in the working tree. When the version, the stack and the answers are those of `.brutalway.json`, it stops before generating anything and says the project is up to date.
 
 | Flag | Effect |
 |---|---|

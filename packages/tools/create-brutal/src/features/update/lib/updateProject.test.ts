@@ -107,6 +107,7 @@ describe('updateProject', () => {
       attach: false,
     });
     assert.deepEqual(result, {
+      changed: true,
       conflicts: ['deleted.txt', 'keep.txt'],
       packageConflicts: ['dependencies.a'],
       attached: undefined,
@@ -143,13 +144,14 @@ describe('updateProject', () => {
 
   it('changes nothing but the state file when both versions generate the same project', async () => {
     const { root, project } = repoWith(V1);
-    await updateProject({
+    const result = await updateProject({
       projectDir: project,
       from: FIRST,
       to: FIRST,
       render: fakeRender,
       attach: false,
     });
+    assert.equal(result.changed, false);
     assert.equal(git(root, ['status', '--porcelain']), '?? .brutalway.json\n');
   });
 

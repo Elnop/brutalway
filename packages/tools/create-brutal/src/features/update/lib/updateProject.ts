@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { applyCommit } from '#src/features/update/lib/applyCommit.ts';
 import { assertClean } from '#src/features/update/lib/assertClean.ts';
 import { commitRenders } from '#src/features/update/lib/commitRenders.ts';
-import { compareFiles } from '#src/features/update/lib/compareFiles.ts';
+import { compareFiles, rendersDiffer } from '#src/features/update/lib/compareFiles.ts';
 import { git } from '#src/features/update/lib/git.ts';
 import { mergePackageJson } from '#src/features/update/lib/mergePackageJson.ts';
 import { renderTree } from '#src/features/update/lib/renderTree.ts';
@@ -33,6 +33,7 @@ async function mergeInto(plan: UpdatePlan, root: string): Promise<UpdateResult> 
   const newDir = await renderTree(plan.render, plan.to, join(root, 'new'));
   const conflicts = mergeRenders(plan, oldDir, newDir, root);
   return {
+    changed: rendersDiffer(oldDir, newDir),
     conflicts,
     packageConflicts: mergePackageJson(plan.projectDir, oldDir, newDir),
     attached,

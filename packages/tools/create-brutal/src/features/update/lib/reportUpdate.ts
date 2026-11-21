@@ -15,6 +15,8 @@ export function reportUpdate(result: UpdateResult, from: BrutalwayState, to: Bru
     );
   }
   log.success(
-    `updated to create-brutal ${to.createBrutal}: review the changes, run npm install and npm run check, then commit`,
+    result.changed
+      ? `updated to create-brutal ${to.createBrutal}: review the changes, run npm install and npm run check, then commit`
+      : `create-brutal ${to.createBrutal} generates the same files as ${from.createBrutal}: only .brutalway.json changed, commit it`,
   );
 }
