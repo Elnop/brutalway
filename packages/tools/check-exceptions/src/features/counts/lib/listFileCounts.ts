@@ -1,6 +1,7 @@
 import {
   CHECK_TREE_FILE,
   DEPCRUISE_FILE,
+  GITLEAKS_IGNORE_FILE,
   JSCPD_FILE,
   KNIP_FILE,
   KNIP_LISTS,
@@ -29,6 +30,11 @@ function depcruiseCount(entry: unknown): [string, number] {
   return [`dependency-cruiser ${typeof rule === 'string' ? rule : 'entry'}`, 1];
 }
 
+function fingerprints(text: string | undefined): number {
+  return (text ?? '').split('\n').filter((line) => line.trim() !== '' && !line.startsWith('#'))
+    .length;
+}
+
 export function listFileCounts(snapshot: Snapshot): [string, number][] {
   const knip = parseJson(snapshot.read(KNIP_FILE), KNIP_FILE);
   const jscpd = parseJson(snapshot.read(JSCPD_FILE), JSCPD_FILE);
@@ -40,5 +46,6 @@ export function listFileCounts(snapshot: Snapshot): [string, number][] {
       sizeOf(field(knip, key)),
     ]),
     ['jscpd ignore', sizeOf(field(jscpd, 'ignore'))],
+    ['gitleaks ignore', fingerprints(snapshot.read(GITLEAKS_IGNORE_FILE))],
   ];
 }

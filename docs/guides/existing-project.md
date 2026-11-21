@@ -104,7 +104,16 @@ rules:
 npx alint check
 ```
 
-## 5. Exceptions
+## 5. Secrets
+
+[`check-secrets`](../../packages/tools/check-secrets) runs gitleaks on the files git would commit. A value that is public by design goes in `.gitleaksignore`.
+
+```sh
+npm install --save-dev @brutalway/check-secrets
+npx check-secrets
+```
+
+## 6. Exceptions
 
 On a large codebase, fixing every violation before turning a rule on means one huge pull request, and the rule never gets turned on. Each checker lets you write the exceptions down in a committed file instead, so they show up in review and new code gets the rule from day one. Keep them few and delete them as you fix the code.
 
@@ -141,12 +150,12 @@ npm install --save-dev @brutalway/check-exceptions
 npx check-exceptions
 ```
 
-## 6. One command
+## 7. One command
 
 Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing:
 
 ```json
-"check": "tsc --noEmit && oxlint --type-aware && depcruise --output-type err-long src && check-tree src && alint check"
+"check": "tsc --noEmit && oxlint --type-aware && depcruise --output-type err-long src && check-tree src && alint check && check-secrets && check-exceptions"
 ```
 
 Then [work with Claude Code](claude-code.md) to get the same messages while the agent writes.

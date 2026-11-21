@@ -49,7 +49,8 @@ A rule that did not exist at the fork point starts at 0. To turn on a rule that 
 | `.dependency-cruiser-known-violations.json` | per rule, one per violation |
 | `knip.json` | the size of `ignore`, `ignoreFiles`, `ignoreDependencies`, `ignoreBinaries`, `ignoreMembers`, `ignoreUnresolved`, `ignoreWorkspaces` and `ignoreIssues` |
 | `.jscpd.json` | the size of `ignore` |
-| code files git tracks or does not ignore | per rule, each `oxlint-disable`, `eslint-disable` or `stylelint-disable` comment, in any of its forms, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck` and `jscpd:ignore-start` |
+| `.gitleaksignore` | one per fingerprint |
+| code files git tracks or does not ignore | per rule, each `oxlint-disable`, `eslint-disable` or `stylelint-disable` comment, in any of its forms, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`, `jscpd:ignore-start` and `gitleaks:allow` |
 
 The counts are per rule over the whole project, not per file. Moving a file, or a violation of check-tree from one folder to another, changes no count.
 

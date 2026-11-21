@@ -11,6 +11,7 @@ describe('directiveCounts', () => {
         '// oxlint-disable',
         '// @ts-expect-error',
         '/* jscpd:ignore-start',
+        '// gitleaks:allow',
       ]),
       [
         ['oxlint-disable max-lines-per-function', 1],
@@ -19,6 +20,7 @@ describe('directiveCounts', () => {
         ['oxlint-disable (every rule)', 1],
         ['@ts-expect-error', 1],
         ['jscpd:ignore-start', 1],
+        ['gitleaks:allow', 1],
       ],
     );
   });
