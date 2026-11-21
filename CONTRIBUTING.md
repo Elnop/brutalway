@@ -39,6 +39,8 @@ With each change:
 - to a published package, add a changeset with `npm run packages:changeset`
 - to a template, when it matters to someone starting a project, add one with `npm run templates:changeset`
 
+A changeset that adds a rule, makes a rule stricter or changes a default says so in its first sentence, and says what a project does about it: fix the code, run a command, or add an entry under `newRules` of check-exceptions. The GitHub release of the package is built from it, and [Upgrade brutalway](docs/guides/upgrade.md) sends projects there.
+
 To release:
 
 1. Commit the template changes first: the CLI records the last commit that changed each template when it is built.
