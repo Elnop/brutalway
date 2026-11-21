@@ -58,7 +58,7 @@ Oxlint: a directive with the rule name, on the line above or at the top of the f
 {/* oxlint-disable-next-line component-props/no-restricted-syntax */}
 ```
 
-check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, one entry per rule and path, with the count of groups or files when the rule has one. check-tree skips them as long as the count does not grow, and fails on a new violation and on an entry that no longer happens. After a fix, delete the entry or lower its count by hand.
+check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, one entry per rule and path, with the count of groups or files when the rule has one. check-tree skips them as long as the count does not grow, and fails on a new violation, on an entry that no longer happens and on a count higher than the current one. After a fix, `npx check-tree src --shrink-known-violations` deletes the fixed entries and lowers the counts without adding new ones.
 
 dependency-cruiser: `npx depcruise src --baseline` writes `.dependency-cruiser-known-violations.json`, and `--ignore-known` skips what it lists. After a fix, `--baseline-mode shrink-only` removes the fixed entries without adding new ones. Put `src` before these flags: each one takes an optional file name, and `depcruise --ignore-known src` reads `src` as that file, prints its help and exits with 0 without checking anything.
 

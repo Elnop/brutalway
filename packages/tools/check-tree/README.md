@@ -59,7 +59,13 @@ check-tree then skips the violations listed in that file, which it reads from th
 ]
 ```
 
-An entry stays known while the same rule fires on the same path with a count no higher than the one written. Adding a file to `src/shared/ui` linked to one of its groups, or merging two of its groups, changes the message without making a new violation. A tenth group, or a fourth hook to move into `hooks/`, is reported. check-tree also fails on an entry whose rule no longer fires on its path: delete it from the file.
+An entry stays known while the same rule fires on the same path with a count no higher than the one written. Adding a file to `src/shared/ui` linked to one of its groups changes the message without making a new violation. A tenth group, or a fourth hook to move into `hooks/`, is reported. check-tree also fails on an entry whose rule no longer fires on its path, and on a count higher than the current one, such as 9 groups written when 8 are left: the list has to follow each fix.
+
+After a fix, `--shrink-known-violations` updates the file: it deletes the entries that no longer happen and lowers the counts that went down, then runs the check. It never adds an entry or raises a count, so a new violation is still reported and the list can only get shorter. A moved folder is a new path: its old entry goes, and its violations are reported until you fix them or add the entry by hand.
+
+```sh
+npx check-tree src --shrink-known-violations
+```
 
 The rules are `empty-folder`, `single-child`, `not-a-layer`, `not-a-kind-folder`, `kind-folder` (files to move into a kind folder, the path being that folder), `shared-root-files`, `single-consumer` and `shared-feature-groups`. Up to 0.12, the file held the printed messages: check-tree now refuses that format, and `--write-known-violations` rewrites it.
 
@@ -135,5 +141,6 @@ It prints one line per problem and exits with code 1 if it found any. The violat
 | `--platforms <list>`       | `platforms`           | `web`, `ios`, `android`, `native`                                                                                                                                        |
 | `--root-entries`           | `rootEntries`         | off                                                                                                                                                                      |
 | `--write-known-violations` |                       | off                                                                                                                                                                      |
+| `--shrink-known-violations` |                      | off                                                                                                                                                                      |
 
 A flag wins over its key. A key that is not one of these, or a value of the wrong type, stops check-tree with a message.

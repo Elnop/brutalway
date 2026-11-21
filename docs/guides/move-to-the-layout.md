@@ -71,7 +71,7 @@ Move with `git mv` so that `git log --follow` keeps the history, and change noth
 
 Keep each pull request to one step or one feature: a reviewer can check a move only when nothing else changed in it.
 
-A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Edit them by hand in the same commit: change the paths, lower the counts, delete the entries that no longer happen. `npx depcruise src --baseline --baseline-mode shrink-only` does it for dependency-cruiser. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
+A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Update them in the same commit. `npx check-tree src --shrink-known-violations` and `npx depcruise src --baseline --baseline-mode shrink-only` delete the entries that no longer happen and lower the counts. A moved folder that still breaks a rule is reported under its new path: change the path of its entry by hand. The globs of jscpd and knip are edited by hand too. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
 
 Test helpers shared by several tests go in `test-utils/` at the root of the project, next to `src/`, behind an alias such as `@test-utils/` declared in the tsconfig and in the config of the test runner. dependency-cruiser rejects an import of `test-utils/` from production code.
 
@@ -84,7 +84,8 @@ Test helpers shared by several tests go in `test-utils/` at the root of the proj
 | check-tree: `src/features/a holds 2 hooks files (...): move them into hooks/` | two files of one kind: they go into the kind folder |
 | check-tree: `src/features/a/hooks holds a single child: move it up one level and delete the folder` | a kind folder with one file: the file goes back to the root of its folder |
 | check-tree: `src/features/a/hooks is empty: delete it` | a move left the folder empty |
-| check-tree: `.check-tree-known-violations.json lists kind-folder for src/pages, which no longer happens: delete the entry` | a move fixed a recorded violation: delete its entry |
+| check-tree: `.check-tree-known-violations.json lists kind-folder for src/pages, which no longer happens: delete the entry or run check-tree with --shrink-known-violations` | a move fixed a recorded violation: delete its entry |
+| check-tree: `.check-tree-known-violations.json lists shared-feature-groups for src/shared/ui with a count of 9, which is now 8: lower it or run check-tree with --shrink-known-violations` | a move fixed part of a recorded violation: lower its count |
 | dependency-cruiser `no-cross-shared` | a file of one shared feature needs another one: it combines two concepts, move it up into the feature that uses it, or merge the two shared features when they are one concept |
 | dependency-cruiser `no-cross-feature` | two features share code: move the part they share down, named after its concept, or connect them in `src/app/` |
 | dependency-cruiser `app-only-to-features` | `src/app/` reaches a shared feature: wrap what it needs in a feature, such as a page shell that renders the frame of every page |
@@ -96,7 +97,7 @@ When a rule rejects a split that looks right, go back to the two moves above bef
 An agent can do the moves, if it gets them in small batches and `npm run check` decides when a batch is done:
 
 - one batch is one step of the order above, or one feature
-- the batch is done when `npm run check` passes and the exception lists only shrank: paths changed, counts lowered, entries deleted
+- the batch is done when `npm run check` passes and the exception lists only shrank: paths changed, counts lowered, entries deleted. `check-tree --shrink-known-violations` and `depcruise --baseline-mode shrink-only` do the last two
 - the agent never regenerates an exception list. check-exceptions fails when a list grew, which catches the agent that runs `check-tree --write-known-violations` to get green
 - the agent stops and asks when a rule seems wrong, instead of disabling it
 
@@ -108,10 +109,11 @@ Read docs/guides/move-to-the-layout.md first. A file only this feature uses
 goes into it. A file two features use and that imports no other shared code
 goes into src/shared/, named after its concept. A file that needs two shared
 features stays in the feature. Use git mv and change nothing in a moved file
-but its imports. You are done when npm run check passes. In the exception
-lists, update the paths of what you moved, lower the counts and delete the
-entries your move fixed, never add or raise one. If a rule looks wrong, stop
-and tell me why.
+but its imports. You are done when npm run check passes. Run
+npx check-tree src --shrink-known-violations and
+npx depcruise src --baseline --baseline-mode shrink-only, then update by hand
+the paths of what you moved in the exception lists. Never add or raise an
+entry. If a rule looks wrong, stop and tell me why.
 ```
 
 Several agents working in parallel all touch the same exception lists, and every merge conflicts there. Resolve it by taking the version of the main branch, removing the entries your branch fixed, and running the checks again.
