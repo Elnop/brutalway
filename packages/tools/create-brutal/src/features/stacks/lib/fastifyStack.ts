@@ -302,6 +302,11 @@ export const fastifyStack: Stack = {
         },
         {
           file: 'docs/concepts/architecture.md',
+          replace: ', with the database that `src/app/buildApp.ts` opens.',
+          with: '.',
+        },
+        {
+          file: 'docs/concepts/architecture.md',
           replace: 'builds its own queries from the database it gets.',
           with: 'builds its own queries.',
         },

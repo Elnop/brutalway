@@ -14,7 +14,7 @@ Enforced by `@brutalway/dependency-cruiser-config/server` (a route never imports
 
 ## Dependencies as parameters
 
-Dependency injection, without the container. A service is built by a factory that takes its dependencies as arguments (`createTodoListService(database)`), and `src/app/buildApp.ts` is the one place that creates and passes them. `src/app/` only imports features, so the service builds its own queries from the database it gets.
+Dependency injection, without the container. A service is built by a factory that takes its dependencies as arguments (`createTodoListService(database)`), and `src/app/AppConfig.ts` is the one place that creates them, with the database that `src/app/buildApp.ts` opens. `src/app/` only imports features, so the service builds its own queries from the database it gets.
 
 We leave out Fastify's `decorate`, which hangs dependencies on the app instance and hides where they come from, and DI containers, which resolve them by name at runtime. A test builds the service on a `:memory:` database and nothing else.
 
