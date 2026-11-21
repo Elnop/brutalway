@@ -11,6 +11,18 @@ function stringsAt(options: unknown, key: string): string[] {
     : [];
 }
 
+const DEFAULT_PLATFORMS = ['web', 'ios', 'android', 'native'];
+
+function withoutPlatform(file: string, options: unknown): string {
+  const listed = stringsAt(options, 'platforms');
+  const platforms =
+    typeof options === 'object' && options !== null && 'platforms' in options
+      ? listed
+      : DEFAULT_PLATFORMS;
+  const platform = platforms.find((name) => file.endsWith(`.${name}`));
+  return platform === undefined ? file : file.slice(0, -platform.length - 1);
+}
+
 function namedDefaultExports(program: ESTree.Program) {
   return program.body.flatMap((node) => {
     if (node.type !== 'ExportDefaultDeclaration') return [];
@@ -29,11 +41,16 @@ export const fileNamedAfterExport = defineRule({
     messages: {
       renameFile: 'A file with a single export is named after it: rename {{file}} to {{name}}.',
     },
-    defaultOptions: [{ exemptSuffixes: ['Types', 'Config', 'Content'] }],
+    defaultOptions: [
+      { exemptSuffixes: ['Types', 'Config', 'Content'], platforms: DEFAULT_PLATFORMS },
+    ],
     schema: [
       {
         type: 'object',
-        properties: { exemptSuffixes: { type: 'array', items: { type: 'string' } } },
+        properties: {
+          exemptSuffixes: { type: 'array', items: { type: 'string' } },
+          platforms: { type: 'array', items: { type: 'string' } },
+        },
         additionalProperties: false,
       },
     ],
@@ -42,7 +59,7 @@ export const fileNamedAfterExport = defineRule({
     return {
       Program(program) {
         const exemptSuffixes = stringsAt(context.options[0], 'exemptSuffixes');
-        const file = baseName(context.filename);
+        const file = withoutPlatform(baseName(context.filename), context.options[0]);
         const entries = [...exportsOf(program), ...namedDefaultExports(program)];
         const [only] = entries;
         if (

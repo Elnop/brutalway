@@ -48,6 +48,8 @@ In `formatPrice.ts`, this reports `A file with a single export is named after it
 
 Files whose name ends with one of `exemptSuffixes` are skipped. The default is `['Types', 'Config', 'Content']`.
 
+A platform variant keeps the name of its base: in `useMediaSession.web.ts`, the rule compares `useMediaSession` with the export, since Metro and Expo pick the file by its `.web` suffix. `platforms` lists the suffixes to strip, `['web', 'ios', 'android', 'native']` by default, the same list as the `platforms` option of [check-tree](https://www.npmjs.com/package/@brutalway/check-tree).
+
 ## Why
 
 The default `exemptSuffixes` are for files that group several types or constants.

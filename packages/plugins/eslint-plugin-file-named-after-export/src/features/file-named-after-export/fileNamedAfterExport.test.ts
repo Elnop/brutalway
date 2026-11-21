@@ -27,8 +27,34 @@ ruleTester.run('file-named-after-export', fileNamedAfterExport, {
       code: 'export function price() {} export default function amount() {}',
     },
     { filename: 'src/types/PriceTypes.ts', code: 'export default class Price {}' },
+    { filename: 'src/hooks/useMediaSession.web.ts', code: 'export function useMediaSession() {}' },
+    {
+      filename: 'src/components/AvatarPhoto.android.tsx',
+      code: 'export function AvatarPhoto() {}',
+    },
+    {
+      filename: 'src/lib/showAlert.tv.ts',
+      code: 'export function showAlert() {}',
+      options: [{ platforms: ['tv'] }],
+    },
   ],
   invalid: [
+    {
+      filename: 'src/hooks/useScreenTitle.web.ts',
+      code: 'export function useTitle() {}',
+      errors: [
+        {
+          message:
+            'A file with a single export is named after it: rename useScreenTitle to useTitle.',
+        },
+      ],
+    },
+    {
+      filename: 'src/lib/showAlert.web.ts',
+      code: 'export function showAlert() {}',
+      options: [{ platforms: [] }],
+      errors: [{ messageId: 'renameFile', data: { file: 'showAlert.web', name: 'showAlert' } }],
+    },
     {
       filename: 'src/configs/LogoConfig.ts',
       code: 'export const LOGO_42 = "";',
