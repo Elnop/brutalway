@@ -639,10 +639,10 @@ export const reactNativeStack: Stack = {
           { file: 'README.md', before: '## Documentation', insert: ANALYTICS_POSTHOG_README },
         ],
         addDependencies: {
-          'posthog-react-native': '4.86.0',
+          'posthog-react-native': '4.87.0',
           'expo-application': '58.1.2',
           'expo-device': '58.0.5',
-          'expo-file-system': '58.0.13',
+          'expo-file-system': '58.0.14',
           'expo-localization': '58.0.5',
         },
       },
