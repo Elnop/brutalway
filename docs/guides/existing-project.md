@@ -134,6 +134,13 @@ jscpd: the `ignore` list of `.jscpd.json`, made of globs.
 { "ignore": ["**/*.test.ts", "src/legacy/**"] }
 ```
 
+Each of these commands rewrites its list with every violation of the moment, new ones included, so regenerating a baseline makes any check pass again. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
+
+```sh
+npm install --save-dev @brutalway/check-exceptions
+npx check-exceptions
+```
+
 ## 6. One command
 
 Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing:

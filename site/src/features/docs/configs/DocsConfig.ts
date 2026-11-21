@@ -42,6 +42,7 @@ const PUBLISHED_PACKAGES = [
   'plugins/eslint-plugin-file-named-after-export',
   'plugins/eslint-plugin-store-layout',
   'tools/check-tree',
+  'tools/check-exceptions',
   'tools/check-doc-length',
   'tools/check-doc-sources',
   'tools/check-doc-links',

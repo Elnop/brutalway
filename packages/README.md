@@ -25,6 +25,12 @@ Each one installs on its own, in a project that did not start from a template: `
 |---|---|---|
 | [`@brutalway/check-tree`](tools/check-tree) | no folder the layout does not name, no empty folder, no kind folder holding a single file, stylesheets in `styles/`, query key factories in `keys/`, except a CSS Module, which stays next to its component | [npm](https://www.npmjs.com/package/@brutalway/check-tree) |
 
+### Exceptions
+
+| Package | What it does | npm |
+|---|---|---|
+| [`@brutalway/check-exceptions`](tools/check-exceptions) | fails when a list of exceptions grew since the commit the branch started from: known violations of check-tree, the dependency-cruiser baseline, the ignore lists of knip and jscpd, disable directives in the code | not published yet |
+
 ### Docs
 
 | Package | What it does | npm |
