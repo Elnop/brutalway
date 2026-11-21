@@ -31,6 +31,23 @@ const styles = StyleSheet.create({
 });
 ```
 
+A theme that changes at runtime, light and dark for instance, builds the sheet in a function that takes the theme. `no-unused-styles` matches a sheet to its uses by the name of its variable, file by file: the function assigns the sheet to `styles` before returning it, and the component calls the result `styles` too. A sheet returned without a name has every entry reported as unused.
+
+```ts
+export function Card() {
+  const { theme } = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+  return <View style={styles.card} />;
+}
+
+function createStyles(theme: Theme) {
+  const styles = StyleSheet.create({
+    card: { padding: theme.spacing.l, backgroundColor: theme.colors.background },
+  });
+  return styles;
+}
+```
+
 When a rule fires:
 
 - a color, a size or a font in `StyleSheet.create`: add a token to the theme if it is missing, and use it

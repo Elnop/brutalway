@@ -30,6 +30,7 @@ describe('reactNativeConfig', () => {
       'src/features/profile/Avatar.tsx:23 theme-styles(no-restricted-syntax)',
       'src/features/profile/Avatar.tsx:25 theme-styles(no-restricted-syntax)',
       'src/features/profile/Avatar.tsx:26 react-native(no-unused-styles)',
+      'src/features/profile/ThemedCard.tsx:15 react-native(no-unused-styles)',
     ]);
   });
 
