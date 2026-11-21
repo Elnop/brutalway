@@ -9,13 +9,15 @@ The templates, and any project that uses `@brutalway/alint-config`, pin every de
 1. Read what changed: each package has a GitHub release, such as [`@brutalway/check-tree@0.13.0`](https://github.com/Elnop/brutalway/releases/tag/%40brutalway%2Fcheck-tree%400.13.0), with the text of its changesets. A release that adds a rule or changes a default says so, and says what to do in a project.
 2. Run `npm run check`.
 3. For each new error, fix the code, or record it as an exception if the fix is a refactor of its own. A rule that did not exist on the main branch starts at 0 for check-exceptions: write the number of violations under `newRules` in `package.json` in that pull request, and delete the entry once it is merged into the main branch, as the [check-exceptions README](../../packages/tools/check-exceptions/README.md) says.
-4. When a release changes the format of an exception list, rewrite the list with the new version of the tool. check-tree 0.13.0 did so for `.check-tree-known-violations.json`: run `npx check-tree src --write-known-violations` once, check that the diff only changes the format, and commit it.
+4. When a release changes the format of an exception list, rewrite the list with the new version of the tool. check-tree 0.13.0 did so for `.check-tree-known-violations.json`: run `npx check-tree src --write-known-violations` once, check in the diff that no entry was added and no count raised, and commit it.
 
 Bump the packages one at a time when you can: a pull request that bumps one package and fixes what it reports is easy to review, ten bumps at once are not.
 
 When a new rule rejects code you think is right, do not disable it in silence. Open an issue with the package, its version, the smallest code that shows it and the message.
 
 ## Take the changes of a template
+
+This section is for a project made with `npm create brutal`. A project that installed the packages by hand only has the bumps above.
 
 A project made with `npm create brutal` does not follow its template on its own: once created, the code is yours. create-brutal records the version that made the project and the answers given in `.brutalway.json`, and merges what changed since then:
 
@@ -31,7 +33,7 @@ It refuses to run on a working tree with changes. It generates the project as th
 - `--set <option>=<value>` changes an answer during the update, to turn an option on or off later: `--set e2e=false`.
 - `npx create-brutal@latest check` exits with 1 when the current version would change the project, for a scheduled CI job.
 
-The `brutal-skills` Claude Code plugin has a skill that runs the update, resolves the conflicts with you and brings `npm run check` back to where it was: `/brutal-skills:brutalway-update`.
+The `brutal-skills` Claude Code plugin has a skill that runs the update, resolves the conflicts with you and brings `npm run check` back to where it was. Install it with `/plugin install brutal-skills --marketplace Elnop/brutalway`, then run `/brutal-skills:brutalway-update`.
 
 ### A project made before .brutalway.json
 

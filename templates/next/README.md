@@ -27,6 +27,10 @@ npm run dev
 
 `npm install` also points git to `.githooks/`, so every commit runs `npm run check` first.
 
+## Update from the template
+
+`.brutalway.json` records the version of create-brutal that made the project and the options chosen. `npx create-brutal@latest update` merges what changed in the template since then, like a git merge, and `npx create-brutal@latest check` says whether there is anything to take. [Upgrade brutalway](https://github.com/Elnop/brutalway/blob/main/docs/guides/upgrade.md#take-the-changes-of-a-template) explains the conflicts and the options.
+
 ## Documentation
 
 - [Starting your own app](docs/guides/start-your-own-app.md): replace the todo list with your own code

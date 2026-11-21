@@ -1,6 +1,6 @@
 # Move a project to the layout
 
-How to move the code of an existing project into `src/app/`, `src/features/` and `src/shared/`, one pull request at a time. The words are defined in the [glossary](../reference/glossary.md). Set up the checks first, as [Use the checks in an existing project](existing-project.md) says: check-tree and dependency-cruiser on together, their current errors recorded, and check-exceptions in `npm run check`.
+How to move the code of an existing project into `src/app/`, `src/features/` and `src/shared/`, one pull request at a time. The words are defined in the [glossary](../reference/glossary.md). Set up the checks first, as [Use the checks in an existing project](existing-project.md) says: check-tree and dependency-cruiser on together, their current errors recorded, and check-exceptions in `npm run check`. On a project laid out another way, that list holds most folders of `src/` at the start: each move below shortens it.
 
 ## Find the features first
 
@@ -8,7 +8,7 @@ List what the project does for its user: the screens and routes of a front end, 
 
 Write this list down before moving a file. Everything else in the project is either part of one feature or code several features use.
 
-A feature that covers several things the user does, such as `playlists` with its list, its detail screen and its editor, gets sub-features: `src/features/playlists/features/detail/`, `src/features/playlists/features/editor/`. Nest when the parts are distinct for the user and share code among themselves that nothing outside the feature needs. Each level works like the top one: what two sub-features use and that stands alone goes down into the `shared/` of their parent, what combines two of those goes up into the sub-feature.
+A feature that covers several things the user does, such as `playlists` with its list, its detail screen and its editor, gets sub-features: `src/features/playlists/features/detail/`, `src/features/playlists/features/editor/`. Nest when the parts are distinct for the user and share code among themselves that nothing outside the feature needs. Each level works like the top one: what two sub-features use and that stands alone goes down into the `shared/` of their parent, what combines two of those goes up into the sub-feature that uses them.
 
 ## Then what goes down into shared/
 
@@ -18,6 +18,8 @@ A file goes into `src/shared/` when two features use it and it combines nothing:
 - what needs two shared features moves up, into the feature that uses it, because a feature combines shared features and a shared feature never imports another one
 
 The trap is to apply only the first move. Everything used twice goes down, including dialogs, a profile card or a media player that use the theme, the primitives and the API client together. Then shared features import each other, and dependency-cruiser reports every pair.
+
+When two features need the same combination, keep the parts in `src/shared/` and let each feature do the combining: a `TrackPlayer` presenter in the design system gets the track and the actions as props, and each feature that shows a player passes what it read from the API. When the combination is something the user sees on its own, it is a feature, and `src/app/` composes it with the others, as [Compose features in src/app/](#compose-features-in-srcapp) shows.
 
 The same split applies inside one component:
 
@@ -52,6 +54,10 @@ Features never import each other, so `src/app/` connects them. Three patterns co
 - `src/app/` injects a component: it passes `TrackActionsSheet` as a prop to the playlists feature and to the queue of the playback feature, so neither imports the other
 - the contract goes down, the implementation stays: the type of the `playback` prop, `PlaybackActions`, lives in `src/shared/playback/`. The playlists feature types its prop with it, the playback feature implements it, and `src/app/` passes one to the other. Moving the implementation down instead would make a shared feature that calls the API and reads a store
 
+## Inside a feature
+
+A feature holds its files at its root until two files share a kind: two hooks go into `hooks/`, two type files into `types/`, two pure functions into `lib/`. In `components/`, orchestrators (`XContainer`, `XLayout`, `XPage`) and presenters split into `orchestrators/` and `presenters/` the same way. A folder with a single child is folded back into its parent. The [glossary](../reference/glossary.md) defines each kind, and the [check-tree README](../../packages/tools/check-tree/README.md) lists the folder names it knows.
+
 ## Move in this order
 
 1. The shared features without UI. They import nothing else of the project, so moving them only changes the imports that point to them.
@@ -59,11 +65,15 @@ Features never import each other, so `src/app/` connects them. Three patterns co
 3. One feature at a time: move its files into `src/features/<name>/`, fix its imports, run `npm run check`, delete the exceptions the move fixed, commit.
 4. What is left in the old folders, file by file: one feature uses it, it goes into that feature; two use it and it combines nothing, it goes down; it combines several shared features, it goes up.
 
-Move with `git mv` so that `git log --follow` keeps the history, and move a file unchanged: split it in the next pull request. A file moved and split in the same commit no longer looks like a rename to git, and the history stops there. Keep each pull request to one step or one feature: a reviewer can check a move only when nothing else changed in it.
+Until step 4, a moved feature may still import files from the old folders. check-tree reports these folders as not part of the layout, and they stay in its list until they are empty.
 
-A move changes the paths in the exception lists: the entry of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`. Update the paths in the same commit. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
+Move with `git mv` so that `git log --follow` keeps the history, and change nothing in a moved file but its imports: split or rewrite it in the next pull request. A file moved and rewritten in the same commit no longer looks like a rename to git, and the history stops there. With aliases instead of relative imports, a moved file keeps its own imports, and only the files that import it change. A file that mixes two concepts, such as a `types.ts` with the types of two features, gets split by concept in its own pull request before the move. `git mv` leaves behind the folders it emptied and those you created for nothing: delete them, or check-tree reports them.
 
-Test helpers shared by several tests go in `test-utils/` at the root of the project, next to `src/`, behind an alias such as `@test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
+Keep each pull request to one step or one feature: a reviewer can check a move only when nothing else changed in it.
+
+A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Edit them by hand in the same commit: change the paths, lower the counts, delete the entries that no longer happen. `npx depcruise src --baseline --baseline-mode shrink-only` does it for dependency-cruiser. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
+
+Test helpers shared by several tests go in `test-utils/` at the root of the project, next to `src/`, behind an alias such as `@test-utils/` declared in the tsconfig and in the config of the test runner. dependency-cruiser rejects an import of `test-utils/` from production code.
 
 ## Read the errors as instructions
 
@@ -71,9 +81,13 @@ Test helpers shared by several tests go in `test-utils/` at the root of the proj
 | --- | --- |
 | check-tree: `X is only used by src/features/a: move it into src/features/a` | the file went down too early, move it up into that feature |
 | check-tree: `src/shared/x holds 2 groups of files that never import each other` | the folder holds two concepts, often because it is named after a kind: split it |
+| check-tree: `src/features/a holds 2 hooks files (...): move them into hooks/` | two files of one kind: they go into the kind folder |
+| check-tree: `src/features/a/hooks holds a single child: move it up one level and delete the folder` | a kind folder with one file: the file goes back to the root of its folder |
+| check-tree: `src/features/a/hooks is empty: delete it` | a move left the folder empty |
+| check-tree: `.check-tree-known-violations.json lists kind-folder for src/pages, which no longer happens: delete the entry` | a move fixed a recorded violation: delete its entry |
 | dependency-cruiser `no-cross-shared` | a file of one shared feature needs another one: it combines two concepts, move it up into the feature that uses it, or merge the two shared features when they are one concept |
 | dependency-cruiser `no-cross-feature` | two features share code: move the part they share down, named after its concept, or connect them in `src/app/` |
-| dependency-cruiser `app-only-to-features` | `src/app/` reaches a shared feature: wrap what it needs in a feature, such as a page shell |
+| dependency-cruiser `app-only-to-features` | `src/app/` reaches a shared feature: wrap what it needs in a feature, such as a page shell that renders the frame of every page |
 
 When a rule rejects a split that looks right, go back to the two moves above before asking for the rule to change. If it still looks wrong, report it with the smallest code that shows it.
 
@@ -82,7 +96,7 @@ When a rule rejects a split that looks right, go back to the two moves above bef
 An agent can do the moves, if it gets them in small batches and `npm run check` decides when a batch is done:
 
 - one batch is one step of the order above, or one feature
-- the batch is done when `npm run check` passes and the exception lists only shrank
+- the batch is done when `npm run check` passes and the exception lists only shrank: paths changed, counts lowered, entries deleted
 - the agent never regenerates an exception list. check-exceptions fails when a list grew, which catches the agent that runs `check-tree --write-known-violations` to get green
 - the agent stops and asks when a rule seems wrong, instead of disabling it
 
@@ -93,10 +107,11 @@ Move the playback feature into src/features/playback/.
 Read docs/guides/move-to-the-layout.md first. A file only this feature uses
 goes into it. A file two features use and that imports no other shared code
 goes into src/shared/, named after its concept. A file that needs two shared
-features stays in the feature. Use git mv and do not change a file you move.
-You are done when npm run check passes. In the exception lists, update the
-paths of what you moved and delete the entries your move fixed, never add
-one. If a rule looks wrong, stop and tell me why.
+features stays in the feature. Use git mv and change nothing in a moved file
+but its imports. You are done when npm run check passes. In the exception
+lists, update the paths of what you moved, lower the counts and delete the
+entries your move fixed, never add or raise one. If a rule looks wrong, stop
+and tell me why.
 ```
 
 Several agents working in parallel all touch the same exception lists, and every merge conflicts there. Resolve it by taking the version of the main branch, removing the entries your branch fixed, and running the checks again.

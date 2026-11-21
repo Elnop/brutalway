@@ -1,6 +1,6 @@
 # Use the checks in an existing project
 
-The `@brutalway/*` packages work without a template. This guide adds them to a TypeScript project one at a time, from the least to the most demanding, so you can stop at any step. Each package README has the full options.
+The `@brutalway/*` packages work without a template. This guide adds them to a TypeScript project one at a time, so you can stop at any step. Each package README has the full options.
 
 ## Keep main green
 
@@ -8,22 +8,22 @@ On a codebase of a few dozen files, run each new check, fix what it reports, the
 
 Turn each check on with the errors it finds written down instead:
 
-1. Install the check and run it.
-2. Record what it reports in its exception list ([Exceptions](#2-exceptions) says how for each tool) and commit the list with the config. `npm run check` is green again, and new code gets the rule from that commit on.
-3. Add [`check-exceptions`](../../packages/tools/check-exceptions) to `npm run check`, so that a branch can shrink these lists but never grow them.
+1. Add a `check` script to `package.json` and let it grow with each step. [One command](#6-one-command) shows the full line.
+2. For each check: install it, run it, record what it reports ([Exceptions](#2-exceptions) says how for each tool), add it to `check`, and commit the config and the list together. `npm run check` is green, and new code gets the rule from that commit on.
+3. Add [`check-exceptions`](../../packages/tools/check-exceptions) to `check` as soon as the first list exists, so that a branch can shrink the lists but never grow them. A check turned on after it starts at 0: write the counts it prints under `newRules` in the same commit, as [Exceptions](#2-exceptions) says.
 4. Fix the recorded errors one folder or one feature at a time, each in its own pull request, deleting the entries it fixes.
 
-Moving the code into `app/`, `features/` and `shared/` is the longest part. [Move a project to the layout](move-to-the-layout.md) gives the order and the way to cut it into pull requests, or into batches for an agent.
+On a project laid out another way, the first run of check-tree reports most folders of `src/`. Record them all the same: [Move a project to the layout](move-to-the-layout.md) then empties that list one pull request at a time, or one batch for an agent.
 
 ## 1. Lint
 
-Pick the config of your stack: [`oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) for any TypeScript code, [`oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) for a React front end, [`oxlint-config-fastify`](../../packages/configs/oxlint-config-fastify) for an API. The others are listed in the [packages index](../../packages/README.md#oxlint).
+Pick the config of your stack: [`oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) for any TypeScript code, [`oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) for a React front end, [`oxlint-config-fastify`](../../packages/configs/oxlint-config-fastify) for an API. The others are listed in the [packages index](../../packages/README.md#oxlint). `--type-aware` needs `oxlint-tsgolint` next to `oxlint`:
 
 ```sh
-npm install --save-dev oxlint @brutalway/oxlint-config-typescript
+npm install --save-dev oxlint oxlint-tsgolint @brutalway/oxlint-config-typescript
 ```
 
-`oxlint.config.ts`:
+`oxlint.config.ts`, with `reactViteConfig` from `@brutalway/oxlint-config-react-vite` on a React front end:
 
 ```ts
 import { typescriptConfig } from '@brutalway/oxlint-config-typescript';
@@ -34,32 +34,37 @@ export default defineConfig({
 });
 ```
 
+Oxlint reads a single config: delete the `.oxlintrc.json` that Vite and other starters create.
+
 ```sh
 npx oxlint --type-aware
 ```
 
-`npx oxlint --type-aware --fix` fixes the rules that have a fix, often most of the first run. Some fixes change types: `!!role` becoming `Boolean(role)` loses the narrowing, and an added `cause` breaks a test that compares errors. Commit the fixes on their own, after `tsc` and the tests pass. The same goes for turning arrow functions into declarations by hand: a hoisted function no longer sees the narrowing done before it.
+The React, Next and React Native configs forbid relative imports. Declare an alias such as `@/` for `src/` in `compilerOptions.paths` of the tsconfig and in the resolver of the bundler (`resolve.alias` in `vite.config.ts`), then rewrite the imports, or record the rule as an exception first. Do it before moving files: with aliases, a moved file keeps its own imports.
+
+`npx oxlint --type-aware --fix` fixes the rules that have a fix, which on code written without these rules is a small part of the first run. Some fixes change types: `!!role` becoming `Boolean(role)` loses the narrowing, and an added `cause` breaks a test that compares errors. Commit the fixes on their own, after `tsc` and the tests pass. The same goes for turning arrow functions into declarations by hand: a hoisted function no longer sees the narrowing done before it.
 
 ## 2. Exceptions
 
-Each checker lets you write its exceptions down in a committed file, so they show up in review. Keep them few and delete them as you fix the code.
+check-tree and dependency-cruiser write their list with a command. Oxlint, knip and jscpd keep theirs in the code or in their config, by hand. Keep the lists short and delete entries as you fix the code.
 
-Oxlint: a directive with the rule name, on the line above or at the top of the file for a rule the file breaks in many places. The `no-comments` rule lets these comments through.
-
-```ts
-// oxlint-disable-next-line max-lines-per-function
-```
+Oxlint: a directive with the rule name, on the line above or at the top of the file for a rule the file breaks in many places, which is the practical form for a first run. The name in the directive comes from the one oxlint prints: `eslint(max-lines-per-function)` becomes `max-lines-per-function`, `component-props(no-restricted-syntax)` becomes `component-props/no-restricted-syntax`. In JSX, wrap the comment in braces. The `no-comments` rule lets these comments through.
 
 ```ts
 /* oxlint-disable max-lines-per-function */
 ```
 
-check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, one entry per rule and path, with the count of groups or files when the rule has one. check-tree skips them as long as the count does not grow, and fails on a new violation and on an entry that no longer happens.
+```tsx
+{/* oxlint-disable-next-line component-props/no-restricted-syntax */}
+```
 
-dependency-cruiser: `npx depcruise --baseline src` writes `.dependency-cruiser-known-violations.json`, and `--ignore-known` skips what it lists:
+check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, one entry per rule and path, with the count of groups or files when the rule has one. check-tree skips them as long as the count does not grow, and fails on a new violation and on an entry that no longer happens. After a fix, delete the entry or lower its count by hand.
+
+dependency-cruiser: `npx depcruise src --baseline` writes `.dependency-cruiser-known-violations.json`, and `--ignore-known` skips what it lists. After a fix, `--baseline-mode shrink-only` removes the fixed entries without adding new ones. Put `src` before these flags: each one takes an optional file name, and `depcruise --ignore-known src` reads `src` as that file, prints its help and exits with 0 without checking anything.
 
 ```sh
-npx depcruise --output-type err-long --ignore-known src
+npx depcruise src --output-type err-long --ignore-known
+npx depcruise src --baseline --baseline-mode shrink-only
 ```
 
 knip: `ignoreFiles` and `ignoreDependencies` in `knip.json`, and `ignoreIssues` to skip one kind of issue in some files.
@@ -74,32 +79,36 @@ jscpd: the `ignore` list of `.jscpd.json`, made of globs.
 { "ignore": ["**/*.test.ts", "src/legacy/**"] }
 ```
 
-Each of these commands rewrites its list with every violation of the moment, new ones included, so regenerating a baseline makes any check pass again. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
+alint has no exception list: fix what it reports. For the pinned versions, add `save-exact=true` to `.npmrc` and install each dependency again at its current version.
+
+`check-tree --write-known-violations` and `depcruise --baseline` rewrite their list with every violation of the moment, new ones included, so running them again makes any check pass. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
 
 ```sh
 npm install --save-dev @brutalway/check-exceptions
 npx check-exceptions
 ```
 
-A rule absent from the main branch starts at 0. In the change that turns a rule on, write the number of violations it found under `newRules` in `package.json`. The entry counts only while the rule is missing from the main branch: delete it once the change is merged there, which on a long feature branch means after the final merge:
+A rule absent from the main branch starts at 0. In the change that turns a rule on, write under `newRules` in `package.json` the count check-exceptions prints for it, with the key it prints: `check-tree kind-folder`, `dependency-cruiser no-circular`, `oxlint-disable max-lines-per-function`. For directives it counts comments, not errors: one file-level directive is 1, whatever number of errors it silences.
 
 ```json
-"check-exceptions": { "newRules": { "oxlint-disable max-lines-per-function": 40 } }
+"check-exceptions": { "newRules": { "oxlint-disable max-lines-per-function": 14 } }
 ```
+
+The entry counts only while the rule is missing from the main branch. Delete it once the change is on the main branch: right after the merge of its pull request, or, when you commit to the main branch directly, in the next commit.
 
 In CI, check out the whole history (`fetch-depth: 0` with `actions/checkout`) so that check-exceptions finds the commit the branch started from.
 
 ## 3. Tree and layers
 
-[`check-tree`](../../packages/tools/check-tree) checks the folders, [`dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) the imports between them. Turn them on together: check-tree accepts a `shared/` whose folders import each other, and only dependency-cruiser reports it. A project that moved its code with check-tree alone had 52 pairs of shared features importing each other, and nothing said so.
+[`check-tree`](../../packages/tools/check-tree) checks the folders, [`dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) the imports between them. Turn them on together: check-tree accepts a `shared/` whose folders import each other, and only dependency-cruiser reports it.
 
-Both expect `src/` to be split into `app/`, `features/` and `shared/`, with one folder per shared feature in `shared/`. If your project is laid out another way, this is the step that asks the most work: [Move a project to the layout](move-to-the-layout.md).
+Both expect `src/` to be split into `app/`, `features/` and `shared/`, with one folder per shared feature in `shared/`.
 
 ```sh
 npm install --save-dev @brutalway/check-tree @brutalway/dependency-cruiser-config dependency-cruiser @swc/core
 ```
 
-`.dependency-cruiser.cjs` for a front end:
+`.dependency-cruiser.cjs` for a front end, with the tsconfig that covers `src/` (`tsconfig.app.json` on Vite, often `tsconfig.json` elsewhere):
 
 ```js
 module.exports = {
@@ -118,23 +127,12 @@ An API extends `@brutalway/dependency-cruiser-config/server` instead, a library 
 
 ```sh
 npx check-tree src
-npx depcruise --output-type err-long src
+npx depcruise src --output-type err-long
 ```
 
 `--output-type err-long` prints, under each error, the comment of the rule, which says what to change.
 
-check-tree rejects empty folders, kind folders holding a single file and folders the layout of `src/` does not name. It also rejects a file of a shared feature that a single feature uses. A test never counts as a consumer there, and a file that only tests import is the job of `knip --production`.
-
-Its options go in the `"check-tree"` key of `package.json`, so `npm run check` and the agent hook read the same ones. `categories` replaces the list of kind folder names with yours. On a React Native or Expo app, a platform variant such as `useScreenTitle.web.ts` goes with `useScreenTitle.ts`: it has its kind and counts as one file with it, so the variants stay next to their base. `platforms` replaces the platforms check-tree knows, `web`, `ios`, `android` and `native`.
-
-```json
-{
-  "check-tree": {
-    "categories": ["components", "hooks", "utils"],
-    "platforms": ["web", "ios", "android", "native"]
-  }
-}
-```
+check-tree rejects empty folders, kind folders holding a single file and folders the layout of `src/` does not name. It also rejects a file of a shared feature that a single feature uses. A test never counts as a consumer there, and a file that only tests import is the job of `knip --production`. Its options, such as the names of your kind folders or the platforms of a React Native app, go in the `"check-tree"` key of `package.json`: see its [README](../../packages/tools/check-tree/README.md).
 
 ## 4. Repository
 
@@ -162,6 +160,14 @@ rules:
 npx alint check
 ```
 
+[knip](https://knip.dev) reports unused files, exports and dependencies, and `knip --production` the code of `src/` that only tests use. [jscpd](https://github.com/kucherenko/jscpd) reports duplicated blocks.
+
+```sh
+npm install --save-dev knip jscpd
+npx knip && npx knip --production
+npx jscpd src
+```
+
 ## 5. Secrets
 
 [`check-secrets`](../../packages/tools/check-secrets) runs gitleaks on the files git would commit. A secret it finds in an existing project has been in the history since it was committed: revoke it, then remove it. A value that is public by design goes in `.gitleaksignore`.
@@ -173,10 +179,10 @@ npx check-secrets
 
 ## 6. One command
 
-Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing:
+Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing. On a Vite project, whose `tsconfig.json` only lists references, `tsc --noEmit` checks nothing: use `tsc -b` there.
 
 ```json
-"check": "tsc --noEmit && oxlint --type-aware && depcruise --output-type err-long --ignore-known src && check-tree src && alint check && check-secrets && check-exceptions"
+"check": "tsc --noEmit && oxlint --type-aware && depcruise src --output-type err-long --ignore-known && check-tree src && alint check && knip && knip --production && jscpd src && check-secrets && check-exceptions"
 ```
 
 Then [work with Claude Code](claude-code.md) to get the same messages while the agent writes, and read [Upgrade brutalway](upgrade.md) before the next bump of a `@brutalway/*` package.

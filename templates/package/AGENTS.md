@@ -16,6 +16,10 @@ Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscp
 - A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `#test-utils/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`#src/` instead), no `index.ts`.
 
+## Updating from the template
+
+`.brutalway.json` records how create-brutal made this project: never edit it. `npx create-brutal@latest update` merges the changes of the template into the working tree. Resolve the conflicts it leaves like any git conflict, then run `npm install` and `npm run check`.
+
 ## When a brutalway tool gets in the way
 
 The checks, their configs and this template come from [brutalway](https://github.com/Elnop/brutalway). When one of them rejects valid code, misses a case it should catch, crashes, or prints a message that does not say what to change, do not work around it in silence with an `oxlint-disable` or a rule turned off. Tell the user what you ran into and offer to report it upstream. Do the same when you see how a rule, a message or the template could be better.

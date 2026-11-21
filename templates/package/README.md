@@ -50,6 +50,10 @@ todo list --file work.json  # No todos.
 
 It keeps the todos in `todos.json` in the current folder, or in the file given by `--file`, and parses its arguments with `node:util`. On an error, it prints the reason and exits with 1.
 
+## Update from the template
+
+`.brutalway.json` records the version of create-brutal that made the project and the options chosen. `npx create-brutal@latest update` merges what changed in the template since then, like a git merge, and `npx create-brutal@latest check` says whether there is anything to take. [Upgrade brutalway](https://github.com/Elnop/brutalway/blob/main/docs/guides/upgrade.md#take-the-changes-of-a-template) explains the conflicts and the options.
+
 ## Documentation
 
 - [Starting your own package](docs/guides/start-your-own-package.md): replace the example with your own code
