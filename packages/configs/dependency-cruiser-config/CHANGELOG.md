@@ -1,5 +1,11 @@
 # @brutalkit/dependency-cruiser-config
 
+## 0.12.2
+
+### Patch Changes
+
+- 66fa040: The messages of `no-cross-shared` and of the nested shared features rule name the move that was missing: a file that combines two shared features moves up into the feature that uses it. Merging the two stays the answer when they are one concept.
+
 ## 0.12.1
 
 ### Patch Changes

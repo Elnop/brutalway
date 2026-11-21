@@ -1,5 +1,11 @@
 # template-fastify
 
+## 0.10.1
+
+### Patch Changes
+
+- c898787: `docs/concepts/architecture.md` says that `src/app/AppConfig.ts` creates the services, since the `FEATURES` table moved that out of `src/app/buildApp.ts`.
+
 ## 0.10.0
 
 ### Minor Changes
