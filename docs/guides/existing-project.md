@@ -46,7 +46,7 @@ The React, Next and React Native configs forbid relative imports. Declare an ali
 
 ## 2. Exceptions
 
-Oxlint, check-tree and dependency-cruiser write their list with a command. knip and jscpd keep theirs in their config, by hand. Keep the lists short and delete entries as you fix the code.
+Oxlint, check-tree, dependency-cruiser and alint write their list with a command. knip and jscpd keep theirs in their config, by hand. Keep the lists short and delete entries as you fix the code.
 
 Oxlint: `npx oxlint --type-aware --suppress-all` writes the current errors to `oxlint-suppressions.json`, with a count per file and rule. Run it after `--fix`, so that what has a fix gets fixed instead of recorded. Oxlint then fails on a new error and on a recorded one that no longer happens, and `npx oxlint --type-aware --prune-suppressions` deletes the fixed ones without adding new ones. The option is missing from `oxlint --help` up to 1.94 at least, but it works.
 
@@ -86,16 +86,16 @@ jscpd: the `ignore` list of `.jscpd.json`, made of globs.
 { "ignore": ["**/*.test.ts", "src/legacy/**"] }
 ```
 
-alint has no exception list: fix what it reports. For the pinned versions, add `save-exact=true` to `.npmrc` and install each dependency again at its current version.
+alint: `npx alint baseline` writes `.alint-baseline.json`, and `baseline: .alint-baseline.json` in `.alint.yml` makes `alint check` skip what it lists. alint only warns about an entry that no longer happens: run `alint check --strict-baseline` so that it fails, like the others. After a fix, `npx alint baseline` again deletes the fixed entries. It refuses to add a new violation unless you pass `--accept-new`. For the pinned versions, the [alint-config README](../../packages/configs/alint-config/README.md#pin-the-dependencies) says how to fix them.
 
-`oxlint --suppress-all`, `check-tree --write-known-violations` and `depcruise --baseline` rewrite their list with every violation of the moment, new ones included, so running them again makes any check pass. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
+`oxlint --suppress-all`, `check-tree --write-known-violations`, `depcruise --baseline` and `alint baseline --accept-new` rewrite their list with every violation of the moment, new ones included, so running them again makes any check pass. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
 
 ```sh
 npm install --save-dev @brutalway/check-exceptions
 npx check-exceptions
 ```
 
-A rule absent from the main branch starts at 0. In the change that turns a rule on, write under `newRules` in `package.json` the count check-exceptions prints for it, with the key it prints: `oxlint-suppressions max-lines-per-function`, `check-tree kind-folder`, `dependency-cruiser no-circular`. For `oxlint-suppressions.json` it counts errors. For directives it counts comments: one file-level directive is 1, whatever number of errors it silences.
+A rule absent from the main branch starts at 0. In the change that turns a rule on, write under `newRules` in `package.json` the count check-exceptions prints for it, with the key it prints: `oxlint-suppressions max-lines-per-function`, `check-tree kind-folder`, `dependency-cruiser no-circular`, `alint styles-only-css`. For `oxlint-suppressions.json` it counts errors. For directives it counts comments: one file-level directive is 1, whatever number of errors it silences.
 
 ```json
 "check-exceptions": { "newRules": { "oxlint-suppressions max-lines-per-function": 14 } }
@@ -164,7 +164,7 @@ rules:
 ```
 
 ```sh
-npx alint check
+npx alint check --strict-baseline
 ```
 
 [knip](https://knip.dev) reports unused files, exports and dependencies, and `knip --production` the code of `src/` that only tests use. [jscpd](https://github.com/kucherenko/jscpd) reports duplicated blocks.
@@ -189,7 +189,7 @@ npx check-secrets
 Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing. On a Vite project, whose `tsconfig.json` only lists references, `tsc --noEmit` checks nothing: use `tsc -b` there.
 
 ```json
-"check": "tsc --noEmit && oxlint --type-aware && depcruise src --output-type err-long --ignore-known && check-tree src && alint check && knip && knip --production && jscpd src && check-secrets && check-exceptions"
+"check": "tsc --noEmit && oxlint --type-aware && depcruise src --output-type err-long --ignore-known && check-tree src && alint check --strict-baseline && knip && knip --production && jscpd src && check-secrets && check-exceptions"
 ```
 
 Then [work with Claude Code](claude-code.md) to get the same messages while the agent writes, and read [Upgrade brutalway](upgrade.md) before the next bump of a `@brutalway/*` package.

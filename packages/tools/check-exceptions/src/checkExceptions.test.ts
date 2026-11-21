@@ -30,6 +30,10 @@ function repository(files: Record<string, string>): string {
   return root;
 }
 
+function alintEntry(rule: string, path: string): string {
+  return JSON.stringify({ rule_id: rule, path, fingerprint: path, count: 1, message: '' });
+}
+
 function run(root: string, args: string[] = []): { status: number | null; lines: string[] } {
   const result = spawnSync(process.execPath, [CLI, ...args], { cwd: root, encoding: 'utf8' });
   return { status: result.status, lines: result.stderr.split('\n').filter((line) => line !== '') };
@@ -109,6 +113,20 @@ describe('check-exceptions', () => {
       lines[0] ?? '',
       /^oxlint-suppressions typescript\/no-explicit-any: 1 exceptions now, 0 allowed/u,
     );
+  });
+
+  it('counts the alint baseline per rule, the sum of the counts of its entries', () => {
+    const header = JSON.stringify({ schema_version: 1, alint_version: '0.21.0' });
+    const root = repository({
+      '.alint-baseline.json': `${header}\n${alintEntry('styles-only-css', 'src/styles/a.ts')}\n`,
+    });
+    write(root, {
+      '.alint-baseline.json': `${header}\n${alintEntry('styles-only-css', 'src/styles/b.ts')}\n${alintEntry('exact-dependency-versions', 'package.json')}\n`,
+    });
+    const { status, lines } = run(root);
+    assert.equal(status, 1);
+    assert.deepEqual(lines.length, 1);
+    assert.match(lines[0] ?? '', /^alint exact-dependency-versions: 1 exceptions now, 0 allowed/u);
   });
 
   it('lets a new rule land with the number of exceptions "newRules" gives it', () => {

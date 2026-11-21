@@ -56,7 +56,7 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Exceptions
 
-`check-exceptions` (`@brutalway/check-exceptions`) counts the ways around a check: `oxlint-disable` and `@ts-expect-error` comments, `jscpd:ignore-start` blocks, the entries of `oxlint-suppressions.json`, `.check-tree-known-violations.json` and `.gitleaksignore`, the ignore lists of `knip.json` and `.jscpd.json`. It counts them per rule and fails when a count is higher than at the fork point with the main branch, so these lists only shrink and moving code around is not growth. With no main branch to compare with, it checks nothing. CI clones the whole history (`fetch-depth: 0`) so that it finds the fork point.
+`check-exceptions` (`@brutalway/check-exceptions`) counts the ways around a check: `oxlint-disable` and `@ts-expect-error` comments, `jscpd:ignore-start` blocks, the entries of `oxlint-suppressions.json`, `.check-tree-known-violations.json`, `.alint-baseline.json` and `.gitleaksignore`, the ignore lists of `knip.json` and `.jscpd.json`. It counts them per rule and fails when a count is higher than at the fork point with the main branch, so these lists only shrink and moving code around is not growth. With no main branch to compare with, it checks nothing. CI clones the whole history (`fetch-depth: 0`) so that it finds the fork point.
 
 ## Repository
 

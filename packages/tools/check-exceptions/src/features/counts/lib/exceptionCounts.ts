@@ -1,3 +1,4 @@
+import { alintBaselineCounts } from '#src/features/counts/lib/alintBaselineCounts.ts';
 import { countBy } from '#src/features/counts/lib/countBy.ts';
 import { directiveCounts } from '#src/features/counts/lib/directiveCounts.ts';
 import { listFileCounts } from '#src/features/counts/lib/listFileCounts.ts';
@@ -8,6 +9,7 @@ export function exceptionCounts(snapshot: Snapshot): Map<string, number> {
   return countBy([
     ...listFileCounts(snapshot),
     ...suppressionCounts(snapshot),
+    ...alintBaselineCounts(snapshot),
     ...directiveCounts(snapshot.directives()),
   ]);
 }

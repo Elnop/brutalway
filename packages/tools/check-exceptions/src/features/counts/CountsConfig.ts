@@ -13,3 +13,4 @@ export const KNIP_LISTS = [
   'ignoreWorkspaces',
 ];
 export const OXLINT_SUPPRESSIONS_FILE = 'oxlint-suppressions.json';
+export const ALINT_BASELINE_FILE = '.alint-baseline.json';

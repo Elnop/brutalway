@@ -6,4 +6,4 @@
 'template-next': patch
 ---
 
-`docs/reference/verifications.md` lists `oxlint-suppressions.json` among the files check-exceptions counts.
+`docs/reference/verifications.md` lists `oxlint-suppressions.json` and `.alint-baseline.json` among the files check-exceptions counts.
