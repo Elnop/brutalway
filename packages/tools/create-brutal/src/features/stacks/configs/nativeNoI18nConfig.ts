@@ -69,11 +69,6 @@ export const NATIVE_NO_I18N: StackChange[] = [
       { file: 'tsconfig.json', replace: ',\n      "@locales/*": ["./locales/*"]', with: '' },
       {
         file: 'docs/reference/layout.md',
-        replace: 'the routes, the i18n setup and the messages',
-        with: 'the routes',
-      },
-      {
-        file: 'docs/reference/layout.md',
         replace: '`_layout.tsx` loads the fonts and wraps every screen in the i18n provider,',
         with: '`_layout.tsx` loads the fonts,',
       },

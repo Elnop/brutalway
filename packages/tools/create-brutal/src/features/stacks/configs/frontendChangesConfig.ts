@@ -405,8 +405,8 @@ export const FRONTEND_SKELETON: StackChange[] = [
       },
       {
         file: 'docs/guides/translations.md',
-        replace: 'each shared feature has its own namespace (`app`, `todoList`, `todoStats`)',
-        with: 'each shared feature gets its own namespace, `app` for now',
+        replace: 'each feature has its own namespace (`app`, `todoList`, `todoStats`)',
+        with: 'each feature gets its own namespace, `app` for now',
       },
       {
         file: 'docs/guides/start-your-own-app.md',
