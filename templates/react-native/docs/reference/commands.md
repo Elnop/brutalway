@@ -7,7 +7,7 @@
 | `npm run phone` | the development build on a USB Android phone, through the adb of `ADB` (`scripts/phone.ts`) |
 | `npm run start:go` | Metro for Expo Go |
 | `npm run web` | the app in the browser |
-| `npm run check` | Prettier, both `tsc` projects, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, i18next-cli, alint, knip |
+| `npm run check` | Prettier, both `tsc` projects, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, i18next-cli, alint, knip, check-secrets, check-exceptions |
 | `npm test` | Jest with the `jest-expo` preset: unit tests and component tests, all in Node |
 | `npm run build` | `expo export --platform web`: the web build in `dist/`, which also proves the code bundles |
 | `npm run format` | Prettier in write mode |

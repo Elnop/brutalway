@@ -74,6 +74,14 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 `check-doc-links` (`@brutalway/check-doc-links`) requests every `http` and `https` link of the Markdown files and fails on one that is gone: a `404`, a `410` or a domain that does not exist. Other errors, like the `403` many sites send to robots, only print a warning. A link that answered is not requested again for 24 hours, and when the machine is offline nothing is requested. Fix the link, or point it to the page that replaced it.
 
+## Secrets
+
+`check-secrets` (`@brutalway/check-secrets`) runs [gitleaks](https://github.com/gitleaks/gitleaks) on the files git would commit, so a file `.gitignore` leaves out, like `.env`, is not read. The first run downloads gitleaks 8.30.1 from its GitHub release, checks it against a pinned checksum and keeps it in `node_modules/.cache/check-secrets/`. A key, a token or a password in the code fails the check: remove it and revoke it. If it is public by design, add the fingerprint the message prints to `.gitleaksignore`.
+
+## Exceptions
+
+`check-exceptions` (`@brutalway/check-exceptions`) counts the ways around a check: `oxlint-disable` and `@ts-expect-error` comments, `jscpd:ignore-start` blocks, the entries of `.check-tree-known-violations.json` and `.gitleaksignore`, the ignore lists of `knip.json` and `.jscpd.json`. It counts them per rule and fails when a count is higher than at the fork point with the main branch, so these lists only shrink and moving code around is not growth. With no main branch to compare with, it checks nothing. CI clones the whole history (`fetch-depth: 0`) so that it finds the fork point.
+
 ## Repository
 
 alint checks that:
