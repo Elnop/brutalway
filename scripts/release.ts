@@ -26,13 +26,13 @@ function versionPendingChangesets(): void {
   run('git', ['commit', '--message', 'chore: release']);
 }
 
-async function release(all: boolean): Promise<number> {
+async function release(): Promise<number> {
   if (output('git', ['status', '--porcelain']) !== '') {
     process.stderr.write('The working tree has changes: commit or stash them before releasing.\n');
     return 1;
   }
   versionPendingChangesets();
-  const plan = releasePlan(new Set(output('git', ['tag', '--list']).split('\n')), all);
+  const plan = releasePlan(new Set(output('git', ['tag', '--list']).split('\n')));
   if (plan.names.length === 0) {
     process.stdout.write('Nothing to release: every version already has its tag.\n');
     return 0;
@@ -47,4 +47,4 @@ async function release(all: boolean): Promise<number> {
   return 0;
 }
 
-process.exitCode = await release(process.argv.includes('--all'));
+process.exitCode = await release();
