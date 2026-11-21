@@ -12,6 +12,8 @@ const TEST_FILES_OPENING_A_DATABASE = [
 const TODO_LIST_ROUTES_TEST = 'src/features/todo-list/todoListRoutes.test.ts';
 const TODO_STATS_ROUTES_TEST = 'src/features/todo-stats/todoStatsRoutes.test.ts';
 const HTTP_SERVER = 'src/features/http-server/createHttpServer.ts';
+const APP_CONFIG = 'src/app/AppConfig.ts';
+const APP_TYPES = 'src/app/AppTypes.ts';
 const SERVICES = [
   'src/features/todo-list/todoListService.ts',
   'src/features/todo-stats/todoStatsService.ts',
@@ -64,13 +66,9 @@ export const fastifyStack: Stack = {
         'docs/reference/endpoints.md',
       ],
       edits: [
-        { file: 'src/app/buildApp.ts', dropLines: '#src/features/todo-' },
-        { file: 'src/app/buildApp.ts', dropLines: 'Routes(create' },
-        {
-          file: 'src/app/buildApp.ts',
-          replace: 'database.close());\n\n',
-          with: 'database.close());\n',
-        },
+        { file: APP_CONFIG, dropLines: '#src/features/todo-' },
+        { file: APP_CONFIG, dropLines: 'Routes(create' },
+        { file: APP_CONFIG, replace: '= [\n];', with: '= [];' },
         {
           file: HTTP_SERVER,
           replace: "'Todos API'",
@@ -221,7 +219,8 @@ export const fastifyStack: Stack = {
           },
           { file, replace: 'createTodosQueries(database)', with: 'createTodosQueries()' },
         ]),
-        { file: 'src/app/buildApp.ts', replace: 'Service(database)', with: 'Service()', all: true },
+        { file: APP_CONFIG, replace: 'Service(database)', with: 'Service()', all: true },
+        { file: APP_CONFIG, replace: '(database) =>', with: '() =>', all: true },
         {
           file: 'docs/reference/layout.md',
           replace: 'the only file that runs SQL on the todos table',
@@ -246,6 +245,13 @@ export const fastifyStack: Stack = {
       edits: [
         { file: 'src/app/buildApp.ts', dropLines: 'openDatabase' },
         { file: 'src/app/buildApp.ts', dropLines: 'database.close()' },
+        { file: 'src/app/buildApp.ts', replace: 'routes(database)', with: 'routes()' },
+        {
+          file: APP_TYPES,
+          replace: '(database: ReturnType<typeof openDatabase>) =>',
+          with: '() =>',
+        },
+        { file: APP_TYPES, dropLines: 'import type { openDatabase }' },
         {
           file: 'src/app/buildApp.ts',
           replace: '{ databasePath, logLevel }',
@@ -258,7 +264,7 @@ export const fastifyStack: Stack = {
           all: true,
         },
         {
-          file: 'src/app/AppTypes.ts',
+          file: APP_TYPES,
           replace: ' & { databasePath: string }',
           with: '',
         },

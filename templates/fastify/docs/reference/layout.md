@@ -14,7 +14,7 @@ Each layer only imports the layers below it, and `src/app/` imports features onl
 
 A feature or a shared feature that grows holds sub-features in `features/<y>/` and the shared features they have in common in `shared/<y>/`, next to its kind folders. Each of them can do the same, down to ten levels. check-tree rejects any other folder name there.
 
-Inside a feature, a request goes `xRoutes.ts` → `xService.ts` → `xQueries.ts`: a route never runs a query. Services get their dependencies as parameters (`createTodoListService(database)`) and build their queries from them, and `src/app/buildApp.ts` is the one place that opens the database and passes it. Imports go through the `#src/` alias declared in the `imports` field of `package.json`.
+Inside a feature, a request goes `xRoutes.ts` → `xService.ts` → `xQueries.ts`: a route never runs a query. Services get their dependencies as parameters (`createTodoListService(database)`) and build their queries from them, and `src/app/buildApp.ts` is the one place that opens the database and passes it. `src/app/buildApp.ts` registers the features listed in `FEATURES`, in `src/app/AppConfig.ts`, one entry each and in that order. Imports go through the `#src/` alias declared in the `imports` field of `package.json`.
 
 ## Words
 
