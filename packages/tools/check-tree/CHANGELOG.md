@@ -1,5 +1,11 @@
 # @brutalkit/check-tree
 
+## 0.14.0
+
+### Minor Changes
+
+- 3e15b41: `--shrink-known-violations` deletes the entries of `.check-tree-known-violations.json` that no longer happen and lowers the counts that went down, without adding new violations. check-tree now also fails on an entry whose count is higher than the current one: run `npx check-tree src --shrink-known-violations` once after the bump.
+
 ## 0.13.0
 
 ### Minor Changes

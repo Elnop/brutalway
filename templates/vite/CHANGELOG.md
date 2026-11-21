@@ -1,5 +1,12 @@
 # template-vite
 
+## 0.11.1
+
+### Patch Changes
+
+- 6b653ea: The README and `AGENTS.md` say how to take the changes of the template: `.brutalway.json` records how the project was made, and `npx create-brutal@latest update` merges what changed since.
+- c1caf4d: `docs/reference/verifications.md` lists `oxlint-suppressions.json` and `.alint-baseline.json` among the files check-exceptions counts.
+
 ## 0.11.0
 
 ### Minor Changes

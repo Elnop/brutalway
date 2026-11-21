@@ -1,5 +1,12 @@
 # @brutalway/check-exceptions
 
+## 0.2.0
+
+### Minor Changes
+
+- db3ea44: check-exceptions counts `.alint-baseline.json`, which `alint baseline` writes: per rule, the sum of the counts of its entries, under the key `alint <rule>`.
+- c1caf4d: check-exceptions counts `oxlint-suppressions.json`, which `oxlint --suppress-all` writes: per rule, the sum of the counts of each file, under the key `oxlint-suppressions <rule>`.
+
 ## 0.1.0
 
 ### Minor Changes

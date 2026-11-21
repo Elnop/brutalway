@@ -1,5 +1,11 @@
 # @brutalkit/alint-config
 
+## 0.2.4
+
+### Patch Changes
+
+- 50bf892: `exact-dependency-versions` keeps the message of alint, which quotes the range it found, instead of the same sentence for every dependency, and links to a README section that says how to pin them.
+
 ## 0.2.3
 
 ### Patch Changes
