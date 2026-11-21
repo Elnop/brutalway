@@ -4,13 +4,18 @@
     "name": "elnop"
   },
   "metadata": {
-    "description": "Claude Code plugins from brutal: deterministic checks run after each edit."
+    "description": "Claude Code plugins from brutal: deterministic checks run after each edit, and skills for projects made with create-brutal."
   },
   "plugins": [
     {
       "name": "brutal-checks",
       "source": "./plugins/brutal-checks",
       "description": "Runs @brutalway/agent-hook after each Edit or Write: oxlint on the edited file, alint and check-tree when a file is created. Errors go back to Claude."
+    },
+    {
+      "name": "brutal-skills",
+      "source": "./plugins/brutal-skills",
+      "description": "Skills for projects made with create-brutal: brutalway-update merges the changes of the template into the project and brings npm run check back to where it was."
     }
   ]
 }

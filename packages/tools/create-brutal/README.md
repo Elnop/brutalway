@@ -42,6 +42,27 @@ npm create brutal -- --help
 
 It lists the stacks, their options, the values of each option and its default.
 
+## Update a project
+
+Every project gets a `.brutalway.json` at its root with the version of create-brutal that made it, the stack, the project name and every answer. Do not edit it: create-brutal rewrites it.
+
+```sh
+npx create-brutal@latest update
+```
+
+`update` generates the project as the recorded version made it and as this version makes it, both with the recorded answers, commits the two in a temporary repository and cherry-picks the second into the project without committing. git does a 3-way merge with the first generation as base: the project's own changes stay, a file the template renamed keeps them, and the lines both sides changed hold conflict markers. `package.json` is merged key by key instead, keeping the project's value when both sides changed a key, and the lockfile is left to `npm install`. It refuses a working tree with changes, and rewrites `.brutalway.json` once the merge is in the working tree.
+
+| Flag | Effect |
+|---|---|
+| `--to <version>` | merges up to that version instead of the one running |
+| `--set <option>=<value>` | changes an answer during the update, repeatable |
+| `--from <version> --stack <id>` | for a project without `.brutalway.json`: the version and the stack that made it. The command refuses when fewer than half of the files of that version exist in the project |
+| `--local` | generates the current version from the templates of this checkout |
+
+`npx create-brutal@latest check` exits with 1 when the latest version would change the project, and with 0 when it is up to date.
+
+A version older than the one running is generated with `npx create-brutal@<version>`, so `update` needs the network for it.
+
 ## Reference
 
 The options of each stack, with their values, their defaults, what they add or remove and the flags they cannot be used with, are in the docs of its template:

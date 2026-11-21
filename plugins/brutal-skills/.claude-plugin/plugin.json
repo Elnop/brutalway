@@ -1,0 +1,8 @@
+{
+  "name": "brutal-skills",
+  "version": "0.1.0",
+  "description": "Skills for projects made with create-brutal: brutalway-update merges the changes of the template into the project and brings npm run check back to where it was.",
+  "author": { "name": "elnop" },
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/plugins/brutal-skills",
+  "license": "MIT"
+}

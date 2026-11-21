@@ -25,5 +25,14 @@ export function usageText(stacks: Stack[]): string {
 
 Each stack option has a flag. A yes/no option takes --<option> or --no-<option>,
 an option with several values takes --<option> <value>.
+
+In a project made with create-brutal:
+
+  npx create-brutal@latest update [--to <version>] [--set <option>=<value>]
+      merge what changed in the template since the project was made
+  npx create-brutal@latest update --from <version> --stack <id> [--set ...]
+      the same for a project made before .brutalway.json existed
+  npx create-brutal@latest check
+      exit with 1 when a newer version changes the project
 ${stacks.map((stack) => `\n${stack.id}\n${stack.options.map(optionUsage).join('\n')}`).join('\n')}`;
 }

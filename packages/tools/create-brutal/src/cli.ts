@@ -14,6 +14,10 @@ import { scaffoldProject } from '#src/features/scaffolding/lib/scaffoldProject.t
 import { templateSource } from '#src/features/scaffolding/lib/templateSource.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
+import { findStack } from '#src/features/stacks/lib/findStack.ts';
+import { runUpdateCommand } from '#src/features/update/lib/runUpdateCommand.ts';
+import type { UpdateTools } from '#src/features/update/UpdateTypes.ts';
+import { ownVersion } from '#src/features/scaffolding/lib/ownVersion.ts';
 import { errorMessage } from '#src/shared/error-message/errorMessage.ts';
 
 async function createProject(dir: string, plan: () => ScaffoldPlan): Promise<void> {
@@ -64,8 +68,27 @@ function nextSteps(choices: ProjectChoices): string {
   ].join('\n');
 }
 
+function updateTools(): UpdateTools {
+  return {
+    version: ownVersion(),
+    renderCurrent: async (state, dir, local) => {
+      const stack = findStack(state.stack);
+      const source = templateSource(stack, local);
+      const plan = { dir, projectName: state.projectName, stack, answers: state.options, source };
+      await scaffoldProject({ ...plan, git: false, install: false }, () => undefined);
+    },
+    resolveOptions: async (stack, given) =>
+      resolveAnswers(findStack(stack).options, given, undefined),
+  };
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
+  const [command] = argv;
+  if (command === 'update' || command === 'check') {
+    process.exitCode = await runUpdateCommand(command, argv.slice(1), updateTools());
+    return;
+  }
   const first = readArgs(argv, undefined);
   if (first.help) {
     process.stdout.write(`${usageText(stacks)}\n`);

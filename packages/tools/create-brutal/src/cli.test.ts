@@ -21,6 +21,15 @@ const USAGE = `Usage: npm create brutal [dir] -- [flags]
 Each stack option has a flag. A yes/no option takes --<option> or --no-<option>,
 an option with several values takes --<option> <value>.
 
+In a project made with create-brutal:
+
+  npx create-brutal@latest update [--to <version>] [--set <option>=<value>]
+      merge what changed in the template since the project was made
+  npx create-brutal@latest update --from <version> --stack <id> [--set ...]
+      the same for a project made before .brutalway.json existed
+  npx create-brutal@latest check
+      exit with 1 when a newer version changes the project
+
 vite
   --[no-]example                 default: yes
   --[no-]zustand                 default: yes
@@ -237,6 +246,14 @@ describe('create-brutal', () => {
     assert.equal(manifest(project).name, 'app');
     assert.equal(manifest(project).scripts?.['prepare'], undefined);
     assert.equal(existsSync(join(project, '.git')), false);
+    const state: unknown = JSON.parse(readFileSync(join(project, '.brutalway.json'), 'utf8'));
+    assert.deepEqual(state, {
+      schemaVersion: 1,
+      createBrutal: manifest(join(import.meta.dirname, '..')).version,
+      stack: 'fastify',
+      projectName: 'app',
+      options: { example: true, swagger: true, database: true, 'claude-hook': true, ci: true },
+    });
     for (const file of [
       'src/server.ts',
       'src/features/database/openDatabase.ts',

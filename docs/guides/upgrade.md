@@ -17,14 +17,31 @@ When a new rule rejects code you think is right, do not disable it in silence. O
 
 ## Take the changes of a template
 
-A project made with `npm create brutal` does not follow its template: once created, the code is yours, and nothing updates it. To take what changed in the template since then:
+A project made with `npm create brutal` does not follow its template on its own: once created, the code is yours. create-brutal records the version that made the project and the answers given in `.brutalway.json`, and merges what changed since then:
 
-1. Find the version you started from. `create-brutal` does not record it, so look at the date of the first commit (`git log --reverse --format=%ad | head -1`) and pick the last release of the template before that date on the [releases page](https://github.com/Elnop/brutalway/releases), for instance `template-vite@0.10.7`.
-2. Read the changelog of the template between that version and the current one: `templates/vite/CHANGELOG.md` in the brutalway repository lists each release with what changed and why.
-3. Compare the two tags on GitHub to see the files: `https://github.com/Elnop/brutalway/compare/template-vite@0.10.7...template-vite@0.11.0`, then look at `templates/vite/` in the diff.
-4. Take the changes you want by hand, one topic per pull request: a new check in `npm run check`, a config, a doc of `docs/reference/`. Leave out what touches the example app if you deleted it.
+```sh
+npx create-brutal@latest update
+```
 
-The tags name the templates, not the options of `create-brutal`: a change to a file that an option removes or rewrites does not apply as is to a project created without that option.
+It refuses to run on a working tree with changes. It generates the project as the recorded version made it and as the current version makes it, with the same answers, and merges the difference into your working tree with git, the way `git cherry-pick` does. What you changed and the template did not stays as it is, and a file the template renamed keeps your edits. Where both sides changed the same lines, the file holds conflict markers to resolve. A file you deleted and the template changed shows up as `deleted by us` in `git status`: keep it deleted with `git rm` or take it back with `git add`.
+
+`package.json` is merged key by key: a script or a dependency the template changed and you did not takes the template's value, and when both sides changed the same key the command keeps yours and names it. The lockfile is left alone: run `npm install` afterwards. Then run `npm run check`, fix what the new checks report, and commit.
+
+- `--to <version>` targets another version than the one running the command.
+- `--set <option>=<value>` changes an answer during the update, to turn an option on or off later: `--set e2e=false`.
+- `npx create-brutal@latest check` exits with 1 when the current version would change the project, for a scheduled CI job.
+
+The `brutal-skills` Claude Code plugin has a skill that runs the update, resolves the conflicts with you and brings `npm run check` back to where it was: `/brutal-skills:brutalway-update`.
+
+### A project made before .brutalway.json
+
+create-brutal writes `.brutalway.json` since 0.16.0. For an older project, give the version and the stack that made it, and the options that differ from the defaults of that version:
+
+```sh
+npx create-brutal@latest update --from 0.14.0 --stack fastify --set swagger=false
+```
+
+To find the version, take the date of the first commit (`git log --reverse --format=%ad | head -1`) and the last `create-brutal` release before it on the [releases page](https://github.com/Elnop/brutalway/releases). The command regenerates that version first and prints how many of its files are unchanged in the project. It refuses when fewer than half of them exist, which means the version, the stack or the options are wrong.
 
 ## For maintainers
 

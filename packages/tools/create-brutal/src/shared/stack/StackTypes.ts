@@ -62,3 +62,10 @@ export type Stack = {
   changes: StackChange[];
   nextSteps: (answers: Answers) => string[];
 };
+export type BrutalwayState = {
+  schemaVersion: number;
+  createBrutal: string;
+  stack: string;
+  projectName: string;
+  options: Answers;
+};

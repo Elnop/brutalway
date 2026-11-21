@@ -69,12 +69,18 @@ Before asking to drop a rule, read [why the rules exist](docs/concepts/intent.md
 
 The docs are also on [brutalway.elnop.dev](https://brutalway.elnop.dev/).
 
-## Claude Code plugin
+## Claude Code plugins
 
 In a project that has `@brutalway/agent-hook` installed, the `brutal-checks` plugin runs it after each `Edit` or `Write`, without editing `.claude/settings.json`. In other projects it does nothing.
 
 ```
 /plugin install brutal-checks --marketplace Elnop/brutalway
+```
+
+The `brutal-skills` plugin holds skills for projects made with create-brutal. `/brutal-skills:brutalway-update` runs `create-brutal update`, resolves the conflicts with you and brings `npm run check` back to where it was.
+
+```
+/plugin install brutal-skills --marketplace Elnop/brutalway
 ```
 
 ## Contributing
