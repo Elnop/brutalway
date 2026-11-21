@@ -1,6 +1,9 @@
 import { existsSync, readFileSync } from 'node:fs';
 import type { TreeSettings } from '#src/features/tree-settings/TreeSettingsTypes.ts';
-import { isStringList } from '#src/shared/string-lists/isStringList.ts';
+
+function isStringList(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((entry) => typeof entry === 'string');
+}
 
 const SETTING_CHECKS = new Map<string, (value: unknown) => boolean>([
   ['categories', isStringList],

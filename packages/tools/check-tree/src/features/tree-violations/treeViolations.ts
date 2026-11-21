@@ -13,31 +13,28 @@ import type {
 } from '#src/features/tree-violations/TreeViolationsTypes.ts';
 import { childLayer } from '#src/features/tree-violations/features/layout/lib/childLayer.ts';
 import { filesCheck } from '#src/features/tree-violations/features/layout/lib/filesCheck.ts';
+import { kindFolderViolation } from '#src/features/tree-violations/features/layout/lib/kindFolderViolation.ts';
 import { sharedRootFileViolations } from '#src/features/tree-violations/features/layout/lib/sharedRootFileViolations.ts';
 import type {
   FilesCheck,
   Layer,
 } from '#src/features/tree-violations/features/layout/LayoutTypes.ts';
 import { platformBase } from '#src/shared/platform-variants/platformBase.ts';
+import type { Violation } from '#src/shared/violations/ViolationTypes.ts';
 
 function groupViolations(
   name: string,
   folderName: string,
   listing: FolderListing,
   categoryFolders: ReadonlySet<string>,
-): string[] {
+): Violation[] {
   const holdsFilesOnly = categoryFolders.has(folderName) && listing.folders.size === 0;
   return FILE_GROUPS.flatMap(({ folder, belongs, appliesIn }) => {
     if (!categoryFolders.has(folder) || !appliesIn(folderName)) return [];
     const loose = listing.files.filter((file) => belongs(listing.baseOf(file)));
     if (loose.length === 0 || (holdsFilesOnly && loose.length === listing.files.length)) return [];
-    if (listing.folders.has(folder)) {
-      return [`${name} has a ${folder}/ folder: move ${loose.join(', ')} into it`];
-    }
-    if (new Set(loose.map(listing.baseOf)).size === 1) return [];
-    return [
-      `${name} holds ${loose.length} ${folder} files (${loose.join(', ')}): move them into ${folder}/`,
-    ];
+    if (!listing.folders.has(folder) && new Set(loose.map(listing.baseOf)).size === 1) return [];
+    return [kindFolderViolation(name, folder, loose, listing.folders.has(folder))];
   });
 }
 
@@ -52,10 +49,18 @@ function folderListing(entries: Dirent[], platforms: readonly string[] | undefin
   };
 }
 
-function shapeViolations(name: string, count: number, isCategory: boolean): string[] {
-  if (count === 0) return [`${name} is empty: delete it`];
+function shapeViolations(name: string, count: number, isCategory: boolean): Violation[] {
+  if (count === 0) {
+    return [{ rule: 'empty-folder', path: name, message: `${name} is empty: delete it` }];
+  }
   if (count === 1 && isCategory) {
-    return [`${name} holds a single child: move it up one level and delete the folder`];
+    return [
+      {
+        rule: 'single-child',
+        path: name,
+        message: `${name} holds a single child: move it up one level and delete the folder`,
+      },
+    ];
   }
   return [];
 }
@@ -65,7 +70,7 @@ function folderViolations(
   name: string,
   scan: TreeScan,
   check: FilesCheck,
-): string[] {
+): Violation[] {
   const children = readdirSync(folder, { withFileTypes: true }).filter(
     (entry) => !TEST_FILE.test(entry.name),
   );
@@ -84,9 +89,9 @@ export function treeViolations(
   root: string,
   categoryFolders: readonly string[] = DEFAULT_CATEGORY_FOLDERS,
   options: TreeOptions = {},
-): string[] {
+): Violation[] {
   const scan = { categories: new Set(categoryFolders), platforms: options.platforms };
-  function walk(folder: string, layer: Layer): string[] {
+  function walk(folder: string, layer: Layer): Violation[] {
     const name = relative(join(root, '..'), folder);
     return [
       ...folderViolations(

@@ -114,7 +114,7 @@ Oxlint: a directive on the line above, with the rule name. The `no-comments` rul
 // oxlint-disable-next-line max-lines-per-function
 ```
 
-check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, a JSON array of the printed messages. check-tree skips them, and fails on a new violation and on an entry that no longer happens.
+check-tree: `npx check-tree src --write-known-violations` writes the current violations to `.check-tree-known-violations.json`, one entry per rule and path, with the count of groups or files when the rule has one. check-tree skips them as long as the count does not grow, and fails on a new violation and on an entry that no longer happens.
 
 dependency-cruiser: `npx depcruise --baseline src` writes `.dependency-cruiser-known-violations.json`, and `--ignore-known` skips what it lists:
 

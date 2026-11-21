@@ -6,19 +6,21 @@ import { checkedPaths } from '#src/features/shared-consumers/lib/checkedPaths.ts
 import { consumerSlots } from '#src/features/shared-consumers/lib/consumerSlots.ts';
 import { sharedFeatureOf } from '#src/features/shared-consumers/lib/sharedFeatureOf.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
+import type { Violation } from '#src/shared/violations/ViolationTypes.ts';
 
-function violation(path: string, owner: string, slot: string): string {
-  if (slot === owner) {
-    return `${path} is only used by ${owner} outside its sub-features: move it out of shared/ into the kind folders of ${owner}`;
-  }
-  return `${path} is only used by ${slot}: move it into ${slot}`;
+function violation(path: string, owner: string, slot: string): Violation {
+  const message =
+    slot === owner
+      ? `${path} is only used by ${owner} outside its sub-features: move it out of shared/ into the kind folders of ${owner}`
+      : `${path} is only used by ${slot}: move it into ${slot}`;
+  return { rule: 'single-consumer', path, message };
 }
 
 export function sharedConsumerViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
   platforms?: readonly string[],
-): string[] {
+): Violation[] {
   const { root, shown } = checkedPaths(checkedFolder);
   const slots = consumerSlots(modules, platforms);
   return modules.flatMap(({ source }) => {

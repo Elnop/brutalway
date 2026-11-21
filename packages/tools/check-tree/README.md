@@ -49,13 +49,19 @@ On a codebase that did not follow the layout, the first run prints a lot. Write 
 npx check-tree src --write-known-violations
 ```
 
-check-tree then skips the violations listed in that file, which it reads from the current folder. It still fails on a violation that is not in the list, and on an entry that no longer happens, which you delete from the file. The file is a JSON array of the messages check-tree prints:
+check-tree then skips the violations listed in that file, which it reads from the current folder. Each entry names the rule and the folder or file it is about, plus a count for the rules that have one:
 
 ```json
-["src/features/player/hooks holds a single child: move it up one level and delete the folder"]
+[
+  { "rule": "single-child", "path": "src/features/player/hooks" },
+  { "rule": "shared-feature-groups", "path": "src/shared/ui", "count": 9 },
+  { "rule": "kind-folder", "path": "src/features/player/hooks", "count": 3 }
+]
 ```
 
-A message that names a count, like `holds 3 groups of files`, changes when the count changes: run `--write-known-violations` again and check the diff.
+An entry stays known while the same rule fires on the same path with a count no higher than the one written. Adding a file to `src/shared/ui` linked to one of its groups, or merging two of its groups, changes the message without making a new violation. A tenth group, or a fourth hook to move into `hooks/`, is reported. check-tree also fails on an entry whose rule no longer fires on its path: delete it from the file.
+
+The rules are `empty-folder`, `single-child`, `not-a-layer`, `not-a-kind-folder`, `kind-folder` (files to move into a kind folder, the path being that folder), `shared-root-files`, `single-consumer` and `shared-feature-groups`. Up to 0.12, the file held the printed messages: check-tree now refuses that format, and `--write-known-violations` rewrites it.
 
 ### Run the check from code
 

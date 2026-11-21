@@ -34,6 +34,25 @@ function run(
   };
 }
 
+function textGroups(count: number): string {
+  return project(
+    [
+      'src/features/a/A.ts',
+      'src/features/b/B.ts',
+      ...['textStore.ts', 'useText.ts', 'TextTypes.ts']
+        .slice(0, count)
+        .map((name) => `src/shared/text/${name}`),
+    ],
+    [],
+    {
+      'src/features/a/A.ts':
+        "import '../../shared/text/textStore.ts'; import '../../shared/text/useText.ts'; import '../../shared/text/TextTypes.ts';",
+      'src/features/b/B.ts':
+        "import '../../shared/text/textStore.ts'; import '../../shared/text/useText.ts'; import '../../shared/text/TextTypes.ts';",
+    },
+  );
+}
+
 describe('check-tree', () => {
   it('prints nothing and exits with 0 on a conforming tree', () => {
     const root = project([
@@ -190,8 +209,11 @@ describe('check-tree', () => {
     });
   });
 
-  it('with --write-known-violations, writes the violations to the known-violations file and exits with 0', () => {
-    const root = project(['src/shared/text/lib/a.ts'], ['src/features/empty']);
+  it('with --write-known-violations, writes the rule, the path and the count of each violation and exits with 0', () => {
+    const root = project(
+      ['src/shared/text/lib/a.ts', 'src/shared/a.ts', 'src/shared/b.ts'],
+      ['src/features/empty'],
+    );
     assert.deepEqual(run(root, ['src', '--write-known-violations']), {
       status: 0,
       stdout: '',
@@ -200,8 +222,9 @@ describe('check-tree', () => {
     assert.deepEqual(
       JSON.parse(readFileSync(join(root, '.check-tree-known-violations.json'), 'utf8')),
       [
-        'src/features/empty is empty: delete it',
-        'src/shared/text/lib holds a single child: move it up one level and delete the folder',
+        { rule: 'empty-folder', path: 'src/features/empty' },
+        { rule: 'shared-root-files', path: 'src/shared', count: 2 },
+        { rule: 'single-child', path: 'src/shared/text/lib' },
       ],
     );
     assert.deepEqual(run(root, ['src']), { status: 0, stdout: '', lines: [] });
@@ -212,8 +235,8 @@ describe('check-tree', () => {
     writeFileSync(
       join(root, '.check-tree-known-violations.json'),
       JSON.stringify([
-        'src/features/empty is empty: delete it',
-        'src/features/gone is empty: delete it',
+        { rule: 'empty-folder', path: 'src/features/empty' },
+        { rule: 'empty-folder', path: 'src/features/gone' },
       ]),
     );
     assert.deepEqual(run(root, ['src']), {
@@ -221,19 +244,40 @@ describe('check-tree', () => {
       stdout: '',
       lines: [
         'src/shared/text/lib holds a single child: move it up one level and delete the folder',
-        '.check-tree-known-violations.json lists a violation that no longer happens: src/features/gone is empty: delete it',
+        '.check-tree-known-violations.json lists empty-folder for src/features/gone, which no longer happens: delete the entry',
       ],
     });
   });
 
-  it('stops with a message when the known-violations file is not a list of strings', () => {
+  it('keeps a known violation known while its count does not grow, and reports it once the count is higher', () => {
+    const known = JSON.stringify([
+      { rule: 'shared-feature-groups', path: 'src/shared/text', count: 2 },
+    ]);
+    const fewer = textGroups(2);
+    writeFileSync(join(fewer, '.check-tree-known-violations.json'), known);
+    assert.deepEqual(run(fewer, ['src']), { status: 0, stdout: '', lines: [] });
+    const more = textGroups(3);
+    writeFileSync(join(more, '.check-tree-known-violations.json'), known);
+    assert.deepEqual(run(more, ['src']), {
+      status: 1,
+      stdout: '',
+      lines: [
+        'src/shared/text holds 3 groups of files that never import each other (textStore.ts) (TextTypes.ts) (useText.ts): split it into one shared feature per group',
+      ],
+    });
+  });
+
+  it('stops with a message when the known-violations file is not a list of rules and paths', () => {
     const root = project(['src/app/App.tsx']);
-    writeFileSync(join(root, '.check-tree-known-violations.json'), '{"a": 1}');
+    writeFileSync(
+      join(root, '.check-tree-known-violations.json'),
+      JSON.stringify(['src/features/empty is empty: delete it']),
+    );
     assert.deepEqual(run(root, ['src']), {
       status: 1,
       stdout: '',
       lines: [
-        '.check-tree-known-violations.json holds a JSON array with one string per known violation',
+        '.check-tree-known-violations.json holds a JSON array of { "rule", "path", "count" } objects, count being optional: run check-tree with --write-known-violations to write it in this format',
       ],
     });
   });

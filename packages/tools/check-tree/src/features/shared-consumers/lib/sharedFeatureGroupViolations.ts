@@ -3,6 +3,7 @@ import { checkedPaths } from '#src/features/shared-consumers/lib/checkedPaths.ts
 import { sharedFeatureOf } from '#src/features/shared-consumers/lib/sharedFeatureOf.ts';
 import { variantLinks } from '#src/features/shared-consumers/lib/variantLinks.ts';
 import type { ImportedModule } from '#src/features/shared-consumers/SharedConsumersTypes.ts';
+import type { Violation } from '#src/shared/violations/ViolationTypes.ts';
 
 function sharedFeatureFolders(
   root: string,
@@ -59,7 +60,7 @@ export function sharedFeatureGroupViolations(
   checkedFolder: string,
   modules: readonly ImportedModule[],
   platforms?: readonly string[],
-): string[] {
+): Violation[] {
   const { root, shown } = checkedPaths(checkedFolder);
   const folders = sharedFeatureFolders(root, modules);
   const links = [...importLinks(modules, folders), ...variantLinks(folders.keys(), platforms)];
@@ -68,7 +69,12 @@ export function sharedFeatureGroupViolations(
     if (groups.size < 2) return [];
     const listed = [...groups.values()].map((files) => `(${files.join(', ')})`).join(' ');
     return [
-      `${shown(folder)} holds ${groups.size} groups of files that never import each other ${listed}: split it into one shared feature per group`,
+      {
+        rule: 'shared-feature-groups',
+        path: shown(folder),
+        count: groups.size,
+        message: `${shown(folder)} holds ${groups.size} groups of files that never import each other ${listed}: split it into one shared feature per group`,
+      },
     ];
   });
 }

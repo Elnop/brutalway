@@ -5,5 +5,7 @@ export async function sharedViolations(
   root: string,
   platforms?: readonly string[],
 ): Promise<string[]> {
-  return sharedFeatureViolations(root, await cruiseImports(root), platforms);
+  return sharedFeatureViolations(root, await cruiseImports(root), platforms).map(
+    ({ message }) => message,
+  );
 }

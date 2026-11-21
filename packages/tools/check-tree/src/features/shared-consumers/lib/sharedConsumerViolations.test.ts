@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { sharedConsumerViolations } from '#src/features/shared-consumers/lib/sharedConsumerViolations.ts';
+import type { Violation } from '#src/shared/violations/ViolationTypes.ts';
+
+function messagesOf(violations: readonly Violation[]): string[] {
+  return violations.map(({ message }) => message);
+}
 
 function graph(edges: Record<string, string[]>) {
   const sources = new Set([...Object.keys(edges), ...Object.values(edges).flat()]);
@@ -13,7 +18,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/A.tsx': ['src/shared/dates/formatDate.ts'],
       'src/features/b/B.tsx': ['src/shared/dates/formatDate.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), []);
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), []);
   });
 
   it('a file of a shared feature used by a single feature or a single other shared feature is reported, however many of its files import it', () => {
@@ -22,7 +27,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/lib/b.ts': ['src/shared/dates/formatDate.ts'],
       'src/shared/todos/todosStore.ts': ['src/shared/ids/id.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/dates/formatDate.ts is only used by src/features/a: move it into src/features/a',
       'src/shared/ids/id.ts is only used by src/shared/todos: move it into src/shared/todos',
     ]);
@@ -33,7 +38,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/list/List.tsx': ['src/shared/todos/todosStore.ts'],
       'src/shared/todos/todosStore.ts': ['src/shared/todos/TodosTypes.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/todos/todosStore.ts is only used by src/features/list: move it into src/features/list',
       'src/shared/todos/TodosTypes.ts is only used by src/features/list: move it into src/features/list',
     ]);
@@ -46,7 +51,7 @@ describe('sharedConsumerViolations', () => {
       'src/shared/dates/formatDate.ts': ['src/shared/dates/pad.ts'],
       'src/shared/slugs/slugify.ts': ['src/shared/text/lower.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/text/lower.ts is only used by src/shared/slugs: move it into src/shared/slugs',
     ]);
   });
@@ -56,7 +61,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/features/x/X.tsx': ['src/shared/dates/formatDate.ts'],
       'src/features/a/features/y/Y.tsx': ['src/shared/dates/formatDate.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/dates/formatDate.ts is only used by src/features/a: move it into src/features/a',
     ]);
   });
@@ -67,7 +72,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/features/x/features/deep/Deep.tsx': ['src/features/a/shared/title/Title.tsx'],
       'src/features/a/features/y/Y.tsx': ['src/features/a/shared/title/Title.tsx'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/features/a/shared/form/useForm.ts is only used by src/features/a/features/x: move it into src/features/a/features/x',
     ]);
   });
@@ -77,7 +82,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/A.tsx': ['src/features/a/shared/dates/format.ts'],
       'src/features/a/lib/b.ts': ['src/features/a/shared/dates/format.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/features/a/shared/dates/format.ts is only used by src/features/a outside its sub-features: move it out of shared/ into the kind folders of src/features/a',
     ]);
   });
@@ -88,7 +93,7 @@ describe('sharedConsumerViolations', () => {
       'src/shared/plan/features/budget/budget.ts': ['src/shared/plan/shared/lock/lock.ts'],
       'src/shared/plan/features/budget/total.ts': ['src/shared/plan/shared/money/money.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/plan/shared/money/money.ts is only used by src/shared/plan/features/budget: move it into src/shared/plan/features/budget',
     ]);
   });
@@ -98,7 +103,7 @@ describe('sharedConsumerViolations', () => {
       'src/main.tsx': ['src/shared/env/readEnv.ts'],
       'src/app/App.tsx': ['src/shared/theme/theme.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), []);
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), []);
   });
 
   it('a test is never a consumer, wherever it sits, and a file only tests import is left to knip --production', () => {
@@ -107,7 +112,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/b/B.test.tsx': ['src/shared/text/format.ts'],
       'src/shared/text/slug.test.ts': ['src/shared/text/slug.ts', 'src/shared/text/unused.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a',
       'src/shared/text/slug.ts is only used by src/features/a: move it into src/features/a',
     ]);
@@ -115,14 +120,14 @@ describe('sharedConsumerViolations', () => {
 
   it('a file at the root of a shared/ is left to the folder checks', () => {
     const modules = graph({ 'src/features/a/A.tsx': ['src/shared/format.ts'] });
-    assert.deepEqual(sharedConsumerViolations('src', modules), []);
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), []);
   });
 
   it('a nested checked folder gives paths from its parent, like the folder checks', () => {
     const modules = graph({
       'packages/ws/src/features/a/A.tsx': ['packages/ws/src/shared/text/format.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('./packages/ws/src/', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('./packages/ws/src/', modules)), [
       'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a',
     ]);
   });
@@ -135,7 +140,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/shell/Shell.tsx': ['src/shared/theme/AlertHost.tsx'],
       'src/shared/theme/AlertHost.tsx': ['src/shared/theme/alertStore.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
       'src/shared/theme/AlertHost.tsx is only used by src/features/shell: move it into src/features/shell',
     ]);
   });
@@ -147,7 +152,7 @@ describe('sharedConsumerViolations', () => {
       'src/shared/theme/lib/alert.tv.ts': ['src/shared/theme/alertStore.ts'],
       'src/features/shell/Shell.tsx': ['src/shared/theme/alertStore.ts'],
     });
-    assert.deepEqual(sharedConsumerViolations('src', modules, ['web']), [
+    assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules, ['web'])), [
       'src/shared/theme/alertStore.ts is only used by src/features/shell: move it into src/features/shell',
     ]);
   });

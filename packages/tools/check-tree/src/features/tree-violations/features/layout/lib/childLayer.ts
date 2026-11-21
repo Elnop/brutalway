@@ -16,7 +16,16 @@ const FEATURE_LAYERS = new Map<string, Layer>([
 
 function kindFolder(path: string, categories: ReadonlySet<string>, reason: string): ChildLayer {
   if (categories.has(basename(path))) return { layer: 'kind', violations: [] };
-  return { layer: 'free', violations: [`${path} is not a kind folder: ${reason}`] };
+  return {
+    layer: 'free',
+    violations: [
+      {
+        rule: 'not-a-kind-folder',
+        path,
+        message: `${path} is not a kind folder: ${reason}`,
+      },
+    ],
+  };
 }
 
 function sourceChild(path: string): ChildLayer {
@@ -25,7 +34,11 @@ function sourceChild(path: string): ChildLayer {
   return {
     layer: 'free',
     violations: [
-      `${path} is not a layer: ${dirname(path)}/ holds app/, features/ and shared/ next to its entry points, move it into one of them`,
+      {
+        rule: 'not-a-layer',
+        path,
+        message: `${path} is not a layer: ${dirname(path)}/ holds app/, features/ and shared/ next to its entry points, move it into one of them`,
+      },
     ],
   };
 }
