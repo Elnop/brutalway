@@ -50,7 +50,7 @@ function subSharedRules() {
     name: ruleName('no-cross-sub-shared', level),
     severity: 'error',
     comment:
-      'A shared feature nested in a feature or in another shared feature (shared/<y>/, at any depth) imports neither another shared feature, nor a sub-feature, nor the root of its parent: merge the two shared features, or copy the code it needs.',
+      'A shared feature nested in a feature or in another shared feature (shared/<y>/, at any depth) imports neither another shared feature, nor a sub-feature, nor the root of its parent: if this file combines the two, move it up into the sub-feature or the parent that uses it; if they are one concept, merge them.',
     from: {
       path: `^(${feature})/shared/([^/]+)/`,
     },
@@ -144,7 +144,7 @@ module.exports = {
       name: 'no-cross-shared',
       severity: 'error',
       comment:
-        'A shared feature never imports another shared feature: merge the two shared features, or copy the code it needs.',
+        'A shared feature never imports another shared feature: if this file combines the two, move it up into the feature that uses it; if they are one concept, merge them.',
       from: {
         path: '^src/shared/([^/]+)/',
       },
