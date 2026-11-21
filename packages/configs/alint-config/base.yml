@@ -31,5 +31,5 @@ rules:
     paths: ['**/package.json']
     path: '$["dependencies","devDependencies"].*'
     matches: '^\d+\.\d+\.\d+$'
-    message: 'Pin each dependency to an exact version (add save-exact=true to .npmrc so npm install writes them exact).'
+    policy_url: 'https://github.com/Elnop/brutalway/tree/main/packages/configs/alint-config#pin-the-dependencies'
     level: error

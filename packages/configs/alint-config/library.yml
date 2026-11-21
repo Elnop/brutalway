@@ -7,5 +7,5 @@ rules:
     paths: ['**/package.json']
     path: '$.devDependencies.*'
     matches: '^\d+\.\d+\.\d+$'
-    message: 'Pin each devDependency to an exact version (add save-exact=true to .npmrc so npm install writes them exact). dependencies and peerDependencies keep their ranges.'
+    policy_url: 'https://github.com/Elnop/brutalway/tree/main/packages/configs/alint-config#pin-the-dependencies'
     level: error

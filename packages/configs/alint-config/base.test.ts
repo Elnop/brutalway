@@ -82,6 +82,16 @@ describe('base.yml', () => {
     ]);
   });
 
+  it('quotes the range of each dependency it reports, with a link to what to do', () => {
+    const root = repository({
+      'package.json': JSON.stringify({ dependencies: { react: '^19.3.1', vite: '~7.1.4' } }),
+    });
+    const result = spawnSync(ALINT, ['check'], { cwd: root, encoding: 'utf8' });
+    assert.match(result.stdout, /"\^19\.3\.1"/u);
+    assert.match(result.stdout, /"~7\.1\.4"/u);
+    assert.match(result.stdout, /alint-config#pin-the-dependencies/u);
+  });
+
   it('runs the .alint.yml of the README, base rules and the local markdown_paths_resolve rule together', () => {
     const root = repository({
       '.alint.yml': README_EXAMPLE,

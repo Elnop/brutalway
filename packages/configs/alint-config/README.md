@@ -45,6 +45,17 @@ extends:
 | `configs-only-config-files` | a `configs/` folder only holds `XConfig.ts` files and their tests                            |
 | `exact-dependency-versions` | every `dependencies` and `devDependencies` entry of every `package.json` is an exact version |
 
+## Pin the dependencies
+
+alint prints one `exact-dependency-versions` error per range, quoting it: `value at path "^19.1.0" does not match regex`. Add `save-exact=true` to `.npmrc`, so that `npm install` writes exact versions from then on, then install each dependency again at the version `package-lock.json` holds for it:
+
+```sh
+npm install react@19.1.1
+npm install --save-dev vite@7.1.4
+```
+
+A library pins only its `devDependencies`, as [Why](#why) says.
+
 ## Why
 
 alint only follows a local `extends` that stays inside the linted tree, so the path goes through `node_modules`. `markdown_paths_resolve` stays in your file because its `prefixes` depend on your folders.
