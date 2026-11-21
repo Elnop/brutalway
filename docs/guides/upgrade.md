@@ -8,7 +8,7 @@ The templates, and any project that uses `@brutalway/alint-config`, pin every de
 
 1. Read what changed: each package has a GitHub release, such as [`@brutalway/check-tree@0.13.0`](https://github.com/Elnop/brutalway/releases/tag/%40brutalway%2Fcheck-tree%400.13.0), with the text of its changesets. A release that adds a rule or changes a default says so, and says what to do in a project.
 2. Run `npm run check`.
-3. For each new error, fix the code, or record it as an exception if the fix is a refactor of its own. A rule that did not exist on the main branch starts at 0 for check-exceptions: write the number of violations under `newRules` in `package.json` in that pull request, and delete the entry in the next one, as the [check-exceptions README](../../packages/tools/check-exceptions/README.md) says.
+3. For each new error, fix the code, or record it as an exception if the fix is a refactor of its own. A rule that did not exist on the main branch starts at 0 for check-exceptions: write the number of violations under `newRules` in `package.json` in that pull request, and delete the entry once it is merged into the main branch, as the [check-exceptions README](../../packages/tools/check-exceptions/README.md) says.
 4. When a release changes the format of an exception list, rewrite the list with the new version of the tool. check-tree 0.13.0 did so for `.check-tree-known-violations.json`: run `npx check-tree src --write-known-violations` once, check that the diff only changes the format, and commit it.
 
 Bump the packages one at a time when you can: a pull request that bumps one package and fixes what it reports is easy to review, ten bumps at once are not.

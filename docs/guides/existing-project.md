@@ -38,7 +38,7 @@ export default defineConfig({
 npx oxlint --type-aware
 ```
 
-Run `npx oxlint --type-aware --fix` first: it fixes the rules that have a safe fix, often most of the first run.
+`npx oxlint --type-aware --fix` fixes the rules that have a fix, often most of the first run. Some fixes change types: `!!role` becoming `Boolean(role)` loses the narrowing, and an added `cause` breaks a test that compares errors. Commit the fixes on their own, after `tsc` and the tests pass. The same goes for turning arrow functions into declarations by hand: a hoisted function no longer sees the narrowing done before it.
 
 ## 2. Exceptions
 
@@ -81,7 +81,7 @@ npm install --save-dev @brutalway/check-exceptions
 npx check-exceptions
 ```
 
-A rule absent from the main branch starts at 0. In the change that turns a rule on, write the number of violations it found under `newRules` in `package.json`, and delete the entry in the next change:
+A rule absent from the main branch starts at 0. In the change that turns a rule on, write the number of violations it found under `newRules` in `package.json`. The entry counts only while the rule is missing from the main branch: delete it once the change is merged there, which on a long feature branch means after the final merge:
 
 ```json
 "check-exceptions": { "newRules": { "oxlint-disable max-lines-per-function": 40 } }
