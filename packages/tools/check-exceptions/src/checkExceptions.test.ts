@@ -90,6 +90,27 @@ describe('check-exceptions', () => {
     assert.match(lines[0] ?? '', /^dependency-cruiser no-circular: 1 exceptions now, 0 allowed/u);
   });
 
+  it('counts the oxlint suppressions per rule, the sum of their counts over the files', () => {
+    const root = repository({
+      'oxlint-suppressions.json': JSON.stringify({
+        'src/a.ts': { 'no-console': { count: 2 } },
+      }),
+    });
+    write(root, {
+      'oxlint-suppressions.json': JSON.stringify({
+        'src/a.ts': { 'no-console': { count: 1 } },
+        'src/b.ts': { 'no-console': { count: 1 }, 'typescript/no-explicit-any': { count: 1 } },
+      }),
+    });
+    const { status, lines } = run(root);
+    assert.equal(status, 1);
+    assert.deepEqual(lines.length, 1);
+    assert.match(
+      lines[0] ?? '',
+      /^oxlint-suppressions typescript\/no-explicit-any: 1 exceptions now, 0 allowed/u,
+    );
+  });
+
   it('lets a new rule land with the number of exceptions "newRules" gives it', () => {
     const root = repository({ 'package.json': '{}' });
     write(root, {

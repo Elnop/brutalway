@@ -12,3 +12,4 @@ export const KNIP_LISTS = [
   'ignoreUnresolved',
   'ignoreWorkspaces',
 ];
+export const OXLINT_SUPPRESSIONS_FILE = 'oxlint-suppressions.json';

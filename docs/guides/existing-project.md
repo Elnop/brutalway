@@ -11,7 +11,7 @@ Turn each check on with the errors it finds written down instead:
 1. Add a `check` script to `package.json` and let it grow with each step. [One command](#6-one-command) shows the full line.
 2. For each check: install it, run it, record what it reports ([Exceptions](#2-exceptions) says how for each tool), add it to `check`, and commit the config and the list together. `npm run check` is green, and new code gets the rule from that commit on.
 3. Add [`check-exceptions`](../../packages/tools/check-exceptions) to `check` as soon as the first list exists, so that a branch can shrink the lists but never grow them. A check turned on after it starts at 0: write the counts it prints under `newRules` in the same commit, as [Exceptions](#2-exceptions) says.
-4. Fix the recorded errors one folder or one feature at a time, each in its own pull request, deleting the entries it fixes.
+4. Fix the recorded errors one folder or one feature at a time, each in its own pull request, deleting the entries it fixes with the commands [Exceptions](#2-exceptions) gives.
 
 On a project laid out another way, the first run of check-tree reports most folders of `src/`. Record them all the same: [Move a project to the layout](move-to-the-layout.md) then empties that list one pull request at a time, or one batch for an agent.
 
@@ -46,12 +46,19 @@ The React, Next and React Native configs forbid relative imports. Declare an ali
 
 ## 2. Exceptions
 
-check-tree and dependency-cruiser write their list with a command. Oxlint, knip and jscpd keep theirs in the code or in their config, by hand. Keep the lists short and delete entries as you fix the code.
+Oxlint, check-tree and dependency-cruiser write their list with a command. knip and jscpd keep theirs in their config, by hand. Keep the lists short and delete entries as you fix the code.
 
-Oxlint: a directive with the rule name, on the line above or at the top of the file for a rule the file breaks in many places, which is the practical form for a first run. The name in the directive comes from the one oxlint prints: `eslint(max-lines-per-function)` becomes `max-lines-per-function`, `component-props(no-restricted-syntax)` becomes `component-props/no-restricted-syntax`. In JSX, wrap the comment in braces. The `no-comments` rule lets these comments through.
+Oxlint: `npx oxlint --type-aware --suppress-all` writes the current errors to `oxlint-suppressions.json`, with a count per file and rule. Run it after `--fix`, so that what has a fix gets fixed instead of recorded. Oxlint then fails on a new error and on a recorded one that no longer happens, and `npx oxlint --type-aware --prune-suppressions` deletes the fixed ones without adding new ones. The option is missing from `oxlint --help` up to 1.94 at least, but it works.
+
+```sh
+npx oxlint --type-aware --suppress-all
+npx oxlint --type-aware --prune-suppressions
+```
+
+For a single exception in new code, a directive with the rule name goes on the line above. The name in the directive comes from the one oxlint prints: `eslint(max-lines-per-function)` becomes `max-lines-per-function`, `component-props(no-restricted-syntax)` becomes `component-props/no-restricted-syntax`. In JSX, wrap the comment in braces. The `no-comments` rule lets these comments through.
 
 ```ts
-/* oxlint-disable max-lines-per-function */
+// oxlint-disable-next-line max-lines-per-function
 ```
 
 ```tsx
@@ -81,17 +88,17 @@ jscpd: the `ignore` list of `.jscpd.json`, made of globs.
 
 alint has no exception list: fix what it reports. For the pinned versions, add `save-exact=true` to `.npmrc` and install each dependency again at its current version.
 
-`check-tree --write-known-violations` and `depcruise --baseline` rewrite their list with every violation of the moment, new ones included, so running them again makes any check pass. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
+`oxlint --suppress-all`, `check-tree --write-known-violations` and `depcruise --baseline` rewrite their list with every violation of the moment, new ones included, so running them again makes any check pass. [`check-exceptions`](../../packages/tools/check-exceptions) fails when one of these lists, or the number of disable directives for a rule, grew since the commit the branch started from:
 
 ```sh
 npm install --save-dev @brutalway/check-exceptions
 npx check-exceptions
 ```
 
-A rule absent from the main branch starts at 0. In the change that turns a rule on, write under `newRules` in `package.json` the count check-exceptions prints for it, with the key it prints: `check-tree kind-folder`, `dependency-cruiser no-circular`, `oxlint-disable max-lines-per-function`. For directives it counts comments, not errors: one file-level directive is 1, whatever number of errors it silences.
+A rule absent from the main branch starts at 0. In the change that turns a rule on, write under `newRules` in `package.json` the count check-exceptions prints for it, with the key it prints: `oxlint-suppressions max-lines-per-function`, `check-tree kind-folder`, `dependency-cruiser no-circular`. For `oxlint-suppressions.json` it counts errors. For directives it counts comments: one file-level directive is 1, whatever number of errors it silences.
 
 ```json
-"check-exceptions": { "newRules": { "oxlint-disable max-lines-per-function": 14 } }
+"check-exceptions": { "newRules": { "oxlint-suppressions max-lines-per-function": 14 } }
 ```
 
 The entry counts only while the rule is missing from the main branch. Delete it once the change is on the main branch: right after the merge of its pull request, or, when you commit to the main branch directly, in the next commit.

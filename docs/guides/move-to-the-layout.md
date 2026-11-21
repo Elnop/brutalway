@@ -71,7 +71,7 @@ Move with `git mv` so that `git log --follow` keeps the history, and change noth
 
 Keep each pull request to one step or one feature: a reviewer can check a move only when nothing else changed in it.
 
-A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Update them in the same commit. `npx check-tree src --shrink-known-violations` and `npx depcruise src --baseline --baseline-mode shrink-only` delete the entries that no longer happen and lower the counts. A moved folder that still breaks a rule is reported under its new path: change the path of its entry by hand. The globs of jscpd and knip are edited by hand too. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
+A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Update them in the same commit. `npx oxlint --type-aware --prune-suppressions`, `npx check-tree src --shrink-known-violations` and `npx depcruise src --baseline --baseline-mode shrink-only` delete the entries that no longer happen and lower the counts. A moved folder that still breaks a rule is reported under its new path: change the path of its entry by hand. The globs of jscpd and knip are edited by hand too. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
 
 Test helpers shared by several tests go in `test-utils/` at the root of the project, next to `src/`, behind an alias such as `@test-utils/` declared in the tsconfig and in the config of the test runner. dependency-cruiser rejects an import of `test-utils/` from production code.
 
@@ -97,8 +97,8 @@ When a rule rejects a split that looks right, go back to the two moves above bef
 An agent can do the moves, if it gets them in small batches and `npm run check` decides when a batch is done:
 
 - one batch is one step of the order above, or one feature
-- the batch is done when `npm run check` passes and the exception lists only shrank: paths changed, counts lowered, entries deleted. `check-tree --shrink-known-violations` and `depcruise --baseline-mode shrink-only` do the last two
-- the agent never regenerates an exception list. check-exceptions fails when a list grew, which catches the agent that runs `check-tree --write-known-violations` to get green
+- the batch is done when `npm run check` passes and the exception lists only shrank: paths changed, counts lowered, entries deleted. `oxlint --prune-suppressions`, `check-tree --shrink-known-violations` and `depcruise --baseline-mode shrink-only` do the last two
+- the agent never regenerates an exception list. check-exceptions fails when a list grew, which catches the agent that runs `oxlint --suppress-all` or `check-tree --write-known-violations` to get green
 - the agent stops and asks when a rule seems wrong, instead of disabling it
 
 A prompt for one batch:
@@ -110,6 +110,7 @@ goes into it. A file two features use and that imports no other shared code
 goes into src/shared/, named after its concept. A file that needs two shared
 features stays in the feature. Use git mv and change nothing in a moved file
 but its imports. You are done when npm run check passes. Run
+npx oxlint --type-aware --prune-suppressions,
 npx check-tree src --shrink-known-violations and
 npx depcruise src --baseline --baseline-mode shrink-only, then update by hand
 the paths of what you moved in the exception lists. Never add or raise an

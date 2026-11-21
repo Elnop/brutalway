@@ -45,6 +45,7 @@ A rule that did not exist at the fork point starts at 0. To turn on a rule that 
 
 | Source | Count |
 | --- | --- |
+| `oxlint-suppressions.json` | per rule, the sum of the `count` of each file |
 | `.check-tree-known-violations.json` | per rule, the sum of the `count` of each entry, 1 for an entry without one |
 | `.dependency-cruiser-known-violations.json` | per rule, one per violation |
 | `knip.json` | the size of `ignore`, `ignoreFiles`, `ignoreDependencies`, `ignoreBinaries`, `ignoreMembers`, `ignoreUnresolved`, `ignoreWorkspaces` and `ignoreIssues` |
@@ -62,4 +63,4 @@ Exit code 1 when a count grew, 0 otherwise. Without a commit or without a branch
 
 ## Why
 
-`check-tree --write-known-violations`, `depcruise --baseline` and the others rewrite their list with every violation of the moment, new ones included. An agent that hits a rule can regenerate the baseline, and every check goes green. Nothing looks at how these files change, so the lists grow and the rules stop mattering.
+`oxlint --suppress-all`, `check-tree --write-known-violations`, `depcruise --baseline` and the others rewrite their list with every violation of the moment, new ones included. An agent that hits a rule can regenerate the baseline, and every check goes green. Nothing looks at how these files change, so the lists grow and the rules stop mattering.
