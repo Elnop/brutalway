@@ -1,5 +1,11 @@
 # template-vite
 
+## 0.10.7
+
+### Patch Changes
+
+- b0d9598: `docs/reference/verifications.md` says that a prop returning JSX is named `children` or `renderX`.
+
 ## 0.10.6
 
 ### Patch Changes

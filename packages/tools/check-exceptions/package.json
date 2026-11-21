@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check-exceptions",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Fails when a list of exceptions grows: known violations, baselines, ignore lists and disable directives can only shrink compared with the commit the branch started from.",
   "keywords": [
     "lint",

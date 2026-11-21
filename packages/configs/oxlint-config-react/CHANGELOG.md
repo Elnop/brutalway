@@ -1,5 +1,11 @@
 # @brutalkit/oxlint-config-react
 
+## 0.5.2
+
+### Patch Changes
+
+- b0d9598: A function prop that returns `ReactNode`, `ReactElement` or `JSX.Element` is a render prop, named `children` or `renderX`, so a container that calls `children(plan)` passes. Any other function prop is still a callback named `onX`, and `renderSave: () => void` is reported as one.
+
 ## 0.5.1
 
 ### Patch Changes

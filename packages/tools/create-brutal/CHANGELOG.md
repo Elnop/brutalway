@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.15.1
+
+### Patch Changes
+
+- 9a59c86: The fastify stack edits `src/app/AppConfig.ts` and `src/app/AppTypes.ts`, where the template now lists its features, when the example or the database is left out.
+
 ## 0.15.0
 
 ### Minor Changes
