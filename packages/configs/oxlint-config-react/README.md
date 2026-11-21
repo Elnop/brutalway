@@ -33,7 +33,7 @@ When a rule fires:
 - the `react` plugin and the `browser` env
 - `react/rules-of-hooks`, `react/exhaustive-deps` and `react/only-export-components`
 - a component types its props with a named type called after it: `function Card({ title }: CardProps)`. Untyped props, inline object types and other type names are reported.
-- a callback prop of an `xProps` type is named `onX` (`onSelect`, `onChange`), in `.tsx` files and in `xTypes.ts` files
+- a function prop of an `xProps` type is named after what it does, in `.tsx` files and in `xTypes.ts` files. A prop that returns `ReactNode`, `ReactElement` or `JSX.Element` is a render prop, named `children` or `renderX` (`renderItem`). Any other function prop is a callback, named `onX` (`onSelect`, `onChange`).
 - a hook lives in a `useX.ts` file, and a `useX.ts` file only exports hooks
 - `fetch` is only called from an `xClient.ts` file, and never inside `useEffect` or `useLayoutEffect`
 - no braces around a plain string in JSX: `className="card"`, not `className={'card'}`

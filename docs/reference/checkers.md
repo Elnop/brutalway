@@ -64,7 +64,7 @@ The options of the front-end stacks add the configs of the last table. Every tem
 |---|---|---|
 | vite | [`@brutalway/oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) | the aliases `@/` and `@e2e/`, then the configs below |
 | next | [`@brutalway/oxlint-config-next`](../../packages/configs/oxlint-config-next) | the `nextjs` plugin of oxlint, where client code and server actions go, then the configs below |
-| vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX`, no orchestrator in a `shared/`, `fetch` only in an `xClient.ts` and never in an effect |
+| vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX` and render props named `children` or `renderX`, no orchestrator in a `shared/`, `fetch` only in an `xClient.ts` and never in an effect |
 | vite, next, react-native | [`@brutalway/oxlint-config-zustand`](../../packages/configs/oxlint-config-zustand) | `xStore.ts` exports only `xStore` and `xActions`, `xSelectors.ts` only `selectX` functions |
 | vite, next | [`@brutalway/oxlint-config-vitest`](../../packages/configs/oxlint-config-vitest) | `it()` inside `describe`, `toStrictEqual`, typed mocks, `toThrow` with the expected message |
 | vite, next, react-native, unless `i18n` is `none` | [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next) | visible text in JSX, `aria-label`, `placeholder`, `title`, `alt`, `accessibilityLabel`, `accessibilityHint` or a template literal |

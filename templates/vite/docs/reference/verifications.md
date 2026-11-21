@@ -19,7 +19,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - a file with a single export is named after it
 - no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `plugin.ts`, `xPlugin.ts`, `.d.ts`): each module is imported under the name it exports
 - `xStore.ts` exports only `xStore` and `xActions`
-- a component types its props with a named `XProps` type, and callback props are named `onX`
+- a component types its props with a named `XProps` type, callback props are named `onX`, and props that return JSX are named `children` or `renderX`
 - no orchestrator (`XContainer`, `XLayout`, `XPage`) in a `shared/`, at any depth: the components that read shared state belong to a feature
 - a hook lives in a `useX.ts` that only exports hooks, a `xSelectors.ts` only exports `selectX` functions
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`, `curly` only for multi-line blocks

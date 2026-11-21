@@ -18,11 +18,20 @@ const COMPONENT_PROPS = [
   },
 ];
 
+const FUNCTION_PROPS =
+  'TSTypeAliasDeclaration[id.name=/Props$/] TSPropertySignature[typeAnnotation.typeAnnotation.type="TSFunctionType"]';
+
+const RETURNS_JSX =
+  ':matches([typeAnnotation.typeAnnotation.returnType.typeAnnotation.typeName.name=/^(ReactNode|ReactElement)$/], [typeAnnotation.typeAnnotation.returnType.typeAnnotation.typeName.right.name=/^(ReactNode|ReactElement|Element)$/])';
+
 const CALLBACK_PROPS = [
   {
-    selector:
-      'TSTypeAliasDeclaration[id.name=/Props$/] TSPropertySignature[key.name!=/^on[A-Z]/][typeAnnotation.typeAnnotation.type="TSFunctionType"]',
+    selector: `${FUNCTION_PROPS}[key.name!=/^on[A-Z]/]:not(${RETURNS_JSX})`,
     message: 'A callback prop is named onX: onSelect, onChange.',
+  },
+  {
+    selector: `${FUNCTION_PROPS}${RETURNS_JSX}[key.name!=/^(children|render[A-Z]\\w*)$/]`,
+    message: 'A prop that returns JSX is a render prop, named children or renderX: renderItem.',
   },
 ];
 
