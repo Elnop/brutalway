@@ -7,6 +7,8 @@ export default defineConfig({
     'src/storagePlacementPlugin.ts',
     'src/designSystemPrimitives.ts',
     'src/designSystemPlugin.ts',
+    'src/themeColorsPlugin.ts',
+    'src/colorFiles.ts',
   ],
   format: 'esm',
   platform: 'node',

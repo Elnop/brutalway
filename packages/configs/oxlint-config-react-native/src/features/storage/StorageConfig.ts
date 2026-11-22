@@ -12,5 +12,8 @@ export const storageRules: DummyRuleMap = {
 };
 
 export const storageOverrides: OxlintOverride[] = [
-  { files: ['**/*Storage.ts'], rules: { 'storage-placement/no-restricted-syntax': 'off' } },
+  {
+    files: ['**/*Storage.ts', '**/*.test.ts', '**/*.test.tsx'],
+    rules: { 'storage-placement/no-restricted-syntax': 'off' },
+  },
 ];

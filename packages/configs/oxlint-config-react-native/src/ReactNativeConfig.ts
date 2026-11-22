@@ -7,10 +7,11 @@ import { jestRules } from '#src/features/jest/JestConfig.ts';
 import { reactNativePluginRules } from '#src/features/react-native-plugin/ReactNativePluginConfig.ts';
 import { routerFilesOverrides } from '#src/features/router-files/RouterFilesConfig.ts';
 import { storageOverrides, storageRules } from '#src/features/storage/StorageConfig.ts';
+import { themeColorsRules } from '#src/features/theme-colors/configs/ThemeColorsConfig.ts';
 import {
   themeStylesOverrides,
   themeStylesRules,
-} from '#src/features/theme-styles/configs/ThemeStylesConfig.ts';
+} from '#src/features/theme-styles/ThemeStylesConfig.ts';
 
 export const reactNativeConfig: OxlintConfig = defineConfig({
   extends: [reactConfig, zustandConfig],
@@ -19,6 +20,10 @@ export const reactNativeConfig: OxlintConfig = defineConfig({
     {
       name: 'theme-styles',
       specifier: fileURLToPath(new URL('./themeStylesPlugin.js', import.meta.url)),
+    },
+    {
+      name: 'theme-colors',
+      specifier: fileURLToPath(new URL('./themeColorsPlugin.js', import.meta.url)),
     },
     {
       name: 'storage-placement',
@@ -33,6 +38,7 @@ export const reactNativeConfig: OxlintConfig = defineConfig({
   ignorePatterns: ['.expo', 'android', 'ios', 'dist', 'expo-env.d.ts'],
   rules: {
     ...themeStylesRules,
+    ...themeColorsRules,
     ...storageRules,
     ...reactNativePluginRules,
     ...jestRules,

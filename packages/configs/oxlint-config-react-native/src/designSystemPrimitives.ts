@@ -16,7 +16,7 @@ export function designSystemPrimitives({ components, files }: DesignSystemOption
       'design-system/no-restricted-syntax': [
         'error',
         {
-          selector: `ImportDeclaration[source.value='react-native'] > ImportSpecifier[imported.name=/^(${components.join('|')})$/u]`,
+          selector: `ImportDeclaration[source.value='react-native'][importKind!='type'] > ImportSpecifier[importKind!='type'][imported.name=/^(${components.join('|')})$/u]`,
           message:
             'This component comes from the design system: import its wrapper instead of the react-native one, so the font, the colors and the focus stay the same everywhere.',
         },

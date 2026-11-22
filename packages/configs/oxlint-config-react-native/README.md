@@ -57,7 +57,7 @@ When a rule fires:
 
 ## Rules
 
-- outside a `*ThemeConfig.ts` file, no color literal: a string that is a hex color (`#fff`, `#ffff`, `#ffffff`, `#ffffffff`) or starts with `rgb(`, `rgba(`, `hsl(` or `hsla(`, a template literal that starts the same way, and a CSS color name (`tomato`) given to a prop or a key ending in `color` or `Color`. `transparent` stays allowed, and a name like `snow` elsewhere is not a color
+- outside a `*ThemeConfig.ts` file, no color literal: a string that is a hex color (`#fff`, `#ffff`, `#ffffff`, `#ffffffff`) or starts with `rgb(`, `rgba(`, `hsl(` or `hsla(`, a template literal without expressions that starts the same way (one with expressions, like `` `rgba(${r}, ${g}, ${b}, 0.5)` ``, computes a color), and a CSS color name (`tomato`) given to a prop or a key ending in `color` or `Color`. `transparent` stays allowed, and a name like `snow` elsewhere is not a color
 - in `StyleSheet.create`, no `fontWeight`: on Android a custom family has a single weight and `fontWeight` falls back to the system font, so the weight comes from a font of the theme
 - in `StyleSheet.create`, no literal for a size or a spacing (margins, paddings, gaps, positions, widths, heights, `flexBasis`, font size, line height, letter spacing, border widths and radii), a `fontFamily`, a `boxShadow` or a `textShadow` (`none` aside). `0` and percentages stay literal, and so do the keys without a unit, like `flex` or `opacity`
 - no object written in a `style` prop or a prop ending in `Style`
@@ -65,7 +65,7 @@ When a rule fires:
 - in tests: `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives, `toHaveBeenCalledWith` over `toHaveBeenCalled`, an error message in `toThrow`, no `.only`
 - the files of `src/app/`, the routes of Expo Router, are left out of the rules on file names, exports and props: Expo Router picks the file name (`_layout.tsx`, `index.tsx`, `+not-found.tsx`, `hello+api.ts`, `[id].tsx`, a kebab-case route that becomes its URL), the default or named exports (`GET`, `ErrorBoundary`, `unstable_settings`, `generateStaticParams`, `redirectSystemPath`) and the props. The other rules, styles and raw text included, still apply to them. Expo Router reads its routes from `src/app/` by default, and the application code lives in `features/` and `shared/`
 - no relative imports: import through the aliases of `tsconfig.json`
-- `@react-native-async-storage/async-storage` is only imported in an `xStorage.ts` file, which the rest of the code calls
+- `@react-native-async-storage/async-storage` is only imported in an `xStorage.ts` file, which the rest of the code calls, and in tests, which seed or clear it
 - `import/default` and `typescript/no-non-null-assertion` off
 - `.expo`, `android`, `ios`, `dist` and `expo-env.d.ts` ignored, and the `node` env for `*.config.ts`, `*.config.js` and `jest.setup.ts`
 
@@ -89,7 +89,19 @@ export default defineConfig({
 });
 ```
 
-It is off unless you add it.
+It is off unless you add it. A type-only import, `import type { TextInput } from 'react-native'` for a ref, is not reported.
+
+## Colors computed by code
+
+A module that works on colors, such as a palette taken from an image or the pick of a text color by contrast, cannot take them from the theme. `colorFiles` lists it, and its tests, for the color rule (`theme-colors`), and leaves the other style rules on:
+
+```ts
+import { colorFiles } from '@brutalway/oxlint-config-react-native/colorFiles';
+
+export default defineConfig({
+  extends: [reactNativeConfig, colorFiles(['src/shared/image-colors/**'])],
+});
+```
 
 ## Why
 

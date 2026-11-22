@@ -32,7 +32,8 @@
   },
   "exports": {
     ".": "./dist/ReactNativeConfig.js",
-    "./designSystemPrimitives": "./dist/designSystemPrimitives.js"
+    "./designSystemPrimitives": "./dist/designSystemPrimitives.js",
+    "./colorFiles": "./dist/colorFiles.js"
   },
   "scripts": {
     "build": "tsdown",

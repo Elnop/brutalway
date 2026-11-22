@@ -65,8 +65,8 @@ describe('dependency-cruiser-config', () => {
       'src/features/editor/editorClient.ts': 'export const editorClient = 1;\n',
       'src/features/theme/ThemeProvider.tsx': 'export const ThemeProvider = 1;\n',
       'src/features/editor/EditorLayout.tsx':
-        "import { analyticsClient } from '../../shared/analytics/analyticsClient.ts';\nexport const EditorLayout = analyticsClient;\n",
-      'src/shared/analytics/analyticsClient.ts': 'export const analyticsClient = 1;\n',
+        "import { analyticsTracker } from '../../shared/analytics/analyticsTracker.ts';\nexport const EditorLayout = analyticsTracker;\n",
+      'src/shared/analytics/analyticsTracker.ts': 'export const analyticsTracker = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
   });
@@ -330,21 +330,21 @@ describe('dependency-cruiser-config', () => {
     ]);
   });
 
-  it('the analytics SDK is only imported from analyticsClient.ts', () => {
+  it('the analytics SDK is only imported from analyticsTracker.ts', () => {
     const root = project({
       'package.json': JSON.stringify({ name: 'fixture', dependencies: { 'posthog-js': '1.0.0' } }),
       ...fakePackage('posthog-js'),
-      'src/shared/analytics/analyticsClient.ts':
-        "import posthog from 'posthog-js';\nexport const analyticsClient = posthog;\n",
+      'src/shared/analytics/analyticsTracker.ts':
+        "import posthog from 'posthog-js';\nexport const analyticsTracker = posthog;\n",
       'src/features/list/listLayout.ts':
-        "import { analyticsClient } from '../../shared/analytics/analyticsClient.ts';\nexport const listLayout = analyticsClient;\n",
+        "import { analyticsTracker } from '../../shared/analytics/analyticsTracker.ts';\nexport const listLayout = analyticsTracker;\n",
     });
     assert.deepEqual(violatedRules(root), []);
     writeFileSync(
       join(root, 'src/features/list/listHelper.ts'),
       "import posthog from 'posthog-js';\nexport const listHelper = posthog;\n",
     );
-    assert.deepEqual(violatedRules(root), ['analytics-in-client']);
+    assert.deepEqual(violatedRules(root), ['analytics-in-tracker']);
   });
 
   it('posthog-react-native is an analytics SDK too', () => {
@@ -357,7 +357,7 @@ describe('dependency-cruiser-config', () => {
       'src/features/list/listHelper.ts':
         "import posthog from 'posthog-react-native';\nexport const listHelper = posthog;\n",
     });
-    assert.deepEqual(violatedRules(root), ['analytics-in-client']);
+    assert.deepEqual(violatedRules(root), ['analytics-in-tracker']);
   });
 
   it('the library rules keep the entry points at the root of src/, imported by nothing but tests', () => {

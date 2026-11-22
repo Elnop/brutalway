@@ -215,9 +215,9 @@ module.exports = {
       name: 'orchestrators-use-hooks',
       severity: 'error',
       comment:
-        'An orchestrator reads server data through a query hook or a service hook, never through the client itself: move the call into a useX hook that calls the xClient.ts. analyticsClient.ts, which only sends events, stays allowed.',
+        'An orchestrator reads server data through a query hook or a service hook, never through the client itself: move the call into a useX hook that calls the xClient.ts.',
       from: { path: '(Container|Layout|Page)\\.tsx$' },
-      to: { path: 'Client\\.ts$', pathNot: '(^|/)analyticsClient\\.ts$' },
+      to: { path: 'Client\\.ts$' },
     },
     {
       name: 'app-composes-orchestrators',
@@ -241,11 +241,11 @@ module.exports = {
       },
     },
     {
-      name: 'analytics-in-client',
+      name: 'analytics-in-tracker',
       severity: 'error',
       comment:
-        'Events leave the app through analyticsClient.ts only: call analyticsClient.track() instead of the SDK, so swapping the tool happens in one file.',
-      from: { pathNot: '(^|/)analyticsClient\\.ts$' },
+        'Events leave the app through analyticsTracker.ts only: call analyticsTracker.track() instead of the SDK, so swapping the tool happens in one file.',
+      from: { pathNot: '(^|/)analyticsTracker\\.ts$' },
       to: {
         path: 'node_modules/(posthog-js|posthog-react-native|@segment/analytics-next|mixpanel-browser|@amplitude/analytics-browser|react-ga4|@vercel/analytics)/',
       },
