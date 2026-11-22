@@ -1,0 +1,74 @@
+{
+  "name": "@brutalway/check",
+  "version": "0.0.0",
+  "description": "Runs every check of a brutalway project in order, from the scripts and the tools the project has, and sums up which failed, so that a release adds a check without touching the check script of the project.",
+  "keywords": [
+    "lint",
+    "check",
+    "cli"
+  ],
+  "homepage": "https://github.com/Elnop/brutalway/tree/main/packages/tools/check#readme",
+  "bugs": "https://github.com/Elnop/brutalway/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elnop/brutalway.git",
+    "directory": "packages/tools/check"
+  },
+  "license": "MIT",
+  "author": "elnop",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "brutal-check": "./dist/brutalCheck.js"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p .",
+    "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
+    "deps": "depcruise --output-type err-long src",
+    "tree": "check-tree src",
+    "duplicates": "jscpd src",
+    "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
+    "test": "node --test 'src/**/*.test.ts'",
+    "format": "prettier --write .",
+    "unused": "knip"
+  },
+  "devDependencies": {
+    "@brutalway/check-tree": "0.12.0",
+    "@brutalway/dependency-cruiser-config": "0.12.1",
+    "@brutalway/oxlint-config-node": "0.2.1",
+    "@brutalway/oxlint-config-node-test": "0.1.0",
+    "@brutalway/prettier-config": "0.3.0",
+    "@brutalway/tsconfig": "0.4.0",
+    "@swc/core": "1.16.22",
+    "@types/node": "26.6.6",
+    "dependency-cruiser": "18.7.2",
+    "jscpd": "5.4.3",
+    "knip": "6.44.2",
+    "oxlint": "1.92.0",
+    "oxlint-tsgolint": "7.0.2006",
+    "prettier": "3.9.10",
+    "tsdown": "0.23.7",
+    "typescript": "7.0.2"
+  },
+  "imports": {
+    "#src/*": "./src/*"
+  },
+  "prettier": "@brutalway/prettier-config",
+  "check-tree": {
+    "rootEntries": true
+  },
+  "allowScripts": {
+    "@swc/core": false
+  },
+  "overrides": {
+    "eslint-plugin-no-comments": {
+      "minimatch": "^11.0.1"
+    }
+  }
+}

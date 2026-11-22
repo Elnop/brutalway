@@ -9,6 +9,7 @@ Each one installs on its own, in a project that did not start from a template: `
 | Package | What it does | npm |
 |---|---|---|
 | [`create-brutal`](tools/create-brutal) | the CLI behind `npm create brutal` | [npm](https://www.npmjs.com/package/create-brutal) |
+| [`@brutalway/check`](tools/check) | `brutal-check` runs every check of a project in order, from the scripts and tools it has, and names the ones that failed | [npm](https://www.npmjs.com/package/@brutalway/check) |
 | [`@brutalway/playwright-fixtures`](tools/playwright-fixtures) | fail a test when the page throws, axe-core violations as readable lines | [npm](https://www.npmjs.com/package/@brutalway/playwright-fixtures) |
 
 ## AI
