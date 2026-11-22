@@ -38,6 +38,9 @@ describe('typescriptConfig', () => {
       'shapes.ts:1 oxc(no-barrel-file)',
       'shapeTypes.ts:2 export-placement(no-restricted-syntax)',
       'shared/todos/todosRoutes.ts:1 check-file(filename-blocklist)',
+      'silence.ts:2 typescript(ban-ts-comment)',
+      'silence.ts:4 typescript(ban-ts-comment)',
+      'silence.ts:8 eslint(no-new-func)',
       'squareSchemas.ts:2 export-placement(no-restricted-syntax)',
       'tally.ts:1 eslint(max-lines-per-function)',
       'tally.ts:1 function-size(max-variables)',
@@ -45,6 +48,7 @@ describe('typescriptConfig', () => {
       'types.ts:1 check-file(filename-blocklist)',
       'types.ts:1 export-placement(no-restricted-syntax)',
       'types.ts:2 export-placement(no-restricted-syntax)',
+      'unchecked.ts:1 typescript(ban-ts-comment)',
     ]);
   });
 });

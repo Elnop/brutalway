@@ -65,6 +65,9 @@ export const typescriptConfig: OxlintConfig = defineConfig({
     'typescript/consistent-type-imports': 'error',
     'typescript/no-explicit-any': 'error',
     'typescript/switch-exhaustiveness-check': 'error',
+    'typescript/ban-ts-comment': 'error',
+    'typescript/no-implied-eval': 'error',
+    'no-new-func': 'error',
     'func-style': ['error', 'declaration'],
     curly: ['error', 'multi-line'],
     'type-definitions/no-restricted-syntax': [
