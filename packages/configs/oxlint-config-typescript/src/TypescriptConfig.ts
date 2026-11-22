@@ -27,7 +27,7 @@ const EXPORT_PLACEMENT = [
   },
   {
     selector:
-      'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ObjectExpression.init:not(:has(> Property[method=true], > Property[value.type=/^(ArrowFunctionExpression|FunctionExpression)$/]))',
+      'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ObjectExpression.init:not(:has(Property[method=true], Property[value.type=/^(ArrowFunctionExpression|FunctionExpression)$/]))',
     message: 'Exported constants belong in an XConfig.ts file (configs/ folder).',
   },
 ];

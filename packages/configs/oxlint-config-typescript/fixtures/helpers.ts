@@ -15,4 +15,6 @@ export const methods = {
   },
 };
 export const thing = defineThing({});
+export const nestedFactory = { notes: { all: () => ['notes'] } };
+export const nestedPlain = { notes: { all: ['notes'] } };
 // a comment
