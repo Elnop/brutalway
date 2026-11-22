@@ -7,7 +7,7 @@
 | `npm run phone` | the development build on a USB Android phone, through the adb of `ADB` (`scripts/phone.ts`) |
 | `npm run start:go` | Metro for Expo Go |
 | `npm run web` | the app in the browser |
-| `npm run check` | `brutal-check`: every check of [Verifications](verifications.md), in order, then the list of those that failed |
+| `npm run check` | `brutal-check`: every check of [Verifications](verifications.md) at the same time, then the list of those that failed |
 | `npm test` | Jest with the `jest-expo` preset: unit tests and component tests, all in Node |
 | `npm run build` | `expo export --platform web`: the web build in `dist/`, which also proves the code bundles |
 | `npm run format` | Prettier in write mode |

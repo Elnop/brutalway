@@ -1,6 +1,6 @@
 # Verifications
 
-Everything below runs locally, in the pre-commit hook and in CI. `npm run check` runs it with `brutal-check` (`@brutalway/check`), which keeps going after a failure, then names the checks that failed and those it skipped because their script is missing. Each check is a script of `package.json`, in this order: `format:check`, `typecheck`, `lint`, `styles`, `deps`, `tree`, `duplicates`, `docs`, `messages`, `repo`, `unused`, `secrets`, `exceptions`, so `npm run tree` runs one alone. Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.
+Everything below runs locally, in the pre-commit hook and in CI. `npm run check` runs it with `brutal-check` (`@brutalway/check`), which starts every check at the same time, prints each one as it ends with the output of a failed one, then names the checks that failed and those it skipped because their script is missing. Each check is a script of `package.json`, in this order: `format:check`, `typecheck`, `lint`, `styles`, `deps`, `tree`, `duplicates`, `docs`, `messages`, `repo`, `unused`, `secrets`, `exceptions`, so `npm run tree` runs one alone, and `npx brutal-check --serial` runs them one after the other on a machine short on memory. Component tests and e2e need headless Chromium: `npx playwright install --only-shell chromium`.
 
 ## TypeScript
 

@@ -3,7 +3,7 @@
 | Command | What it does |
 |---|---|
 | `npm run dev` | Vite dev server |
-| `npm run check` | `brutal-check`: every check of [Verifications](verifications.md), in order, then the list of those that failed |
+| `npm run check` | `brutal-check`: every check of [Verifications](verifications.md) at the same time, then the list of those that failed |
 | `npm test` | Vitest: unit tests in Node, component tests in headless Chromium |
 | `npm run e2e` | builds, then runs Playwright against `vite preview` |
 | `npm run format` | Prettier in write mode |
