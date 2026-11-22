@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.16.2
+
+### Patch Changes
+
+- ff9eb96: The projects get check-tree 0.14.0, check-exceptions 0.2.0 and alint-config 0.2.4, with the docs that say what check-exceptions counts.
+
 ## 0.16.1
 
 ### Patch Changes
