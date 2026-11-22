@@ -185,6 +185,10 @@ export const typescriptConfig: OxlintConfig = defineConfig({
       },
     },
     {
+      files: ['**/logger.ts', '**/*Logger.ts'],
+      rules: { 'no-console': 'off' },
+    },
+    {
       files: ['**/*.test.ts', '**/*.test.tsx'],
       rules: { 'typescript/no-floating-promises': 'off' },
     },

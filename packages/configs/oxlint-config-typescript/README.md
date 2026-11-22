@@ -33,7 +33,7 @@ The `typescript/no-floating-promises` family of rules needs `oxlint --type-aware
 
 ### Allow `console` in a CLI
 
-`console` is limited to `console.error`. A CLI turns `no-console` off in an override.
+`console` is limited to `console.error`, except in `logger.ts` and `xLogger.ts`, where a project writes the one logger the rest of its code goes through. A CLI turns `no-console` off in an override.
 
 ### Keep a narrowing inside a declared function
 

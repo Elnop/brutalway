@@ -13,7 +13,7 @@ Everything below runs locally, in the pre-commit hook and in CI. `npm run check`
 - no comments, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
 - a file with a single export is named after it, an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`
 - no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `plugin.ts`, `xPlugin.ts`, `.d.ts`): each module is imported under the name it exports
-- `console` only for `console.error`: a command writes to `process.stdout` and `process.stderr`
+- `console` only for `console.error`, except in a `logger.ts` or `xLogger.ts`: a command writes to `process.stdout` and `process.stderr`
 - `fetch` is called only in an `xClient.ts` file (or a test)
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit

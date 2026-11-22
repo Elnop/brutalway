@@ -11,6 +11,7 @@ describe('typescriptConfig', () => {
       'area.ts:9 eslint(curly)',
       'area.ts:20 type-definitions(no-restricted-syntax)',
       'blend.ts:1 eslint(max-params)',
+      'chatter.ts:2 eslint(no-console)',
       'clamp.ts:1 typescript(method-signature-style)',
       'clamp.ts:4 eslint(no-param-reassign)',
       'clamp.ts:5 unicorn(no-array-for-each)',
