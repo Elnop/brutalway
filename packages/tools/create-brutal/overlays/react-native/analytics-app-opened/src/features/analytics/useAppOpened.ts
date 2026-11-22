@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';
+import { analyticsTracker } from '@/shared/analytics/analyticsTracker.ts';
 
 export function useAppOpened(): void {
   useEffect(() => {
-    analyticsClient.track('app_opened');
+    analyticsTracker.track('app_opened');
   }, []);
 }

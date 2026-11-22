@@ -60,7 +60,7 @@ Without it, the `zustand` dependency is removed. The example needs the store, so
 
 ## server-state
 
-It adds `@tanstack/react-query`, a query client in a `query-client` feature, the cache profiles of `QueryConfig.ts` next to the client, and `@brutalway/oxlint-config-tanstack-query`.
+It adds `@tanstack/react-query`, a `QueryProvider` in a `query-client` feature, which creates the query client and wraps the routes in `src/app/_layout.tsx`, the cache profiles of `QueryConfig.ts` next to it, and `@brutalway/oxlint-config-tanstack-query`.
 
 With the example, the todos are read and written through the routes of template-fastify, at `EXPO_PUBLIC_API_URL` or `http://localhost:3000`: there is no dev server to mock the API from, as Vite does. A client parses each response with Zod (added as a dependency), the API filters the list and gives the counters, and the zustand store only keeps the filter of the list, so it moves into `src/features/todo-list/` and `src/shared/todos/lib/todosSelectors.ts` goes. `expo-crypto` is removed, and `@react-native-async-storage/async-storage` too unless `i18n` is `en-fr`.
 
@@ -82,7 +82,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## analytics
 
-Both values add `analyticsClient.ts` to an `analytics` shared feature in `src/shared/`, the only place where events leave the app, and the root layout sends `app_opened` at startup through the `useAppOpened` hook of an `analytics` feature. The example also calls `analyticsClient.track('todo_added')`. Without it, the hook is the only user of `analyticsClient.ts`, which then moves next to it.
+Both values add `analyticsTracker.ts` to an `analytics` shared feature in `src/shared/`, the only place where events leave the app, and the root layout sends `app_opened` at startup through the `useAppOpened` hook of an `analytics` feature. The example also calls `analyticsTracker.track('todo_added')`. Without it, the hook is the only user of `analyticsTracker.ts`, which then moves next to it.
 
 - `module`: the client emits an event on `DeviceEventEmitter`, for whatever tool you plug in
 - `posthog`: it adds `posthog-react-native` and the Expo modules it needs (`expo-application`, `expo-device`, `expo-file-system`, `expo-localization`), and the client sends the events when `EXPO_PUBLIC_POSTHOG_KEY` is set

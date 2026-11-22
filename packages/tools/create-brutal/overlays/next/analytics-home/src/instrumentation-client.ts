@@ -1,3 +1,3 @@
-import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';
+import { analyticsTracker } from '@/shared/analytics/analyticsTracker.ts';
 
-analyticsClient.track('app_opened');
+analyticsTracker.track('app_opened');

@@ -63,11 +63,11 @@ const JEST_WITHOUT_TESTS: FileEdit = {
   with: '"test": "jest --passWithNoTests",',
 };
 
-function analyticsClientPath(file: string): FileEdit {
+function analyticsTrackerPath(file: string): FileEdit {
   return {
     file,
-    replace: '`src/shared/analytics/analyticsClient.ts`',
-    with: '`src/features/analytics/analyticsClient.ts`',
+    replace: '`src/shared/analytics/analyticsTracker.ts`',
+    with: '`src/features/analytics/analyticsTracker.ts`',
     all: true,
   };
 }
@@ -90,10 +90,10 @@ const ANALYTICS_HOME = 'src/features/analytics';
 const ANALYTICS_HOME_IMPORTS: FileEdit[] = [
   {
     file: `${ANALYTICS_HOME}/useAppOpened.ts`,
-    replace: "'@/shared/analytics/analyticsClient.ts'",
-    with: "'@/features/analytics/analyticsClient.ts'",
+    replace: "'@/shared/analytics/analyticsTracker.ts'",
+    with: "'@/features/analytics/analyticsTracker.ts'",
   },
-  analyticsClientPath('README.md'),
+  analyticsTrackerPath('README.md'),
 ];
 
 const ANCHORS = {
@@ -412,14 +412,9 @@ export const reactNativeStack: Stack = {
         edits: [
           {
             file: 'src/app/_layout.tsx',
-            before: "import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';\n",
-            insert: "import { QueryClientProvider } from '@tanstack/react-query';\n",
-          },
-          {
-            file: 'src/app/_layout.tsx',
             after:
               "import { STACK_SCREEN_OPTIONS } from '@/features/page-layout/StackConfig.ts';\n",
-            insert: "import { queryClient } from '@/features/query-client/queryClient.ts';\n",
+            insert: "import { QueryProvider } from '@/features/query-client/QueryProvider.tsx';\n",
           },
           { file: 'src/app/_layout.tsx', replace: PLAIN_LAYOUT, with: SERVER_STATE_LAYOUT },
         ],
@@ -653,19 +648,21 @@ export const reactNativeStack: Stack = {
       { when: { analytics: 'posthog' }, edits: APP_OPENED, overlay: 'analytics-app-opened' },
       {
         when: { analytics: 'module', example: false },
-        move: { 'src/shared/analytics/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts` },
+        move: {
+          'src/shared/analytics/analyticsTracker.ts': `${ANALYTICS_HOME}/analyticsTracker.ts`,
+        },
         edits: ANALYTICS_HOME_IMPORTS,
       },
       {
         when: { analytics: 'posthog', example: false },
         move: {
-          'src/shared/analytics/analyticsClient.ts': `${ANALYTICS_HOME}/analyticsClient.ts`,
+          'src/shared/analytics/analyticsTracker.ts': `${ANALYTICS_HOME}/analyticsTracker.ts`,
           'src/shared/analytics/AnalyticsTypes.ts': `${ANALYTICS_HOME}/AnalyticsTypes.ts`,
         },
         edits: [
           ...ANALYTICS_HOME_IMPORTS,
           {
-            file: `${ANALYTICS_HOME}/analyticsClient.ts`,
+            file: `${ANALYTICS_HOME}/analyticsTracker.ts`,
             replace: "'@/shared/analytics/AnalyticsTypes.ts'",
             with: "'@/features/analytics/AnalyticsTypes.ts'",
           },
@@ -673,8 +670,11 @@ export const reactNativeStack: Stack = {
       },
       ...FRONTEND_SERVER_STATE_AGENTS,
       ...FRONTEND_AGENTS,
-      { when: { analytics: 'module', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
-      { when: { analytics: 'posthog', example: false }, edits: [analyticsClientPath('AGENTS.md')] },
+      { when: { analytics: 'module', example: false }, edits: [analyticsTrackerPath('AGENTS.md')] },
+      {
+        when: { analytics: 'posthog', example: false },
+        edits: [analyticsTrackerPath('AGENTS.md')],
+      },
       ...I18N_LIB_CHANGES,
       ...THEME_SKELETON_CHANGES,
       ...FRONTEND_NO_I18N,

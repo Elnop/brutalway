@@ -77,7 +77,7 @@ With `shadcn`, the Button, Input, Checkbox and Card of [shadcn/ui](https://ui.sh
 
 ## server-state
 
-It adds `@tanstack/react-query`, the `QueryClientProvider` in `src/main.tsx`, the `QueryClient` in a `query-client` feature, the cache profiles of `QueryConfig.ts` next to the client and `@brutalway/oxlint-config-tanstack-query`.
+It adds `@tanstack/react-query`, a `QueryProvider` in a `query-client` feature, which creates the `QueryClient` and is mounted in `src/main.tsx`, the cache profiles of `QueryConfig.ts` next to the client and `@brutalway/oxlint-config-tanstack-query`.
 
 With the example, the todos are read and written through the routes of template-fastify. A client parses each response with Zod (added as a dependency), the API filters the list and gives the counters, and the zustand store only keeps the filter of the list, so it moves into `src/features/todo-list/` and `src/shared/todos/lib/todosSelectors.ts` goes. `devApi.ts` and `devApiRoutes.ts` at the root answer `/api` from an in-memory list in `npm run dev` and `vite preview`, and `API_URL=http://localhost:3000` proxies it to the API instead.
 
@@ -99,7 +99,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 ## analytics
 
-Both values add `analyticsClient.ts` to an `analytics` shared feature in `src/shared/`, the only place where events leave the app, and `@brutalway/dependency-cruiser-config` keeps analytics SDKs inside it. Every project sends `app_opened` from `src/main.tsx` at startup, and the example also calls `analyticsClient.track('todo_added')`.
+Both values add `analyticsTracker.ts` to an `analytics` shared feature in `src/shared/`, the only place where events leave the app, and `@brutalway/dependency-cruiser-config` keeps analytics SDKs inside it. Every project sends `app_opened` from `src/main.tsx` at startup, and the example also calls `analyticsTracker.track('todo_added')`.
 
 - `module`: the client dispatches an `analytics` event on `window`, for whatever tool you plug in
 - `posthog`: it adds `posthog-js`, the client sends the events when `VITE_POSTHOG_KEY` is set, and `securityHeaders.ts` lets the PostHog hosts through

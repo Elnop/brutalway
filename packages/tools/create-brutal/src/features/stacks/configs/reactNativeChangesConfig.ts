@@ -20,9 +20,9 @@ export const WITHOUT_ASYNC_STORAGE: FileEdit[] = [
 ];
 
 export const SERVER_STATE_LAYOUT = `    <I18nProvider>
-      <QueryClientProvider client={queryClient}>
+      <QueryProvider>
         <Stack screenOptions={STACK_SCREEN_OPTIONS} />
-      </QueryClientProvider>
+      </QueryProvider>
     </I18nProvider>`;
 
 export const PLAIN_LAYOUT = `    <I18nProvider>
@@ -68,13 +68,13 @@ export const REACT_COMPILER_DOC = `\`app.json\` turns on the [React Compiler](ht
 
 export const ANALYTICS_MODULE_README = `## Analytics
 
-\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it emits an \`analytics\` event on \`DeviceEventEmitter\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
+\`src/shared/analytics/analyticsTracker.ts\` is the only place where events leave the app: \`analyticsTracker.track('todo_added', { source: 'form' })\`. It sends nothing yet: it emits an \`analytics\` event on \`DeviceEventEmitter\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
 
 `;
 
 export const ANALYTICS_POSTHOG_README = `## Analytics
 
-\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-react-native\`. Set \`EXPO_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`EXPO_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev or in the tests. Expo writes these values into the bundle when Metro starts, so restart it after a change.
+\`src/shared/analytics/analyticsTracker.ts\` is the only place where events leave the app: \`analyticsTracker.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-react-native\`. Set \`EXPO_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`EXPO_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev or in the tests. Expo writes these values into the bundle when Metro starts, so restart it after a change.
 
 `;
 
@@ -82,9 +82,9 @@ export const COVERAGE_JEST = `    "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/app/**",
       "!**/*.test.{ts,tsx}",
-      "!**/*{Container,Layout,Page}.tsx",
+      "!**/*{Container,Layout,Page,Provider}.tsx",
       "!**/use[A-Z]*.ts",
-      "!**/*{Client,Keys,Types,Config,Schemas,Storage}.ts"
+      "!**/*{Client,Tracker,Keys,Types,Config,Schemas,Storage}.ts"
     ],
     "coverageReporters": ["text"],
     "coverageThreshold": {
@@ -92,7 +92,7 @@ export const COVERAGE_JEST = `    "collectCoverageFrom": [
     },
 `;
 
-export const COVERAGE_DOC = `\`npm test\` also measures coverage and fails under 90 % of the lines, functions, branches or statements of what Jest is meant to test: presenters, pure functions, selectors and stores. Orchestrators, hooks, clients, \`xStorage.ts\` files and \`src/app/\` are left out (\`jest\` in \`package.json\`), since they need the device. \`npm run test:watch\` runs without it.
+export const COVERAGE_DOC = `\`npm test\` also measures coverage and fails under 90 % of the lines, functions, branches or statements of what Jest is meant to test: presenters, pure functions, selectors and stores. Orchestrators, providers, hooks, clients, trackers, \`xStorage.ts\` files and \`src/app/\` are left out (\`jest\` in \`package.json\`), since they need the device. \`npm run test:watch\` runs without it.
 
 `;
 

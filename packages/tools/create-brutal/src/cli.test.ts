@@ -339,7 +339,7 @@ describe('create-brutal', () => {
       'devApi.ts',
       'devApiRoutes.ts',
       'locales/fr/app.json',
-      'src/shared/analytics/analyticsClient.ts',
+      'src/shared/analytics/analyticsTracker.ts',
       'tsconfig.third-party.json',
     ]) {
       assert.equal(existsSync(join(project, file)), true, file);
@@ -373,7 +373,7 @@ describe('create-brutal', () => {
       'locales/fr/app.json',
       'src/features/language-switch/lib/requestLanguage.ts',
       'src/features/language-switch/components/LanguageSwitch.module.css',
-      'src/shared/analytics/analyticsClient.ts',
+      'src/shared/analytics/analyticsTracker.ts',
     ]) {
       assert.equal(existsSync(join(project, file)), true, file);
     }
@@ -420,11 +420,11 @@ describe('create-brutal', () => {
     assert.equal(result.status, 0, result.stdout);
     const project = join(result.cwd, 'my-app');
     for (const file of [
-      'src/features/query-client/queryClient.ts',
+      'src/features/query-client/QueryProvider.tsx',
       'locales/fr/app.json',
       'src/features/language-switch/components/LanguageSwitchContainer.tsx',
       'src/features/todo-stats/useTodoStatsQuery.ts',
-      'src/shared/analytics/analyticsClient.ts',
+      'src/shared/analytics/analyticsTracker.ts',
     ]) {
       assert.equal(existsSync(join(project, file)), true, file);
     }

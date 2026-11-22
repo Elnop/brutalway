@@ -63,7 +63,7 @@ const REACT_COMPILER_DOC = `\`next.config.ts\` turns on the [React Compiler](htt
 
 const ANALYTICS_POSTHOG_README = `## Analytics
 
-\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`NEXT_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`NEXT_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Next.js writes both into the client code at build time. Without a key nothing is sent, in dev, in \`next start\` or in the e2e tests, and nothing is sent during server rendering. Autocapture and the scripts PostHog loads from its servers are off, and \`src/proxy.ts\` lets the PostHog hosts through \`connect-src\`.
+\`src/shared/analytics/analyticsTracker.ts\` is the only place where events leave the app: \`analyticsTracker.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`NEXT_PUBLIC_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`NEXT_PUBLIC_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Next.js writes both into the client code at build time. Without a key nothing is sent, in dev, in \`next start\` or in the e2e tests, and nothing is sent during server rendering. Autocapture and the scripts PostHog loads from its servers are off, and \`src/proxy.ts\` lets the PostHog hosts through \`connect-src\`.
 
 `;
 
@@ -149,8 +149,9 @@ export const nextStack: Stack = {
           },
           {
             file: 'docs/concepts/architecture.md',
-            replace: 'the `QueryClient` lives in `src/features/query-client/queryClient.ts`,',
-            with: 'the `QueryClient` is created in `src/features/query-client/QueryProvider.tsx`, once in the browser and once per request on the server,',
+            replace:
+              'the `QueryClient` is created by `src/features/query-client/QueryProvider.tsx`,',
+            with: 'the `QueryClient` is created by `src/features/query-client/QueryProvider.tsx`, once in the browser and once per request on the server,',
           },
           {
             file: 'docs/reference/verifications.md',

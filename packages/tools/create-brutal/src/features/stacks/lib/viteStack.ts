@@ -60,12 +60,12 @@ const REACT_COMPILER_DOC = `\`vite.config.ts\` runs the [React Compiler](https:/
 
 const ANALYTICS_POSTHOG_README = `## Analytics
 
-\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`VITE_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`VITE_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev, in preview or in the e2e tests. Autocapture and the scripts PostHog loads from its servers are off, and \`securityHeaders.ts\` lets the PostHog hosts through \`connect-src\`.
+\`src/shared/analytics/analyticsTracker.ts\` is the only place where events leave the app: \`analyticsTracker.track('todo_added', { source: 'form' })\` sends them to PostHog through \`posthog-js\`, and dependency-cruiser keeps \`posthog-js\` inside this file. Set \`VITE_POSTHOG_KEY\` in \`.env.local\`, which git ignores, and \`VITE_POSTHOG_HOST\` for another host than \`https://eu.i.posthog.com\`. Without a key nothing is sent, in dev, in preview or in the e2e tests. Autocapture and the scripts PostHog loads from its servers are off, and \`securityHeaders.ts\` lets the PostHog hosts through \`connect-src\`.
 
 `;
 
 const ANALYTICS_IMPORT =
-  "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n";
+  "import { analyticsTracker } from '@/shared/analytics/analyticsTracker.ts';\n";
 
 const APP_OPENED_IMPORTS: StackChange[] = [
   {
@@ -94,7 +94,7 @@ const APP_OPENED: FileEdit[] = [
   {
     file: 'src/main.tsx',
     after: '  </StrictMode>,\n);\n',
-    insert: "\nanalyticsClient.track('app_opened');\n",
+    insert: "\nanalyticsTracker.track('app_opened');\n",
   },
 ];
 

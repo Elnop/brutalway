@@ -178,15 +178,15 @@ const COVERAGE_CONFIG = `      coverage: {
         exclude: [
 {{coverageEntries}}          'src/app/**',
           '**/*.test.{ts,tsx}',
-          '**/*{Container,Layout,Page}.tsx',
+          '**/*{Container,Layout,Page,Provider}.tsx',
           '**/use[A-Z]*.ts',
-          '**/*{Client,Keys,Types,Config,Schemas,Storage}.ts',
+          '**/*{Client,Tracker,Keys,Types,Config,Schemas,Storage}.ts',
         ],
         thresholds: { lines: 90, functions: 90, branches: 90, statements: 90 },
       },
 `;
 
-const COVERAGE_DOC = `\`npm test\` also measures coverage with \`@vitest/coverage-v8\` and fails under 90 % of the lines, functions, branches or statements of what Vitest is meant to test: presenters, pure functions, selectors and stores. Orchestrators, hooks, clients, \`xStorage.ts\` files{{coverageLeftOut}} are left out (\`vitest.config.ts\`), since the e2e tests cover them. \`npm run test:unit\` and \`npm run test:component\` run without it.
+const COVERAGE_DOC = `\`npm test\` also measures coverage with \`@vitest/coverage-v8\` and fails under 90 % of the lines, functions, branches or statements of what Vitest is meant to test: presenters, pure functions, selectors and stores. Orchestrators, providers, hooks, clients, trackers, \`xStorage.ts\` files{{coverageLeftOut}} are left out (\`vitest.config.ts\`), since the e2e tests cover them. \`npm run test:unit\` and \`npm run test:component\` run without it.
 
 `;
 
@@ -204,14 +204,14 @@ const REACT_COMPILER_LINT = `      {
 
 const ANALYTICS_MODULE_README = `## Analytics
 
-\`src/shared/analytics/analyticsClient.ts\` is the only place where events leave the app: \`analyticsClient.track('todo_added', { source: 'form' })\`. It sends nothing yet: it dispatches an \`analytics\` event on \`window\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
+\`src/shared/analytics/analyticsTracker.ts\` is the only place where events leave the app: \`analyticsTracker.track('todo_added', { source: 'form' })\`. It sends nothing yet: it dispatches an \`analytics\` event on \`window\` with the name and the properties, for the tool you plug in there. Replace its body with your SDK, and dependency-cruiser keeps that SDK inside this file.
 
 `;
 
 const ANALYTICS_LAYOUT_FUNCTION = `
   function addTodo(title: string) {
     list.add(title);
-    analyticsClient.track('todo_added');
+    analyticsTracker.track('todo_added');
   }
 `;
 
@@ -262,7 +262,7 @@ const SERVER_STATE_ARCHITECTURE = `## Server state
 
 From bedrock: data that comes from an API and state that only the UI owns are held by two different tools. Data from the API goes through TanStack Query, UI state goes into a zustand store, and a store never holds what the API returns.
 
-The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of a \`QueryConfig.ts\` next to the code that reads them, the \`QueryClient\` lives in \`src/features/query-client/queryClient.ts\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
+The requests live in an \`xClient.ts\`, which parses each response with the Zod schemas of an \`xSchemas.ts\`, so a response that drifts from the API fails at the boundary instead of deep in a component. Query keys come from an \`xKeys.ts\` factory, so an invalidation reaches the query it targets. \`staleTime\` and \`gcTime\` come from the profiles of a \`QueryConfig.ts\` next to the code that reads them, the \`QueryClient\` is created by \`src/features/query-client/QueryProvider.tsx\`, and an error thrown by a query or a mutation reaches React. Only orchestrators call the query hooks: a presenter still gets everything through props.
 
 Enforced by \`@brutalway/oxlint-config-tanstack-query\` (keys, cache windows), \`@brutalway/oxlint-config-react\` (\`fetch\` only in an \`xClient.ts\`, never in an effect) and \`@brutalway/dependency-cruiser-config\` (no client, no query hook and no \`@tanstack/react-query\` in a presenter or a store).
 
@@ -1184,7 +1184,7 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
         after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
-        insert: "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n",
+        insert: "import { analyticsTracker } from '@/shared/analytics/analyticsTracker.ts';\n",
       },
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
@@ -1204,7 +1204,7 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
         after: "import { useTodoList } from '@/features/todo-list/useTodoList.ts';\n",
-        insert: "import { analyticsClient } from '@/shared/analytics/analyticsClient.ts';\n",
+        insert: "import { analyticsTracker } from '@/shared/analytics/analyticsTracker.ts';\n",
       },
       {
         file: 'src/features/todo-list/components/TodoListLayout.tsx',
@@ -1292,7 +1292,7 @@ export const FRONTEND_AGENTS: StackChange[] = [
       {
         file: 'AGENTS.md',
         before: '- No comments,',
-        insert: '- Events leave the app through `src/shared/analytics/analyticsClient.ts` only.\n',
+        insert: '- Events leave the app through `src/shared/analytics/analyticsTracker.ts` only.\n',
       },
     ],
   },
@@ -1302,7 +1302,7 @@ export const FRONTEND_AGENTS: StackChange[] = [
       {
         file: 'AGENTS.md',
         before: '- No comments,',
-        insert: '- Events leave the app through `src/shared/analytics/analyticsClient.ts` only.\n',
+        insert: '- Events leave the app through `src/shared/analytics/analyticsTracker.ts` only.\n',
       },
     ],
   },

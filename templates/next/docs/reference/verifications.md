@@ -38,7 +38,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 - every rule of the `nextjs` plugin of oxlint: `next/image` over `<img>`, `next/link` over `<a>` for a page of the app, no `<head>` element, no async client component
 - `'use client'` only goes on an orchestrator (`XContainer`, `XLayout`, `XPage`), a provider (`XProvider`) or an `error.tsx`. A presenter, a hook or a file under `shared/` becomes client code through the orchestrator that renders it
-- a `'use client'` file imports no `xClient.ts` other than `analyticsClient.ts`: a server component reads the data and passes it down
+- a `'use client'` file imports no `xClient.ts` other than `analyticsTracker.ts`: a server component reads the data and passes it down
 - a server action lives in a `.ts` file of its own that starts with `'use server'` and exports one async function
 
 ## Styles

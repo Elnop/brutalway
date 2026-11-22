@@ -13,7 +13,7 @@ if (enabled) {
   });
 }
 
-export const analyticsClient = {
+export const analyticsTracker = {
   track(name: string, properties: AnalyticsProperties = {}): void {
     if (enabled) posthog.capture(name, properties);
   },

@@ -23,18 +23,13 @@ export const NATIVE_NO_I18N_SERVER_STATE: StackChange[] = [
     edits: [
       {
         file: LAYOUT,
-        after: "import { Stack } from 'expo-router';\n",
-        insert: "import { QueryClientProvider } from '@tanstack/react-query';\n",
-      },
-      {
-        file: LAYOUT,
         after: "import { STACK_SCREEN_OPTIONS } from '@/features/page-layout/StackConfig.ts';\n",
-        insert: "import { queryClient } from '@/features/query-client/queryClient.ts';\n",
+        insert: "import { QueryProvider } from '@/features/query-client/QueryProvider.tsx';\n",
       },
       {
         file: LAYOUT,
         replace: PLAIN_STACK,
-        with: '  return (\n    <QueryClientProvider client={queryClient}>\n      <Stack screenOptions={STACK_SCREEN_OPTIONS} />\n    </QueryClientProvider>\n  );',
+        with: '  return (\n    <QueryProvider>\n      <Stack screenOptions={STACK_SCREEN_OPTIONS} />\n    </QueryProvider>\n  );',
       },
     ],
   },

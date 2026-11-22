@@ -10,7 +10,7 @@ const posthog =
         captureAppLifecycleEvents: false,
       });
 
-export const analyticsClient = {
+export const analyticsTracker = {
   track(name: string, properties: AnalyticsProperties = {}): void {
     posthog?.capture(name, properties);
   },
