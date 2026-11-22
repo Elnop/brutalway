@@ -11,8 +11,8 @@ import type { Violation } from '#src/shared/violations/ViolationTypes.ts';
 function violation(path: string, owner: string, slot: string): Violation {
   const message =
     slot === owner
-      ? `${path} is only used by ${owner} outside its sub-features: move it out of shared/ into the kind folders of ${owner}`
-      : `${path} is only used by ${slot}: move it into ${slot}`;
+      ? `${path} is only used by ${owner} outside its sub-features: move it out of shared/ into the kind folders of ${owner}, with the tests that import it`
+      : `${path} is only used by ${slot}: move it into ${slot}, with the tests that import it`;
   return { rule: 'single-consumer', path, message };
 }
 

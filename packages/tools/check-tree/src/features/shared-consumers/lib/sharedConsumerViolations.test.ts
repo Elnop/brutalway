@@ -28,8 +28,8 @@ describe('sharedConsumerViolations', () => {
       'src/shared/todos/todosStore.ts': ['src/shared/ids/id.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/dates/formatDate.ts is only used by src/features/a: move it into src/features/a',
-      'src/shared/ids/id.ts is only used by src/shared/todos: move it into src/shared/todos',
+      'src/shared/dates/formatDate.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
+      'src/shared/ids/id.ts is only used by src/shared/todos: move it into src/shared/todos, with the tests that import it',
     ]);
   });
 
@@ -39,8 +39,8 @@ describe('sharedConsumerViolations', () => {
       'src/shared/todos/todosStore.ts': ['src/shared/todos/TodosTypes.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/todos/todosStore.ts is only used by src/features/list: move it into src/features/list',
-      'src/shared/todos/TodosTypes.ts is only used by src/features/list: move it into src/features/list',
+      'src/shared/todos/todosStore.ts is only used by src/features/list: move it into src/features/list, with the tests that import it',
+      'src/shared/todos/TodosTypes.ts is only used by src/features/list: move it into src/features/list, with the tests that import it',
     ]);
   });
 
@@ -52,7 +52,7 @@ describe('sharedConsumerViolations', () => {
       'src/shared/slugs/slugify.ts': ['src/shared/text/lower.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/text/lower.ts is only used by src/shared/slugs: move it into src/shared/slugs',
+      'src/shared/text/lower.ts is only used by src/shared/slugs: move it into src/shared/slugs, with the tests that import it',
     ]);
   });
 
@@ -62,7 +62,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/features/y/Y.tsx': ['src/shared/dates/formatDate.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/dates/formatDate.ts is only used by src/features/a: move it into src/features/a',
+      'src/shared/dates/formatDate.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
     ]);
   });
 
@@ -73,7 +73,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/features/y/Y.tsx': ['src/features/a/shared/title/Title.tsx'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/features/a/shared/form/useForm.ts is only used by src/features/a/features/x: move it into src/features/a/features/x',
+      'src/features/a/shared/form/useForm.ts is only used by src/features/a/features/x: move it into src/features/a/features/x, with the tests that import it',
     ]);
   });
 
@@ -83,7 +83,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/a/lib/b.ts': ['src/features/a/shared/dates/format.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/features/a/shared/dates/format.ts is only used by src/features/a outside its sub-features: move it out of shared/ into the kind folders of src/features/a',
+      'src/features/a/shared/dates/format.ts is only used by src/features/a outside its sub-features: move it out of shared/ into the kind folders of src/features/a, with the tests that import it',
     ]);
   });
 
@@ -94,7 +94,7 @@ describe('sharedConsumerViolations', () => {
       'src/shared/plan/features/budget/total.ts': ['src/shared/plan/shared/money/money.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/plan/shared/money/money.ts is only used by src/shared/plan/features/budget: move it into src/shared/plan/features/budget',
+      'src/shared/plan/shared/money/money.ts is only used by src/shared/plan/features/budget: move it into src/shared/plan/features/budget, with the tests that import it',
     ]);
   });
 
@@ -113,8 +113,8 @@ describe('sharedConsumerViolations', () => {
       'src/shared/text/slug.test.ts': ['src/shared/text/slug.ts', 'src/shared/text/unused.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a',
-      'src/shared/text/slug.ts is only used by src/features/a: move it into src/features/a',
+      'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
+      'src/shared/text/slug.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
     ]);
   });
 
@@ -128,7 +128,7 @@ describe('sharedConsumerViolations', () => {
       'packages/ws/src/features/a/A.tsx': ['packages/ws/src/shared/text/format.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('./packages/ws/src/', modules)), [
-      'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a',
+      'src/shared/text/format.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
     ]);
   });
 
@@ -141,7 +141,7 @@ describe('sharedConsumerViolations', () => {
       'src/shared/theme/AlertHost.tsx': ['src/shared/theme/alertStore.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules)), [
-      'src/shared/theme/AlertHost.tsx is only used by src/features/shell: move it into src/features/shell',
+      'src/shared/theme/AlertHost.tsx is only used by src/features/shell: move it into src/features/shell, with the tests that import it',
     ]);
   });
 
@@ -153,7 +153,7 @@ describe('sharedConsumerViolations', () => {
       'src/features/shell/Shell.tsx': ['src/shared/theme/alertStore.ts'],
     });
     assert.deepEqual(messagesOf(sharedConsumerViolations('src', modules, ['web'])), [
-      'src/shared/theme/alertStore.ts is only used by src/features/shell: move it into src/features/shell',
+      'src/shared/theme/alertStore.ts is only used by src/features/shell: move it into src/features/shell, with the tests that import it',
     ]);
   });
 });

@@ -202,8 +202,8 @@ describe('check-tree', () => {
       status: 1,
       stdout: '',
       lines: [
-        'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a',
-        'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a',
+        'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
+        'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
         'src/shared/text holds 2 groups of files that never import each other (format.ts) (TextTypes.ts): split it into one shared feature per group',
       ],
     });

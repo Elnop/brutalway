@@ -71,6 +71,8 @@ Move with `git mv` so that `git log --follow` keeps the history, and change noth
 
 Keep each pull request to one step or one feature: a reviewer can check a move only when nothing else changed in it.
 
+A move often ends with a second round on the folders it filled. A kind folder left with one file, or a file landing next to a kind folder that already exists, gets its own check-tree message: fix them in the same pull request. Tests move too: check-tree does not count them as consumers, but dependency-cruiser checks their imports, so a test that imports a moved file goes with it, or it breaks a `no-cross-sub-*` rule. A helper that only tests use is deleted, or moves into `test-utils/`.
+
 A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Update them in the same commit. `npx oxlint --type-aware --prune-suppressions`, `npx check-tree src --shrink-known-violations`, `npx depcruise src --baseline --baseline-mode shrink-only` and `npx alint baseline` delete the entries that no longer happen and lower the counts. A moved folder that still breaks a rule is reported under its new path: change the path of its entry by hand. The globs of jscpd and knip are edited by hand too. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
 
 Test helpers shared by several tests go in `test-utils/` at the root of the project, next to `src/`, behind an alias such as `@test-utils/` declared in the tsconfig and in the config of the test runner. dependency-cruiser rejects an import of `test-utils/` from production code.
@@ -79,7 +81,7 @@ Test helpers shared by several tests go in `test-utils/` at the root of the proj
 
 | Message | What it means |
 | --- | --- |
-| check-tree: `X is only used by src/features/a: move it into src/features/a` | the file went down too early, move it up into that feature |
+| check-tree: `X is only used by src/features/a: move it into src/features/a, with the tests that import it` | the file went down too early, move it up into that feature, and its tests with it |
 | check-tree: `src/shared/x holds 2 groups of files that never import each other` | the folder holds two concepts, often because it is named after a kind: split it |
 | check-tree: `src/features/a holds 2 hooks files (...): move them into hooks/` | two files of one kind: they go into the kind folder |
 | check-tree: `src/features/a/hooks holds a single child: move it up one level and delete the folder` | a kind folder with one file: the file goes back to the root of its folder |
@@ -109,7 +111,9 @@ Read docs/guides/move-to-the-layout.md first. A file only this feature uses
 goes into it. A file two features use and that imports no other shared code
 goes into src/shared/, named after its concept. A file that needs two shared
 features stays in the feature. Use git mv and change nothing in a moved file
-but its imports. You are done when npm run check passes. Run
+but its imports. Tests that import a moved file move with it. You are done
+when npm run check passes, including the messages about the folders you
+filled. Run
 npx oxlint --type-aware --prune-suppressions,
 npx check-tree src --shrink-known-violations,
 npx depcruise src --baseline --baseline-mode shrink-only and
