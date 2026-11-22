@@ -14,7 +14,8 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 `oxlint.config.ts` extends `@brutalway/oxlint-config-next`, which brings the React config and its TypeScript base, the zustand and Vitest configs and the rules of Next.js below, then the i18next config. Each package README details its rules. The main ones:
 
-- no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed)
+- no `eval`, `new Function` or code in a string passed to `setTimeout`
+- no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed). A `@ts-expect-error` says why, and `@ts-ignore` and `@ts-nocheck` are refused
 - no relative imports: `@/` in `src/`, `@test-utils/` in `test-utils/`, `@e2e/` in `e2e/`. Root config files are the only exception
 - no `index.ts`, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
@@ -23,7 +24,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - `xStore.ts` exports only `xStore` and `xActions`
 - a component types its props with a named `XProps` type, callback props are named `onX`, and props that return JSX are named `children` or `renderX`
 - no orchestrator (`XContainer`, `XLayout`, `XPage`) in a `shared/`, at any depth: the components that read shared state belong to a feature
-- a hook lives in a `useX.ts` that only exports hooks, a `xSelectors.ts` only exports `selectX` functions
+- a hook lives in a `useX.ts` that only exports hooks, a `xSelectors.ts` only exports `selectX` functions, and a store is read with a selector (`useStore(xStore, selectX)`), so a component re-renders only when what it selects changes
 - one way to write each thing: function declarations, `type` over `interface`, `for...of` over `forEach`, `curly` only for multi-line blocks
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - a function takes 4 parameters at most, and declares 5 local variables at most, each name of a destructuring counted. Tests have no variable limit
@@ -54,6 +55,8 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 - inside a feature or a shared feature, at every nesting level, a sub-feature (`features/<y>/`) imports neither its siblings nor the root of its parent, and a shared feature of its `shared/` (`shared/<y>/`) imports neither another shared feature, nor a sub-feature, nor the root of its parent. They nest at most ten levels deep
 - a presenter reaches no store, no `xClient.ts`, no zustand and no react-query through any chain of imports, so a hook that reads a store is refused there and a hook of local state is fine
 - a presenter imports no orchestrator
+- an orchestrator imports no `xClient.ts`: it reads server data through a query hook
+- `src/app/` imports the orchestrators (`XContainer`, `XLayout`, `XPage`) and the providers of a feature, never one of its presenters
 - a store lives at the root or in the `stores/` folder of its level
 - no cycles, no import of a test file, of `test-utils/` or of a devDependency from production code
 

@@ -43,7 +43,7 @@ Without \`API_URL\`, \`devApi.ts\` answers these routes from an in-memory list, 
 
 `;
 
-const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitch.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languageStorage.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it.
+const I18N_README = `The example comes in English and French. The buttons in the header switch between them through \`src/features/language-switch/LanguageSwitchContainer.tsx\`, the languages are listed in \`src/features/language-switch/LanguagesConfig.ts\`, and \`src/features/language-switch/languageStorage.ts\` starts from the language saved in \`localStorage\`, or else the first one of the browser that the project has, and keeps \`<html lang>\` and the title of the page in line with it.
 
 ## Add a language
 
@@ -234,12 +234,12 @@ export const viteStack: Stack = {
             file: 'src/app/App.tsx',
             after: "import { useTranslation } from 'react-i18next';\n",
             insert:
-              "import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';\n",
+              "import { LanguageSwitchContainer } from '@/features/language-switch/LanguageSwitchContainer.tsx';\n",
           },
           {
             file: 'src/app/App.tsx',
             before: '      </header>',
-            insert: '        <LanguageSwitch />\n',
+            insert: '        <LanguageSwitchContainer />\n',
           },
           {
             file: 'docs/guides/translations.md',

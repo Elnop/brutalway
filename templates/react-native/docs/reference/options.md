@@ -46,7 +46,7 @@ npm create brutal my-app -- --preset react-native.json --yes
 
 A combination from the last column stops the CLI before anything is written, with a message naming both flags.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/index.tsx` only shows the project name, the theme moves next to the page frame in `src/features/page-shell/`, or stays in `src/shared/theme/` with the `Button` going into the language switch when `i18n` is `en-fr`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` unless `i18n` is `en-fr`.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `src/app/index.tsx` only shows the project name, the theme moves next to the page frame in `src/features/page-layout/`, or stays in `src/shared/theme/` with the `Button` going into the language switch when `i18n` is `en-fr`, and `expo-crypto` is removed, along with `@react-native-async-storage/async-storage` unless `i18n` is `en-fr`.
 
 Tailwind, CSS Modules, shadcn/ui and the security headers are not offered: React Native has no CSS, the styles come from the theme object, and an app sends no HTTP headers of its own. There are no e2e tests either, since they need a simulator.
 

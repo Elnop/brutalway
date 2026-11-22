@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { LanguageSwitch } from '@/features/language-switch/LanguageSwitch.tsx';
+import { LanguageSwitchContainer } from '@/features/language-switch/LanguageSwitchContainer.tsx';
 
-describe('LanguageSwitch', () => {
+describe('LanguageSwitchContainer', () => {
   it('marks the current language and switches to the one picked', async () => {
-    const screen = await render(<LanguageSwitch />);
+    const screen = await render(<LanguageSwitchContainer />);
     await expect
       .element(screen.getByRole('button', { name: 'English' }))
       .toHaveAttribute('aria-pressed', 'true');

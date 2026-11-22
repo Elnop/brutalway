@@ -10,7 +10,7 @@ Everything below runs locally, in the pre-commit hook and in CI. `npm run check`
 
 `oxlint.config.ts` extends `@brutalway/oxlint-config-node` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
-- no comments, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
+- no comments (a `@ts-expect-error` says why, `@ts-ignore` and `@ts-nocheck` are refused), no `eval` or `new Function`, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
 - a file with a single export is named after it, an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`
 - no `export default`, except in the files a tool loads by their default export (`*.config.ts`, `plugin.ts`, `xPlugin.ts`, `.d.ts`): each module is imported under the name it exports
 - `console` only for `console.error`, except in a `logger.ts` or `xLogger.ts`: a command writes to `process.stdout` and `process.stderr`

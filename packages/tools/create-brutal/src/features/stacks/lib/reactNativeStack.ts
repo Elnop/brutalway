@@ -75,7 +75,7 @@ function analyticsClientPath(file: string): FileEdit {
 const APP_OPENED: FileEdit[] = [
   {
     file: 'src/app/_layout.tsx',
-    before: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
+    before: "import { STACK_SCREEN_OPTIONS } from '@/features/page-layout/StackConfig.ts';\n",
     insert: "import { useAppOpened } from '@/features/analytics/useAppOpened.ts';\n",
   },
   {
@@ -164,7 +164,7 @@ const I18N_LIB_CHANGES: StackChange[] = [
 ];
 
 const THEME_CONFIG = 'src/shared/theme/ThemeConfig.ts';
-const PAGE_SHELL_CONFIGS = 'src/features/page-shell/configs';
+const PAGE_LAYOUT_CONFIGS = 'src/features/page-layout/configs';
 const SWITCH_PRESENTERS = 'src/features/language-switch/components/presenters';
 const THEME_SENTENCE =
   '`src/shared/theme/` holds the theme (`ThemeConfig.ts`) and the `Button` every feature uses.';
@@ -185,24 +185,24 @@ const THEME_SKELETON_CHANGES: StackChange[] = [
   {
     when: { example: false, i18n: ['none', 'en'] },
     move: {
-      [THEME_CONFIG]: `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
-      'src/features/page-shell/StackConfig.ts': `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
+      [THEME_CONFIG]: `${PAGE_LAYOUT_CONFIGS}/ThemeConfig.ts`,
+      'src/features/page-layout/StackConfig.ts': `${PAGE_LAYOUT_CONFIGS}/StackConfig.ts`,
     },
     edits: [
       importEdit(
-        'src/features/page-shell/PageShell.tsx',
+        'src/features/page-layout/PageLayout.tsx',
         THEME_CONFIG,
-        `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+        `${PAGE_LAYOUT_CONFIGS}/ThemeConfig.ts`,
       ),
       importEdit(
-        `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
+        `${PAGE_LAYOUT_CONFIGS}/StackConfig.ts`,
         THEME_CONFIG,
-        `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+        `${PAGE_LAYOUT_CONFIGS}/ThemeConfig.ts`,
       ),
       importEdit(
         'src/app/_layout.tsx',
-        'src/features/page-shell/StackConfig.ts',
-        `${PAGE_SHELL_CONFIGS}/StackConfig.ts`,
+        'src/features/page-layout/StackConfig.ts',
+        `${PAGE_LAYOUT_CONFIGS}/StackConfig.ts`,
       ),
       ...docPathEdits(
         [
@@ -212,12 +212,12 @@ const THEME_SKELETON_CHANGES: StackChange[] = [
           'docs/reference/verifications.md',
         ],
         THEME_CONFIG,
-        `${PAGE_SHELL_CONFIGS}/ThemeConfig.ts`,
+        `${PAGE_LAYOUT_CONFIGS}/ThemeConfig.ts`,
       ),
       {
         file: 'docs/reference/layout.md',
         replace: THEME_SENTENCE,
-        with: `The theme sits in \`${PAGE_SHELL_CONFIGS}/ThemeConfig.ts\`, next to the page frame, its only user.`,
+        with: `The theme sits in \`${PAGE_LAYOUT_CONFIGS}/ThemeConfig.ts\`, next to the page frame, its only user.`,
       },
     ],
   },
@@ -417,7 +417,8 @@ export const reactNativeStack: Stack = {
           },
           {
             file: 'src/app/_layout.tsx',
-            after: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
+            after:
+              "import { STACK_SCREEN_OPTIONS } from '@/features/page-layout/StackConfig.ts';\n",
             insert: "import { queryClient } from '@/features/query-client/queryClient.ts';\n",
           },
           { file: 'src/app/_layout.tsx', replace: PLAIN_LAYOUT, with: SERVER_STATE_LAYOUT },
@@ -429,6 +430,7 @@ export const reactNativeStack: Stack = {
         remove: [
           'src/shared/todos/useTodos.ts',
           'src/shared/todos/todosStore.ts',
+          'src/shared/todos/lib/todosStorage.ts',
           'src/shared/todos/todosStore.test.ts',
           'src/shared/todos/lib/todosSelectors.ts',
           'src/shared/todos/lib/todosSelectors.test.ts',
@@ -472,14 +474,14 @@ export const reactNativeStack: Stack = {
           ...I18N_LOCALE_EDITS,
           {
             file: 'src/app/index.tsx',
-            before: "import { PageShell } from '@/features/page-shell/PageShell.tsx';\n",
+            before: "import { PageLayout } from '@/features/page-layout/PageLayout.tsx';\n",
             insert:
               "import { LanguageSwitchContainer } from '@/features/language-switch/components/LanguageSwitchContainer.tsx';\n",
           },
           {
             file: 'src/app/index.tsx',
-            replace: "<PageShell title={t('title')}",
-            with: "<PageShell actions={<LanguageSwitchContainer />} title={t('title')}",
+            replace: "<PageLayout title={t('title')}",
+            with: "<PageLayout actions={<LanguageSwitchContainer />} title={t('title')}",
           },
           {
             file: 'docs/guides/translations.md',

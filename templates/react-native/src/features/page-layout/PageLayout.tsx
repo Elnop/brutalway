@@ -3,14 +3,14 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { THEME } from '@/shared/theme/ThemeConfig.ts';
 
-type PageShellProps = {
+type PageLayoutProps = {
   title: string;
   tagline: string;
   actions?: ReactNode;
   children?: ReactNode;
 };
 
-export function PageShell({ title, tagline, actions, children }: PageShellProps) {
+export function PageLayout({ title, tagline, actions, children }: PageLayoutProps) {
   return (
     <SafeAreaView style={styles.screen}>
       <ScrollView contentContainerStyle={styles.page}>

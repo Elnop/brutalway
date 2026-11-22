@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES } from '@/features/language-switch/LanguagesConfig.ts';
 
-export function LanguageSwitch() {
+export function LanguageSwitchContainer() {
   const { t, i18n } = useTranslation('app');
 
   function choose(language: (typeof LANGUAGES)[number]) {

@@ -5,7 +5,7 @@ import {
 } from '@expo-google-fonts/space-grotesk';
 import { Stack } from 'expo-router';
 import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';
-import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';
+import { STACK_SCREEN_OPTIONS } from '@/features/page-layout/StackConfig.ts';
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ SpaceGrotesk_400Regular, SpaceGrotesk_700Bold });

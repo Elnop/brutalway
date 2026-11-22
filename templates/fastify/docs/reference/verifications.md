@@ -10,7 +10,7 @@ Everything below runs locally, in the pre-commit hook and in CI. `npm run check`
 
 `oxlint.config.ts` extends `@brutalway/oxlint-config-fastify` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
-- no comments, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
+- no comments (a `@ts-expect-error` says why, `@ts-ignore` and `@ts-nocheck` are refused), no `eval` or `new Function`, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
 - `process.env` is read only in a file whose name ends with `Env.ts`: here `src/shared/env/readEnv.ts`
 - no `app.decorate`: dependencies are factory parameters
 - an `async` handler returns its value and never calls `reply.send()`

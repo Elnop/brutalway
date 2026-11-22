@@ -28,7 +28,7 @@ export const NATIVE_NO_I18N_SERVER_STATE: StackChange[] = [
       },
       {
         file: LAYOUT,
-        after: "import { STACK_SCREEN_OPTIONS } from '@/features/page-shell/StackConfig.ts';\n",
+        after: "import { STACK_SCREEN_OPTIONS } from '@/features/page-layout/StackConfig.ts';\n",
         insert: "import { queryClient } from '@/features/query-client/queryClient.ts';\n",
       },
       {

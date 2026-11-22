@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES } from '@/features/language-switch/LanguagesConfig.ts';
-import '@/features/language-switch/language-switch.css';
+import styles from '@/features/language-switch/LanguageSwitchContainer.module.css';
 
-export function LanguageSwitch() {
+export function LanguageSwitchContainer() {
   const { t, i18n } = useTranslation('app');
 
   function choose(language: (typeof LANGUAGES)[number]) {
@@ -10,7 +10,7 @@ export function LanguageSwitch() {
   }
 
   return (
-    <div className="language-switch" role="group" aria-label={t('language')}>
+    <div className={styles.languageSwitch} role="group" aria-label={t('language')}>
       {LANGUAGES.map((language) => (
         <button
           key={language}

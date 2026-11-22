@@ -1,15 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { randomUUID } from 'expo-crypto';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 import { normalizeTitle } from '@/shared/todos/lib/normalizeTitle.ts';
 import { STARTER_TODOS } from '@/shared/todos/TodosConfig.ts';
+import { todosStorage } from '@/shared/todos/lib/todosStorage.ts';
 import type { TodosActions, TodosState } from '@/shared/todos/TodosTypes.ts';
 
 export const todosStore = createStore<TodosState>()(
   persist((): TodosState => ({ todos: STARTER_TODOS, filter: 'all' }), {
     name: 'todos',
-    storage: createJSONStorage(() => AsyncStorage),
+    storage: todosStorage(),
     partialize: (state) => ({ todos: state.todos }),
   }),
 );

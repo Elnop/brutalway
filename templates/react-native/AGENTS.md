@@ -8,8 +8,8 @@ Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifi
 
 ## Conventions worth knowing first
 
-- `src/app/` is the app layer: the Expo Router routes in `src/app/` compose the features and import nothing else (the page frame and the themed stack live in `src/features/page-shell/`), `src/features/` holds one folder per feature, `src/shared/` one folder per shared feature, for the code several features use. Each layer only imports the layers below it, a feature never imports another feature, and a file of a shared feature that a single feature uses moves into it.
-- A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`) that reads state through hooks, or a presenter that only gets props.
+- `src/app/` is the app layer: the Expo Router routes in `src/app/` compose the features and import nothing else (the page frame and the themed stack live in `src/features/page-layout/`), `src/features/` holds one folder per feature, `src/shared/` one folder per shared feature, for the code several features use. Each layer only imports the layers below it, a feature never imports another feature, and a file of a shared feature that a single feature uses moves into it.
+- A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`), which composes presenters and is the only kind that may read state through hooks, or a presenter that only gets props. `src/app/` imports the orchestrators of a feature, never its presenters.
 - Every visible string goes through `t()`, with its English text in `locales/en/`.
 - Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared/theme/ThemeConfig.ts`.
 - A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `@test-utils/`: code in `src/` that only a test uses fails `knip --production`.
