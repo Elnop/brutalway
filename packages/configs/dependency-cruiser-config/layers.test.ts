@@ -64,6 +64,9 @@ describe('dependency-cruiser-config', () => {
         "import { editorClient } from './editorClient.ts';\nexport const useEditor = editorClient;\n",
       'src/features/editor/editorClient.ts': 'export const editorClient = 1;\n',
       'src/features/theme/ThemeProvider.tsx': 'export const ThemeProvider = 1;\n',
+      'src/features/editor/EditorLayout.tsx':
+        "import { analyticsClient } from '../../shared/analytics/analyticsClient.ts';\nexport const EditorLayout = analyticsClient;\n",
+      'src/shared/analytics/analyticsClient.ts': 'export const analyticsClient = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
   });

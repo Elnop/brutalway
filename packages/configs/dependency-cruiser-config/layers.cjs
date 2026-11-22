@@ -215,9 +215,9 @@ module.exports = {
       name: 'orchestrators-use-hooks',
       severity: 'error',
       comment:
-        'An orchestrator reads server data through a query hook or a service hook, never through the client itself: move the call into a useX hook that calls the xClient.ts.',
+        'An orchestrator reads server data through a query hook or a service hook, never through the client itself: move the call into a useX hook that calls the xClient.ts. analyticsClient.ts, which only sends events, stays allowed.',
       from: { path: '(Container|Layout|Page)\\.tsx$' },
-      to: { path: 'Client\\.ts$' },
+      to: { path: 'Client\\.ts$', pathNot: '(^|/)analyticsClient\\.ts$' },
     },
     {
       name: 'app-composes-orchestrators',
