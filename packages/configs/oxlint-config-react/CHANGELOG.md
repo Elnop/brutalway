@@ -1,5 +1,13 @@
 # @brutalkit/oxlint-config-react
 
+## 0.5.3
+
+### Patch Changes
+
+- bcca4c7: An `XContainer`, `XLayout` or `XPage` no longer has to call a hook. A layout or a page that only composes presenters is an orchestrator too: what sets a presenter apart is what it may not do, which dependency-cruiser checks.
+- Updated dependencies [75ff7d8]
+  - @brutalway/oxlint-config-typescript@0.8.3
+
 ## 0.5.2
 
 ### Patch Changes

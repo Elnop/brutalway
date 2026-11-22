@@ -1,5 +1,13 @@
 # @brutalkit/oxlint-config-zustand
 
+## 0.3.1
+
+### Patch Changes
+
+- 98f97a7: A store hook takes a selector: `useStore(xStore)` with a single argument and `useXStore()` without one are reported, since the component would re-render on every change of the store.
+- Updated dependencies [75ff7d8]
+  - @brutalway/oxlint-config-typescript@0.8.3
+
 ## 0.3.0
 
 ### Minor Changes

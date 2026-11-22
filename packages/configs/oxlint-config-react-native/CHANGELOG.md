@@ -1,5 +1,15 @@
 # @brutalway/oxlint-config-react-native
 
+## 0.3.2
+
+### Patch Changes
+
+- 8f4a1ee: Colors are reported anywhere outside a `*ThemeConfig.ts` file, not only in `StyleSheet.create`: hex strings, `rgb(`, `rgba(`, `hsl(` and `hsla(` strings and templates, and a CSS color name given to a prop or a key ending in `color`. `fontWeight` in a `StyleSheet.create` is reported, since a custom font on Android has a single weight. AsyncStorage is only imported in an `xStorage.ts` file. `designSystemPrimitives({ components, files })`, from `@brutalway/oxlint-config-react-native/designSystemPrimitives`, reserves react-native components to the design system, off unless a project adds it.
+- Updated dependencies [bcca4c7]
+- Updated dependencies [98f97a7]
+  - @brutalway/oxlint-config-react@0.5.3
+  - @brutalway/oxlint-config-zustand@0.3.1
+
 ## 0.3.1
 
 ### Patch Changes
