@@ -1,5 +1,11 @@
 # @brutalway/check-secrets
 
+## 0.1.1
+
+### Patch Changes
+
+- 754da96: The README says that the change adding the first fingerprints to `.gitleaksignore` writes their number under `newRules` for check-exceptions.
+
 ## 0.1.0
 
 ### Minor Changes

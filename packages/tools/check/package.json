@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Runs every check of a brutalway project in order, from the scripts and the tools the project has, and sums up which failed, so that a release adds a check without touching the check script of the project.",
   "keywords": [
     "lint",

@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/check-secrets",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fails when a file git would commit holds a secret, with gitleaks, downloaded from its GitHub release and checked against a pinned checksum.",
   "keywords": [
     "secrets",
