@@ -8,6 +8,8 @@ describe('zustandConfig', () => {
     assert.deepEqual(lintFixture(fileURLToPath(new URL('../fixtures', import.meta.url))), [
       'cartSelectors.ts:5 selector-naming(no-restricted-syntax)',
       'cartStore.ts:1 store-layout(store-layout)',
+      'useView.ts:9 store-selector(no-restricted-syntax)',
+      'useView.ts:11 store-selector(no-restricted-syntax)',
       'viewStore.ts:3 export-placement(no-restricted-syntax)',
       'viewStore.ts:3 store-layout(store-layout)',
       'viewStore.ts:6 store-layout(store-layout)',

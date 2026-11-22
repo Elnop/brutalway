@@ -22,6 +22,7 @@ export default defineConfig({
 
 - `viewStore.ts` only exports `viewStore` and `viewActions` (`store-layout`)
 - an `xSelectors.ts` file only exports functions named `selectX`
+- a store hook takes a selector: `useStore(xStore)` with a single argument and `useXStore()` without one are reported, since the component would re-render on every change of the store instead of when what it selects changes
 - in `*Store.ts` files, the base config's placement rule only refuses exported types, and the file naming rule is off
 
 ## Why
