@@ -1,5 +1,11 @@
 # template-fastify
 
+## 0.10.3
+
+### Patch Changes
+
+- 974a207: The templates use check-tree 0.14.0 (`--shrink-known-violations`), check-exceptions 0.2.0 (counts `oxlint-suppressions.json` and `.alint-baseline.json`) and alint-config 0.2.4 (the `exact-dependency-versions` message quotes the range).
+
 ## 0.10.2
 
 ### Patch Changes
