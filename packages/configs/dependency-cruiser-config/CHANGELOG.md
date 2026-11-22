@@ -1,5 +1,11 @@
 # @brutalkit/dependency-cruiser-config
 
+## 0.12.4
+
+### Patch Changes
+
+- 9814049: `orchestrators-use-hooks` lets an orchestrator import `analyticsClient.ts`, which only sends events and is the one way out for them.
+
 ## 0.12.3
 
 ### Patch Changes
