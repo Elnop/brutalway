@@ -30,7 +30,14 @@ describe('reactNativeConfig', () => {
       'src/features/profile/Avatar.tsx:23 theme-styles(no-restricted-syntax)',
       'src/features/profile/Avatar.tsx:25 theme-styles(no-restricted-syntax)',
       'src/features/profile/Avatar.tsx:26 react-native(no-unused-styles)',
+      'src/features/profile/saveProfile.ts:1 storage-placement(no-restricted-syntax)',
       'src/features/profile/ThemedCard.tsx:15 react-native(no-unused-styles)',
+      'src/features/profile/Tint.tsx:8 theme-styles(no-restricted-syntax)',
+      'src/features/profile/Tint.tsx:9 theme-styles(no-restricted-syntax)',
+      'src/features/profile/Tint.tsx:10 theme-styles(no-restricted-syntax)',
+      'src/features/profile/Tint.tsx:11 theme-styles(no-restricted-syntax)',
+      'src/features/profile/Tint.tsx:15 theme-styles(no-restricted-syntax)',
+      'src/features/profile/Tint.tsx:22 theme-styles(no-restricted-syntax)',
     ]);
   });
 
@@ -51,5 +58,11 @@ describe('reactNativeConfig', () => {
 
   it('accepts every file Expo Router names, with the exports it asks for', () => {
     assert.deepEqual(lintFixture(fixture('conventions')), []);
+  });
+
+  it('reserves the components given to designSystemPrimitives to the files of the design system', () => {
+    assert.deepEqual(lintFixture(fixture('design-system')), [
+      'src/features/feed/FeedTitle.tsx:1 design-system(no-restricted-syntax)',
+    ]);
   });
 });

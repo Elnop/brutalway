@@ -6,7 +6,11 @@ import type { OxlintConfig } from 'oxlint';
 import { jestRules } from '#src/features/jest/JestConfig.ts';
 import { reactNativePluginRules } from '#src/features/react-native-plugin/ReactNativePluginConfig.ts';
 import { routerFilesOverrides } from '#src/features/router-files/RouterFilesConfig.ts';
-import { themeStylesRules } from '#src/features/theme-styles/ThemeStylesConfig.ts';
+import { storageOverrides, storageRules } from '#src/features/storage/StorageConfig.ts';
+import {
+  themeStylesOverrides,
+  themeStylesRules,
+} from '#src/features/theme-styles/configs/ThemeStylesConfig.ts';
 
 export const reactNativeConfig: OxlintConfig = defineConfig({
   extends: [reactConfig, zustandConfig],
@@ -17,6 +21,10 @@ export const reactNativeConfig: OxlintConfig = defineConfig({
       specifier: fileURLToPath(new URL('./themeStylesPlugin.js', import.meta.url)),
     },
     {
+      name: 'storage-placement',
+      specifier: fileURLToPath(new URL('./storagePlacementPlugin.js', import.meta.url)),
+    },
+    {
       name: 'react-native',
       specifier: fileURLToPath(import.meta.resolve('eslint-plugin-react-native')),
     },
@@ -25,6 +33,7 @@ export const reactNativeConfig: OxlintConfig = defineConfig({
   ignorePatterns: ['.expo', 'android', 'ios', 'dist', 'expo-env.d.ts'],
   rules: {
     ...themeStylesRules,
+    ...storageRules,
     ...reactNativePluginRules,
     ...jestRules,
     'no-restricted-imports': [
@@ -43,6 +52,8 @@ export const reactNativeConfig: OxlintConfig = defineConfig({
   },
   overrides: [
     ...routerFilesOverrides,
+    ...themeStylesOverrides,
+    ...storageOverrides,
     { files: ['**/*.config.ts', '**/*.config.js', 'jest.setup.ts'], env: { node: true } },
   ],
 });

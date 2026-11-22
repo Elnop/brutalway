@@ -19,7 +19,7 @@ export default defineConfig({
 
 ## Usage
 
-The config does not know where your theme lives. It only rejects literals inside `StyleSheet.create`, so the theme can be any object outside of it, like a `THEME` constant in a `ThemeConfig.ts`:
+Sizes, fonts and shadows are only rejected inside `StyleSheet.create`. Colors are rejected anywhere, so the theme lives in a file whose name ends with `ThemeConfig.ts`, where they are allowed, like a `THEME` constant in `ThemeConfig.ts`:
 
 ```ts
 const styles = StyleSheet.create({
@@ -50,21 +50,46 @@ function createStyles(theme: Theme) {
 
 When a rule fires:
 
-- a color, a size or a font in `StyleSheet.create`: add a token to the theme if it is missing, and use it
+- a color anywhere outside the theme, or a size, a font or a weight in `StyleSheet.create`: add a token to the theme if it is missing, and use it
 - an object in a `style` prop, or in any prop ending in `Style`: move it into the `StyleSheet.create` of the file. A style that depends on a prop picks one of several entries of the sheet, each written out (`styles.paper`, `styles.yellow`): `no-unused-styles` does not see an entry read as `styles[tone]`
 - text outside `<Text>`: wrap it, React Native throws on raw text at runtime
 - an unused entry of `StyleSheet.create`: delete it
 
 ## Rules
 
-- in `StyleSheet.create`, no literal for a color (any key ending in `color` or `Color`, `transparent` aside), a size or a spacing (margins, paddings, gaps, positions, widths, heights, `flexBasis`, font size, line height, letter spacing, border widths and radii), a `fontFamily`, a `boxShadow` or a `textShadow` (`none` aside). `0` and percentages stay literal, and so do the keys without a unit, like `flex` or `opacity`
+- outside a `*ThemeConfig.ts` file, no color literal: a string that is a hex color (`#fff`, `#ffff`, `#ffffff`, `#ffffffff`) or starts with `rgb(`, `rgba(`, `hsl(` or `hsla(`, a template literal that starts the same way, and a CSS color name (`tomato`) given to a prop or a key ending in `color` or `Color`. `transparent` stays allowed, and a name like `snow` elsewhere is not a color
+- in `StyleSheet.create`, no `fontWeight`: on Android a custom family has a single weight and `fontWeight` falls back to the system font, so the weight comes from a font of the theme
+- in `StyleSheet.create`, no literal for a size or a spacing (margins, paddings, gaps, positions, widths, heights, `flexBasis`, font size, line height, letter spacing, border widths and radii), a `fontFamily`, a `boxShadow` or a `textShadow` (`none` aside). `0` and percentages stay literal, and so do the keys without a unit, like `flex` or `opacity`
 - no object written in a `style` prop or a prop ending in `Style`
 - from eslint-plugin-react-native: `no-raw-text`, `no-unused-styles`, `no-single-element-style-arrays` and `split-platform-components` (a component ending in `IOS` or `Android` lives in a `.ios.tsx` or `.android.tsx` file)
 - in tests: `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives, `toHaveBeenCalledWith` over `toHaveBeenCalled`, an error message in `toThrow`, no `.only`
 - the files of `src/app/`, the routes of Expo Router, are left out of the rules on file names, exports and props: Expo Router picks the file name (`_layout.tsx`, `index.tsx`, `+not-found.tsx`, `hello+api.ts`, `[id].tsx`, a kebab-case route that becomes its URL), the default or named exports (`GET`, `ErrorBoundary`, `unstable_settings`, `generateStaticParams`, `redirectSystemPath`) and the props. The other rules, styles and raw text included, still apply to them. Expo Router reads its routes from `src/app/` by default, and the application code lives in `features/` and `shared/`
 - no relative imports: import through the aliases of `tsconfig.json`
+- `@react-native-async-storage/async-storage` is only imported in an `xStorage.ts` file, which the rest of the code calls
 - `import/default` and `typescript/no-non-null-assertion` off
 - `.expo`, `android`, `ios`, `dist` and `expo-env.d.ts` ignored, and the `node` env for `*.config.ts`, `*.config.js` and `jest.setup.ts`
+
+## Design system
+
+`designSystemPrimitives` reserves react-native components to the files of your design system, which wrap them with the font, the colors and the focus of the app. Elsewhere, importing them from `react-native` is reported:
+
+```ts
+import { reactNativeConfig } from '@brutalway/oxlint-config-react-native';
+import { designSystemPrimitives } from '@brutalway/oxlint-config-react-native/designSystemPrimitives';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [
+    reactNativeConfig,
+    designSystemPrimitives({
+      components: ['Pressable', 'Text', 'TextInput'],
+      files: ['src/shared/theme/**'],
+    }),
+  ],
+});
+```
+
+It is off unless you add it.
 
 ## Why
 
