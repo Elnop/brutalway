@@ -2,8 +2,6 @@ import type { OxlintOverride } from 'oxlint';
 
 const MAX_COMPONENT_PROPS = 6;
 
-const ORCHESTRATOR = 'FunctionDeclaration[id.name=/^[A-Z]\\w*(Container|Layout|Page)$/]';
-
 const PRESENTER_FORMATTING = [
   {
     selector:
@@ -31,15 +29,6 @@ const COMPONENT_ROLES = [
   },
 ];
 
-const ORCHESTRATOR_ROLE = [
-  ...COMPONENT_ROLES,
-  {
-    selector: `${ORCHESTRATOR}:not(:has(CallExpression[callee.name=/^use[A-Z]/]))`,
-    message:
-      'An XContainer, XLayout or XPage reads state through a hook and hands it to presenters: call the hook here, or rename the component, since it is a presenter.',
-  },
-];
-
 export const componentRolesOverrides: OxlintOverride[] = [
   {
     files: ['**/*.tsx'],
@@ -53,6 +42,6 @@ export const componentRolesOverrides: OxlintOverride[] = [
   },
   {
     files: ['**/*Container.tsx', '**/*Layout.tsx', '**/*Page.tsx'],
-    rules: { 'component-roles/no-restricted-syntax': ['error', ...ORCHESTRATOR_ROLE] },
+    rules: { 'component-roles/no-restricted-syntax': ['error', ...COMPONENT_ROLES] },
   },
 ];

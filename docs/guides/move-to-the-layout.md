@@ -90,7 +90,7 @@ Test helpers shared by several tests go in `test-utils/` at the root of the proj
 | check-tree: `.check-tree-known-violations.json lists shared-feature-groups for src/shared/ui with a count of 9, which is now 8: lower it or run check-tree with --shrink-known-violations` | a move fixed part of a recorded violation: lower its count |
 | dependency-cruiser `no-cross-shared` | a file of one shared feature needs another one: it combines two concepts, move it up into the feature that uses it, or merge the two shared features when they are one concept |
 | dependency-cruiser `no-cross-feature` | two features share code: move the part they share down, named after its concept, or connect them in `src/app/` |
-| dependency-cruiser `app-only-to-features` | `src/app/` reaches a shared feature: wrap what it needs in a feature, such as a page shell that renders the frame of every page |
+| dependency-cruiser `app-only-to-features` | `src/app/` reaches a shared feature: wrap what it needs in a feature, such as a page layout that renders the frame of every page |
 
 When a rule rejects a split that looks right, go back to the two moves above before asking for the rule to change. If it still looks wrong, report it with the smallest code that shows it.
 

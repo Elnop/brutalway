@@ -56,6 +56,14 @@ describe('dependency-cruiser-config', () => {
         "import { label } from './label.ts';\nexport const state = label;\n",
       'src/shared/plan/label.ts': 'export const label = 1;\n',
       'src/shared/util/util.ts': 'export const util = 1;\n',
+      'src/app/Home.tsx':
+        "import { EditorPage } from '../features/editor/EditorPage.tsx';\nimport { ThemeProvider } from '../features/theme/ThemeProvider.tsx';\nexport const Home = [EditorPage, ThemeProvider];\n",
+      'src/features/editor/EditorPage.tsx':
+        "import { useEditor } from './useEditor.ts';\nexport const EditorPage = useEditor;\n",
+      'src/features/editor/useEditor.ts':
+        "import { editorClient } from './editorClient.ts';\nexport const useEditor = editorClient;\n",
+      'src/features/editor/editorClient.ts': 'export const editorClient = 1;\n',
+      'src/features/theme/ThemeProvider.tsx': 'export const ThemeProvider = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
   });
@@ -82,7 +90,11 @@ describe('dependency-cruiser-config', () => {
       'src/shared/other/otherStore.ts': 'export const otherStore = 1;\n',
       'src/features/editor/components/Panel.tsx':
         "import { EditorContainer } from './EditorContainer.tsx';\nexport const Panel = EditorContainer;\n",
-      'src/features/editor/components/EditorContainer.tsx': 'export const EditorContainer = 1;\n',
+      'src/features/editor/components/EditorContainer.tsx':
+        "import { editorClient } from '../lib/editorClient.ts';\nexport const EditorContainer = editorClient;\n",
+      'src/features/editor/lib/editorClient.ts': 'export const editorClient = 1;\n',
+      'src/app/Screen.tsx':
+        "import { Card } from '../features/editor/components/Card.tsx';\nexport const Screen = Card;\n",
       'src/features/summary/lib/cartStore.ts': 'export const cartStore = 1;\n',
       'src/features/summary/lib/useCart.ts':
         "import { cartStore } from './cartStore.ts';\nexport const useCart = cartStore;\n",
@@ -97,6 +109,7 @@ describe('dependency-cruiser-config', () => {
     assert.deepEqual(
       violatedRules(root),
       [
+        'app-composes-orchestrators',
         'app-only-to-features',
         'features-not-to-app',
         'no-circular',
@@ -107,6 +120,7 @@ describe('dependency-cruiser-config', () => {
         'no-prod-to-tests',
         'no-unresolvable',
         'not-to-dev-dep',
+        'orchestrators-use-hooks',
         'presenters-are-pure',
         'presenters-render-presenters',
         'shared-not-to-features',

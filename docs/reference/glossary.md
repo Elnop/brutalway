@@ -38,7 +38,7 @@ A file that a tool loads, not another file of `src/`: the route files of `src/ap
 
 ## Orchestrator and presenter
 
-An orchestrator is a component named `XContainer`, `XLayout` or `XPage`. It reads stores through hooks and passes what it gets down as props. A presenter is any other component: it gets props and renders them, and reaches no store through any chain of imports. No orchestrator lives in a shared feature.
+An orchestrator is a component named `XContainer`, `XLayout` or `XPage`. It composes presenters, and it is the only kind of component that may read stores and server data, through hooks, to pass them down as props. A layout or a page with no state is an orchestrator too. A presenter is any other component: it gets props and renders them, and reaches no store through any chain of imports. No orchestrator lives in a shared feature.
 
 ## Platform variant
 

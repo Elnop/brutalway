@@ -55,7 +55,7 @@ The templates run it with `--output-type err-long`, so each error comes with the
 
 ## Roles
 
-On the front end, a component is an orchestrator (`XContainer`, `XLayout`, `XPage`), which reads stores and calls hooks, or a presenter, which only gets props. A presenter reaches no store through any chain of imports, renders no orchestrator, and does no formatting, sorting or filtering. No orchestrator lives in a `shared/`.
+On the front end, a component is an orchestrator (`XContainer`, `XLayout`, `XPage`), which composes presenters and may read stores through hooks, or a presenter, which only gets props. An orchestrator reaches server data through a hook, never through an `xClient.ts`, and `src/app/` imports the orchestrators of a feature, never its presenters. A presenter reaches no store through any chain of imports, renders no orchestrator, and does no formatting, sorting or filtering. No orchestrator lives in a `shared/`.
 
 On the API, a route calls its service, a service calls its queries, and only queries files run SQL.
 

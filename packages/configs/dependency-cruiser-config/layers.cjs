@@ -168,7 +168,7 @@ module.exports = {
       name: 'app-only-to-features',
       severity: 'error',
       comment:
-        'app/ composes the features: it imports no shared feature. Wrap what it needs in a feature, like a page shell or the server setup.',
+        'app/ composes the features: it imports no shared feature. Wrap what it needs in a feature, like a page layout or the server setup.',
       from: {
         path: '^src/app/',
       },
@@ -210,6 +210,25 @@ module.exports = {
         'A presenter renders presenters only: the orchestrator that reads state sits above it, so render the orchestrator from its parent orchestrator, or rename the presenter into an orchestrator.',
       from: presenter(),
       to: { path: '(Container|Layout|Page)\\.tsx$' },
+    },
+    {
+      name: 'orchestrators-use-hooks',
+      severity: 'error',
+      comment:
+        'An orchestrator reads server data through a query hook or a service hook, never through the client itself: move the call into a useX hook that calls the xClient.ts.',
+      from: { path: '(Container|Layout|Page)\\.tsx$' },
+      to: { path: 'Client\\.ts$' },
+    },
+    {
+      name: 'app-composes-orchestrators',
+      severity: 'error',
+      comment:
+        'src/app/ composes the features through their orchestrators: import an XContainer, XLayout, XPage or XProvider of the feature, never one of its presenters. A screen made only of presenters is an XPage or an XLayout of its feature.',
+      from: { path: '^src/app/' },
+      to: {
+        path: '^src/features/.+\\.tsx$',
+        pathNot: '(Container|Layout|Page|Provider|Content|Config)\\.tsx$',
+      },
     },
     {
       name: 'stores-hold-no-server-data',
