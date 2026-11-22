@@ -20,14 +20,17 @@ A check of your own goes after it:
 "check": "brutal-check && npm run lint:sql"
 ```
 
-It runs, in a fixed order, each of its scripts that `package.json` defines, keeps going after a failure, and exits with 1 when at least one failed:
+It runs every one of its scripts that `package.json` defines, all at the same time, and prints a line for each as it ends. The output of a step that failed follows its line, in full, and the output of a step that passed is left out. It exits with 1 when at least one step failed:
 
 ```
-brutal-check: typecheck
-...
 brutal-check: no script for styles, messages
-brutal-check: lint, unused failed
+brutal-check: tree OK (1.2s)
+brutal-check: lint FAILED (2.3s)
+src/features/cart/CartPanel.tsx:12:3: error ...
+brutal-check: lint failed
 ```
+
+`brutal-check --serial` runs them one after the other, in the order below, for a machine short on memory.
 
 ## Steps
 
@@ -47,7 +50,7 @@ brutal-check: lint, unused failed
 | `secrets` | check-secrets |
 | `exceptions` | check-exceptions |
 
-Each step is a script of the project, so its arguments stay in `package.json` and knip sees the tools it calls. A missing script is skipped, and the last line before the result lists them, so a script removed by mistake shows up.
+Each step is a script of the project, so its arguments stay in `package.json` and knip sees the tools it calls. A missing script is skipped, and the first line lists them, so a script removed by mistake shows up.
 
 ## Why
 

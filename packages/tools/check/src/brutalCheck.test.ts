@@ -13,37 +13,44 @@ function project(scripts: Record<string, string>): string {
   return root;
 }
 
-function run(root: string): { status: number | null; lines: string[] } {
-  const result = spawnSync(process.execPath, [CLI], { cwd: root, encoding: 'utf8' });
+function run(root: string, args: string[] = []): { status: number | null; lines: string[] } {
+  const result = spawnSync(process.execPath, [CLI, ...args], { cwd: root, encoding: 'utf8' });
   return {
     status: result.status,
-    lines: (result.stdout || result.stderr).split('\n').filter((line) => line !== ''),
+    lines: (result.stdout || result.stderr)
+      .split('\n')
+      .filter((line) => line !== '')
+      .map((line) => line.replace(/\(\d+\.\ds\)/u, '(s)')),
   };
 }
 
 describe('brutal-check', () => {
-  it('runs the scripts the project has, in its order, and names the missing ones', () => {
+  it('with --serial, runs the scripts the project has in its order and names the missing ones', () => {
     const root = project({ unused: 'echo unused', lint: 'echo linted', typecheck: 'echo typed' });
-    assert.deepEqual(run(root), {
+    assert.deepEqual(run(root, ['--serial']), {
       status: 0,
       lines: [
-        'brutal-check: typecheck',
-        'typed',
-        'brutal-check: lint',
-        'linted',
-        'brutal-check: unused',
-        'unused',
         'brutal-check: no script for format:check, styles, deps, tree, duplicates, docs, messages, repo, secrets, exceptions',
+        'brutal-check: typecheck OK (s)',
+        'brutal-check: lint OK (s)',
+        'brutal-check: unused OK (s)',
         'brutal-check: every check passed',
       ],
     });
   });
 
-  it('runs every step after a failure and names the steps that failed', () => {
-    const root = project({ typecheck: 'exit 2', tree: 'echo tree', exceptions: 'exit 1' });
+  it('runs the steps at the same time, prints the output of a failed one and names the failures', () => {
+    const root = project({
+      typecheck: 'echo "src/a.ts: type error" && exit 2',
+      tree: 'echo tree',
+      exceptions: 'exit 1',
+    });
     const { status, lines } = run(root);
     assert.equal(status, 1);
-    assert.ok(lines.includes('tree'));
+    assert.ok(lines.includes('brutal-check: tree OK (s)'));
+    assert.ok(!lines.includes('tree'));
+    assert.ok(lines.includes('brutal-check: typecheck FAILED (s)'));
+    assert.ok(lines.includes('src/a.ts: type error'));
     assert.equal(lines.at(-1), 'brutal-check: typecheck, exceptions failed');
   });
 
