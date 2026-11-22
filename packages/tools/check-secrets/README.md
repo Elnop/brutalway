@@ -24,7 +24,7 @@ A secret that reached a commit stays in the history: revoke it, removing the lin
 
 ### A value that is public by design
 
-A Firebase web key, a key of a test fixture: add the fingerprint the message gives to `.gitleaksignore`, one per line, and commit it. [`check-exceptions`](../check-exceptions) counts its lines, so the list only shrinks. A `.gitleaks.toml` in the folder changes the rules of gitleaks, see [its docs](https://github.com/gitleaks/gitleaks#configuration).
+A Firebase web key, a key of a test fixture: add the fingerprint the message gives to `.gitleaksignore`, one per line, and commit it. [`check-exceptions`](../check-exceptions) counts its lines, so the list only shrinks. The change that adds the first fingerprints writes their number under `newRules` in `package.json`: `"check-exceptions": { "newRules": { "gitleaks ignore": 2 } }`. A `.gitleaks.toml` in the folder changes the rules of gitleaks, see [its docs](https://github.com/gitleaks/gitleaks#configuration).
 
 ### Without a download
 

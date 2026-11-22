@@ -129,6 +129,21 @@ describe('check-exceptions', () => {
     assert.match(lines[0] ?? '', /^alint exact-dependency-versions: 1 exceptions now, 0 allowed/u);
   });
 
+  it('lets a first list land with "newRules", since an absent file counts 0 at the fork point', () => {
+    const root = repository({ 'package.json': '{}' });
+    write(root, {
+      'package.json': JSON.stringify({
+        'check-exceptions': { newRules: { 'gitleaks ignore': 2 } },
+      }),
+      '.gitleaksignore': 'app.config.js:generic-api-key:120\n.env.example:generic-api-key:20\n',
+    });
+    assert.deepEqual(run(root), { status: 0, lines: [] });
+    write(root, { 'package.json': '{}' });
+    const { status, lines } = run(root);
+    assert.equal(status, 1);
+    assert.match(lines[0] ?? '', /^gitleaks ignore: 2 exceptions now, 0 allowed for a new rule/u);
+  });
+
   it('lets a new rule land with the number of exceptions "newRules" gives it', () => {
     const root = repository({ 'package.json': '{}' });
     write(root, {

@@ -37,7 +37,7 @@ A rule that did not exist at the fork point starts at 0. To turn on a rule that 
 "check-exceptions": { "newRules": { "check-tree single-consumer": 12 } }
 ```
 
-`newRules` only counts for a rule absent at the fork point. Delete the entry in the next change.
+`newRules` only counts for a rule absent at the fork point, or at 0 there: a first `.gitleaksignore`, `.jscpd.json` ignore or knip ignore list lands the same way. Delete the entry in the next change.
 
 ## Reference
 
