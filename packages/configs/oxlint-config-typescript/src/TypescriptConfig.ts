@@ -22,12 +22,17 @@ const EXPORT_PLACEMENT = [
   },
   {
     selector:
-      'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator:not([init.type=/^(ArrowFunctionExpression|FunctionExpression|NewExpression|ObjectExpression)$/], [init.callee.name=/^define[A-Z]/])',
+      'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator:not([init.type=/^(ArrowFunctionExpression|FunctionExpression|NewExpression|ObjectExpression)$/], [init.callee.name=/^define[A-Z]/], [init.type=/^TS(As|Satisfies)Expression$/][init.expression.type=/^(ArrowFunctionExpression|FunctionExpression|NewExpression|ObjectExpression)$/])',
     message: 'Exported constants belong in an XConfig.ts file (configs/ folder).',
   },
   {
     selector:
       'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ObjectExpression.init:not(:has(Property[method=true], Property[value.type=/^(ArrowFunctionExpression|FunctionExpression)$/]))',
+    message: 'Exported constants belong in an XConfig.ts file (configs/ folder).',
+  },
+  {
+    selector:
+      'ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > :matches(TSAsExpression, TSSatisfiesExpression).init > ObjectExpression.expression:not(:has(Property[method=true], Property[value.type=/^(ArrowFunctionExpression|FunctionExpression)$/]))',
     message: 'Exported constants belong in an XConfig.ts file (configs/ folder).',
   },
 ];

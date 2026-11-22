@@ -17,4 +17,7 @@ export const methods = {
 export const thing = defineThing({});
 export const nestedFactory = { notes: { all: () => ['notes'] } };
 export const nestedPlain = { notes: { all: ['notes'] } };
+export const nestedAsConst = { notes: { all: () => ['notes'] } } as const;
+export const nestedSatisfies = { notes: { all: () => ['notes'] } } satisfies Record<string, object>;
+export const plainAsConst = { notes: { all: ['notes'] } } as const;
 // a comment
