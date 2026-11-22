@@ -1,5 +1,12 @@
 # @brutalkit/oxlint-config-typescript
 
+## 0.8.1
+
+### Patch Changes
+
+- da1eb39: export-placement accepts an exported object that holds a function at any depth, such as a query key factory made of nested objects, instead of only at its first level. An object of plain values, nested or not, still belongs in an `XConfig.ts`.
+- 1fe73e5: `no-console` is off in `logger.ts` and `xLogger.ts`, so a project can write the one logger the rest of its code goes through without a suppression.
+
 ## 0.8.0
 
 ### Minor Changes

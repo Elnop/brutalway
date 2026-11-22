@@ -1,5 +1,11 @@
 # template-package
 
+## 0.9.1
+
+### Patch Changes
+
+- 1fe73e5: `docs/reference/verifications.md` says that a `logger.ts` or `xLogger.ts` may use the console.
+
 ## 0.9.0
 
 ### Minor Changes

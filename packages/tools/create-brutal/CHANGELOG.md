@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.17.1
+
+### Patch Changes
+
+- 1fe73e5: The package template's `docs/reference/verifications.md` says that a `logger.ts` or `xLogger.ts` may use the console.
+
 ## 0.17.0
 
 ### Minor Changes
