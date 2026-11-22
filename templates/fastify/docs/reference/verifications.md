@@ -1,6 +1,6 @@
 # Verifications
 
-Everything below runs locally, in the pre-commit hook and in CI.
+Everything below runs locally, in the pre-commit hook and in CI. `npm run check` runs it with `brutal-check` (`@brutalway/check`), which keeps going after a failure, then names the checks that failed and those it skipped because their script is missing. Each check is a script of `package.json`, in this order: `format:check`, `typecheck`, `lint`, `styles`, `deps`, `tree`, `duplicates`, `docs`, `messages`, `repo`, `unused`, `secrets`, `exceptions`, so `npm run tree` runs one alone.
 
 ## TypeScript
 

@@ -4,7 +4,7 @@ A standalone npm package in TypeScript where every convention is checked by a to
 
 ## Before calling a change done
 
-Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, alint, knip, check-secrets and check-exceptions. Each message says what to change. Then run `npm test`.
+Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifications.md` describes and names the ones that failed. Each message says what to change. Then run `npm test`.
 
 ## Conventions worth knowing first
 

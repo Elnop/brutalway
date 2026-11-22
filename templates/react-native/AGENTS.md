@@ -4,7 +4,7 @@ A React Native + Expo (Expo Router) + TypeScript app where every convention is c
 
 ## Before calling a change done
 
-Run `npm run check`: Prettier, tsc, Oxlint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, i18next-cli, alint, knip, check-secrets and check-exceptions. Each message says what to change. Then run `npm test`.
+Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifications.md` describes and names the ones that failed. Each message says what to change. Then run `npm test`.
 
 ## Conventions worth knowing first
 

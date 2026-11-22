@@ -29,6 +29,8 @@ It refuses to run on a working tree with changes. It generates the project as th
 
 `package.json` is merged key by key: a script or a dependency the template changed and you did not takes the template's value, and when both sides changed the same key the command keeps yours and names it. The lockfile is left alone: run `npm install` afterwards. Then run `npm run check`, fix what the new checks report, and commit.
 
+From create-brutal 0.17.0, the `check` script of a template is `brutal-check`, which runs one script per check. If you had added your own checks to the old `check` line, `update` keeps your line and names it: set it to `brutal-check` followed by your checks, such as `"check": "brutal-check && npm run lint:sql"`. A release that adds a check then adds a script and bumps `@brutalway/check`, which merge without a conflict.
+
 - `--to <version>` targets another version than the one running the command.
 - `--set <option>=<value>` changes an answer during the update, to turn an option on or off later: `--set e2e=false`.
 - `npx create-brutal@latest check` exits with 1 when the current version would change the project, for a scheduled CI job.

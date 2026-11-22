@@ -487,16 +487,6 @@ export const FRONTEND_TAILWIND: StackChange[] = [
       },
       { file: 'docs/reference/verifications.md', dropSection: '## Styles' },
       { file: 'package.json', replace: STYLELINT_SETTINGS, with: '' },
-      {
-        file: 'package.json',
-        replace: 'npm run lint && npm run styles && ',
-        with: 'npm run lint && ',
-      },
-      {
-        file: 'docs/reference/commands.md',
-        replace: 'Oxlint, stylelint, dependency-cruiser',
-        with: 'Oxlint, dependency-cruiser',
-      },
     ],
     removeScripts: ['styles'],
     removeDependencies: ['stylelint', '@brutalway/stylelint-config'],
@@ -577,11 +567,6 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
       },
       { file: '.alint.yml', after: '    level: error\n', insert: THIRD_PARTY_ALINT },
       { file: 'README.md', before: '## Documentation', insert: SHADCN_README },
-      {
-        file: 'docs/reference/commands.md',
-        replace: '| `npm run check` | Prettier, both `tsc` projects,',
-        with: '| `npm run check` | Prettier, the three `tsc` projects,',
-      },
       {
         file: 'docs/reference/verifications.md',
         before: '## Lint',
@@ -1241,11 +1226,6 @@ export const FRONTEND_ANALYTICS_AND_AGENTS: StackChange[] = [
         replace:
           '- Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.',
         with: '- Styles are Tailwind classes built on the tokens declared under `@theme` in `src/app/globals.css`: no palette class, no arbitrary color.',
-      },
-      {
-        file: 'AGENTS.md',
-        replace: 'Oxlint, stylelint, dependency-cruiser',
-        with: 'Oxlint, dependency-cruiser',
       },
     ],
   },

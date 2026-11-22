@@ -186,10 +186,26 @@ npx check-secrets
 
 ## 6. One command
 
-Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing. On a Vite project, whose `tsconfig.json` only lists references, `tsc --noEmit` checks nothing: use `tsc -b` there.
+Put everything behind `npm run check` in `package.json`, so that a person, an agent and CI run the same thing. [`@brutalway/check`](../../packages/tools/check) gives the command: `brutal-check` runs one script per check, in a fixed order, keeps going after a failure and names the ones that failed. Each check stays a script of your own, with its arguments. On a Vite project, whose `tsconfig.json` only lists references, `tsc --noEmit` checks nothing: use `tsc -b` there.
+
+```sh
+npm install --save-dev @brutalway/check
+```
 
 ```json
-"check": "tsc --noEmit && oxlint --type-aware && depcruise src --output-type err-long --ignore-known && check-tree src && alint check --strict-baseline && knip && knip --production && jscpd src && check-secrets && check-exceptions"
+"format:check": "prettier --check .",
+"typecheck": "tsc --noEmit",
+"lint": "oxlint --type-aware",
+"deps": "depcruise src --output-type err-long --ignore-known",
+"tree": "check-tree src",
+"duplicates": "jscpd src",
+"repo": "alint check --strict-baseline",
+"unused": "knip && knip --production",
+"secrets": "check-secrets",
+"exceptions": "check-exceptions",
+"check": "brutal-check"
 ```
+
+A check that brutal-check does not know goes after it: `"check": "brutal-check && npm run lint:sql"`. The [README](../../packages/tools/check/README.md) lists the scripts it runs.
 
 Then [work with Claude Code](claude-code.md) to get the same messages while the agent writes, and read [Upgrade brutalway](upgrade.md) before the next bump of a `@brutalway/*` package.

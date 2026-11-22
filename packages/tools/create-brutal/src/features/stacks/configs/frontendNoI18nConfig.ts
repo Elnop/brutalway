@@ -62,7 +62,6 @@ export const FRONTEND_NO_I18N: StackChange[] = [
     keep: ['src/features'],
     edits: [
       { file: 'package.json', replace: 'i18next-cli types --quiet && ', with: '', all: true },
-      { file: 'package.json', replace: ' && npm run messages', with: '' },
       { file: 'package.json', replace: ' i18next.config.ts', with: '', all: true },
       { file: '.alint.yml', replace: "'locales/', ", with: '' },
       { file: 'tsconfig.app.json', replace: ',\n      "@locales/*": ["./locales/*"]', with: '' },
@@ -72,19 +71,9 @@ export const FRONTEND_NO_I18N: StackChange[] = [
       { file: 'tsconfig.test.json', replace: ',\n    "i18next.config.ts"', with: '' },
       {
         file: 'AGENTS.md',
-        replace: 'check-doc-links, i18next-cli, alint',
-        with: 'check-doc-links, alint',
-      },
-      {
-        file: 'AGENTS.md',
         replace:
           '- Every visible string goes through `t()`, with its English text in `locales/en/`.',
         with: '- Visible text is written in English, in the components.',
-      },
-      {
-        file: 'docs/reference/commands.md',
-        replace: 'check-doc-links, i18next-cli, alint',
-        with: 'check-doc-links, alint',
       },
       { file: 'README.md', dropLines: '(docs/guides/translations.md)' },
       { file: 'docs/reference/verifications.md', dropLines: 'runs `i18next-cli types`' },

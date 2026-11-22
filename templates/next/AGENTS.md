@@ -4,7 +4,7 @@ A Next.js (App Router) + React + TypeScript app where every convention is checke
 
 ## Before calling a change done
 
-Run `npm run check`: Prettier, tsc, Oxlint, stylelint, dependency-cruiser, check-tree, jscpd, check-doc-length, check-doc-sources, check-doc-links, i18next-cli, alint, knip, check-secrets and check-exceptions. Each message says what to change. Then run `npm test`, and `npm run e2e` when the change shows on screen.
+Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifications.md` describes and names the ones that failed. Each message says what to change. Then run `npm test`, and `npm run e2e` when the change shows on screen.
 
 ## Conventions worth knowing first
 
