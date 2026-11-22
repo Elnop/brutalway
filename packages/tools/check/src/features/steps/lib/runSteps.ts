@@ -1,5 +1,4 @@
 import { STEPS } from '#src/features/steps/StepsConfig.ts';
-import { missingPart } from '#src/features/steps/lib/missingPart.ts';
 import { runStep } from '#src/features/steps/lib/runStep.ts';
 import type { Manifest, StepsReport } from '#src/features/steps/StepsTypes.ts';
 
@@ -9,16 +8,15 @@ function say(line: string): void {
 
 export function runSteps(manifest: Manifest, cwd: string): StepsReport {
   const report: StepsReport = { failed: [], skipped: [] };
-  for (const step of STEPS) {
-    const missing = missingPart(step, manifest);
-    if (missing !== undefined) {
-      report.skipped.push(`${step.name} (${missing})`);
+  for (const script of STEPS) {
+    if (manifest.scripts[script] === undefined) {
+      report.skipped.push(script);
       continue;
     }
-    say(step.name);
-    if (!runStep(step, cwd)) report.failed.push(step.name);
+    say(script);
+    if (!runStep(script, cwd)) report.failed.push(script);
   }
-  if (report.skipped.length > 0) say(`skipped ${report.skipped.join(', ')}`);
+  if (report.skipped.length > 0) say(`no script for ${report.skipped.join(', ')}`);
   say(report.failed.length === 0 ? 'every check passed' : `${report.failed.join(', ')} failed`);
   return report;
 }
