@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.17.2
+
+### Patch Changes
+
+- bc81a86: The projects get check-tree 0.14.1 and oxlint-config-typescript 0.8.1.
+
 ## 0.17.1
 
 ### Patch Changes
