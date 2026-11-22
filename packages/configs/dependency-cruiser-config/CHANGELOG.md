@@ -1,5 +1,11 @@
 # @brutalkit/dependency-cruiser-config
 
+## 0.13.0
+
+### Minor Changes
+
+- 28aee4e: `xClient.ts` means a client of an external API, with no exception. The analytics rule becomes `analytics-in-tracker`: the SDK is only imported from `analyticsTracker.ts`, so rename `analyticsClient.ts` to `analyticsTracker.ts`. `orchestrators-use-hooks` no longer lets an orchestrator import `analyticsClient.ts`.
+
 ## 0.12.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-react-native
 
+## 0.3.3
+
+### Patch Changes
+
+- 28aee4e: Colors are a rule of their own, `theme-colors`. A template literal with expressions computes a color and is no longer reported, and `colorFiles([...])`, from `@brutalway/oxlint-config-react-native/colorFiles`, lets a project name the modules that work on colors. Tests may import AsyncStorage to seed or clear it, and `designSystemPrimitives` skips type-only imports.
+
 ## 0.3.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # create-brutal
 
+## 0.17.4
+
+### Patch Changes
+
+- ce1d3e9: The projects get @brutalway/check 0.3.0, whose `npm run check` runs every check at the same time, and @brutalway/check-exceptions 0.2.1.
+
 ## 0.17.3
 
 ### Patch Changes
