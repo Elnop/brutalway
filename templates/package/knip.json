@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "project": ["src/**/*.ts!", "{,test-utils/**/}*.ts"],
+  "project": ["src/**/*.ts!", "{,test/**/}*.ts"],
   "ignoreDependencies": [
     "@swc/core",
     "@brutalway/agent-hook",

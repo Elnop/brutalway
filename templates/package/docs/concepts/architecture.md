@@ -22,7 +22,7 @@ Enforced by `@brutalway/alint-config/library.yml`.
 
 ## Test the published surface
 
-Tests sit next to their source, and each entry point also gets a test that uses it the way a user does. `src/todo.test.ts` runs `node src/todo.ts` in a temporary folder and compares the exact output and exit code. `src/todos.test.ts` checks the names the export offers and calls them together on one file.
+Tests sit in `test/unit/` at the path of their source, and each entry point also gets a test that uses it the way a user does. `test/unit/todo.test.ts` runs `node src/todo.ts` in a temporary folder and compares the exact output and exit code. `test/unit/todos.test.ts` checks the names the export offers and calls them together on one file.
 
 We leave out tests of the built `dist/`, which would make `npm test` wait for a build. tsdown builds the same files the tests run.
 

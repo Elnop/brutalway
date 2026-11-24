@@ -4,8 +4,9 @@ import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-const CLI = join(import.meta.dirname, 'todo.ts');
+const CLI = fileURLToPath(import.meta.resolve('#src/todo.ts'));
 const USAGE =
   'Usage: todo add <text> | todo list | todo done <id>, with --file <path> (default: todos.json)\n';
 
