@@ -71,11 +71,11 @@ Move with `git mv` so that `git log --follow` keeps the history, and change noth
 
 Keep each pull request to one step or one feature: a reviewer can check a move only when nothing else changed in it.
 
-A move often ends with a second round on the folders it filled. A kind folder left with one file, or a file landing next to a kind folder that already exists, gets its own check-tree message: fix them in the same pull request. Tests move too: check-tree does not count them as consumers, but dependency-cruiser checks their imports, so a test that imports a moved file goes with it, or it breaks a `no-cross-sub-*` rule. A helper that only tests use is deleted, or moves into `test-utils/`.
+A move often ends with a second round on the folders it filled. A kind folder left with one file, or a file landing next to a kind folder that already exists, gets its own check-tree message: fix them in the same pull request. Tests move too: a test sits in `test/unit/` at the path of its source, so check-tree reports the test of a moved file, and `npx check-tree src --fix` moves it. A helper that only tests use is deleted, or moves into `test/support/`.
 
 A move changes the exception lists: the path of a moved folder in `.check-tree-known-violations.json`, a glob of `.jscpd.json` or `knip.json`, the count of a folder that lost files. Update them in the same commit. `npx oxlint --type-aware --prune-suppressions`, `npx check-tree src --shrink-known-violations`, `npx depcruise src --baseline --baseline-mode shrink-only` and `npx alint baseline` delete the entries that no longer happen and lower the counts. A moved folder that still breaks a rule is reported under its new path: change the path of its entry by hand. The globs of jscpd and knip are edited by hand too. check-exceptions counts per rule over the whole project, not per path, so a list whose paths changed but whose size did not still passes.
 
-Test helpers shared by several tests go in `test-utils/` at the root of the project, next to `src/`, behind an alias such as `@test-utils/` declared in the tsconfig and in the config of the test runner. dependency-cruiser rejects an import of `test-utils/` from production code.
+Test helpers shared by several tests go in `test/support/`, next to `test/unit/`, behind an alias such as `@test-support/` declared in the tsconfig and in the config of the test runner. dependency-cruiser rejects an import of `test/` from production code.
 
 ## Read the errors as instructions
 

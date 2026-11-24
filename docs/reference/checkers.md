@@ -21,9 +21,9 @@ The agent hook only reads the file it was given, and only with the `claude-hook`
 | Prettier | [`@brutalway/prettier-config`](../../packages/configs/prettier-config) | yes | yes | yes | yes | yes | a file not formatted: single quotes, trailing commas, 100 columns |
 | tsc | [`@brutalway/tsconfig`](../../packages/configs/tsconfig) | `react-vite.json` | `react-vite.json` | `base.json` | `node.json` | `node.json` | a type error, with `strict` and every extra strictness flag on |
 | Oxlint | [`@brutalway/oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) and the config of the stack | yes | yes | yes | yes | yes | comments, relative imports, `index.ts`, `export *`, a file not named after its single export, a function over 25 lines, 4 parameters or 5 variables, a file over 5 top-level functions |
-| dependency-cruiser | [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) | `layers` | `layers` | `layers` | `server` | `library` | an import that goes up a layer or crosses features, a cycle, a test file, `test-utils/` or a devDependency imported by production code |
+| dependency-cruiser | [`@brutalway/dependency-cruiser-config`](../../packages/configs/dependency-cruiser-config) | `layers` | `layers` | `layers` | `server` | `library` | an import that goes up a layer or crosses features, a cycle, a file of `test/` or a devDependency imported by production code, a unit test that imports more of `src/` than its source |
 | check-tree | [`@brutalway/check-tree`](../../packages/tools/check-tree) | yes | yes | yes | yes | `"rootEntries": true` | an empty folder, a kind folder holding a single file, two files of a kind outside their folder, a folder the layout does not name |
-| jscpd | `.jscpd.json` | yes | yes | yes | yes | yes | a block of 8 lines or 120 tokens that appears twice in `src/`, tests left out |
+| jscpd | `.jscpd.json` | yes | yes | yes | yes | yes | a block of 8 lines or 120 tokens that appears twice in `src/` |
 | check-doc-length | [`@brutalway/check-doc-length`](../../packages/tools/check-doc-length) | yes | yes | yes | yes | yes | a Markdown file over 300 lines |
 | check-doc-sources | [`@brutalway/check-doc-sources`](../../packages/tools/check-doc-sources) | yes | yes | yes | yes | yes | warns, without failing, when a cited file changed and the doc did not |
 | check-doc-links | [`@brutalway/check-doc-links`](../../packages/tools/check-doc-links) | yes | yes | yes | yes | yes | an external link that answers `404` or `410`, or whose domain is gone |
@@ -32,7 +32,7 @@ The agent hook only reads the file it was given, and only with the `claude-hook`
 
 The package stack pins only its devDependencies: `dependencies` and `peerDependencies` keep their ranges.
 
-A test sits next to its source, and a helper several tests share goes in `test-utils/` at the root of the project, outside `src/`. `npm run check` runs knip twice: the second run, `knip --production`, only reads `src/` without its tests, so a file or an export that only a test reaches is reported. dependency-cruiser keeps production code from importing `test-utils/`.
+A unit test sits in `test/unit/` at the path of its source, check-tree keeps that mirror, and a helper several tests share goes in `test/support/`. `npm run check` runs knip twice: the second run, `knip --production`, only reads `src/`, so a file or an export that only a test reaches is reported. dependency-cruiser keeps production code from importing `test/`, and a unit test from importing more of `src/` than its source, `xConfig.ts` and `xTypes.ts` files.
 
 ## Oxlint config of each stack
 
@@ -62,7 +62,7 @@ The options of the front-end stacks add the configs of the last table. Every tem
 
 | Stack | Config | What it adds to the TypeScript base |
 |---|---|---|
-| vite | [`@brutalway/oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) | the aliases `@/` and `@e2e/`, then the configs below |
+| vite | [`@brutalway/oxlint-config-react-vite`](../../packages/configs/oxlint-config-react-vite) | the aliases `@/`, `@test-support/` and `@test-e2e/`, then the configs below |
 | next | [`@brutalway/oxlint-config-next`](../../packages/configs/oxlint-config-next) | the `nextjs` plugin of oxlint, where client code and server actions go, then the configs below |
 | vite, react-native | [`@brutalway/oxlint-config-react`](../../packages/configs/oxlint-config-react) | hooks rules, props typed with a named `XProps`, callback props named `onX` and render props named `children` or `renderX`, no orchestrator in a `shared/`, `fetch` only in an `xClient.ts` and never in an effect |
 | vite, next, react-native | [`@brutalway/oxlint-config-zustand`](../../packages/configs/oxlint-config-zustand) | `xStore.ts` exports only `xStore` and `xActions`, `xSelectors.ts` only `selectX` functions |

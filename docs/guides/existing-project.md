@@ -83,7 +83,7 @@ knip: `ignoreFiles` and `ignoreDependencies` in `knip.json`, and `ignoreIssues` 
 jscpd: the `ignore` list of `.jscpd.json`, made of globs.
 
 ```json
-{ "ignore": ["**/*.test.ts", "src/legacy/**"] }
+{ "ignore": ["src/legacy/**"] }
 ```
 
 alint: `npx alint baseline` writes `.alint-baseline.json`, and `baseline: .alint-baseline.json` in `.alint.yml` makes `alint check` skip what it lists. alint only warns about an entry that no longer happens: run `alint check --strict-baseline` so that it fails, like the others. After a fix, `npx alint baseline` again deletes the fixed entries. It refuses to add a new violation unless you pass `--accept-new`. For the pinned versions, the [alint-config README](../../packages/configs/alint-config/README.md#pin-the-dependencies) says how to fix them.

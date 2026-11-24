@@ -32,9 +32,10 @@ src/features/todo-stats/
   components/
     TodoStats.tsx            the presenter: it only gets props
     TodoStatsContainer.tsx   the orchestrator: it reads the store
-    TodoStats.test.tsx
   todo-stats.css
 ```
+
+Its tests sit in `test/unit/`, at the same path: `test/unit/features/todo-stats/components/TodoStats.test.tsx` tests the presenter.
 
 ## A hook in its own folder
 
@@ -75,7 +76,6 @@ src/features/todo-stats/          src/features/todo-stats/
   components/                       components/
     TodoStats.tsx                     TodoStats.tsx
     TodoStatsContainer.tsx            TodoStatsContainer.tsx
-    TodoStats.test.tsx                TodoStats.test.tsx
   hooks/                            useTodoProgress.ts
     useTodoProgress.ts              todo-stats.css
   todo-stats.css
@@ -162,7 +162,7 @@ npm run check
 ```
 
 ```
-src/features/todo-stats/components/TodoStats.test.tsx(8,34): error TS2741: Property 'progress' is missing in type '{ remaining: number; completed: number; onClearCompleted: Mock<() => void>; }' but required in type 'TodoStatsProps'.
+test/unit/features/todo-stats/components/TodoStats.test.tsx(8,34): error TS2741: Property 'progress' is missing in type '{ remaining: number; completed: number; onClearCompleted: Mock<() => void>; }' but required in type 'TodoStatsProps'.
 ```
 
 The presenter test renders `TodoStats` with its old props. Give it `progress={67}` in the first test and `progress={0}` in the second, and check the new chip in the first one:

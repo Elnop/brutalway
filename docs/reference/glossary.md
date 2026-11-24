@@ -30,7 +30,7 @@ A folder that imports a file of a shared feature: a feature of `src/features/` f
 
 ## Group of files
 
-The files of a shared feature, tests aside, linked by their imports in either direction. A shared feature holds a single group: two groups that never import each other are two concepts, and check-tree asks to split them into two shared features. A platform variant is in the group of its base.
+The files of a shared feature, linked by their imports in either direction. A shared feature holds a single group: two groups that never import each other are two concepts, and check-tree asks to split them into two shared features. A platform variant is in the group of its base.
 
 ## Entry point
 
