@@ -20,7 +20,7 @@ A check of your own goes after it:
 "check": "brutal-check && npm run lint:sql"
 ```
 
-It runs every one of its scripts that `package.json` defines, all at the same time, and prints a line for each as it ends. The output of a step that failed follows its line, in full, and the output of a step that passed is left out. It exits with 1 when at least one step failed:
+It runs every one of its scripts that `package.json` defines, all at the same time, and prints a line for each as it ends. It runs them with the package manager that started it, npm or pnpm, read from `npm_config_user_agent`, then from the `packageManager` field of `package.json`, and npm when neither names one. The output of a step that failed follows its line, in full, and the output of a step that passed is left out. It exits with 1 when at least one step failed:
 
 ```
 brutal-check: no script for styles, messages

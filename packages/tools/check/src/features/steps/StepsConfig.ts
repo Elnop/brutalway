@@ -13,3 +13,5 @@ export const STEPS = [
   'secrets',
   'exceptions',
 ];
+
+export const PACKAGE_MANAGERS = ['npm', 'pnpm'];

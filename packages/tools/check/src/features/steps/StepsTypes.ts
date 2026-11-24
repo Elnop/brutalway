@@ -1,4 +1,4 @@
-export type Manifest = { scripts: Record<string, string> };
+export type Manifest = { scripts: Record<string, string>; packageManager?: string };
 
 export type StepResult = { script: string; passed: boolean; seconds: number; output: string };
 

@@ -1,20 +1,32 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 const CLI = join(import.meta.dirname, 'brutalCheck.ts');
 
-function project(scripts: Record<string, string>): string {
+function project(scripts: Record<string, string>, fields: Record<string, string> = {}): string {
   const root = mkdtempSync(join(tmpdir(), 'brutal-check-'));
-  writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts }));
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts, ...fields }));
   return root;
 }
 
-function run(root: string, args: string[] = []): { status: number | null; lines: string[] } {
-  const result = spawnSync(process.execPath, [CLI, ...args], { cwd: root, encoding: 'utf8' });
+function fakePnpmPath(): string {
+  const bin = join(mkdtempSync(join(tmpdir(), 'brutal-check-bin-')), 'bin');
+  mkdirSync(bin);
+  writeFileSync(join(bin, 'pnpm'), '#!/bin/sh\necho "pnpm $*"\nexit 1\n');
+  chmodSync(join(bin, 'pnpm'), 0o755);
+  return `${bin}:${process.env['PATH'] ?? ''}`;
+}
+
+function run(
+  root: string,
+  args: string[] = [],
+  env: NodeJS.ProcessEnv = process.env,
+): { status: number | null; lines: string[] } {
+  const result = spawnSync(process.execPath, [CLI, ...args], { cwd: root, encoding: 'utf8', env });
   return {
     status: result.status,
     lines: (result.stdout || result.stderr)
@@ -52,6 +64,23 @@ describe('brutal-check', () => {
     assert.ok(lines.includes('brutal-check: typecheck FAILED (s)'));
     assert.ok(lines.includes('src/a.ts: type error'));
     assert.equal(lines.at(-1), 'brutal-check: typecheck, exceptions failed');
+  });
+
+  it('runs the scripts with the package manager that started it, read from npm_config_user_agent', () => {
+    const root = project({ lint: 'echo linted' }, { packageManager: 'npm@11.0.0' });
+    const env = {
+      PATH: fakePnpmPath(),
+      npm_config_user_agent: 'pnpm/10.20.0 npm/? node/v26.0.0 linux x64',
+    };
+    assert.ok(run(root, ['--serial'], env).lines.includes('pnpm --silent run lint'));
+  });
+
+  it('falls back on the packageManager field of package.json, then on npm', () => {
+    const pnpmProject = project({ lint: 'echo linted' }, { packageManager: 'pnpm@10.20.0' });
+    const env = { PATH: fakePnpmPath() };
+    assert.ok(run(pnpmProject, ['--serial'], env).lines.includes('pnpm --silent run lint'));
+    const plainProject = project({ lint: 'echo linted' });
+    assert.ok(run(plainProject, ['--serial'], env).lines.includes('brutal-check: lint OK (s)'));
   });
 
   it('stops with a message when the folder has no package.json', () => {

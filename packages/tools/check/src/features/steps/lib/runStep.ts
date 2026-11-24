@@ -1,10 +1,10 @@
 import { spawn } from 'node:child_process';
 import type { StepResult } from '#src/features/steps/StepsTypes.ts';
 
-export function runStep(script: string, cwd: string): Promise<StepResult> {
+export function runStep(script: string, cwd: string, packageManager: string): Promise<StepResult> {
   const started = performance.now();
   const chunks: Buffer[] = [];
-  const child = spawn('npm', ['run', '--silent', script], { cwd });
+  const child = spawn(packageManager, ['--silent', 'run', script], { cwd });
   child.stdout.on('data', (chunk: Buffer) => chunks.push(chunk));
   child.stderr.on('data', (chunk: Buffer) => chunks.push(chunk));
   return new Promise((resolve) => {
