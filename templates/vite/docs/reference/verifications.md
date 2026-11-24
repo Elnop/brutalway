@@ -14,7 +14,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 
 - no `eval`, `new Function` or code in a string passed to `setTimeout`
 - no comments anywhere, tests included (directives like `oxlint-` and `@ts-expect-error` are allowed). A `@ts-expect-error` says why, and `@ts-ignore` and `@ts-nocheck` are refused
-- no relative imports: `@/` in `src/`, `@test-utils/` in `test-utils/`, `@e2e/` in `e2e/`. Root config files are the only exception
+- no relative imports: `@/` in `src/`, `@test-support/` in `test/support/`, `@test-e2e/` in `test/e2e/`. Root config files are the only exception
 - no `index.ts`, no `export *`, no `types.ts` without a domain, file names in camelCase or PascalCase
 - an exported type lives in an `XTypes.ts`, an exported constant in an `XConfig.ts`. Functions, classes and objects holding functions (like `todosActions`) can live anywhere
 - a file with a single export is named after it
@@ -47,11 +47,12 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 - an orchestrator imports no `xClient.ts`: it reads server data through a query hook
 - `src/app/` imports the orchestrators (`XContainer`, `XLayout`, `XPage`) and the providers of a feature, never one of its presenters
 - a store lives at the root or in the `stores/` folder of its level
-- no cycles, no import of a test file, of `test-utils/` or of a devDependency from production code
+- no cycles, no import of `test/` or of a devDependency from production code
+- a unit test imports from `src/` its own source and `xConfig.ts` or `xTypes.ts` files, nothing else, and follows the layer rules of its source: `test/unit/features/todo-stats/` cannot import `src/features/todo-list/`
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. Tests do not count: a test sits next to its source. A file of a shared feature that a single feature uses is rejected too, and moves into that feature. So is a shared feature whose files, tests aside, form two groups that never import each other: it splits into two shared features. It also rejects two CSS files outside a `styles/` folder.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders (`components`, `hooks`, `lib`...) holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind folder. Inside `components/`, the same goes for `orchestrators/` and `presenters/`. It also keeps `test/unit/` a mirror of `src/`: a test sits at the path of its source, and `npx check-tree src --fix` moves the tests whose source moved. A file of a shared feature that a single feature uses is rejected too, and moves into that feature. So is a shared feature whose files form two groups that never import each other: it splits into two shared features. It also rejects two CSS files outside a `styles/` folder.
 
 ## Messages
 
@@ -59,7 +60,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 
 ## Duplicates
 
-jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears twice in `src/`, tests left out: the threshold is 0. Move the shared part into a function the two places call.
+jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears twice in `src/`: the threshold is 0. Move the shared part into a function the two places call.
 
 ## Headers
 
@@ -95,20 +96,20 @@ alint checks that:
 
 The rules come from `@brutalway/alint-config`, except the path check, which `.alint.yml` declares itself because its prefixes depend on this repository's folders. Paths are resolved from the repository root, so the docs always write full paths like `src/app/App.tsx`.
 
-knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name. `npm run check` runs it a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the app never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
+knip (`knip.json`) rejects exports nobody imports, unused files, unused dependencies and packages used without being declared. `@swc/core` is ignored because dependency-cruiser loads it by name. `npm run check` runs it a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the app never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test/support/`.
 
 ## Tests
 
 | Kind | What it tests | Where | Command |
 |---|---|---|---|
-| Unit | a pure function, a selector | `src/shared/todos/lib/normalizeTitle.test.ts` next to its source | `npm run test:unit` |
-| Component | a presenter alone, through its props | `src/features/todo-list/components/presenters/TodoInput.test.tsx` | `npm run test:component` |
-| E2e | a user flow on the built app | `e2e/app.spec.ts` | `npm run e2e` |
+| Unit | a pure function, a selector | `test/unit/shared/todos/lib/normalizeTitle.test.ts` | `npm run test:unit` |
+| Component | a presenter alone, through its props | `test/unit/features/todo-list/components/presenters/TodoInput.test.tsx` | `npm run test:component` |
+| E2e | a user flow on the built app | `test/e2e/app.spec.ts` | `npm run e2e` |
 
 The extension picks the kind: `.test.ts` runs in Node, `.test.tsx` in Chromium. Only presenters get component tests, since orchestrators read stores and e2e covers them. Find elements by role and accessible name, wait with retrying assertions, never with a timeout. `vitest.setup.ts` gives the tests the same i18next instance as the app, so a presenter renders its English text.
 
-The specs import `test`, `expect` and `axeViolations` from `@brutalway/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `e2e/openApp.ts` opens the app and waits for its `h1`. `e2e/app.spec.ts` checks the first screen: no axe violation, no sideways scroll at 320 px. `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.
+The specs import `test`, `expect` and `axeViolations` from `@brutalway/playwright-fixtures`: `test` fails any test during which the page throws, `axeViolations` runs axe-core. `test/e2e/openApp.ts` opens the app and waits for its `h1`. `test/e2e/app.spec.ts` checks the first screen: no axe violation, no sideways scroll at 320 px. `test/e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.
 
-A helper that tests share (a fixture, a builder, a fake) goes in `test-utils/` at the root of the project, never in `src/`, and the tests import it through `@test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
+A helper that tests share (a fixture, a builder, a fake) goes in `test/support/`, never in `src/`, and the tests import it through `@test-support/`. dependency-cruiser rejects an import of `test/` from production code.
 
 Before keeping a test, break the code it protects and watch it fail.

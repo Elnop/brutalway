@@ -4,7 +4,7 @@ const URL = 'http://localhost:4173/';
 const onCi = Boolean(process.env['CI']);
 
 export default defineConfig({
-  testDir: 'e2e',
+  testDir: 'test/e2e',
   tsconfig: './tsconfig.test.json',
   forbidOnly: onCi,
   reporter: onCi ? 'list' : [['list'], ['html', { open: 'never' }]],

@@ -73,7 +73,7 @@ With `shadcn`, the Button, Input, Checkbox and Card of [shadcn/ui](https://ui.sh
 
 ## dark-theme
 
-`src/app/globals.css` gives each color token a dark value under `@media (prefers-color-scheme: dark)`, so the classes and stylesheets stay the same. With `e2e`, `darkTheme.spec.ts` in `e2e/` runs axe in dark mode.
+`src/app/globals.css` gives each color token a dark value under `@media (prefers-color-scheme: dark)`, so the classes and stylesheets stay the same. With `e2e`, `darkTheme.spec.ts` in `test/e2e/` runs axe in dark mode.
 
 ## server-state
 
@@ -91,7 +91,7 @@ It adds `react-hook-form`, `@hookform/resolvers`, `zod` and `@brutalway/oxlint-c
 
 `none` leaves i18next out, for an app that will only ever speak one language: the components hold their English text, to replace with the language of the app, and there is no `locales/`, no `npm run messages` and no lint rule against text written in JSX.
 
-`en-fr` adds French next to English: a `fr/` folder beside `locales/en/`, a `language-switch` feature with English and Français buttons in the header, and the choice saved in `localStorage`. `<html lang>` and the page title follow it, and `i18next-cli status` fails when French misses a key. With `e2e` and the example, `language.spec.ts` in `e2e/` runs axe in French.
+`en-fr` adds French next to English: a `fr/` folder beside `locales/en/`, a `language-switch` feature with English and Français buttons in the header, and the choice saved in `localStorage`. `<html lang>` and the page title follow it, and `i18next-cli status` fails when French misses a key. With `e2e` and the example, `language.spec.ts` in `test/e2e/` runs axe in French.
 
 ## react-compiler
 
@@ -106,7 +106,7 @@ Both values add `analyticsTracker.ts` to an `analytics` shared feature in `src/s
 
 ## component-tests
 
-Without it, the `.test.tsx` files, the `component` project of `vitest.config.ts`, the `test:component` script, `@vitest/browser-playwright` and `vitest-browser-react` are removed. The unit tests of `src/**/*.test.ts` stay.
+Without it, the `.test.tsx` files, the `component` project of `vitest.config.ts`, the `test:component` script, `@vitest/browser-playwright` and `vitest-browser-react` are removed. The unit tests, the `.test.ts` files of `test/unit/`, stay.
 
 ## coverage
 
@@ -114,4 +114,4 @@ Without it, the `.test.tsx` files, the `component` project of `vitest.config.ts`
 
 ## e2e
 
-Without it, `e2e/`, `playwright.config.ts`, the `e2e` script, `@playwright/test`, `@axe-core/playwright` and `@brutalway/playwright-fixtures` are removed, along with the e2e job of the CI workflow.
+Without it, `test/e2e/`, `playwright.config.ts`, the `e2e` script, `@playwright/test`, `@axe-core/playwright` and `@brutalway/playwright-fixtures` are removed, along with the e2e job of the CI workflow.
