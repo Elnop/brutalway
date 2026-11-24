@@ -62,6 +62,18 @@ describe('hookChecks', () => {
     );
   });
 
+  it('a test created in the test/ folder next to a tree runs check-tree on that tree', () => {
+    const root = project(['oxlint.config.ts', 'web/test/unit/a.test.ts', 'test/unit/b.test.ts']);
+    const trees = { trees: ['web/src', 'src'] };
+    function commands(file: string) {
+      return hookChecks(root, { file: join(root, file), created: true }, trees)
+        .filter((check) => check.command === 'check-tree')
+        .map((check) => check.args);
+    }
+    assert.deepEqual(commands('web/test/unit/a.test.ts'), [['web/src']]);
+    assert.deepEqual(commands('test/unit/b.test.ts'), [['src']]);
+  });
+
   it('an edited Markdown file runs alint only, and only when the project has a config', () => {
     const withAlint = project(['.alint.yml', 'docs/a.md']);
     assert.deepEqual(

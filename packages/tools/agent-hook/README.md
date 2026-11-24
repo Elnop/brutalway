@@ -73,7 +73,7 @@ After each `Edit` or `Write` by the agent:
 - an edited `.ts` or `.tsx` file goes through `oxlint --type-aware`, run from the folder of the nearest `oxlint.config.ts` or `.oxlintrc.json`, so a monorepo with a config per workspace works as is
 - an edited `.css` file goes through `stylelint` if the project has a stylelint config (a `stylelint` key in `package.json`, a `.stylelintrc*` or a `stylelint.config.*`)
 - a created file, or an edited Markdown file, runs `alint check` if the project has an `.alint.yml`
-- a created file inside one of the `--tree` folders runs `check-tree` on that folder
+- a created file inside one of the `--tree` folders, or inside the `test/` folder next to it, runs `check-tree` on that folder
 
 ### Exit code
 

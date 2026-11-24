@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import type { HookCheck, HookScope } from '#src/features/edit-checks/EditChecksTypes.ts';
 import { insideProject } from '#src/features/edit-checks/lib/insideProject.ts';
 import { oxlintCheck } from '#src/features/edit-checks/lib/oxlintCheck.ts';
@@ -25,7 +25,9 @@ function alintCheck(root: string, file: string, created: boolean): HookCheck[] {
 
 function treeChecks(root: string, fromRoot: string, { trees }: HookScope): HookCheck[] {
   return trees
-    .filter((folder) => fromRoot.startsWith(`${folder}/`))
+    .filter((folder) =>
+      [folder, join(dirname(folder), 'test')].some((checked) => fromRoot.startsWith(`${checked}/`)),
+    )
     .map((tree) => ({
       label: `check-tree found problems in ${tree}`,
       command: 'check-tree',
