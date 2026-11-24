@@ -81,7 +81,6 @@ export const ANALYTICS_POSTHOG_README = `## Analytics
 export const COVERAGE_JEST = `    "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/app/**",
-      "!**/*.test.{ts,tsx}",
       "!**/*{Container,Layout,Page,Provider}.tsx",
       "!**/use[A-Z]*.ts",
       "!**/*{Client,Tracker,Keys,Types,Config,Schemas,Storage}.ts"

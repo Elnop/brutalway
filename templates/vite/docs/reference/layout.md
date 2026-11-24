@@ -25,7 +25,7 @@ Components are orchestrators (`XContainer`, `XLayout`, `XPage`), which read stor
 
 One file of a kind stays at the root of its folder. From two on, they move into `components/`, `hooks/`, `types/`, `configs/`, `stores/` or `lib/`.
 
-`test/unit/` mirrors `src/`: the test of `src/shared/todos/lib/normalizeTitle.ts` is `test/unit/shared/todos/lib/normalizeTitle.test.ts`. A source needs no test, but a test needs its source at that path, so moving a source means moving its test: `npx check-tree src --fix` does it.
+`test/unit/` mirrors `src/`: a test sits at the path of its source, `x.ts` or `X.tsx` being tested by `x.test.ts` or `X.test.tsx`. A source needs no test, but a test needs its source at that path, so moving a source means moving its test: `npx check-tree src --fix` does it.
 
 ## Words
 

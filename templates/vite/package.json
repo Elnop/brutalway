@@ -17,7 +17,7 @@
     "typecheck": "i18next-cli types --quiet && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
     "lint": "oxlint --type-aware src test oxlint.config.ts vite.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts securityHeaders.ts",
     "styles": "stylelint 'src/**/*.css'",
-    "deps": "depcruise --output-type err-long src test",
+    "deps": "depcruise --output-type err-long '{src,test}/**/*.{ts,tsx}'",
     "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",

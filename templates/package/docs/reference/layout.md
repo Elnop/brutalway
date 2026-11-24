@@ -19,7 +19,7 @@ Each layer only imports the layers below it. `src/shared/todos/` holds the `Todo
 
 A feature or a shared feature that grows holds sub-features in `features/<y>/` and the shared features they have in common in `shared/<y>/`, next to its kind folders. Each of them can do the same, down to ten levels. check-tree rejects any other folder name there.
 
-`test/unit/` mirrors `src/`: the test of `src/shared/todos/todosFile.ts` is `test/unit/shared/todos/todosFile.test.ts`. A source needs no test, but a test needs its source at that path, so moving a source means moving its test: `npx check-tree src --fix` does it.
+`test/unit/` mirrors `src/`: a test sits at the path of its source, `x.ts` being tested by `x.test.ts`. A source needs no test, but a test needs its source at that path, so moving a source means moving its test: `npx check-tree src --fix` does it.
 
 ## Words
 

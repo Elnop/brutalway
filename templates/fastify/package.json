@@ -16,7 +16,7 @@
     "start": "node src/server.ts",
     "typecheck": "tsc -p .",
     "lint": "oxlint --type-aware src test oxlint.config.ts",
-    "deps": "depcruise --output-type err-long src test",
+    "deps": "depcruise --output-type err-long '{src,test}/**/*.ts'",
     "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",

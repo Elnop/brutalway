@@ -13,7 +13,9 @@ export function finishProject(
   target: Pick<ScaffoldPlan, 'dir' | 'stack' | 'answers' | 'projectName'>,
 ): void {
   dropStaleGitkeeps(target.dir);
-  if (existsSync(join(target.dir, 'src'))) dropEmptyFolders(join(target.dir, 'src'));
+  for (const tree of ['src', 'test']) {
+    if (existsSync(join(target.dir, tree))) dropEmptyFolders(join(target.dir, tree));
+  }
   for (const file of ['knip.json', ...globSync('tsconfig*.json', { cwd: target.dir })]) {
     const path = join(target.dir, file);
     if (existsSync(path)) writeFileSync(path, formatJson(readFileSync(path, 'utf8'), file));

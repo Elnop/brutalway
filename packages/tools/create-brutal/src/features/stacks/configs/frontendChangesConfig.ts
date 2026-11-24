@@ -19,7 +19,7 @@ ${CHROMIUM_LINE}      - run: npm run e2e
 
 const UNIT_PROJECT = `        {
           extends: true,
-          test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] },
+          test: { name: 'unit', environment: 'node', include: ['test/unit/**/*.test.ts'] },
         },
 `;
 
@@ -27,7 +27,7 @@ const COMPONENT_PROJECT = `        {
           extends: true,
           test: {
             name: 'component',
-            include: ['src/**/*.test.tsx'],
+            include: ['test/unit/**/*.test.tsx'],
             browser: {
               enabled: true,
               provider: playwright(),
@@ -40,7 +40,7 @@ const COMPONENT_PROJECT = `        {
 
 export const PRESENTER_TEST_EXAMPLE = {
   file: 'docs/concepts/architecture.md',
-  replace: ', as `src/features/todo-list/components/presenters/TodoInput.test.tsx` does,',
+  replace: ', as `test/unit/features/todo-list/components/presenters/TodoInput.test.tsx` does,',
   with: ',',
 };
 
@@ -177,7 +177,6 @@ const COVERAGE_CONFIG = `      coverage: {
         include: ['src/**/*.{ts,tsx}'],
         exclude: [
 {{coverageEntries}}          'src/app/**',
-          '**/*.test.{ts,tsx}',
           '**/*{Container,Layout,Page,Provider}.tsx',
           '**/use[A-Z]*.ts',
           '**/*{Client,Tracker,Keys,Types,Config,Schemas,Storage}.ts',
@@ -420,13 +419,13 @@ export const FRONTEND_SKELETON: StackChange[] = [
       },
       {
         file: 'docs/reference/verifications.md',
-        replace: '`src/shared/todos/lib/normalizeTitle.test.ts` next to its source',
-        with: 'next to its source',
+        replace: '`test/unit/shared/todos/lib/normalizeTitle.test.ts`',
+        with: 'in `test/unit/`, at the path of its source',
       },
       {
         file: 'docs/reference/verifications.md',
-        replace: '`src/features/todo-list/components/presenters/TodoInput.test.tsx`',
-        with: 'next to the presenter',
+        replace: '`test/unit/features/todo-list/components/presenters/TodoInput.test.tsx`',
+        with: 'in `test/unit/`, at the path of the presenter',
       },
       {
         file: 'docs/concepts/architecture.md',
@@ -584,8 +583,8 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
       },
       {
         file: 'package.json',
-        replace: '"deps": "depcruise --output-type err-long src"',
-        with: '"deps": "depcruise --output-type err-long src third-party"',
+        replace: "'{src,test}/**/*.{ts,tsx}'",
+        with: "'{src,test,third-party}/**/*.{ts,tsx}'",
       },
       {
         file: 'oxlint.config.ts',
@@ -855,7 +854,7 @@ const FRONTEND_I18N_E2E_AND_COVERAGE: StackChange[] = [
       {
         file: 'docs/reference/verifications.md',
         replace: 'and renaming.',
-        with: 'and renaming. `e2e/language.spec.ts` switches to French, checks the heading, a counter, `<html lang>` and the title of the page, runs axe, and reloads to check that the choice stays.',
+        with: 'and renaming. `test/e2e/language.spec.ts` switches to French, checks the heading, a counter, `<html lang>` and the title of the page, runs axe, and reloads to check that the choice stays.',
       },
     ],
   },
@@ -893,12 +892,12 @@ const FRONTEND_I18N_E2E_AND_COVERAGE: StackChange[] = [
   },
   {
     when: { example: false, e2e: true },
-    remove: ['e2e/todos.spec.ts'],
+    remove: ['test/e2e/todos.spec.ts'],
     edits: [
       {
         file: 'docs/reference/verifications.md',
         replace:
-          ' `e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.',
+          ' `test/e2e/todos.spec.ts` covers the example: the same two checks while a task is being renamed, axe again on the error shown for a blank title, the counters while adding, checking, filtering and clearing tasks, and renaming.',
         with: '',
       },
     ],
@@ -957,7 +956,7 @@ export const FRONTEND_NO_ZUSTAND: StackChange[] = [
 export const FRONTEND_TEST_SWITCHES: StackChange[] = [
   {
     when: { 'component-tests': false, example: true },
-    remove: ['src/**/*.test.tsx'],
+    remove: ['test/unit/**/*.test.tsx'],
   },
   {
     when: { 'component-tests': false },
@@ -1002,25 +1001,24 @@ export const FRONTEND_TEST_SWITCHES: StackChange[] = [
   },
   {
     when: { e2e: false },
-    remove: ['e2e', 'playwright.config.ts'],
+    remove: ['test/e2e', 'playwright.config.ts'],
     edits: [
       {
         file: 'package.json',
         replace: '{{lint}}',
         with: '{{lintWithoutE2e}}',
       },
-      { file: 'tsconfig.test.json', replace: '    "e2e",\n', with: '' },
       { file: 'tsconfig.test.json', replace: '    "playwright.config.ts",\n', with: '' },
       {
         file: 'tsconfig.test.json',
-        replace: '"@e2e/*": ["./e2e/*"],\n      ',
+        replace: '"@test-e2e/*": ["./test/e2e/*"],\n      ',
         with: '',
       },
       {
         file: 'oxlint.config.ts',
         replace:
-          "'Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/, @e2e/ in e2e/).',",
-        with: "'Relative imports are not allowed: import through an alias (@/ in src/, @test-utils/ in test-utils/).',",
+          "'Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/, @test-e2e/ in test/e2e/).',",
+        with: "'Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/).',",
       },
       { file: 'docs/reference/commands.md', dropLines: '| `npm run e2e` |' },
       {
@@ -1035,7 +1033,7 @@ export const FRONTEND_TEST_SWITCHES: StackChange[] = [
       },
       {
         file: 'docs/reference/verifications.md',
-        replace: ', `@e2e/` in `e2e/`',
+        replace: ', `@test-e2e/` in `test/e2e/`',
         with: '',
       },
       { file: 'docs/reference/verifications.md', dropLines: '| E2e |' },
@@ -1057,7 +1055,7 @@ export const FRONTEND_E2E_AND_REPOSITORY: StackChange[] = [
       {
         file: 'docs/guides/start-your-own-app.md',
         replace:
-          ' and `e2e/todos.spec.ts`. `e2e/app.spec.ts` and `e2e/openApp.ts` work on any app whose first screen has an `h1`.',
+          ', and `test/e2e/todos.spec.ts`. `test/e2e/app.spec.ts` and `test/e2e/openApp.ts` work on any app whose first screen has an `h1`.',
         with: '.',
       },
     ],

@@ -3,9 +3,9 @@ import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const BIN_SENTENCE =
-  ' `src/todo.test.ts` runs `node src/todo.ts` in a temporary folder and compares the exact output and exit code.';
+  ' `test/unit/todo.test.ts` runs `node src/todo.ts` in a temporary folder and compares the exact output and exit code.';
 const EXPORT_SENTENCE =
-  ' `src/todos.test.ts` checks the names the export offers and calls them together on one file.';
+  ' `test/unit/todos.test.ts` checks the names the export offers and calls them together on one file.';
 const BIN_ENTRY = '"todo": "./dist/todo.js"';
 const BIN_LAYOUT_LINE = '  todo.ts           bin: the todo command';
 const EXPORT_LAYOUT_LINE = '  todos.ts          the "." export';
@@ -83,7 +83,7 @@ export const packageStack: Stack = {
     },
     {
       when: { example: true, bin: false },
-      remove: ['src/todo.ts', 'src/todo.test.ts'],
+      remove: ['src/todo.ts'],
       edits: [
         {
           file: 'package.json',
@@ -105,14 +105,7 @@ export const packageStack: Stack = {
     },
     {
       when: { example: false },
-      remove: [
-        'src/features',
-        'src/shared',
-        'src/todo.ts',
-        'src/todo.test.ts',
-        'src/todos.ts',
-        'src/todos.test.ts',
-      ],
+      remove: ['src/features', 'src/shared', 'src/todo.ts', 'src/todos.ts'],
       edits: [
         { file: 'package.json', dropLines: '"description": "A todo list' },
         { file: 'package.json', replace: '"./dist/todos.d.ts"', with: '"./dist/greet.d.ts"' },
@@ -156,14 +149,15 @@ export const packageStack: Stack = {
         {
           file: 'docs/concepts/architecture.md',
           replace: EXPORT_SENTENCE,
-          with: ' `src/greet.test.ts` checks the names the export offers and calls them.',
+          with: ' `test/unit/greet.test.ts` checks the names the export offers and calls them.',
         },
         { file: 'docs/reference/verifications.md', dropLines: '| Feature |' },
         { file: 'docs/reference/verifications.md', dropLines: '| Shared feature |' },
         {
           file: 'docs/reference/verifications.md',
-          replace: 'the names the export offers, called together on one file | `src/todos.test.ts`',
-          with: 'the names the export offers, called once | `src/greet.test.ts`',
+          replace:
+            'the names the export offers, called together on one file | `test/unit/todos.test.ts`',
+          with: 'the names the export offers, called once | `test/unit/greet.test.ts`',
         },
       ],
       overlay: 'skeleton',
@@ -200,13 +194,13 @@ export const packageStack: Stack = {
         {
           file: 'docs/concepts/architecture.md',
           replace: BIN_SENTENCE,
-          with: ' `src/cli.test.ts` runs `node src/cli.ts` and compares the exact output and exit code.',
+          with: ' `test/unit/cli.test.ts` runs `node src/cli.ts` and compares the exact output and exit code.',
         },
         {
           file: 'docs/reference/verifications.md',
           replace:
-            '`node src/todo.ts` in a temporary folder: exact output, exit code | `src/todo.test.ts`',
-          with: '`node src/cli.ts`: exact output, exit code | `src/cli.test.ts`',
+            '`node src/todo.ts` in a temporary folder: exact output, exit code | `test/unit/todo.test.ts`',
+          with: '`node src/cli.ts`: exact output, exit code | `test/unit/cli.test.ts`',
         },
       ],
     },

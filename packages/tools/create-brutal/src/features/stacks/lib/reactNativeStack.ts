@@ -166,6 +166,7 @@ const I18N_LIB_CHANGES: StackChange[] = [
 const THEME_CONFIG = 'src/shared/theme/ThemeConfig.ts';
 const PAGE_LAYOUT_CONFIGS = 'src/features/page-layout/configs';
 const SWITCH_PRESENTERS = 'src/features/language-switch/components/presenters';
+const SWITCH_PRESENTER_TESTS = 'test/unit/features/language-switch/components/presenters';
 const THEME_SENTENCE =
   '`src/shared/theme/` holds the theme (`ThemeConfig.ts`) and the `Button` every feature uses.';
 
@@ -259,17 +260,17 @@ const THEME_SKELETON_CHANGES: StackChange[] = [
   {
     when: { example: false, i18n: 'en-fr', 'component-tests': true },
     move: {
-      'src/shared/theme/Button.test.tsx': `${SWITCH_PRESENTERS}/Button.test.tsx`,
-      'src/features/language-switch/components/LanguageSwitch.test.tsx': `${SWITCH_PRESENTERS}/LanguageSwitch.test.tsx`,
+      'test/unit/shared/theme/Button.test.tsx': `${SWITCH_PRESENTER_TESTS}/Button.test.tsx`,
+      'test/unit/features/language-switch/components/LanguageSwitch.test.tsx': `${SWITCH_PRESENTER_TESTS}/LanguageSwitch.test.tsx`,
     },
     edits: [
       importEdit(
-        `${SWITCH_PRESENTERS}/Button.test.tsx`,
+        `${SWITCH_PRESENTER_TESTS}/Button.test.tsx`,
         'src/shared/theme/Button.tsx',
         `${SWITCH_PRESENTERS}/Button.tsx`,
       ),
       importEdit(
-        `${SWITCH_PRESENTERS}/LanguageSwitch.test.tsx`,
+        `${SWITCH_PRESENTER_TESTS}/LanguageSwitch.test.tsx`,
         'src/features/language-switch/components/LanguageSwitch.tsx',
         `${SWITCH_PRESENTERS}/LanguageSwitch.tsx`,
       ),
@@ -349,7 +350,7 @@ export const reactNativeStack: Stack = {
       },
       {
         when: { example: false, i18n: ['none', 'en'], 'component-tests': true },
-        remove: ['src/shared/theme/Button.test.tsx'],
+        remove: ['test/unit/shared/theme/Button.test.tsx'],
       },
       {
         when: { example: false, i18n: ['none', 'en'] },
@@ -426,9 +427,7 @@ export const reactNativeStack: Stack = {
           'src/shared/todos/useTodos.ts',
           'src/shared/todos/todosStore.ts',
           'src/shared/todos/lib/todosStorage.ts',
-          'src/shared/todos/todosStore.test.ts',
           'src/shared/todos/lib/todosSelectors.ts',
-          'src/shared/todos/lib/todosSelectors.test.ts',
         ],
         edits: [
           { file: 'docs/concepts/architecture.md', replace: PERSISTENCE_DOC, with: '' },
@@ -501,11 +500,11 @@ export const reactNativeStack: Stack = {
       ...FRONTEND_NO_ZUSTAND,
       {
         when: { 'component-tests': false, example: true },
-        remove: ['src/**/*.test.tsx'],
+        remove: ['test/unit/**/*.test.tsx'],
       },
       {
         when: { 'component-tests': false, example: false },
-        remove: ['src/**/*.test.tsx'],
+        remove: ['test/unit/**/*.test.tsx'],
       },
       {
         when: { 'component-tests': false },
@@ -567,8 +566,8 @@ export const reactNativeStack: Stack = {
           },
           {
             file: 'package.json',
-            replace: 'oxlint --type-aware src test-utils scripts ',
-            with: 'oxlint --type-aware src test-utils ',
+            replace: 'oxlint --type-aware src test scripts ',
+            with: 'oxlint --type-aware src test ',
           },
           { file: 'tsconfig.test.json', replace: '    "scripts",\n', with: '' },
           { file: 'knip.json', replace: ', "scripts/*.ts"]', with: ']' },

@@ -74,9 +74,9 @@ const ANCHORS = {
   aliasFile: 'vitest.config.ts',
   ignorePatterns: "'.next', 'next-env.d.ts'",
   cspFile: 'src/proxy.ts',
-  lint: 'oxlint --type-aware src test-utils e2e oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
+  lint: 'oxlint --type-aware src test oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts playwright.config.ts i18next.config.ts',
   lintWithoutE2e:
-    'oxlint --type-aware src test-utils oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
+    'oxlint --type-aware src test oxlint.config.ts next.config.ts vitest.config.ts vitest.setup.ts i18next.config.ts',
   testsLintLine:
     '- in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)',
   coverageEntries:
@@ -197,9 +197,7 @@ export const nextStack: Stack = {
         remove: [
           'src/shared/todos/useTodos.ts',
           'src/shared/todos/todosStore.ts',
-          'src/shared/todos/todosStore.test.ts',
           'src/shared/todos/lib/todosSelectors.ts',
-          'src/shared/todos/lib/todosSelectors.test.ts',
         ],
         edits: [
           { file: 'README.md', before: '## Documentation', insert: SERVER_STATE_README },
@@ -312,7 +310,7 @@ export const nextStack: Stack = {
       ...FRONTEND_TEST_SWITCHES,
       {
         when: { 'component-tests': false, example: false },
-        remove: ['src/features/i18n/I18nProvider.test.tsx'],
+        remove: ['test/unit/features/i18n/I18nProvider.test.tsx'],
       },
       {
         when: { 'server-state': true, coverage: true },

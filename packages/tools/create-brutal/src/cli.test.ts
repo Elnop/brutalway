@@ -346,7 +346,7 @@ describe('create-brutal', () => {
     }
     for (const file of [
       'playwright.config.ts',
-      'e2e/app.spec.ts',
+      'test/e2e/app.spec.ts',
       'src/features/todo-list/todo-list.css',
     ]) {
       assert.equal(existsSync(join(project, file)), false, file);
@@ -487,7 +487,7 @@ describe('create-brutal', () => {
     assert.equal(pkg.scripts?.['release'], undefined);
     assert.equal(pkg.devDependencies?.['@changesets/cli'], undefined);
     assert.equal(pkg.devDependencies?.['@brutalway/agent-hook'], undefined);
-    for (const file of ['src/greet.ts', 'src/greet.test.ts', 'src/features/.gitkeep']) {
+    for (const file of ['src/greet.ts', 'test/unit/greet.test.ts', 'src/features/.gitkeep']) {
       assert.equal(existsSync(join(project, file)), true, file);
     }
     for (const file of [
@@ -530,7 +530,7 @@ describe('create-brutal', () => {
     const project = join(result.cwd, 'app');
     assert.equal(manifest(project).bin, undefined);
     assert.equal(existsSync(join(project, 'src/todos.ts')), true);
-    for (const file of ['src/todo.ts', 'src/todo.test.ts']) {
+    for (const file of ['src/todo.ts', 'test/unit/todo.test.ts']) {
       assert.equal(existsSync(join(project, file)), false, file);
     }
     assert.equal(

@@ -17,7 +17,7 @@
     "build": "expo export --platform web",
     "typecheck": "i18next-cli types --quiet && tsc -p tsconfig.app.json && tsc -p tsconfig.test.json",
     "lint": "oxlint --type-aware src test scripts oxlint.config.ts jest.setup.ts i18next.config.ts",
-    "deps": "depcruise --output-type err-long src test",
+    "deps": "depcruise --output-type err-long '{src,test}/**/*.{ts,tsx}'",
     "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
@@ -98,8 +98,8 @@
   "main": "expo-router/entry",
   "jest": {
     "preset": "jest-expo",
-    "roots": [
-      "<rootDir>/test/unit"
+    "testMatch": [
+      "<rootDir>/test/unit/**/*.test.{ts,tsx}"
     ],
     "setupFiles": [
       "<rootDir>/jest.setup.ts"

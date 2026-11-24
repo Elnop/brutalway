@@ -2,6 +2,10 @@ import type { StackChange } from '#src/shared/stack/StackTypes.ts';
 
 const TODOS = 'src/shared/todos';
 const TODOS_LIB = `${TODOS}/lib`;
+
+function mirrorOf(path: string): string {
+  return path.replace(/^src\//u, 'test/unit/');
+}
 const TITLE_FORM = 'src/features/todo-list/shared/title-form';
 
 type Variant = Pick<StackChange, 'when'> & { folder: string; importers: string[] };
@@ -20,25 +24,20 @@ const VARIANTS: Variant[] = [
 ];
 
 function moveNormalizeTitle({ when, folder, importers }: Variant, docs: string[]): StackChange {
-  const sourceEdits = [...importers, `${folder}/normalizeTitle.test.ts`].map((file) => ({
+  const sourceEdits = [...importers, `${mirrorOf(folder)}/normalizeTitle.test.ts`].map((file) => ({
     file,
     replace: "'@/shared/todos/lib/normalizeTitle.ts'",
     with: `'${folder.replace(/^src\//u, '@/')}/normalizeTitle.ts'`,
   }));
   const docEdits = docs.map((file) => ({
     file,
-    replace: `\`${TODOS_LIB}/normalizeTitle`,
-    with: `\`${folder}/normalizeTitle`,
+    replace: `${TODOS_LIB.replace(/^src\//u, '')}/normalizeTitle`,
+    with: `${folder.replace(/^src\//u, '')}/normalizeTitle`,
     all: true,
   }));
   return {
     when,
-    move: Object.fromEntries(
-      ['normalizeTitle.ts', 'normalizeTitle.test.ts'].map((file) => [
-        `${TODOS_LIB}/${file}`,
-        `${folder}/${file}`,
-      ]),
-    ),
+    move: { [`${TODOS_LIB}/normalizeTitle.ts`]: `${folder}/normalizeTitle.ts` },
     edits: [...sourceEdits, ...docEdits],
   };
 }

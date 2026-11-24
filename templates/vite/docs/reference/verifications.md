@@ -48,7 +48,7 @@ dependency-cruiser checks the direction of imports. The rules come from `@brutal
 - `src/app/` imports the orchestrators (`XContainer`, `XLayout`, `XPage`) and the providers of a feature, never one of its presenters
 - a store lives at the root or in the `stores/` folder of its level
 - no cycles, no import of `test/` or of a devDependency from production code
-- a unit test imports from `src/` its own source and `xConfig.ts` or `xTypes.ts` files, nothing else, and follows the layer rules of its source: `test/unit/features/todo-stats/` cannot import `src/features/todo-list/`
+- a unit test imports from `src/` its own source and `xConfig.ts` or `xTypes.ts` files, nothing else, and follows the layer rules of its source: the test of a feature cannot import another feature
 
 ## Tree
 

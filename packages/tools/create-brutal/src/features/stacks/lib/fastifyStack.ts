@@ -3,14 +3,8 @@ import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsCon
 
 const NPM_TEST_ROW = '`node:test`: queries on an in-memory database, routes through `inject()`';
 const ROW_ID_SENTENCE = " That is also why `src/shared/todos/todosQueries.ts` reads `row['id']`.";
-const TEST_FILES_OPENING_A_DATABASE = [
-  'src/shared/todos/todosQueries.test.ts',
-  'src/features/todo-list/todoListRoutes.test.ts',
-  'src/features/todo-stats/todoStatsRoutes.test.ts',
-];
-
-const TODO_LIST_ROUTES_TEST = 'src/features/todo-list/todoListRoutes.test.ts';
-const TODO_STATS_ROUTES_TEST = 'src/features/todo-stats/todoStatsRoutes.test.ts';
+const MEMORY_TODOS = 'test/support/memoryTodos.ts';
+const TEST_FILES_OPENING_A_DATABASE = ['test/unit/shared/todos/todosQueries.test.ts', MEMORY_TODOS];
 const HTTP_SERVER = 'src/features/http-server/createHttpServer.ts';
 const APP_CONFIG = 'src/app/AppConfig.ts';
 const APP_TYPES = 'src/app/AppTypes.ts';
@@ -62,7 +56,7 @@ export const fastifyStack: Stack = {
         'src/features/todo-list',
         'src/features/todo-stats',
         'src/shared/todos',
-        'test-utils',
+        'test/support',
         'docs/reference/endpoints.md',
       ],
       edits: [
@@ -181,35 +175,15 @@ export const fastifyStack: Stack = {
           dropLines: "import { DatabaseSync } from 'node:sqlite';",
         })),
         {
-          file: 'src/shared/todos/todosQueries.test.ts',
+          file: 'test/unit/shared/todos/todosQueries.test.ts',
           replace: "  return createTodosQueries(new DatabaseSync(':memory:'));\n",
           with: `${EMPTY_MEMORY_STORE}  return todos;\n`,
         },
         {
-          file: TODO_LIST_ROUTES_TEST,
-          before: "import { createTestServer } from '#test-utils/createTestServer.ts';\n",
-          insert: "import { createTodosQueries } from '#src/shared/todos/todosQueries.ts';\n",
-        },
-        {
-          file: TODO_LIST_ROUTES_TEST,
-          replace: "createTodoListService(new DatabaseSync(':memory:'))",
-          with: 'createTodoListService()',
-        },
-        {
-          file: TODO_LIST_ROUTES_TEST,
-          before: '  const app = createTestServer();\n',
-          insert: EMPTY_MEMORY_STORE,
-        },
-        {
-          file: TODO_STATS_ROUTES_TEST,
+          file: MEMORY_TODOS,
           replace:
-            "    const database = new DatabaseSync(':memory:');\n    const todos = createTodosQueries(database);\n",
-          with: '    const todos = createTodosQueries();\n',
-        },
-        {
-          file: TODO_STATS_ROUTES_TEST,
-          replace: 'createTodoStatsService(database)',
-          with: 'createTodoStatsService()',
+            "  const database = new DatabaseSync(':memory:');\n  return {\n    todos: createTodosQueries(database),\n    todoListService: createTodoListService(database),\n    todoStatsService: createTodoStatsService(database),\n",
+          with: `${EMPTY_MEMORY_STORE}  return {\n    todos,\n    todoListService: createTodoListService(),\n    todoStatsService: createTodoStatsService(),\n`,
         },
         ...SERVICES.flatMap((file) => [
           {
@@ -237,6 +211,11 @@ export const fastifyStack: Stack = {
           replace: 'the SQL, on a `:memory:` database',
           with: 'the in-memory store',
         },
+        {
+          file: 'docs/reference/verifications.md',
+          replace: 'its service on a `:memory:` database from `memoryTodos()`',
+          with: 'its service on an emptied in-memory store from `memoryTodos()`',
+        },
       ],
     },
     {
@@ -258,7 +237,7 @@ export const fastifyStack: Stack = {
           with: '{ logLevel }',
         },
         {
-          file: 'src/app/buildApp.test.ts',
+          file: 'test/unit/app/buildApp.test.ts',
           replace: "databasePath: ':memory:', ",
           with: '',
           all: true,
@@ -271,9 +250,9 @@ export const fastifyStack: Stack = {
         { file: 'src/shared/env/EnvTypes.ts', dropLines: 'databasePath' },
         { file: 'src/shared/env/readEnv.ts', dropLines: 'DATABASE_PATH: z' },
         { file: 'src/shared/env/readEnv.ts', dropLines: 'databasePath: env.DATABASE_PATH' },
-        { file: 'src/shared/env/readEnv.test.ts', dropLines: "databasePath: 'todos.db'" },
+        { file: 'test/unit/shared/env/readEnv.test.ts', dropLines: "databasePath: 'todos.db'" },
         {
-          file: 'src/shared/env/readEnv.test.ts',
+          file: 'test/unit/shared/env/readEnv.test.ts',
           replace:
             "    assert.deepEqual(\n      readEnv({ HOST: '0.0.0.0', PORT: '8080', DATABASE_PATH: ':memory:', LOG_LEVEL: 'silent' }),\n      {\n        host: '0.0.0.0',\n        port: 8080,\n        databasePath: ':memory:',\n        logLevel: 'silent',\n      },\n    );\n",
           with: "    assert.deepEqual(readEnv({ HOST: '0.0.0.0', PORT: '8080', LOG_LEVEL: 'silent' }), {\n      host: '0.0.0.0',\n      port: 8080,\n      logLevel: 'silent',\n    });\n",

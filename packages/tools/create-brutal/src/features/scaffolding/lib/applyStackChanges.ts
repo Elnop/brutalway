@@ -13,6 +13,7 @@ import { changeApplies } from '#src/features/scaffolding/lib/changeApplies.ts';
 import { finishProject } from '#src/features/scaffolding/lib/finishProject.ts';
 import { editFiles } from '#src/features/scaffolding/lib/editFiles.ts';
 import { movePaths } from '#src/features/scaffolding/lib/movePaths.ts';
+import { mirroredTests } from '#src/features/scaffolding/lib/mirroredTests.ts';
 import { updatePackage } from '#src/features/scaffolding/lib/updatePackage.ts';
 import { fillProjectTokens } from '#src/features/scaffolding/lib/fillProjectTokens.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
@@ -21,7 +22,10 @@ function removePaths(dir: string, patterns: string[]): void {
   for (const pattern of patterns) {
     const found = globSync(pattern, { cwd: dir });
     if (found.length === 0) throw new Error(`nothing matches ${pattern}`);
-    for (const path of found) rmSync(join(dir, path), { recursive: true, force: true });
+    for (const path of found) {
+      for (const test of mirroredTests(dir, path)) rmSync(join(dir, test), { recursive: true });
+      rmSync(join(dir, path), { recursive: true, force: true });
+    }
   }
 }
 
