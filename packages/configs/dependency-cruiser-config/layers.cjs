@@ -1,18 +1,17 @@
 const MAX_FEATURE_DEPTH = 10;
-const TEST_CODE = ['\\.test\\.tsx?$', '^(test-utils|e2e)/'];
+const TEST_CODE = '^test/';
+const SOURCE_OR_MIRROR = '^(?:src|test/unit)/';
 const SUB_FEATURE_OR_SHARED_FEATURE = '(?:features|shared)/[^/]+';
 
 function presenter() {
   return {
     path: '^src/(features|shared)/.+\\.tsx$',
-    pathNot: ['(Container|Layout|Page|Content|Config|Provider)\\.tsx$', '\\.test\\.tsx$'],
+    pathNot: '(Container|Layout|Page|Content|Config|Provider)\\.tsx$',
   };
 }
 
 function featureAtDepth(depth) {
-  return (
-    `src/${SUB_FEATURE_OR_SHARED_FEATURE}` + `/${SUB_FEATURE_OR_SHARED_FEATURE}`.repeat(depth - 1)
-  );
+  return SUB_FEATURE_OR_SHARED_FEATURE + `/${SUB_FEATURE_OR_SHARED_FEATURE}`.repeat(depth - 1);
 }
 
 function ruleName(base, level) {
@@ -36,11 +35,11 @@ function subFeatureRules() {
     comment:
       'A sub-feature (features/<y>/ inside a feature or a shared feature, at any depth) imports neither its siblings nor the root of its parent: move what several of them use into a shared feature in the shared/ of the parent, named after its concept.',
     from: {
-      path: `^(${feature})/features/([^/]+)/`,
+      path: `${SOURCE_OR_MIRROR}(${feature})/features/([^/]+)/`,
     },
     to: {
-      path: '^$1/',
-      pathNot: '^$1/(features/$2|shared)/',
+      path: '^src/$1/',
+      pathNot: '^src/$1/(features/$2|shared)/',
     },
   }));
 }
@@ -52,17 +51,17 @@ function subSharedRules() {
     comment:
       'A shared feature nested in a feature or in another shared feature (shared/<y>/, at any depth) imports neither another shared feature, nor a sub-feature, nor the root of its parent: if this file combines the two, move it up into the sub-feature or the parent that uses it; if they are one concept, merge them.',
     from: {
-      path: `^(${feature})/shared/([^/]+)/`,
+      path: `${SOURCE_OR_MIRROR}(${feature})/shared/([^/]+)/`,
     },
     to: {
-      path: '^$1/',
-      pathNot: '^$1/shared/$2/',
+      path: '^src/$1/',
+      pathNot: '^src/$1/shared/$2/',
     },
   }));
 }
 
 function tooDeepRules() {
-  const tooDeep = `^${featureAtDepth(MAX_FEATURE_DEPTH + 1)}/`;
+  const tooDeep = `^src/${featureAtDepth(MAX_FEATURE_DEPTH + 1)}/`;
   const comment = `Features and shared features nest at most ${MAX_FEATURE_DEPTH} levels deep: move the deepest sub-features up into their own feature.`;
   return [
     {
@@ -88,12 +87,26 @@ module.exports = {
       name: 'no-prod-to-tests',
       severity: 'error',
       comment:
-        'Production code never imports a test file, a test utility from test-utils/ or an end-to-end file from e2e/.',
+        'Production code never imports a file of test/: a unit test, a helper from test/support/ or an end-to-end test.',
       from: {
         pathNot: TEST_CODE,
       },
       to: {
         path: TEST_CODE,
+      },
+    },
+    {
+      name: 'unit-test-own-source',
+      severity: 'error',
+      comment:
+        'A unit test drives its own source, the file at the same path under src/: it imports nothing else from src/ but xConfig.ts and xTypes.ts files. A test that needs several files of src/ is not a unit test: split it, or move the setup it shares into test/support/.',
+      from: {
+        path: '^test/unit/(.+)\\.test\\.tsx?$',
+      },
+      to: {
+        path: '^src/',
+        pathNot: ['^src/$1\\.tsx?$', '^src/$1\\.[^./]+\\.tsx?$', '(Config|Types)\\.ts$'],
+        dependencyTypesNot: ['type-only'],
       },
     },
     {
@@ -103,7 +116,6 @@ module.exports = {
         'Production code only imports packages from dependencies: devDependencies hold the tooling, which never ships in the bundle.',
       from: {
         path: '^src/',
-        pathNot: '\\.test\\.tsx?$',
       },
       to: {
         dependencyTypes: ['npm-dev'],
@@ -134,7 +146,7 @@ module.exports = {
       comment:
         'src/shared/ sits below the features: a shared feature imports no feature and not app/.',
       from: {
-        path: '^src/shared/',
+        path: `${SOURCE_OR_MIRROR}shared/`,
       },
       to: {
         path: '^src/(app|features)/',
@@ -146,7 +158,7 @@ module.exports = {
       comment:
         'A shared feature never imports another shared feature: if this file combines the two, move it up into the feature that uses it; if they are one concept, merge them.',
       from: {
-        path: '^src/shared/([^/]+)/',
+        path: `${SOURCE_OR_MIRROR}shared/([^/]+)/`,
       },
       to: {
         path: '^src/shared/',
@@ -158,7 +170,7 @@ module.exports = {
       severity: 'error',
       comment: 'A feature never imports app/: app/ composes the features.',
       from: {
-        path: '^src/features/',
+        path: `${SOURCE_OR_MIRROR}features/`,
       },
       to: {
         path: '^src/app/',
@@ -170,7 +182,7 @@ module.exports = {
       comment:
         'app/ composes the features: it imports no shared feature. Wrap what it needs in a feature, like a page layout or the server setup.',
       from: {
-        path: '^src/app/',
+        path: `${SOURCE_OR_MIRROR}app/`,
       },
       to: {
         path: '^src/shared/',
@@ -182,7 +194,7 @@ module.exports = {
       comment:
         'A feature never imports another feature: move what they share down to a shared feature in src/shared/, named after its concept.',
       from: {
-        path: '^src/features/([^/]+)/',
+        path: `${SOURCE_OR_MIRROR}features/([^/]+)/`,
       },
       to: {
         path: '^src/features/',
@@ -224,7 +236,7 @@ module.exports = {
       severity: 'error',
       comment:
         'src/app/ composes the features through their orchestrators: import an XContainer, XLayout, XPage or XProvider of the feature, never one of its presenters. A screen made only of presenters is an XPage or an XLayout of its feature.',
-      from: { path: '^src/app/' },
+      from: { path: `${SOURCE_OR_MIRROR}app/` },
       to: {
         path: '^src/features/.+\\.tsx$',
         pathNot: '(Container|Layout|Page|Provider|Content|Config)\\.tsx$',
@@ -258,7 +270,7 @@ module.exports = {
       from: {},
       to: {
         path: 'Store\\.ts$',
-        pathNot: atEveryDepth((feature) => `^${feature}/(stores/)?[^/]+Store\\.ts$`),
+        pathNot: atEveryDepth((feature) => `^src/${feature}/(stores/)?[^/]+Store\\.ts$`),
       },
     },
   ],

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { describe, it } from 'node:test';
 
 const DEPCRUISE = join(import.meta.dirname, 'node_modules', '.bin', 'depcruise');
@@ -23,7 +23,10 @@ function project(files: Record<string, string>, config = 'layers.cjs'): string {
   return root;
 }
 
-function violatedRules(root: string, folders = ['src']): string[] {
+function violatedRules(
+  root: string,
+  folders = ['src', 'test'].filter((folder) => existsSync(join(root, folder))),
+): string[] {
   const result = spawnSync(DEPCRUISE, [...folders, '--output-type', 'json'], {
     cwd: root,
     encoding: 'utf8',
@@ -106,8 +109,8 @@ describe('dependency-cruiser-config', () => {
       'src/shared/misc/missing.ts':
         "import { nothing } from './nothing.ts';\nexport const missing = nothing;\n",
       'src/shared/misc/prod.ts':
-        "import { fixture } from './prod.test.ts';\nimport tooling from 'tooling';\nexport const prod = fixture + tooling;\n",
-      'src/shared/misc/prod.test.ts': 'export const fixture = 1;\n',
+        "import { fixture } from '../../../test/unit/shared/misc/prod.test.ts';\nimport tooling from 'tooling';\nexport const prod = fixture + tooling;\n",
+      'test/unit/shared/misc/prod.test.ts': 'export const fixture = 1;\n',
     });
     assert.deepEqual(
       violatedRules(root),
@@ -132,33 +135,33 @@ describe('dependency-cruiser-config', () => {
     );
   });
 
-  it('test-utils/ and e2e/ hold test code: production imports neither, a test imports both', () => {
+  it('test/ holds test code: production imports none of it, a test imports test/support/ and test/e2e/', () => {
     const root = project({
       'src/shared/util/util.ts': 'export const util = 1;\n',
-      'src/shared/util/util.test.ts':
-        "import { util } from './util.ts';\nimport { seed } from '../../../test-utils/seed.ts';\nimport { openApp } from '../../../e2e/openApp.ts';\nexport const checked = [util, seed, openApp];\n",
-      'test-utils/seed.ts':
-        "import { util } from '../src/shared/util/util.ts';\nimport { more } from './more.ts';\nexport const seed = util + more;\n",
-      'test-utils/more.ts': 'export const more = 1;\n',
-      'e2e/openApp.ts': 'export const openApp = 1;\n',
+      'test/unit/shared/util/util.test.ts':
+        "import { util } from '../../../../src/shared/util/util.ts';\nimport { seed } from '../../../support/seed.ts';\nimport { openApp } from '../../../e2e/openApp.ts';\nexport const checked = [util, seed, openApp];\n",
+      'test/support/seed.ts':
+        "import { util } from '../../src/shared/util/util.ts';\nimport { more } from './more.ts';\nexport const seed = util + more;\n",
+      'test/support/more.ts': 'export const more = 1;\n',
+      'test/e2e/openApp.ts': 'export const openApp = 1;\n',
     });
     assert.deepEqual(violatedRules(root), []);
     writeFileSync(
       join(root, 'src/shared/util/prod.ts'),
-      "import { seed } from '../../../test-utils/seed.ts';\nimport { openApp } from '../../../e2e/openApp.ts';\nexport const prod = [seed, openApp];\n",
+      "import { seed } from '../../../test/support/seed.ts';\nimport { openApp } from '../../../test/e2e/openApp.ts';\nexport const prod = [seed, openApp];\n",
     );
     assert.deepEqual(violatedRules(root), ['no-prod-to-tests']);
   });
 
-  it('a test utility reaches queries, workers and entry points like a test', () => {
+  it('a helper of test/support/ reaches queries, workers and entry points like a test', () => {
     const server = project(
       {
         'src/shared/todos/todosQueries.ts': 'export const createTodosQueries = 1;\n',
         'src/shared/todos/sweepWorker.ts': 'export const createSweepWorker = 1;\n',
-        'src/shared/todos/todos.test.ts':
-          "import { seedTodos } from '../../../test-utils/seedTodos.ts';\nexport const checked = seedTodos;\n",
-        'test-utils/seedTodos.ts':
-          "import { createTodosQueries } from '../src/shared/todos/todosQueries.ts';\nimport { createSweepWorker } from '../src/shared/todos/sweepWorker.ts';\nimport https from 'node:https';\nexport const seedTodos = [createTodosQueries, createSweepWorker, https];\n",
+        'test/unit/shared/todos/todos.test.ts':
+          "import { seedTodos } from '../../../support/seedTodos.ts';\nexport const checked = seedTodos;\n",
+        'test/support/seedTodos.ts':
+          "import { createTodosQueries } from '../../src/shared/todos/todosQueries.ts';\nimport { createSweepWorker } from '../../src/shared/todos/sweepWorker.ts';\nimport https from 'node:https';\nexport const seedTodos = [createTodosQueries, createSweepWorker, https];\n",
       },
       'server.cjs',
     );
@@ -166,14 +169,45 @@ describe('dependency-cruiser-config', () => {
     const library = project(
       {
         'src/cli.ts': 'export const cli = 1;\n',
-        'src/shared/util/util.test.ts':
-          "import { runCli } from '../../../test-utils/runCli.ts';\nexport const checked = runCli;\n",
-        'test-utils/runCli.ts':
-          "import { cli } from '../src/cli.ts';\nexport const runCli = cli;\n",
+        'test/unit/shared/util/util.test.ts':
+          "import { runCli } from '../../../support/runCli.ts';\nexport const checked = runCli;\n",
+        'test/support/runCli.ts':
+          "import { cli } from '../../src/cli.ts';\nexport const runCli = cli;\n",
       },
       'library.cjs',
     );
     assert.deepEqual(violatedRules(library), []);
+  });
+
+  it('a unit test imports from src/ its own source, a platform variant of it, and xConfig.ts and xTypes.ts files only', () => {
+    const root = project({
+      'src/features/a/lib/format.ts': 'export const format = 1;\n',
+      'src/features/a/lib/slug.ts': 'export const slug = 1;\n',
+      'src/features/a/AConfig.ts': 'export const A_CONFIG = 1;\n',
+      'src/features/a/ATypes.ts': 'export const A_TYPES = 1;\n',
+      'src/features/a/Button.native.tsx': 'export const Button = 1;\n',
+      'test/unit/features/a/lib/format.test.ts':
+        "import { format } from '../../../../../src/features/a/lib/format.ts';\nimport { A_CONFIG } from '../../../../../src/features/a/AConfig.ts';\nimport { A_TYPES } from '../../../../../src/features/a/ATypes.ts';\nexport const checked = [format, A_CONFIG, A_TYPES];\n",
+      'test/unit/features/a/Button.test.tsx':
+        "import { Button } from '../../../../src/features/a/Button.native.tsx';\nexport const checked = Button;\n",
+    });
+    assert.deepEqual(violatedRules(root), []);
+    writeFileSync(
+      join(root, 'test/unit/features/a/lib/format.test.ts'),
+      "import { format } from '../../../../../src/features/a/lib/format.ts';\nimport { slug } from '../../../../../src/features/a/lib/slug.ts';\nexport const checked = [format, slug];\n",
+    );
+    assert.deepEqual(violatedRules(root), ['unit-test-own-source']);
+  });
+
+  it('a unit test follows the layer rules of its source', () => {
+    const root = project({
+      'src/features/a/features/form/form.ts': 'export const form = 1;\n',
+      'src/features/a/features/list/ListConfig.ts': 'export const LIST = 1;\n',
+      'src/features/b/BConfig.ts': 'export const B = 1;\n',
+      'test/unit/features/a/features/form/form.test.ts':
+        "import { form } from '../../../../../../src/features/a/features/form/form.ts';\nimport { LIST } from '../../../../../../src/features/a/features/list/ListConfig.ts';\nimport { B } from '../../../../../../src/features/b/BConfig.ts';\nexport const checked = [form, LIST, B];\n",
+    });
+    assert.deepEqual(violatedRules(root), ['no-cross-feature', 'no-cross-sub-feature']);
   });
 
   it('server data stays out of presenters and stores', () => {
@@ -240,8 +274,8 @@ describe('dependency-cruiser-config', () => {
           "import { createTodosQueries } from '../../shared/todos/todosQueries.ts';\nexport const listRoutes = createTodosQueries;\n",
         'src/features/list/listHelper.ts':
           "import { createTodosQueries } from '../../shared/todos/todosQueries.ts';\nimport { DatabaseSync } from 'node:sqlite';\nexport const listHelper = [createTodosQueries, DatabaseSync];\n",
-        'src/features/list/listService.test.ts':
-          "import { DatabaseSync } from 'node:sqlite';\nimport { createListService } from './listService.ts';\nexport const checked = createListService(new DatabaseSync(':memory:'));\n",
+        'test/unit/features/list/listService.test.ts':
+          "import { DatabaseSync } from 'node:sqlite';\nimport { createListService } from '../../../../src/features/list/listService.ts';\nexport const checked = createListService(new DatabaseSync(':memory:'));\n",
       },
       'server.cjs',
     );
@@ -365,7 +399,8 @@ describe('dependency-cruiser-config', () => {
       {
         'src/cli.ts':
           "import { feature } from './features/list/feature.ts';\nexport const cli = feature;\n",
-        'src/cli.test.ts': "import { cli } from './cli.ts';\nexport const checked = cli;\n",
+        'test/unit/cli.test.ts':
+          "import { cli } from '../../src/cli.ts';\nexport const checked = cli;\n",
         'src/features/list/feature.ts':
           "import { util } from '../../shared/util/util.ts';\nexport const feature = util;\n",
         'src/shared/util/util.ts': 'export const util = 1;\n',
@@ -475,9 +510,11 @@ describe('dependency-cruiser-config', () => {
       join(root, nested, 'deep.ts'),
       `import { util } from '${'../'.repeat(22)}shared/util/util.ts';\nexport const deep = util;\n`,
     );
+    const mirror = join(root, 'test/unit', nested.slice('src/'.length));
+    mkdirSync(mirror, { recursive: true });
     writeFileSync(
-      join(root, nested, 'deep.test.ts'),
-      "import { deep } from './deep.ts';\nexport const checked = deep;\n",
+      join(mirror, 'deep.test.ts'),
+      `import { deep } from '${relative(mirror, join(root, nested))}/deep.ts';\nexport const checked = deep;\n`,
     );
     assert.deepEqual(violatedRules(root), [
       'feature-nesting-too-deep',

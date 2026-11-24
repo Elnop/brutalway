@@ -6,6 +6,9 @@
 src/app/        composes the features, and imports nothing else
 src/features/   one folder per feature
 src/shared/     the code several features use, one shared feature per concept
+test/unit/      the unit tests, at the path of their source
+test/support/   the helpers the tests share
+test/e2e/       the end-to-end tests
 ```
 
 A shared feature (`shared/todos/`, `shared/errors/`) never imports another one. When shared feature A needs code from shared feature B, the two merge, or the code is copied.
@@ -33,9 +36,9 @@ module.exports = {
 
 `tsPreCompilationDeps: false` means type-only imports do not count.
 
-Run it with `npx depcruise --output-type err-long src`. The default output only prints the name of the rule, `err-long` adds its comment, which says what to change.
+Run it with `npx depcruise --output-type err-long src test`. The default output only prints the name of the rule, `err-long` adds its comment, which says what to change.
 
-A file under `test-utils/` or `e2e/` counts as a test: the server and library rules let it import what a test may import.
+Every file under `test/` counts as a test: the server and library rules let it import what a test may import. A unit test of `test/unit/` is read at the path of its source for the layer rules, so `test/unit/features/cart/...` follows the rules of `src/features/cart/...`.
 
 ### shadcn/ui
 
@@ -90,7 +93,8 @@ Each rule has a `comment` that says what to do instead.
 | `stores-in-their-folder`             | an `xStore.ts` outside the root or the `stores/` folder of its level                                                                                                            |
 | `no-circular`                        | import cycles                                                                                                                                                                   |
 | `no-unresolvable`                    | imports that resolve to no file                                                                                                                                                 |
-| `no-prod-to-tests`                   | production code importing a test file, a test utility from `test-utils/` or a file from `e2e/`                                                                                  |
+| `no-prod-to-tests`                   | production code importing a file of `test/`                                                                                  |
+| `unit-test-own-source`               | a unit test of `test/unit/` importing from `src/` anything but its own source, at the same path, a platform variant of it, and `xConfig.ts` or `xTypes.ts` files. A test that drives several files is not a unit test: split it, or move the setup it shares into `test/support/` |
 | `not-to-dev-dep`                     | code under `src/` importing a devDependency                                                                                                                                     |
 
 Sub-features and shared features nest like the features they live in: each can hold its own `features/` and `shared/`, under a feature or a shared feature, and the same two rules apply at every level, up to 10 levels. Below the first level, the rule names carry the level of the parent feature, like `no-cross-sub-feature-level-2`.
@@ -112,7 +116,7 @@ A package has no `src/app/`: each entry point (a bin, an export of `package.json
 
 | Rule                   | Rejects                                                                       |
 | ---------------------- | ----------------------------------------------------------------------------- |
-| `entries-not-imported` | a file at the root of `src/` imported by anything but a test or `test-utils/` |
+| `entries-not-imported` | a file at the root of `src/` imported by anything but a file of `test/` |
 | `no-app-folder`        | a file under `src/app/`                                                       |
 | `not-to-dev-dep`       | code under `src/` importing a devDependency that is not also a peerDependency |
 

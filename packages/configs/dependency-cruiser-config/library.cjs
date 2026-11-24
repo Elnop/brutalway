@@ -1,4 +1,4 @@
-const TEST_CODE = ['\\.test\\.tsx?$', '^(test-utils|e2e)/'];
+const TEST_CODE = '^test/';
 
 module.exports = {
   extends: require.resolve('./layers.cjs'),
@@ -10,7 +10,6 @@ module.exports = {
         'Production code only imports packages from dependencies or peerDependencies: devDependencies hold the tooling, which is not installed with the package.',
       from: {
         path: '^src/',
-        pathNot: '\\.test\\.tsx?$',
       },
       to: {
         dependencyTypes: ['npm-dev'],
