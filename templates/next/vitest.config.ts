@@ -19,8 +19,8 @@ export default mergeConfig(
     resolve: {
       alias: [
         {
-          find: /^@test-utils\//u,
-          replacement: fileURLToPath(new URL('./test-utils/', import.meta.url)),
+          find: /^@test-support\//u,
+          replacement: fileURLToPath(new URL('./test/support/', import.meta.url)),
         },
       ],
     },
@@ -30,13 +30,13 @@ export default mergeConfig(
       projects: [
         {
           extends: true,
-          test: { name: 'unit', environment: 'node', include: ['src/**/*.test.ts'] },
+          test: { name: 'unit', environment: 'node', include: ['test/unit/**/*.test.ts'] },
         },
         {
           extends: true,
           test: {
             name: 'component',
-            include: ['src/**/*.test.tsx'],
+            include: ['test/unit/**/*.test.tsx'],
             browser: {
               enabled: true,
               provider: playwright(),

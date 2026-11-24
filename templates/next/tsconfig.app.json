@@ -7,6 +7,5 @@
       "@locales/*": ["./locales/*"]
     }
   },
-  "include": ["src", "node_modules/.cache/i18next"],
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+  "include": ["src", "node_modules/.cache/i18next"]
 }

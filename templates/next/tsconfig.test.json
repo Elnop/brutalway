@@ -5,15 +5,14 @@
     "paths": {
       "@/*": ["./src/*"],
       "@locales/*": ["./locales/*"],
-      "@e2e/*": ["./e2e/*"],
-      "@test-utils/*": ["./test-utils/*"]
+      "@test-e2e/*": ["./test/e2e/*"],
+      "@test-support/*": ["./test/support/*"]
     }
   },
   "include": [
     "src",
-    "test-utils",
+    "test",
     "node_modules/.cache/i18next",
-    "e2e",
     "next.config.ts",
     "vitest.config.ts",
     "vitest.setup.ts",
