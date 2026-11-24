@@ -48,7 +48,7 @@
     "unused": "knip"
   },
   "dependencies": {
-    "@brutalway/oxlint-config-react": "^0.5.0",
+    "@brutalway/oxlint-config-react": "^0.6.0",
     "@brutalway/oxlint-config-zustand": "^0.3.0",
     "eslint-plugin-react-native": "^5.0.0",
     "oxlint-plugin-eslint": "^1.91.0"
