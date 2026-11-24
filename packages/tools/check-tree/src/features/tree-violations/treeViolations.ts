@@ -4,7 +4,6 @@ import { basename, join, relative } from 'node:path';
 import {
   DEFAULT_CATEGORY_FOLDERS,
   FILE_GROUPS,
-  TEST_FILE,
 } from '#src/features/tree-violations/TreeViolationsConfig.ts';
 import type {
   FolderListing,
@@ -71,9 +70,7 @@ function folderViolations(
   scan: TreeScan,
   check: FilesCheck,
 ): Violation[] {
-  const children = readdirSync(folder, { withFileTypes: true }).filter(
-    (entry) => !TEST_FILE.test(entry.name),
-  );
+  const children = readdirSync(folder, { withFileTypes: true });
   const listing = folderListing(children, scan.platforms);
   const units =
     new Set(listing.files.map(listing.baseOf)).size + children.length - listing.files.length;

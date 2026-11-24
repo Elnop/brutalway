@@ -18,7 +18,6 @@ export const DEFAULT_CATEGORY_FOLDERS = [
   'workers',
   'lib',
 ];
-export const TEST_FILE = /\.test\.tsx?$/u;
 const NAMED_FILE =
   /^use[A-Z]|(?:Types|Config|Store|Routes|Service|Queries|Keys|Schemas|Client|Worker|Env)\.ts$|Content\.tsx?$|\.d\.ts$/u;
 const COMPONENT_FILE = /^[A-Z]\w*\.tsx$/u;

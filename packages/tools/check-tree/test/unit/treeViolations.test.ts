@@ -22,7 +22,6 @@ describe('treeViolations', () => {
       'app/globals.css',
       'shared/ui/lib/a.ts',
       'shared/ui/lib/b.ts',
-      'shared/ui/lib/a.test.ts',
       'features/feature/styles/a.css',
       'features/feature/styles/b.css',
       'features/feature/Feature.tsx',
@@ -33,12 +32,6 @@ describe('treeViolations', () => {
   it('an empty folder is reported', () => {
     assert.deepEqual(treeViolations(tree(['a.ts'], ['features/empty'])), [
       'src/features/empty is empty: delete it',
-    ]);
-  });
-
-  it('a kind folder with a single child is reported, its tests aside', () => {
-    assert.deepEqual(treeViolations(tree(['shared/ui/lib/a.ts', 'shared/ui/lib/a.test.ts'])), [
-      'src/shared/ui/lib holds a single child: move it up one level and delete the folder',
     ]);
   });
 
@@ -75,13 +68,7 @@ describe('treeViolations', () => {
 
   it('hooks, types, configs, stores and lib files follow the same rule as stylesheets', () => {
     assert.deepEqual(
-      treeViolations(
-        tree([
-          'features/feature/useA.ts',
-          'features/feature/useB.tsx',
-          'features/feature/useA.test.ts',
-        ]),
-      ),
+      treeViolations(tree(['features/feature/useA.ts', 'features/feature/useB.tsx'])),
       ['src/features/feature holds 2 hooks files (useA.ts, useB.tsx): move them into hooks/'],
     );
     assert.deepEqual(
@@ -279,7 +266,6 @@ describe('treeViolations', () => {
         tree([
           'shared/readEnv.ts',
           'shared/EnvTypes.ts',
-          'shared/readEnv.test.ts',
           'shared/todos/todos.ts',
           'features/list/shared/format.ts',
           'features/list/shared/title/Title.tsx',

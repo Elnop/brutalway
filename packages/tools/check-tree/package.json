@@ -1,7 +1,7 @@
 {
   "name": "@brutalway/check-tree",
   "version": "0.14.1",
-  "description": "Checks a source tree: only the folders the layout names, no empty folder, no kind folder holding a single child, stylesheets grouped in styles/, no file of a shared feature used by a single feature, no shared feature whose files never import each other.",
+  "description": "Checks a source tree: only the folders the layout names, no empty folder, no kind folder holding a single child, stylesheets grouped in styles/, no file of a shared feature used by a single feature, no shared feature whose files never import each other, unit tests in test/unit at the path of their source.",
   "keywords": [
     "lint",
     "folder-structure",
@@ -34,12 +34,12 @@
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p .",
-    "lint": "oxlint --type-aware src oxlint.config.ts tsdown.config.ts",
+    "lint": "oxlint --type-aware src test oxlint.config.ts tsdown.config.ts",
     "deps": "depcruise --output-type err-long src",
     "tree": "node src/checkTree.ts src",
     "duplicates": "jscpd src",
     "check": "prettier --check . && npm run typecheck && npm run lint && npm run deps && npm run tree && npm run duplicates && npm run unused",
-    "test": "node --test 'src/**/*.test.ts'",
+    "test": "node --test 'test/**/*.test.ts'",
     "format": "prettier --write .",
     "unused": "knip"
   },

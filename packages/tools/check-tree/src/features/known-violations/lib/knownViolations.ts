@@ -3,16 +3,9 @@ import type { KnownViolation, Violation } from '#src/shared/violations/Violation
 import { readKnownViolations } from '#src/features/known-violations/lib/readKnownViolations.ts';
 import { currentViolation } from '#src/features/known-violations/lib/currentViolation.ts';
 import { writeEntries } from '#src/features/known-violations/lib/writeEntries.ts';
+import { reportedViolations } from '#src/features/known-violations/lib/reportedViolations.ts';
 
 const SHRINK_HINT = 'run check-tree with --shrink-known-violations';
-
-function covers(entry: KnownViolation, violation: Violation): boolean {
-  return (
-    entry.rule === violation.rule &&
-    entry.path === violation.path &&
-    (violation.count ?? 0) <= (entry.count ?? 0)
-  );
-}
 
 function staleEntryMessage(
   entry: KnownViolation,
@@ -31,9 +24,7 @@ function staleEntryMessage(
 export function unknownViolations(violations: readonly Violation[], file: string): string[] {
   const known = readKnownViolations(file);
   return [
-    ...violations
-      .filter((violation) => !known.some((entry) => covers(entry, violation)))
-      .map(({ message }) => message),
+    ...reportedViolations(violations, file).map(({ message }) => message),
     ...known.flatMap((entry) => staleEntryMessage(entry, violations, file) ?? []),
   ];
 }

@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 
-const CLI = join(import.meta.dirname, 'checkTree.ts');
+const CLI = fileURLToPath(import.meta.resolve('#src/checkTree.ts'));
 
 function project(
   files: string[],
@@ -59,7 +60,6 @@ describe('check-tree', () => {
       'src/app/App.tsx',
       'src/features/feature/lib/a.ts',
       'src/features/feature/lib/b.ts',
-      'src/features/feature/lib/a.test.ts',
       'src/features/feature/styles/a.css',
       'src/features/feature/styles/b.css',
     ]);
@@ -202,11 +202,42 @@ describe('check-tree', () => {
       status: 1,
       stdout: '',
       lines: [
-        'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
-        'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a, with the tests that import it',
+        'src/shared/slugs/SlugTypes.ts is only used by src/features/a: move it into src/features/a, its test following it under test/unit',
+        'src/shared/text/TextTypes.ts is only used by src/features/a: move it into src/features/a, its test following it under test/unit',
         'src/shared/text holds 2 groups of files that never import each other (format.ts) (TextTypes.ts): split it into one shared feature per group',
       ],
     });
+  });
+
+  it('with --fix, moves the tests that have a single place to go, prints each move and reports the rest', () => {
+    const root = project([
+      'src/features/a/A.tsx',
+      'src/features/a/A.test.tsx',
+      'src/features/b/lib/format.ts',
+      'src/features/b/lib/slug.ts',
+      'test/unit/features/old/format.test.ts',
+      'test/unit/features/a/gone.test.ts',
+    ]);
+    assert.deepEqual(run(root, ['src', '--fix']), {
+      status: 1,
+      stdout:
+        'moved src/features/a/A.test.tsx to test/unit/features/a/A.test.tsx\nmoved test/unit/features/old/format.test.ts to test/unit/features/b/lib/format.test.ts\n',
+      lines: [
+        'test/unit/features/a/gone.test.ts has no source named gone in src/features/a: a unit test sits at the path of its source, under test/unit, move it there or delete it',
+      ],
+    });
+    assert.equal(existsSync(join(root, 'test/unit/features/old')), false);
+    assert.equal(existsSync(join(root, 'test/unit/features/b/lib/format.test.ts')), true);
+  });
+
+  it('with --fix, leaves the known violations where they are', () => {
+    const root = project(['src/features/a/A.tsx', 'src/features/a/A.test.tsx']);
+    writeFileSync(
+      join(root, '.check-tree-known-violations.json'),
+      JSON.stringify([{ rule: 'test-in-source', path: 'src/features/a/A.test.tsx' }]),
+    );
+    assert.deepEqual(run(root, ['src', '--fix']), { status: 0, stdout: '', lines: [] });
+    assert.equal(existsSync(join(root, 'src/features/a/A.test.tsx')), true);
   });
 
   it('with --write-known-violations, writes the rule, the path and the count of each violation and exits with 0', () => {

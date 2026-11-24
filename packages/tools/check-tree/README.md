@@ -1,6 +1,6 @@
 # @brutalway/check-tree
 
-Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no kind folder with a single child, files of one kind grouped in that kind's folder once there are two of them, no file in a shared feature that a single feature uses, and no shared feature whose files never import each other.
+Checks the folders of a source tree, which a linter does not see: only the folders the layout names, no empty folder, no kind folder with a single child, files of one kind grouped in that kind's folder once there are two of them, no file in a shared feature that a single feature uses, no shared feature whose files never import each other, and unit tests kept in `test/unit/`, at the path of their source.
 
 ## Install
 
@@ -41,6 +41,22 @@ A published package keeps its entry points at the root of `src/`, one file per b
 
 A platform variant (`X.web.ts`, `X.ios.tsx`) is the file that Metro and Expo pick in place of `X.ts` for one platform. check-tree knows `web`, `ios`, `android` and `native`, and `platforms` replaces that list.
 
+### Keep the tests in a mirror of the source tree
+
+The unit tests live in `test/unit/`, next to the checked folder, at the path of their source: the test of `src/shared/todos/lib/normalizeTitle.ts` is `test/unit/shared/todos/lib/normalizeTitle.test.ts`. A test keeps its `.test.ts` or `.test.tsx` suffix, and a source needs no test. `test/` holds two other folders, `e2e/` for the end-to-end tests and `support/` for the helpers the tests share, which check-tree does not look into.
+
+Moving a source leaves its test behind, so check-tree reports a test with no source at its mirrored path. When a single folder of `src/` holds a source of that name, the message gives the `git mv` to run:
+
+```
+test/unit/features/a/format.test.ts has no source named format in src/features/a: src/features/b/lib holds one, run git mv test/unit/features/a/format.test.ts test/unit/features/b/lib/format.test.ts
+```
+
+`--fix` makes these moves, along with the moves of the tests still under `src/`, prints each one and runs the check again. It never overwrites a file, and it leaves the known violations where they are, so a large project can move its tests one folder at a time:
+
+```sh
+npx check-tree src --fix
+```
+
 ### Keep the violations of an existing tree
 
 On a codebase that did not follow the layout, the first run prints a lot. Write the current violations to `.check-tree-known-violations.json` and commit it:
@@ -67,7 +83,7 @@ After a fix, `--shrink-known-violations` updates the file: it deletes the entrie
 npx check-tree src --shrink-known-violations
 ```
 
-The rules are `empty-folder`, `single-child`, `not-a-layer`, `not-a-kind-folder`, `kind-folder` (files to move into a kind folder, the path being that folder), `shared-root-files`, `single-consumer` and `shared-feature-groups`. Up to 0.12, the file held the printed messages: check-tree now refuses that format, and `--write-known-violations` rewrites it.
+The rules are `empty-folder`, `single-child`, `not-a-layer`, `not-a-kind-folder`, `kind-folder` (files to move into a kind folder, the path being that folder), `shared-root-files`, `single-consumer`, `shared-feature-groups`, `test-in-source`, `orphan-test`, `orphan-test-folder`, `not-a-test` and `not-a-test-folder`. Up to 0.12, the file held the printed messages: check-tree now refuses that format, and `--write-known-violations` rewrites it.
 
 ### Run the check from code
 
@@ -117,14 +133,19 @@ const violations = await sharedViolations('src');
 | `stores/`                              | `xStore.ts`                                                       |
 | `lib/`                                 | any other `.ts` file, except `xContent.ts`, `xEnv.ts` and `.d.ts` |
 
-- a file of a shared feature is used by at least two consumers. For `src/shared/`, a consumer is a feature or another shared feature, a sub-feature counting as the feature it sits in. For the `shared/` of a feature or a shared feature, a consumer is one of its sub-features, another of its shared features, or its own files outside them. A file imported by another file of the same shared feature gets the consumers of that file. A test is never a consumer, wherever it sits: it exists for the code it covers and gives no reason to share it. A file that only tests import has no consumer at all and passes here, `knip --production` reports it. A file of `src/shared/` used only by `app/` or by the entry points of `src/` passes. A file with a single consumer gets `src/shared/dates/format.ts is only used by src/features/cart: move it into src/features/cart, with the tests that import it`, which also catches a whole shared feature used by one feature. dependency-cruiser checks the imports of tests, though: a test that imports the moved file goes with it, or it breaks a `no-cross-sub-*` rule, and a helper that only tests use is deleted or moves into `test-utils/`.
-- the files of a shared feature, tests aside, form one group in the import graph, whatever the direction of the imports. Since two shared features never import each other, the folder then only names a boundary the graph already draws. A `shared/utils/` holding `errorMessage.ts`, `isRecord.ts` and `packageRoot.ts`, which do not import each other, gets `src/shared/utils holds 3 groups of files that never import each other (errorMessage.ts) (isRecord.ts) (packageRoot.ts): split it into one shared feature per group`. A shared feature of a single file is fine.
+- a file of a shared feature is used by at least two consumers. For `src/shared/`, a consumer is a feature or another shared feature, a sub-feature counting as the feature it sits in. For the `shared/` of a feature or a shared feature, a consumer is one of its sub-features, another of its shared features, or its own files outside them. A file imported by another file of the same shared feature gets the consumers of that file. The tests live in `test/unit/`, outside the checked folder, so a test is never a consumer: it exists for the code it covers and gives no reason to share it. A file that only tests import has no consumer at all and passes here, `knip --production` reports it. A file of `src/shared/` used only by `app/` or by the entry points of `src/` passes. A file with a single consumer gets `src/shared/dates/format.ts is only used by src/features/cart: move it into src/features/cart, with the tests that import it`, which also catches a whole shared feature used by one feature. The test of the moved file follows it to the new mirrored path, which `--fix` does once the source has moved, and a helper that only tests use is deleted or moves into `test/support/`.
+- the files of a shared feature form one group in the import graph, whatever the direction of the imports. Since two shared features never import each other, the folder then only names a boundary the graph already draws. A `shared/utils/` holding `errorMessage.ts`, `isRecord.ts` and `packageRoot.ts`, which do not import each other, gets `src/shared/utils holds 3 groups of files that never import each other (errorMessage.ts) (isRecord.ts) (packageRoot.ts): split it into one shared feature per group`. A shared feature of a single file is fine.
 
 The first of these two rules says why a file is shared, the second why files sit together. Each one lets through what the other catches: in the `shared/utils/` above, each file has two consumers.
 
 So a feature with two components puts them in `components/`, and a `components/` folder with two presenters puts them in `presenters/`. The `components/` rule does not apply inside `components/`, `orchestrators/` or `presenters/`.
 
-Test files (`*.test.ts`, `*.test.tsx`) are not counted.
+- the unit tests sit in `test/unit/`, the folder `test/` next to the checked folder:
+  - a `.test.ts` or `.test.tsx` file under the checked folder moves to the same path under `test/unit/` (`test-in-source`)
+  - a test of `test/unit/` has a source of the same name at the mirrored path, `X.test.tsx` testing `X.ts`, `X.tsx` or a platform variant of them (`orphan-test`)
+  - a folder of `test/unit/` has its counterpart in the checked folder, reported once at the highest missing level (`orphan-test-folder`), and is not empty
+  - `test/unit/` holds tests only, `__snapshots__/` folders aside (`not-a-test`)
+  - `test/` holds `unit/`, `e2e/` and `support/`, and nothing else (`not-a-test-folder`)
 
 The files of a folder named `X.<platform>.<ext>`, like `useScreenTitle.web.ts` and `useScreenTitle.native.ts`, go with `X.<ext>`, whether that file exists or not. The bundler picks them by name and nothing imports them, so the variants and their base count as one file: they have the kind of `X.<ext>` (`AvatarPhoto.web.tsx` is a presenter), a `lib/` holding only `alert.ts` and `alert.web.ts` holds a single child, and they belong to one group in the import graph of a shared feature. check-tree does not compare their exports: TypeScript checks the base only, unless `moduleSuffixes` in the tsconfig points it at a variant.
 
@@ -140,6 +161,7 @@ It prints one line per problem and exits with code 1 if it found any. The violat
 | `--categories <list>`      | `categories`          | `components`, `orchestrators`, `presenters`, `hooks`, `styles`, `types`, `configs`, `stores`, `routes`, `services`, `queries`, `keys`, `schemas`, `clients`, `workers`, `lib` |
 | `--platforms <list>`       | `platforms`           | `web`, `ios`, `android`, `native`                                                                                                                                        |
 | `--root-entries`           | `rootEntries`         | off                                                                                                                                                                      |
+| `--fix`                    |                       | off                                                                                                                                                                      |
 | `--write-known-violations` |                       | off                                                                                                                                                                      |
 | `--shrink-known-violations` |                      | off                                                                                                                                                                      |
 

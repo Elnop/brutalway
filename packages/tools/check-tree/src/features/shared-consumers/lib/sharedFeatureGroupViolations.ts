@@ -1,4 +1,3 @@
-import { TEST_CODE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import { checkedPaths } from '#src/features/shared-consumers/lib/checkedPaths.ts';
 import { sharedFeatureOf } from '#src/features/shared-consumers/lib/sharedFeatureOf.ts';
 import { variantLinks } from '#src/features/shared-consumers/lib/variantLinks.ts';
@@ -12,7 +11,7 @@ function sharedFeatureFolders(
   const folders = new Map<string, string>();
   for (const { source } of modules) {
     const sharedFeature = sharedFeatureOf(source);
-    if (sharedFeature !== undefined && !TEST_CODE.test(source) && source.startsWith(`${root}/`)) {
+    if (sharedFeature !== undefined && source.startsWith(`${root}/`)) {
       folders.set(source, sharedFeature.folder);
     }
   }

@@ -1,8 +1,5 @@
 import { basename, dirname } from 'node:path';
-import {
-  SUB_FEATURE_OR_SHARED_FEATURE,
-  TEST_CODE,
-} from '#src/features/shared-consumers/SharedConsumersConfig.ts';
+import { SUB_FEATURE_OR_SHARED_FEATURE } from '#src/features/shared-consumers/SharedConsumersConfig.ts';
 import type {
   ImportedModule,
   SharedFeature,
@@ -25,7 +22,6 @@ function importersByUnit(
 ): Map<string, string[]> {
   const importers = new Map<string, string[]>();
   for (const { source, imports } of modules) {
-    if (TEST_CODE.test(source)) continue;
     for (const target of imports) {
       const unit = unitOf(target, platforms);
       importers.set(unit, [...(importers.get(unit) ?? []), source]);

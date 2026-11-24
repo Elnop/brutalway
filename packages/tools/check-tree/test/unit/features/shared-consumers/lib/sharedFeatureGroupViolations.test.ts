@@ -40,17 +40,6 @@ describe('sharedFeatureGroupViolations', () => {
     ]);
   });
 
-  it('a test that imports two groups does not link them', () => {
-    const modules = graph({
-      'src/shared/text/slug.ts': [],
-      'src/shared/text/pad.ts': [],
-      'src/shared/text/text.test.ts': ['src/shared/text/slug.ts', 'src/shared/text/pad.ts'],
-    });
-    assert.deepEqual(messagesOf(sharedFeatureGroupViolations('src', modules)), [
-      'src/shared/text holds 2 groups of files that never import each other (pad.ts) (slug.ts): split it into one shared feature per group',
-    ]);
-  });
-
   it('a shared feature of the shared/ of a feature or of a shared feature is checked on its own, and its sub-features belong to it', () => {
     const modules = graph({
       'src/features/a/shared/title/TitleInput.tsx': [],
