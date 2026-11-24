@@ -1,5 +1,11 @@
 # @brutalway/check
 
+## 0.4.0
+
+### Minor Changes
+
+- 0b53d91: `brutal-check` runs the scripts with the package manager that started it, npm or pnpm: it reads `npm_config_user_agent`, then the `packageManager` field of `package.json`, and falls back on npm. `pnpm run check` no longer calls npm for each step.
+
 ## 0.3.0
 
 ### Minor Changes
