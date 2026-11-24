@@ -1,5 +1,11 @@
 # @brutalkit/agent-hook
 
+## 0.5.0
+
+### Minor Changes
+
+- 0b8698f: A file created in the `test/` folder next to a `--tree` folder runs check-tree on that tree, so a test left with no source at its mirrored path is reported right after the edit that created it.
+
 ## 0.4.0
 
 ### Minor Changes

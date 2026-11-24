@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-react-vite",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Oxlint preset for React + Vite + zustand + Vitest apps, built on @brutalway/oxlint-config-react, @brutalway/oxlint-config-zustand and @brutalway/oxlint-config-vitest.",
   "keywords": [
     "oxlint",
