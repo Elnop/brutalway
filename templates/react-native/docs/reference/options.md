@@ -89,7 +89,7 @@ Both values add `analyticsTracker.ts` to an `analytics` shared feature in `src/s
 
 ## component-tests
 
-Without it, the `.test.tsx` files, `src/shared/theme/Button.test.tsx` included, and `@testing-library/react-native` are removed. Jest keeps the unit tests.
+Without it, the `.test.tsx` files, `test/unit/shared/theme/Button.test.tsx` included, and `@testing-library/react-native` are removed. Jest keeps the unit tests.
 
 ## coverage
 

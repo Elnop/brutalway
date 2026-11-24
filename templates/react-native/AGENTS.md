@@ -12,7 +12,7 @@ Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifi
 - A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`), which composes presenters and is the only kind that may read state through hooks, or a presenter that only gets props. `src/app/` imports the orchestrators of a feature, never its presenters.
 - Every visible string goes through `t()`, with its English text in `locales/en/`.
 - Styles go in a `StyleSheet.create` next to their component, and every color, size and font comes from `THEME` in `src/shared/theme/ThemeConfig.ts`.
-- A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `@test-utils/`: code in `src/` that only a test uses fails `knip --production`.
+- A unit test sits in `test/unit/`, at the path of its source under `src/`, and imports from `src/` only that source and `xConfig.ts` or `xTypes.ts` files. A helper that several tests share goes in `test/support/` and is imported through `@test-support/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`@/` instead), no `index.ts` and no `export default` outside the route files and the configs.
 
 ## Updating from the template

@@ -5,12 +5,12 @@
     "paths": {
       "@/*": ["./src/*"],
       "@locales/*": ["./locales/*"],
-      "@test-utils/*": ["./test-utils/*"]
+      "@test-support/*": ["./test/support/*"]
     }
   },
   "include": [
     "src",
-    "test-utils",
+    "test",
     "node_modules/.cache/i18next",
     "jest.setup.ts",
     "scripts",
