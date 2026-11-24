@@ -44,6 +44,7 @@ npm create brutal my-app -- --preset react-native.json --yes
 | `--[no-]expo-go` | yes, no | no |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
 | `--[no-]ci` | yes, no | yes |  |
+| `--package-manager` | `npm`, `pnpm` | `npm` |  |
 
 A combination from the last column stops the CLI before anything is written, with a message naming both flags.
 
@@ -103,3 +104,7 @@ Without it, the `.test.tsx` files, `test/unit/shared/theme/Button.test.tsx` incl
 ## expo-go
 
 The app runs in Expo Go instead of a development build: `expo-dev-client`, `eas.json`, `scripts/phone.ts` and the `start:go` and `phone` scripts are removed, `android` and `ios` become `expo start --android` and `expo start --ios`, and `npm start` prints the QR code to scan. Expo Go cannot load a native library outside the Expo SDK, so a project that needs one moves to a development build.
+
+## package-manager
+
+`pnpm` writes the project for pnpm: a `packageManager` field in `package.json`, a `pnpm-workspace.yaml` that holds the build scripts allowed to run, the overrides and `saveExact`, and `nodeLinker: hoisted`, which Expo and Metro need,, and every command of the hook, the CI workflow, the scripts and the docs written with `pnpm`. `pnpm-lock.yaml` replaces `package-lock.json`, and `.npmrc` goes. create-brutal runs `pnpm install` when it installs, so pnpm has to be installed first: `npm install --global pnpm`.

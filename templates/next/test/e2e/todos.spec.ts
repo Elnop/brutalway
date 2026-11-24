@@ -3,7 +3,7 @@ import { openApp } from '@test-e2e/openApp.ts';
 
 test('axe finds no violation while a task is being renamed', async ({ page }) => {
   await openApp(page);
-  await page.getByRole('button', { name: 'Edit Run npm run check' }).click();
+  await page.getByRole('button', { name: 'Edit Run the checks' }).click();
   expect(await axeViolations(page)).toStrictEqual([]);
 });
 
@@ -47,7 +47,7 @@ test('the page never scrolls sideways at 320 px while a task is being renamed', 
 }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await openApp(page);
-  await page.getByRole('button', { name: 'Edit Run npm run check' }).click();
+  await page.getByRole('button', { name: 'Edit Run the checks' }).click();
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

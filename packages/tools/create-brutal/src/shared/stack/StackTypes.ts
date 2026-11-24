@@ -71,3 +71,5 @@ export type BrutalwayState = {
   projectName: string;
   options: Answers;
 };
+
+export type PackageManager = 'npm' | 'pnpm';

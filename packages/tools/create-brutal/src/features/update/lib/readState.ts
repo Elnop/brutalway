@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { isRecord } from '#src/shared/is-record/isRecord.ts';
-import { STATE_FILE, STATE_SCHEMA_VERSION } from '#src/shared/stack/StateConfig.ts';
+import { STATE_FILE, STATE_SCHEMA_VERSION } from '#src/shared/stack/configs/StateConfig.ts';
 import type { BrutalwayState, AnswerValue, Answers } from '#src/shared/stack/StackTypes.ts';
 
 function answers(value: unknown): Answers | undefined {

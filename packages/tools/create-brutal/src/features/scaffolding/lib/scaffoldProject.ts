@@ -1,3 +1,4 @@
+import { packageManagerOf } from '#src/shared/stack/lib/packageManagerOf.ts';
 import { applyStackChanges } from '#src/features/scaffolding/lib/applyStackChanges.ts';
 import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
 import { fetchTemplate } from '#src/features/scaffolding/lib/fetchTemplate.ts';
@@ -23,6 +24,6 @@ export async function scaffoldProject(
   }
   if (plan.install) {
     step('Installing dependencies');
-    runCommand('npm', ['install'], plan.dir);
+    runCommand(packageManagerOf(plan.answers), ['install'], plan.dir);
   }
 }

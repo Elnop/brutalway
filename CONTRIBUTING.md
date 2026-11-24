@@ -28,7 +28,7 @@ To work on a single package, run the same commands from its folder: `npm ci`, `n
 
 A package is checked with the `@brutalway/*` versions published on npm, not with the code next to it. A change to `oxlint-config-typescript` reaches `oxlint-config-node` once it is published and `oxlint-config-node` raises its range.
 
-`npm run matrix` creates projects covering every pair of CLI option values and runs their `npm run check` and `npm test` (`--all` for every combination). With `--local-packages`, the projects install the `@brutalway/*` packages packed from this checkout instead of the versions on npm, so a rule can be tried on both templates before it is published. CI runs it that way, with `--e2e`.
+`npm run matrix` creates projects covering every pair of CLI option values and runs their `npm run check` and `npm test` (`--all` for every combination). With `--local-packages`, the projects install the `@brutalway/*` packages packed from this checkout instead of the versions on npm, so a rule can be tried on both templates before it is published. CI runs it that way, with `--e2e`. The rows with `--package-manager pnpm` install with pnpm, which has to be on the `PATH`: `npm install --global pnpm`.
 
 ## Release
 

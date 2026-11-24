@@ -3,7 +3,7 @@ import { basename, join } from 'node:path';
 import type { StartState, UpdateArgs } from '#src/features/update/UpdateTypes.ts';
 import { isRecord } from '#src/shared/is-record/isRecord.ts';
 import { readState } from '#src/features/update/lib/readState.ts';
-import { STATE_FILE, STATE_SCHEMA_VERSION } from '#src/shared/stack/StateConfig.ts';
+import { STATE_FILE, STATE_SCHEMA_VERSION } from '#src/shared/stack/configs/StateConfig.ts';
 
 function projectName(dir: string): string {
   const manifest: unknown = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));

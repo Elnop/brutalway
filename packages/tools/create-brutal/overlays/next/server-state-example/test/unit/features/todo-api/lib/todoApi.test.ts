@@ -49,7 +49,7 @@ describe('todoApi', () => {
     const session = { cookie: '' };
     expect((await call(session, 'PATCH', '/todos/2', { completed: true })).body).toStrictEqual({
       id: 2,
-      title: 'Run npm run check',
+      title: 'Run the checks',
       completed: true,
     });
     expect(

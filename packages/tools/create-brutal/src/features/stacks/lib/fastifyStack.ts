@@ -1,3 +1,4 @@
+import { PACKAGE_MANAGER_OPTION } from '#src/shared/stack/configs/PackageManagerConfig.ts';
 import { SERVER_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
@@ -44,6 +45,7 @@ export const fastifyStack: Stack = {
       independent: true,
     },
     { id: 'ci', message: 'Add the GitHub Actions workflow?', default: true, independent: true },
+    PACKAGE_MANAGER_OPTION,
   ],
   changes: [
     {

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { packageManagerOf } from '#src/shared/stack/lib/packageManagerOf.ts';
+import { pnpmCommands } from '#src/shared/stack/lib/pnpmCommands.ts';
 import { existsSync, readdirSync, rmSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 import { intro, log, note, outro, spinner } from '@clack/prompts';
@@ -55,17 +57,18 @@ async function askChoices(argv: string[], first: CliArgs): Promise<ProjectChoice
     answers,
     local: args.local,
     git: await askYesNo(args.git, args.yes, 'Run git init?'),
-    install: await askYesNo(args.install, args.yes, 'Run npm install?'),
+    install: await askYesNo(args.install, args.yes, `Run ${packageManagerOf(answers)} install?`),
   };
 }
 
 function nextSteps(choices: ProjectChoices): string {
-  return [
+  const steps = [
     `cd ${choices.dir}`,
     ...(choices.install ? [] : ['npm install']),
     ...(choices.git ? [] : ['git init && git config core.hooksPath .githooks']),
     ...choices.stack.nextSteps(choices.answers),
   ].join('\n');
+  return packageManagerOf(choices.answers) === 'pnpm' ? pnpmCommands(steps) : steps;
 }
 
 function updateTools(): UpdateTools {
@@ -103,7 +106,7 @@ async function main(): Promise<void> {
     source: templateSource(choices.stack, choices.local),
   }));
   note(nextSteps(choices), 'Next steps');
-  outro('Run npm run check before each commit.');
+  outro(`Run ${packageManagerOf(choices.answers)} run check before each commit.`);
 }
 
 try {

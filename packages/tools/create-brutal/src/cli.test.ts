@@ -47,6 +47,7 @@ vite
   --[no-]e2e                     default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
+  --package-manager npm|pnpm     default: npm
 
 next
   --[no-]example                 default: yes
@@ -65,6 +66,7 @@ next
   --[no-]e2e                     default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
+  --package-manager npm|pnpm     default: npm
 
 react-native
   --[no-]example                 default: yes
@@ -81,6 +83,7 @@ react-native
   --[no-]expo-go                 default: no
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
+  --package-manager npm|pnpm     default: npm
 
 fastify
   --[no-]example                 default: yes
@@ -89,6 +92,7 @@ fastify
   --[no-]unit-tests              default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
+  --package-manager npm|pnpm     default: npm
 
 package
   --[no-]example                 default: yes
@@ -97,6 +101,7 @@ package
   --[no-]unit-tests              default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
+  --package-manager npm|pnpm     default: npm
 `;
 
 const CREATED_WITHOUT_GIT = `┌  create-brutal
@@ -264,6 +269,7 @@ describe('create-brutal', () => {
         'unit-tests': true,
         'claude-hook': true,
         ci: true,
+        'package-manager': 'npm',
       },
     });
     for (const file of [

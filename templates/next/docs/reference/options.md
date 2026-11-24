@@ -44,6 +44,7 @@ npm create brutal my-app -- --preset next.json --yes
 | `--[no-]e2e` | yes, no | yes |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
 | `--[no-]ci` | yes, no | yes |  |
+| `--package-manager` | `npm`, `pnpm` | `npm` |  |
 
 A combination from the last column stops the CLI before anything is written, with a message naming both flags.
 
@@ -122,3 +123,7 @@ Without it, the `.test.tsx` files, the `component` project of `vitest.config.ts`
 ## e2e
 
 Without it, `test/e2e/`, `playwright.config.ts`, the `e2e` script, `@playwright/test`, `@axe-core/playwright` and `@brutalway/playwright-fixtures` are removed, along with the e2e job of the CI workflow.
+
+## package-manager
+
+`pnpm` writes the project for pnpm: a `packageManager` field in `package.json`, a `pnpm-workspace.yaml` that holds the build scripts allowed to run, the overrides and `saveExact`, and every command of the hook, the CI workflow, the scripts and the docs written with `pnpm`. `pnpm-lock.yaml` replaces `package-lock.json`, and `.npmrc` goes. create-brutal runs `pnpm install` when it installs, so pnpm has to be installed first: `npm install --global pnpm`.

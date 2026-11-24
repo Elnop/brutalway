@@ -17,3 +17,9 @@ export type PackageJson = Record<string, unknown> & {
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
 };
+
+export type WorkspaceSettings = {
+  allowBuilds: Record<string, boolean>;
+  overrides: Record<string, string>;
+  nodeLinker: string | undefined;
+};

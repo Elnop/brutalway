@@ -5,7 +5,7 @@ type Body = Record<string, unknown>;
 
 const STARTER_TODOS: MockTodo[] = [
   { id: 1, title: 'Read the README', completed: true },
-  { id: 2, title: 'Run npm run check', completed: false },
+  { id: 2, title: 'Run the checks', completed: false },
   { id: 3, title: 'Write your first feature', completed: false },
 ];
 const NOT_FOUND: MockAnswer = { status: 404, body: { message: 'No todo has this id' } };

@@ -1,3 +1,4 @@
+import { PACKAGE_MANAGER_OPTION } from '#src/shared/stack/configs/PackageManagerConfig.ts';
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import { FRONTEND_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import type { FileEdit, Stack, StackChange } from '#src/shared/stack/StackTypes.ts';
@@ -127,6 +128,7 @@ export const viteStack: Stack = {
       default: false,
     },
     ...FRONTEND_FEATURE_OPTIONS,
+    PACKAGE_MANAGER_OPTION,
   ],
   changes: fillAnchors(
     [

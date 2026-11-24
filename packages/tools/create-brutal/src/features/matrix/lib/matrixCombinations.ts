@@ -14,7 +14,14 @@ function crossAll(options: StackOption[]): Answers[] {
 }
 
 function matchesFixed(answers: Answers, fixed: Answers): boolean {
-  return Object.entries(fixed).every(([id, value]) => answers[id] === value);
+  return Object.entries(fixed).every(([id, value]) => !(id in answers) || answers[id] === value);
+}
+
+function cycledValue(option: StackOption, row: number, position: number, fixed: Answers) {
+  const given = fixed[option.id];
+  if (given !== undefined) return given;
+  const values = candidateValues(option);
+  return values[Math.floor(row / values.length ** position) % values.length] ?? option.default;
 }
 
 export function matrixCombinations(
@@ -31,13 +38,10 @@ export function matrixCombinations(
   return rows.map((answers, index) => ({
     ...answers,
     ...Object.fromEntries(
-      independent.map((option, position) => {
-        const values = candidateValues(option);
-        return [
-          option.id,
-          values[Math.floor(index / values.length ** position) % values.length] ?? option.default,
-        ];
-      }),
+      independent.map((option, position) => [
+        option.id,
+        cycledValue(option, index, position, fixed),
+      ]),
     ),
   }));
 }

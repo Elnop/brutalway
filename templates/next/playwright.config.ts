@@ -10,7 +10,7 @@ export default defineConfig({
   reporter: onCi ? 'list' : [['list'], ['html', { open: 'never' }]],
   use: { baseURL: URL, trace: 'retain-on-failure' },
   webServer: {
-    command: 'npx next start --port 4173',
+    command: 'next start --port 4173',
     url: URL,
     reuseExistingServer: !onCi,
   },

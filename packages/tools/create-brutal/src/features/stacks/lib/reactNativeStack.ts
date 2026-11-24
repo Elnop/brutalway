@@ -1,3 +1,4 @@
+import { PACKAGE_MANAGER_OPTION } from '#src/shared/stack/configs/PackageManagerConfig.ts';
 import { NATIVE_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import {
   FRONTEND_NO_I18N,
@@ -308,6 +309,7 @@ export const reactNativeStack: Stack = {
     },
     sharedOption('claude-hook'),
     sharedOption('ci'),
+    PACKAGE_MANAGER_OPTION,
   ],
   changes: fillAnchors(
     [

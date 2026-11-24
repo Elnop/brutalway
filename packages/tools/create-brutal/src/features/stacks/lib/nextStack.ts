@@ -1,3 +1,4 @@
+import { PACKAGE_MANAGER_OPTION } from '#src/shared/stack/configs/PackageManagerConfig.ts';
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import {
   FRONTEND_NO_UNIT_TESTS,
@@ -101,6 +102,7 @@ export const nextStack: Stack = {
       default: false,
     },
     ...FRONTEND_FEATURE_OPTIONS,
+    PACKAGE_MANAGER_OPTION,
   ],
   changes: fillAnchors(
     [

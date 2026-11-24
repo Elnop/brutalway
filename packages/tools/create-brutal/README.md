@@ -86,10 +86,14 @@ A combination that cannot work stops the CLI before anything is written, with a 
 | `example` | yes | the todo list |
 | `claude-hook` | yes | the Claude Code hook that lints each edited file |
 | `ci` | yes | the GitHub Actions workflow that runs the checks |
+| `unit-tests` | yes | the unit tests, their runner and the `test` script |
+| `package-manager` | `npm` | npm, or pnpm with `--package-manager pnpm` |
 
 Without `example`, the todo list goes and the layers stay, with the least code the checks accept. The options page of each template says what remains.
 
-Without `claude-hook`, `.claude/`, `docs/guides/work-with-an-agent.md` and `@brutalway/agent-hook` are removed. Without `ci`, the CI workflow is removed, and the commands and verifications docs stop mentioning it.
+Without `claude-hook`, `.claude/`, `docs/guides/work-with-an-agent.md` and `@brutalway/agent-hook` are removed. Without `ci`, the CI workflow is removed, and the commands and verifications docs stop mentioning it. Without `unit-tests`, `test/unit/`, `test/support/`, the test runner and its scripts are removed, and the e2e tests of vite and next stay with `e2e`.
+
+With `--package-manager pnpm`, the project gets a `packageManager` field and a `pnpm-workspace.yaml` that holds the allowed build scripts, the overrides and `saveExact`, plus `nodeLinker: hoisted` on react-native. The hook, the CI workflow, the scripts and the docs call `pnpm`, `pnpm-lock.yaml` replaces `package-lock.json`, and create-brutal installs with pnpm, which has to be installed already.
 
 `git` and `install` are asked on every stack too, and are covered under Install above.
 

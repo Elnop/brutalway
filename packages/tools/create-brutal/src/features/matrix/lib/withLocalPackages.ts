@@ -42,3 +42,11 @@ export function withoutLocalPackages(manifestText: string, originalText: string)
   };
   return `${JSON.stringify(restored, null, 2)}\n`;
 }
+
+export function withLocalOverrides(workspaceText: string, tarballs: Map<string, string>): string {
+  const lines = [...tarballs].map(([name, path]) => `  '${name}': 'file:${path}'`).join('\n');
+  if (/^overrides:$/mu.test(workspaceText)) {
+    return workspaceText.replace(/^overrides:$/mu, `overrides:\n${lines}`);
+  }
+  return `${workspaceText}overrides:\n${lines}\n`;
+}

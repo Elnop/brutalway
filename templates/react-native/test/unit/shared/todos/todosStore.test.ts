@@ -12,7 +12,7 @@ describe('todosActions', () => {
     todosActions.add('   ');
     expect(todosStore.getState().todos.map((todo) => todo.title)).toStrictEqual([
       'Read the README',
-      'Run npm run check',
+      'Run the checks',
       'Write your first feature',
       'ship it',
     ]);
@@ -24,7 +24,7 @@ describe('todosActions', () => {
     todosActions.rename('write-a-feature', ' ');
     todosActions.remove('read-the-readme');
     expect(todosStore.getState().todos).toStrictEqual([
-      { id: 'run-the-checks', title: 'Run npm run check', completed: true },
+      { id: 'run-the-checks', title: 'Run the checks', completed: true },
       { id: 'write-a-feature', title: 'Write two features', completed: false },
     ]);
     todosActions.clearCompleted();

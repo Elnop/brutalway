@@ -1,4 +1,4 @@
-import { appendFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -14,10 +14,8 @@ import { LOCAL_ROOT } from '#src/features/scaffolding/ScaffoldConfig.ts';
 import { SHADCN_ADDED_AFTER_SCAFFOLD } from '#src/features/stacks/configs/shadcnConfig.ts';
 import type { Answers, Stack } from '#src/shared/stack/StackTypes.ts';
 import { stacks } from '#src/features/stacks/configs/stacksConfig.ts';
-import {
-  withLocalPackages,
-  withoutLocalPackages,
-} from '#src/features/matrix/lib/withLocalPackages.ts';
+import { withLocalManifest } from '#src/features/matrix/lib/withLocalManifest.ts';
+import { packageManagerOf } from '#src/shared/stack/lib/packageManagerOf.ts';
 
 const { values } = parseArgs({
   options: {
@@ -41,28 +39,24 @@ const tarballs =
     ? await packLocalPackages(LOCAL_ROOT, join(WORK_DIR, 'packages'))
     : undefined;
 
-async function withLocalManifest(
-  dir: string,
-  command: string,
-  args: string[],
-): Promise<{ ok: boolean; output: string }> {
-  if (tarballs === undefined) return runProcess(command, args, dir);
-  const manifestPath = join(dir, 'package.json');
-  const original = readFileSync(manifestPath, 'utf8');
-  writeFileSync(manifestPath, withLocalPackages(original, tarballs));
-  const result = await runProcess(command, args, dir);
-  writeFileSync(manifestPath, withoutLocalPackages(readFileSync(manifestPath, 'utf8'), original));
-  return result;
-}
-
-const INSTALL_ARGS = ['install', '--prefer-offline', '--no-audit', '--no-fund'];
+const INSTALL_ARGS = {
+  npm: ['install', '--prefer-offline', '--no-audit', '--no-fund'],
+  pnpm: ['install', '--prefer-offline', '--no-frozen-lockfile'],
+};
 const SHADCN_ARGS = ['shadcn', 'add', ...SHADCN_ADDED_AFTER_SCAFFOLD, '--yes'];
+const SHADCN_COMMAND = { npm: ['npx', ...SHADCN_ARGS], pnpm: ['pnpm', 'exec', ...SHADCN_ARGS] };
 
 const SCAFFOLD_DEFAULTS = {
   source: { kind: 'local', root: LOCAL_ROOT },
   git: true,
   install: false,
 } as const;
+
+async function addShadcn(dir: string, manager: 'npm' | 'pnpm'): Promise<string | undefined> {
+  const [command = 'npx', ...args] = SHADCN_COMMAND[manager];
+  const added = await withLocalManifest(tarballs, dir, command, args);
+  return added.ok ? undefined : `shadcn add failed\n${added.output.slice(-4000)}`;
+}
 
 async function prepare(matrixRun: Run, dir: string): Promise<string | undefined> {
   const plan = { ...matrixRun, ...SCAFFOLD_DEFAULTS, dir, projectName: matrixRun.name };
@@ -71,18 +65,18 @@ async function prepare(matrixRun: Run, dir: string): Promise<string | undefined>
   } catch (error) {
     return `scaffolding failed: ${errorMessage(error)}`;
   }
-  const installed = await withLocalManifest(dir, 'npm', INSTALL_ARGS);
-  if (!installed.ok) return `npm install failed\n${installed.output.slice(-4000)}`;
-  if (matrixRun.answers['ui'] !== 'shadcn') return undefined;
-  const added = await withLocalManifest(dir, 'npx', SHADCN_ARGS);
-  return added.ok ? undefined : `shadcn add failed\n${added.output.slice(-4000)}`;
+  const manager = packageManagerOf(matrixRun.answers);
+  const installed = await withLocalManifest(tarballs, dir, manager, INSTALL_ARGS[manager]);
+  if (!installed.ok) return `${manager} install failed\n${installed.output.slice(-4000)}`;
+  return matrixRun.answers['ui'] === 'shadcn' ? addShadcn(dir, manager) : undefined;
 }
 
 async function runCommands(answers: Answers, dir: string): Promise<string | undefined> {
+  const manager = packageManagerOf(answers);
   const commands = [
-    ['npm', 'run', 'check'],
-    ...(answers['unit-tests'] === false ? [] : [['npm', 'test']]),
-    ...(values.e2e === true && answers['e2e'] ? [['npm', 'run', 'e2e']] : []),
+    [manager, 'run', 'check'],
+    ...(answers['unit-tests'] === false ? [] : [[manager, 'test']]),
+    ...(values.e2e === true && answers['e2e'] ? [[manager, 'run', 'e2e']] : []),
   ];
   for (const [command = '', ...args] of commands) {
     const result = await runProcess(command, args, dir);

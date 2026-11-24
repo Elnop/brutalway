@@ -1,3 +1,5 @@
+import { packageManagerOf } from '#src/shared/stack/lib/packageManagerOf.ts';
+import { usePnpm } from '#src/features/scaffolding/lib/usePnpm.ts';
 import { existsSync, globSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { dropEmptyFolders } from '#src/features/scaffolding/lib/dropEmptyFolders.ts';
@@ -6,7 +8,7 @@ import { formatJson } from '#src/features/scaffolding/lib/formatJson.ts';
 import { updatePackageJson } from '#src/features/scaffolding/lib/updatePackageJson.ts';
 import type { ScaffoldPlan } from '#src/features/scaffolding/ScaffoldTypes.ts';
 import { ownVersion } from '#src/features/scaffolding/lib/ownVersion.ts';
-import { STATE_SCHEMA_VERSION } from '#src/shared/stack/StateConfig.ts';
+import { STATE_SCHEMA_VERSION } from '#src/shared/stack/configs/StateConfig.ts';
 import { writeState } from '#src/shared/stack/lib/writeState.ts';
 
 export function finishProject(
@@ -16,6 +18,7 @@ export function finishProject(
   for (const tree of ['src', 'test']) {
     if (existsSync(join(target.dir, tree))) dropEmptyFolders(join(target.dir, tree));
   }
+  if (packageManagerOf(target.answers) === 'pnpm') usePnpm(target.dir, target.stack.id);
   for (const file of ['knip.json', ...globSync('tsconfig*.json', { cwd: target.dir })]) {
     const path = join(target.dir, file);
     if (existsSync(path)) writeFileSync(path, formatJson(readFileSync(path, 'utf8'), file));

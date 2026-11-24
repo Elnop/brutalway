@@ -10,7 +10,7 @@ export default defineConfig({
   reporter: onCi ? 'list' : [['list'], ['html', { open: 'never' }]],
   use: { baseURL: URL, trace: 'retain-on-failure' },
   webServer: {
-    command: 'npx vite preview --port 4173 --strictPort',
+    command: 'vite preview --port 4173 --strictPort',
     url: URL,
     reuseExistingServer: !onCi,
   },

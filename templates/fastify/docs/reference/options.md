@@ -34,6 +34,7 @@ npm create brutal my-api -- --preset fastify.json --yes
 | `--[no-]unit-tests` | yes, no | yes |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
 | `--[no-]ci` | yes, no | yes |  |
+| `--package-manager` | `npm`, `pnpm` | `npm` |  |
 
 Every combination works.
 
@@ -50,3 +51,7 @@ Without it, `src/features/database/` and the `DATABASE_PATH` variable are remove
 ## unit-tests
 
 Without it, `test/`, the `test` script and `@brutalway/oxlint-config-node-test` are removed, along with the test step of the CI workflow. check-tree still checks `test/unit/`, so a test added later goes at the path of its source.
+
+## package-manager
+
+`pnpm` writes the project for pnpm: a `packageManager` field in `package.json`, a `pnpm-workspace.yaml` that holds the build scripts allowed to run, the overrides and `saveExact`, and every command of the hook, the CI workflow, the scripts and the docs written with `pnpm`. `pnpm-lock.yaml` replaces `package-lock.json`, and `.npmrc` goes. create-brutal runs `pnpm install` when it installs, so pnpm has to be installed first: `npm install --global pnpm`.

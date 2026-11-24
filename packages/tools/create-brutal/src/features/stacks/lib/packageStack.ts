@@ -1,3 +1,4 @@
+import { PACKAGE_MANAGER_OPTION } from '#src/shared/stack/configs/PackageManagerConfig.ts';
 import { SERVER_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
@@ -51,6 +52,7 @@ export const packageStack: Stack = {
       default: true,
       independent: true,
     },
+    PACKAGE_MANAGER_OPTION,
   ],
   changes: [
     {

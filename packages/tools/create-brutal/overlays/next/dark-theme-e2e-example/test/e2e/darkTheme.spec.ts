@@ -17,7 +17,7 @@ test('axe finds no violation in dark mode on a task being renamed and on an erro
   page,
 }) => {
   await openApp(page);
-  await page.getByRole('button', { name: 'Edit Run npm run check' }).click();
+  await page.getByRole('button', { name: 'Edit Run the checks' }).click();
   await page.getByLabel('New task').fill('   ');
   await page.getByRole('button', { name: 'Add' }).click();
   await expect(page.getByRole('main').getByRole('alert')).toHaveText('The title is blank');
