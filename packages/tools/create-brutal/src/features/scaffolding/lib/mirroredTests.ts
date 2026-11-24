@@ -6,7 +6,7 @@ const TEST_ROOT = 'test/unit/';
 const SOURCE_EXTENSION = /\.tsx?$/u;
 const TEST_SUFFIXES = ['.test.ts', '.test.tsx'];
 
-export function mirrorOf(source: string): string | undefined {
+function mirrorOf(source: string): string | undefined {
   return source.startsWith(SOURCE_ROOT)
     ? `${TEST_ROOT}${source.slice(SOURCE_ROOT.length)}`
     : undefined;
