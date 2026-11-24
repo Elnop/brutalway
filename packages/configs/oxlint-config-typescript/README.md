@@ -67,7 +67,7 @@ It turns on the `correctness` and `suspicious` categories, a set of `typescript/
 - a function takes 4 parameters at most (`max-params`) and declares 5 local variables at most (`function-size/max-variables`, a rule of this package). Each name bound by a destructuring counts, a nested function is counted on its own, and tests are exempt. Both limits come from the Norminette
 - a file declares 5 top-level functions at most (`function-size/max-functions`): function declarations and functions assigned to a top-level `const`, exported or not. A function nested in another one, a callback and an object method do not count. The limit comes from the Norminette, which caps a `.c` file at 5 functions
 
-Tests (`*.test.ts`, `*.spec.ts`, `e2e/`) skip the naming and placement rules, the length limit and the variable limit.
+Tests (`*.test.ts`, `*.spec.ts`, `test/e2e/`) skip the naming and placement rules, the length limit and the variable limit.
 
 ## Why
 

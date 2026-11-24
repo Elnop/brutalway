@@ -25,7 +25,7 @@ On top of the configs it extends:
 - side effect imports allowed for `.css` files only
 - `import/default` off
 - `typescript/no-non-null-assertion` and `unicorn/prefer-add-event-listener` off
-- the `node` env for `e2e/` and `*.config.ts` (Vite, Vitest, Playwright configs)
+- the `node` env for `test/e2e/` and `*.config.ts` (Vite, Vitest, Playwright configs)
 
 ## Why
 

@@ -25,5 +25,5 @@ export const reactViteConfig: OxlintConfig = defineConfig({
     'typescript/no-non-null-assertion': 'off',
     'unicorn/prefer-add-event-listener': 'off',
   },
-  overrides: [{ files: ['e2e/**', '**/*.config.ts'], env: { node: true } }],
+  overrides: [{ files: ['test/e2e/**', '**/*.config.ts'], env: { node: true } }],
 });

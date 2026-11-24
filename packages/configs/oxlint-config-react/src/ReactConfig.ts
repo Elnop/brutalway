@@ -51,7 +51,7 @@ export const reactConfig: OxlintConfig = defineConfig({
     ...componentRolesOverrides,
     ...hookFilesOverrides,
     {
-      files: ['**/*.test.tsx', 'e2e/**'],
+      files: ['**/*.test.tsx', 'test/e2e/**'],
       rules: {
         'component-props/no-restricted-syntax': 'off',
         'component-roles/no-restricted-syntax': 'off',

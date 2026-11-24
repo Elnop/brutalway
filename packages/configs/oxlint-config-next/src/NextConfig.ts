@@ -46,7 +46,7 @@ export const nextConfig: OxlintConfig = defineConfig({
     ...serverActionsOverrides,
     ...routerFilesOverrides,
     {
-      files: ['e2e/**', '**/*.config.ts', '**/proxy.ts', '**/instrumentation.ts'],
+      files: ['test/e2e/**', '**/*.config.ts', '**/proxy.ts', '**/instrumentation.ts'],
       env: { node: true },
     },
   ],

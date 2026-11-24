@@ -52,7 +52,7 @@ When a rule fires:
 - no relative imports: import through the aliases of `tsconfig.json`
 - side effect imports allowed for `.css` files only
 - `import/default`, `typescript/no-non-null-assertion` and `unicorn/prefer-add-event-listener` off
-- the `node` env for `e2e/`, `*.config.ts`, `proxy.ts` and `instrumentation.ts`
+- the `node` env for `test/e2e/`, `*.config.ts`, `proxy.ts` and `instrumentation.ts`
 
 ## Why
 

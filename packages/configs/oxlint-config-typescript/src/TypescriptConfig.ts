@@ -201,7 +201,7 @@ export const typescriptConfig: OxlintConfig = defineConfig({
       rules: { 'typescript/no-floating-promises': 'off' },
     },
     {
-      files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', 'e2e/**'],
+      files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', 'test/e2e/**'],
       rules: {
         'export-placement/no-restricted-syntax': 'off',
         'file-named-after-export/file-named-after-export': 'off',
