@@ -259,10 +259,6 @@ const THEME_SKELETON_CHANGES: StackChange[] = [
   },
   {
     when: { example: false, i18n: 'en-fr', 'component-tests': true },
-    move: {
-      'test/unit/shared/theme/Button.test.tsx': `${SWITCH_PRESENTER_TESTS}/Button.test.tsx`,
-      'test/unit/features/language-switch/components/LanguageSwitch.test.tsx': `${SWITCH_PRESENTER_TESTS}/LanguageSwitch.test.tsx`,
-    },
     edits: [
       importEdit(
         `${SWITCH_PRESENTER_TESTS}/Button.test.tsx`,

@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { join } from 'node:path';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-const CLI = join(import.meta.dirname, 'cli.ts');
+const CLI = fileURLToPath(import.meta.resolve('#src/cli.ts'));
 
 describe('__PROJECT_NAME__', () => {
   it('prints its name and exits with 0', () => {
