@@ -38,7 +38,8 @@ npm create brutal my-app -- --preset react-native.json --yes
 | `--i18n` | `none`, `en`, `en-fr` | `en` |  |
 | `--[no-]react-compiler` | yes, no | no |  |
 | `--analytics` | `none`, `module`, `posthog` | `none` |  |
-| `--[no-]component-tests` | yes, no | yes | `--no-component-tests` with `--coverage` |
+| `--[no-]unit-tests` | yes, no | yes | `--no-unit-tests` with `--component-tests` |
+| `--[no-]component-tests` | yes, no | yes | `--component-tests` with `--no-unit-tests`, `--no-component-tests` with `--coverage` |
 | `--[no-]coverage` | yes, no | no | `--coverage` with `--no-component-tests` |
 | `--[no-]expo-go` | yes, no | no |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
@@ -86,6 +87,10 @@ Both values add `analyticsTracker.ts` to an `analytics` shared feature in `src/s
 
 - `module`: the client emits an event on `DeviceEventEmitter`, for whatever tool you plug in
 - `posthog`: it adds `posthog-react-native` and the Expo modules it needs (`expo-application`, `expo-device`, `expo-file-system`, `expo-localization`), and the client sends the events when `EXPO_PUBLIC_POSTHOG_KEY` is set
+
+## unit-tests
+
+Without it, `test/`, `jest.setup.ts`, Jest and its config in `package.json`, and the `test` and `test:watch` scripts are removed, along with the test step of the CI workflow. `--component-tests` and `--coverage` need it. check-tree still checks `test/unit/`, so a test added later goes at the path of its source.
 
 ## component-tests
 

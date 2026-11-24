@@ -29,6 +29,14 @@ function removePaths(dir: string, patterns: string[]): void {
   }
 }
 
+function discardPaths(dir: string, patterns: string[]): void {
+  for (const pattern of patterns) {
+    for (const path of globSync(pattern, { cwd: dir })) {
+      rmSync(join(dir, path), { recursive: true, force: true });
+    }
+  }
+}
+
 function copyOverlay(from: string, to: string, projectName: string): void {
   for (const entry of readdirSync(from)) {
     const source = join(from, entry);
@@ -58,6 +66,7 @@ export function applyStackChanges(target: StackTarget, overlaysRoot: string): vo
   for (const change of changes) {
     movePaths(target.dir, change.move ?? {});
     removePaths(target.dir, change.remove ?? []);
+    discardPaths(target.dir, change.discard ?? []);
     editFiles(target.dir, change.edits ?? [], target.projectName);
     updatePackage(target.dir, change);
     if (change.overlay !== undefined) {

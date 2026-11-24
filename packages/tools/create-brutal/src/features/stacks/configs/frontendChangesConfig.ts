@@ -346,7 +346,13 @@ export const FRONTEND_FEATURE_OPTIONS: StackOption[] = [
       { id: 'posthog', label: 'Through that module, sending to PostHog' },
     ],
   },
-  { id: 'component-tests', message: 'Add component tests (Vitest in Chromium)?', default: true },
+  { id: 'unit-tests', message: 'Add unit tests (Vitest in Node)?', default: true },
+  {
+    id: 'component-tests',
+    message: 'Add component tests (Vitest in Chromium)?',
+    default: true,
+    requires: { 'unit-tests': true },
+  },
   {
     id: 'coverage',
     message:

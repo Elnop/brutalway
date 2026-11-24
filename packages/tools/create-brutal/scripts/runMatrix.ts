@@ -81,7 +81,7 @@ async function prepare(matrixRun: Run, dir: string): Promise<string | undefined>
 async function runCommands(answers: Answers, dir: string): Promise<string | undefined> {
   const commands = [
     ['npm', 'run', 'check'],
-    ['npm', 'test'],
+    ...(answers['unit-tests'] === false ? [] : [['npm', 'test']]),
     ...(values.e2e === true && answers['e2e'] ? [['npm', 'run', 'e2e']] : []),
   ];
   for (const [command = '', ...args] of commands) {

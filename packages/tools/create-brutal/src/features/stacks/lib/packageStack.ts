@@ -1,3 +1,4 @@
+import { SERVER_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
@@ -37,6 +38,7 @@ export const packageStack: Stack = {
       message: 'Publish to npm with changesets and a GitHub workflow?',
       default: true,
     },
+    { id: 'unit-tests', message: 'Add unit tests (node:test)?', default: true },
     {
       id: 'claude-hook',
       message: 'Add the Claude Code hook that lints each edited file?',
@@ -250,6 +252,18 @@ export const packageStack: Stack = {
       when: { ci: false, release: false },
       remove: ['.github'],
     },
+    ...SERVER_NO_UNIT_TESTS,
+    {
+      when: { 'unit-tests': false, release: true },
+      edits: [
+        { file: '.github/workflows/release.yml', dropLines: '      - run: npm test' },
+        {
+          file: 'docs/guides/publish.md',
+          replace: 'after `npm run check` and `npm test`,',
+          with: 'after `npm run check`,',
+        },
+      ],
+    },
   ],
-  nextSteps: () => ['npm test'],
+  nextSteps: (answers) => [answers['unit-tests'] === false ? 'npm run check' : 'npm test'],
 };

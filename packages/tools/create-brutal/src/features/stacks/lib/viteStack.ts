@@ -1,4 +1,5 @@
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
+import { FRONTEND_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import type { FileEdit, Stack, StackChange } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
@@ -353,6 +354,7 @@ export const viteStack: Stack = {
           },
         ],
       },
+      ...FRONTEND_NO_UNIT_TESTS,
     ],
     ANCHORS,
   ),

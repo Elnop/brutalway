@@ -97,6 +97,9 @@ export const NATIVE_NO_I18N: StackChange[] = [
       },
     ],
   },
-  { ...WITHOUT_JEST_SETUP, when: { i18n: 'none', example: false } },
-  { ...WITHOUT_JEST_SETUP, when: { i18n: 'none', example: true, 'server-state': true } },
+  { ...WITHOUT_JEST_SETUP, when: { i18n: 'none', example: false, 'unit-tests': true } },
+  {
+    ...WITHOUT_JEST_SETUP,
+    when: { i18n: 'none', example: true, 'server-state': true, 'unit-tests': true },
+  },
 ];

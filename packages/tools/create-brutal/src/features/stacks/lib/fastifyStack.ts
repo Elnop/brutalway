@@ -1,3 +1,4 @@
+import { SERVER_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
@@ -35,6 +36,7 @@ export const fastifyStack: Stack = {
       message: 'Use SQLite (node:sqlite)? Without it, the example keeps its todos in memory.',
       default: true,
     },
+    { id: 'unit-tests', message: 'Add unit tests (node:test)?', default: true },
     {
       id: 'claude-hook',
       message: 'Add the Claude Code hook that lints each edited file?',
@@ -317,6 +319,7 @@ export const fastifyStack: Stack = {
         },
       ],
     },
+    ...SERVER_NO_UNIT_TESTS,
   ],
   nextSteps: () => ['npm run dev'],
 };

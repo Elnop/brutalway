@@ -31,6 +31,7 @@ npm create brutal my-lib -- --preset lib.json --yes
 | `--[no-]example` | yes, no | yes |  |
 | `--[no-]bin` | yes, no | yes |  |
 | `--[no-]release` | yes, no | yes |  |
+| `--[no-]unit-tests` | yes, no | yes |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
 | `--[no-]ci` | yes, no | yes |  |
 
@@ -49,3 +50,7 @@ Without it, `package.json` has no `bin`, `src/todo.ts` and its test are removed,
 With it, the project publishes to npm with changesets: `@changesets/cli`, `.changeset/`, the `release` script, `docs/guides/publish.md` and `.github/workflows/release.yml`, which opens the release pull request and publishes each merged version through trusted publishing, with provenance.
 
 Without it, all of these are removed, and `.github/` too when `ci` is off.
+
+## unit-tests
+
+Without it, `test/`, the `test` script and `@brutalway/oxlint-config-node-test` are removed, along with the test step of the CI and release workflows. check-tree still checks `test/unit/`, so a test added later goes at the path of its source.

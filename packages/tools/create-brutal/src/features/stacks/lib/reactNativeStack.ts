@@ -1,3 +1,4 @@
+import { NATIVE_NO_UNIT_TESTS } from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import {
   FRONTEND_NO_I18N,
   FRONTEND_NO_I18N_FORMS,
@@ -291,10 +292,12 @@ export const reactNativeStack: Stack = {
     sharedOption('i18n'),
     sharedOption('react-compiler'),
     sharedOption('analytics'),
+    { id: 'unit-tests', message: 'Add unit tests (Jest)?', default: true },
     {
       id: 'component-tests',
       message: 'Add component tests (React Native Testing Library)?',
       default: true,
+      requires: { 'unit-tests': true },
     },
     sharedOption('coverage'),
     {
@@ -681,6 +684,7 @@ export const reactNativeStack: Stack = {
           i18n: ['none', 'en'],
         },
       ),
+      ...NATIVE_NO_UNIT_TESTS,
     ],
     ANCHORS,
   ),

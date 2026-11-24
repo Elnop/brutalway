@@ -31,6 +31,7 @@ npm create brutal my-api -- --preset fastify.json --yes
 | `--[no-]example` | yes, no | yes |  |
 | `--[no-]swagger` | yes, no | yes |  |
 | `--[no-]database` | yes, no | yes |  |
+| `--[no-]unit-tests` | yes, no | yes |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
 | `--[no-]ci` | yes, no | yes |  |
 
@@ -45,3 +46,7 @@ Without it, there is no Swagger UI on `/docs`: `src/features/http-server/swagger
 ## database
 
 Without it, `src/features/database/` and the `DATABASE_PATH` variable are removed, and nothing uses `node:sqlite`. The example keeps its todos in a `Map` at the top of `src/shared/todos/todosQueries.ts`, which has the same functions: both services call `createTodosQueries()` and see the same todos, and the routes do not change.
+
+## unit-tests
+
+Without it, `test/`, the `test` script and `@brutalway/oxlint-config-node-test` are removed, along with the test step of the CI workflow. check-tree still checks `test/unit/`, so a test added later goes at the path of its source.

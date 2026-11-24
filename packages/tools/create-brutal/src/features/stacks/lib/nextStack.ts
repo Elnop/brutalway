@@ -1,4 +1,8 @@
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
+import {
+  FRONTEND_NO_UNIT_TESTS,
+  NEXT_NO_UNIT_TESTS,
+} from '#src/features/stacks/configs/noUnitTestsConfig.ts';
 import type { Stack } from '#src/shared/stack/StackTypes.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
 import { serverStateExtends } from '#src/features/stacks/lib/serverStateExtends.ts';
@@ -407,6 +411,8 @@ export const nextStack: Stack = {
           },
         ],
       },
+      ...FRONTEND_NO_UNIT_TESTS,
+      ...NEXT_NO_UNIT_TESTS,
     ],
     ANCHORS,
   ),

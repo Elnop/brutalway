@@ -44,8 +44,10 @@ export type StackChange = {
   when: ChangeCondition;
   move?: Record<string, string>;
   remove?: string[];
+  discard?: string[];
   edits?: FileEdit[];
   removeScripts?: string[];
+  removePackageFields?: string[];
   removeDependencies?: string[];
   addDependencies?: Record<string, string>;
   addDevDependencies?: Record<string, string>;

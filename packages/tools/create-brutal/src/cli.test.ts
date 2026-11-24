@@ -41,6 +41,7 @@ vite
   --i18n none|en|en-fr           default: en
   --[no-]react-compiler          default: no
   --analytics none|module|posthog default: none
+  --[no-]unit-tests              default: yes
   --[no-]component-tests         default: yes
   --[no-]coverage                default: no
   --[no-]e2e                     default: yes
@@ -58,6 +59,7 @@ next
   --i18n none|en|en-fr           default: en
   --[no-]react-compiler          default: no
   --analytics none|module|posthog default: none
+  --[no-]unit-tests              default: yes
   --[no-]component-tests         default: yes
   --[no-]coverage                default: no
   --[no-]e2e                     default: yes
@@ -73,6 +75,7 @@ react-native
   --i18n none|en|en-fr           default: en
   --[no-]react-compiler          default: no
   --analytics none|module|posthog default: none
+  --[no-]unit-tests              default: yes
   --[no-]component-tests         default: yes
   --[no-]coverage                default: no
   --[no-]expo-go                 default: no
@@ -83,6 +86,7 @@ fastify
   --[no-]example                 default: yes
   --[no-]swagger                 default: yes
   --[no-]database                default: yes
+  --[no-]unit-tests              default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
 
@@ -90,6 +94,7 @@ package
   --[no-]example                 default: yes
   --[no-]bin                     default: yes
   --[no-]release                 default: yes
+  --[no-]unit-tests              default: yes
   --[no-]claude-hook             default: yes
   --[no-]ci                      default: yes
 `;
@@ -252,7 +257,14 @@ describe('create-brutal', () => {
       createBrutal: manifest(join(import.meta.dirname, '..')).version,
       stack: 'fastify',
       projectName: 'app',
-      options: { example: true, swagger: true, database: true, 'claude-hook': true, ci: true },
+      options: {
+        example: true,
+        swagger: true,
+        database: true,
+        'unit-tests': true,
+        'claude-hook': true,
+        ci: true,
+      },
     });
     for (const file of [
       'src/server.ts',

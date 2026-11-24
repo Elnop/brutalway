@@ -38,7 +38,8 @@ npm create brutal my-app -- --preset next.json --yes
 | `--i18n` | `none`, `en`, `en-fr` | `en` |  |
 | `--[no-]react-compiler` | yes, no | no |  |
 | `--analytics` | `none`, `module`, `posthog` | `none` |  |
-| `--[no-]component-tests` | yes, no | yes | `--no-component-tests` with `--coverage` |
+| `--[no-]unit-tests` | yes, no | yes | `--no-unit-tests` with `--component-tests` |
+| `--[no-]component-tests` | yes, no | yes | `--component-tests` with `--no-unit-tests`, `--no-component-tests` with `--coverage` |
 | `--[no-]coverage` | yes, no | no | `--coverage` with `--no-component-tests` |
 | `--[no-]e2e` | yes, no | yes |  |
 | `--[no-]claude-hook` | yes, no | yes |  |
@@ -105,6 +106,10 @@ Both values add `analyticsTracker.ts` to an `analytics` shared feature in `src/s
 
 - `module`: the client dispatches an `analytics` event on `window`, for whatever tool you plug in
 - `posthog`: it adds `posthog-js`, the client sends the events when `NEXT_PUBLIC_POSTHOG_KEY` is set and never during server rendering, and `src/proxy.ts` lets the PostHog hosts through its Content Security Policy
+
+## unit-tests
+
+Without it, `test/unit/`, `test/support/`, `vitest.config.ts`, `vitest.setup.ts`, Vitest and the `test`, `test:unit` and `test:watch` scripts are removed, along with the test step of the CI workflow. `--component-tests` and `--coverage` need it, and the e2e tests stay with `--e2e`. check-tree still checks `test/unit/`, so a test added later goes at the path of its source.
 
 ## component-tests
 
