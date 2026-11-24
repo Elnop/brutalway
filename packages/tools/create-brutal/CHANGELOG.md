@@ -1,5 +1,14 @@
 # create-brutal
 
+## 0.19.0
+
+### Minor Changes
+
+- 8643750: The projects keep their tests in `test/`: `test/unit/` at the path of their source, `test/e2e/` for the Playwright specs and `test/support/` for the helpers, where `test-utils/` was. They get check-tree 0.15.0, dependency-cruiser-config 0.14.0 and agent-hook 0.5.0. An option that removes or moves a file of `src/` removes or moves its test in `test/unit/` with it, and the folders left empty in `test/` are deleted.
+- 8a1de36: A `--[no-]unit-tests` option, yes by default, on the five stacks. Without it, the project gets no `test/unit/` or `test/support/`, no test runner and no `test` script: Vitest and its config on vite and next, Jest and its config on react-native, the `node:test` lint config on fastify and package. The test step leaves the CI workflow, and the test lines leave `AGENTS.md` and the docs. `--component-tests` and `--coverage` need it, and `--e2e` stays independent. check-tree still checks `test/unit/`, so a test added later goes at the path of its source.
+
+  The `tsconfig.third-party.json` of next with shadcn/ui no longer loads the types of `vite/client`, which only resolved while Vitest brought vite in.
+
 ## 0.18.0
 
 ### Minor Changes

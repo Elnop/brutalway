@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-node
 
+## 0.3.1
+
+### Patch Changes
+
+- ae7b854: `@brutalway/oxlint-config-typescript` goes from `^0.8.0` to `^0.9.0` and `@brutalway/oxlint-config-react` from `^0.5.0` to `^0.6.0`, so a project that extends react-vite, next or react-native gets the overrides of `test/e2e/**`.
+
 ## 0.3.0
 
 ### Minor Changes
