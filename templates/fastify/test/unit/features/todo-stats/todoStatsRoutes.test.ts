@@ -1,17 +1,14 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { DatabaseSync } from 'node:sqlite';
 import { todoStatsRoutes } from '#src/features/todo-stats/todoStatsRoutes.ts';
-import { createTodoStatsService } from '#src/features/todo-stats/todoStatsService.ts';
-import { createTodosQueries } from '#src/shared/todos/todosQueries.ts';
-import { createTestServer } from '#test-utils/createTestServer.ts';
+import { createTestServer } from '#test-support/createTestServer.ts';
+import { memoryTodos } from '#test-support/memoryTodos.ts';
 
 describe('todo stats routes', () => {
   it('counts total, completed and remaining todos', async () => {
-    const database = new DatabaseSync(':memory:');
-    const todos = createTodosQueries(database);
+    const { todos, todoStatsService } = memoryTodos();
     const app = createTestServer();
-    await app.register(todoStatsRoutes(createTodoStatsService(database)));
+    await app.register(todoStatsRoutes(todoStatsService));
     assert.deepEqual((await app.inject({ method: 'GET', url: '/stats' })).json(), {
       total: 0,
       completed: 0,

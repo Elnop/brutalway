@@ -12,7 +12,7 @@ Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifi
 - A request goes `xRoutes.ts` to `xService.ts` to `xQueries.ts`: a route never runs a query, and only an `xQueries.ts` touches the storage.
 - Services get the database as a parameter and build their queries from it, and `src/app/buildApp.ts` is the one place that opens it and passes it. A feature is registered by one entry of `FEATURES` in `src/app/AppConfig.ts`, never by a new line in `buildApp.ts`.
 - Requests and responses are Zod schemas in an `xSchemas.ts`, and the environment is read once, at startup.
-- A test sits next to its source. A helper that several tests share goes in `test-utils/` and is imported through `#test-utils/`: code in `src/` that only a test uses fails `knip --production`.
+- A unit test sits in `test/unit/`, at the path of its source under `src/`, and imports from `src/` only that source and `xConfig.ts` or `xTypes.ts` files. A helper that several tests share goes in `test/support/` and is imported through `#test-support/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`#src/` instead), no `index.ts`.
 
 ## Updating from the template

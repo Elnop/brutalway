@@ -36,7 +36,7 @@ npm create brutal my-api -- --preset fastify.json --yes
 
 Every combination works.
 
-`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `FEATURES` in `src/app/AppConfig.ts` is empty, so `src/app/buildApp.ts` only creates the server, and the two features of the example, `test-utils/` and `docs/reference/endpoints.md` are removed. The Swagger UI, if kept, is titled with the project name.
+`example`, `claude-hook` and `ci`, along with `git` and `install`, work the same on every stack and are described in the [create-brutal reference](https://github.com/Elnop/brutalway/tree/main/packages/tools/create-brutal#every-stack). Here, without the example, `FEATURES` in `src/app/AppConfig.ts` is empty, so `src/app/buildApp.ts` only creates the server, and the two features of the example, `test/support/` and `docs/reference/endpoints.md` are removed. The Swagger UI, if kept, is titled with the project name.
 
 ## swagger
 

@@ -10,7 +10,7 @@ Everything below runs locally, in the pre-commit hook and in CI. `npm run check`
 
 `oxlint.config.ts` extends `@brutalway/oxlint-config-fastify` (which brings the TypeScript base) and `@brutalway/oxlint-config-node-test`. Each package README details its rules. The main ones:
 
-- no comments (a `@ts-expect-error` says why, `@ts-ignore` and `@ts-nocheck` are refused), no `eval` or `new Function`, no relative imports (use `#src/`, and `#test-utils/` in `test-utils/`), no `index.ts`, no `export *`
+- no comments (a `@ts-expect-error` says why, `@ts-ignore` and `@ts-nocheck` are refused), no `eval` or `new Function`, no relative imports (use `#src/`, and `#test-support/` in `test/support/`), no `index.ts`, no `export *`
 - `process.env` is read only in a file whose name ends with `Env.ts`: here `src/shared/env/readEnv.ts`
 - no `app.decorate`: dependencies are factory parameters
 - an `async` handler returns its value and never calls `reply.send()`
@@ -36,15 +36,16 @@ dependency-cruiser extends `@brutalway/dependency-cruiser-config/server`:
 - the database driver (`node:sqlite`, `pg`…) is only imported by queries, `src/features/database/` and the tests
 - an `xWorker.ts` is only imported by `src/app/`, which starts and stops it with the server, so it lives in a feature
 - HTTP libraries (`undici`, `node:https`…) are only imported by an `xClient.ts`
-- no cycles, no import of a test file or of `test-utils/`, no devDependency in production code
+- no cycles, no import of `test/`, no devDependency in production code
+- a unit test imports from `src/` its own source and `xConfig.ts` or `xTypes.ts` files, nothing else, and follows the layer rules of its source
 
 ## Tree
 
-`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. A file of a shared feature that a single feature uses is rejected too, and moves into that feature. So is a shared feature whose files, tests aside, form two groups that never import each other: it splits into two shared features. That is why the server factory lives in `src/features/http-server/`.
+`check-tree` (`@brutalway/check-tree`) rejects empty folders and kind folders holding a single file. It also rejects a folder the layout does not name: `src/` holds `app/`, `features/` and `shared/`, `src/shared/` holds one folder per shared feature, and a feature or a shared feature holds kind folders, `features/` and `shared/`. One file of a kind stays at the root of its folder, two or more go in the kind's folder: `routes/`, `services/`, `queries/`, `schemas/`, `clients/`, `workers/`, `types/`, `configs/` or `lib/`. A file of a shared feature that a single feature uses is rejected too, and moves into that feature. It also keeps `test/unit/` a mirror of `src/`: a test sits at the path of its source, and `npx check-tree src --fix` moves the tests whose source moved. So is a shared feature whose files form two groups that never import each other: it splits into two shared features. That is why the server factory lives in `src/features/http-server/`.
 
 ## Duplicates
 
-jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears twice in `src/`, tests left out: the threshold is 0. Move the shared part into a function the two places call.
+jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears twice in `src/`: the threshold is 0. Move the shared part into a function the two places call.
 
 ## Docs
 
@@ -64,19 +65,19 @@ jscpd (`.jscpd.json`) fails on any block of 8 lines or 120 tokens that appears t
 
 ## Repository
 
-alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, kind folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the server never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test-utils/`.
+alint extends `@brutalway/alint-config`: every path in backticks, link and anchor of the README and `docs/` exists, kind folders only hold their kind, and every dependency is pinned to an exact version. knip rejects unused exports, files and dependencies. `npm run check` runs knip a second time with `--production`, on the code of `src/` alone: a file or an export of `src/` that only a test uses is reported, since the server never reaches it. Delete it, test it through the code that uses it, or move a test helper to `test/support/`.
 
 ## Tests
 
 | Kind | What it tests | Example |
 |---|---|---|
-| Queries | the SQL, on a `:memory:` database | `src/shared/todos/todosQueries.test.ts` |
-| Routes | one feature mounted alone on `createTestServer()` from `test-utils/`, called with `inject()` | `src/features/todo-list/todoListRoutes.test.ts` |
-| App | the full wiring and the OpenAPI document | `src/app/buildApp.test.ts` |
-| Env | defaults, conversion, refusal of invalid values | `src/shared/env/readEnv.test.ts` |
+| Queries | the SQL, on a `:memory:` database | `test/unit/shared/todos/todosQueries.test.ts` |
+| Routes | one feature mounted alone on `createTestServer()`, its service on a `:memory:` database from `memoryTodos()`, both in `test/support/`, called with `inject()` | `test/unit/features/todo-list/todoListRoutes.test.ts` |
+| App | the full wiring and the OpenAPI document | `test/unit/app/buildApp.test.ts` |
+| Env | defaults, conversion, refusal of invalid values | `test/unit/shared/env/readEnv.test.ts` |
 
-A test sits next to its source. `inject()` sends fake requests to Fastify without opening a port.
+A test sits in `test/unit/` at the path of its source, and imports from `src/` that source alone, plus `xConfig.ts` and `xTypes.ts` files: what else it needs, like a service for a route, comes from `test/support/`. `inject()` sends fake requests to Fastify without opening a port.
 
-A helper that tests share (a fixture, a seeding function, a fake) goes in `test-utils/` at the root of the project, never in `src/`, and the tests import it through `#test-utils/`. dependency-cruiser rejects an import of `test-utils/` from production code.
+A helper that tests share (a fixture, a seeding function, a fake) goes in `test/support/`, never in `src/`, and the tests import it through `#test-support/`. dependency-cruiser rejects an import of `test/` from production code.
 
 Before keeping a test, break the code it protects and watch it fail.

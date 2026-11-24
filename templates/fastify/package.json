@@ -9,14 +9,14 @@
   "prettier": "@brutalway/prettier-config",
   "imports": {
     "#src/*": "./src/*",
-    "#test-utils/*": "./test-utils/*"
+    "#test-support/*": "./test/support/*"
   },
   "scripts": {
     "dev": "node --watch src/server.ts",
     "start": "node src/server.ts",
     "typecheck": "tsc -p .",
-    "lint": "oxlint --type-aware src test-utils oxlint.config.ts",
-    "deps": "depcruise --output-type err-long src",
+    "lint": "oxlint --type-aware src test oxlint.config.ts",
+    "deps": "depcruise --output-type err-long src test",
     "tree": "check-tree src",
     "duplicates": "jscpd src",
     "docs": "check-doc-length && check-doc-sources && check-doc-links",
@@ -27,7 +27,7 @@
     "secrets": "check-secrets",
     "exceptions": "check-exceptions",
     "check": "brutal-check",
-    "test": "node --test",
+    "test": "node --test 'test/unit/**/*.test.ts'",
     "prepare": "git config core.hooksPath .githooks"
   },
   "allowScripts": {
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@asamarts/alint": "0.22.0",
-    "@brutalway/agent-hook": "0.4.0",
+    "@brutalway/agent-hook": "0.5.0",
     "@brutalway/alint-config": "0.2.4",
     "@brutalway/check": "0.3.0",
     "@brutalway/check-doc-length": "0.2.1",
@@ -57,8 +57,8 @@
     "@brutalway/check-doc-sources": "0.2.1",
     "@brutalway/check-exceptions": "0.2.1",
     "@brutalway/check-secrets": "0.1.1",
-    "@brutalway/check-tree": "0.14.1",
-    "@brutalway/dependency-cruiser-config": "0.13.0",
+    "@brutalway/check-tree": "0.15.0",
+    "@brutalway/dependency-cruiser-config": "0.14.0",
     "@brutalway/oxlint-config-fastify": "0.3.0",
     "@brutalway/oxlint-config-node-test": "0.1.0",
     "@brutalway/prettier-config": "0.3.0",

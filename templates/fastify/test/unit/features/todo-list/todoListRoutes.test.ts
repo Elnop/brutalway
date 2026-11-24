@@ -1,13 +1,12 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { DatabaseSync } from 'node:sqlite';
 import { todoListRoutes } from '#src/features/todo-list/todoListRoutes.ts';
-import { createTodoListService } from '#src/features/todo-list/todoListService.ts';
-import { createTestServer } from '#test-utils/createTestServer.ts';
+import { createTestServer } from '#test-support/createTestServer.ts';
+import { memoryTodos } from '#test-support/memoryTodos.ts';
 
 async function emptyApp() {
   const app = createTestServer();
-  await app.register(todoListRoutes(createTodoListService(new DatabaseSync(':memory:'))));
+  await app.register(todoListRoutes(memoryTodos().todoListService));
   return app;
 }
 
