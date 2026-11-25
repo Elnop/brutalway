@@ -36,8 +36,8 @@
     "unified": "11.0.5"
   },
   "devDependencies": {
-    "@asamarts/alint": "0.22.0",
-    "@brutalway/alint-config": "0.2.2",
+    "@asamarts/alint": "0.23.0",
+    "@brutalway/alint-config": "0.2.4",
     "@brutalway/check-tree": "0.8.0",
     "@brutalway/dependency-cruiser-config": "0.11.0",
     "@brutalway/oxlint-config-react-vite": "0.4.2",
@@ -60,7 +60,7 @@
   },
   "allowScripts": {
     "@swc/core": false,
-    "@asamarts/alint@0.22.0": true
+    "@asamarts/alint@0.23.0": true
   },
   "overrides": {
     "eslint-plugin-no-comments": {
