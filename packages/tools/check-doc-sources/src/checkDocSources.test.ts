@@ -80,6 +80,12 @@ describe('check-doc-sources', () => {
     assert.deepEqual(run(root), { status: 0, stdout: '', lines: [] });
   });
 
+  it('ignores the Markdown files ignored by git', () => {
+    const root = repository({ 'src/app.ts': 'a\n', '.gitignore': 'tmp/\n' });
+    write(root, { 'tmp/note.md': 'See `src/app.ts`.\n', 'src/app.ts': 'b\n' });
+    assert.deepEqual(run(root), { status: 0, stdout: '', lines: [] });
+  });
+
   it('does not crash on a link with a malformed % sequence, and exits with 0', () => {
     const root = repository({ 'src/a.ts': 'a\n', 'README.md': '[x](src/a%zz.ts)\n' });
     write(root, { 'src/a.ts': 'b\n' });

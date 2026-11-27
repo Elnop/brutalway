@@ -1,5 +1,6 @@
 import { globSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { withoutGitIgnored } from '#src/features/markdown-links/lib/withoutGitIgnored.ts';
 import type {
   DocLinksSettings,
   MarkdownFile,
@@ -9,7 +10,7 @@ export function markdownFiles(cwd: string, settings: DocLinksSettings): Markdown
   const paths = new Set(
     settings.include.flatMap((pattern) => globSync(pattern, { cwd, exclude: settings.ignore })),
   );
-  return [...paths]
+  return withoutGitIgnored(cwd, [...paths])
     .toSorted()
     .map((path) => ({ path, content: readFileSync(join(cwd, path), 'utf8') }));
 }

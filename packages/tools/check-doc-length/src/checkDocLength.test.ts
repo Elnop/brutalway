@@ -51,6 +51,22 @@ describe('check-doc-length', () => {
     });
   });
 
+  it('skips the files ignored by git, and keeps the tracked ones', () => {
+    const root = project({
+      '.gitignore': 'tmp/\nkept.md\n',
+      'tmp/note.md': 'line\n'.repeat(400),
+      'kept.md': 'line\n'.repeat(400),
+    });
+    spawnSync('git', ['init', '-q'], { cwd: root });
+    spawnSync('git', ['add', '-f', 'kept.md'], { cwd: root });
+    assert.deepEqual(run(root), {
+      status: 1,
+      stdout: '',
+      stderr:
+        'kept.md has 400 lines, more than 300: run check-doc-length split kept.md to see how it would be split along its headings, then add --write.\n',
+    });
+  });
+
   it('reads the docLength settings of package.json, and a flag overrides them', () => {
     const root = project({
       'package.json': JSON.stringify({ docLength: { maxLines: 2, ignore: ['skipped/**'] } }),

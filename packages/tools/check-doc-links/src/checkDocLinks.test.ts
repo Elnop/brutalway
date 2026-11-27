@@ -62,6 +62,14 @@ describe('check-doc-links', () => {
     });
   });
 
+  it('skips the Markdown files ignored by git', () => {
+    const root = project({
+      '.gitignore': 'tmp/\n',
+      'tmp/note.md': '[gone](https://github.com/Elnop/brutalway/tree/main/docs/gone)\n',
+    });
+    assert.deepEqual(run(root, OFFLINE), { status: 0, lines: [] });
+  });
+
   it('leaves external links unchecked when offline, and still fails on local ones', () => {
     const root = project({
       'README.md':
