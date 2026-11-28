@@ -347,7 +347,7 @@ export const viteStack: Stack = {
         edits: [
           {
             file: 'docs/reference/layout.md',
-            dropLines: 'The messages are data, so they live outside `src/`',
+            dropLines: 'The messages are data, so they live in a `locales/<language>/` folder',
           },
           {
             file: 'docs/reference/verifications.md',

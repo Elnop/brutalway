@@ -195,8 +195,7 @@ const REACT_COMPILER_LINT = `      {
           {
             name: 'react',
             importNames: ['useMemo', 'useCallback', 'memo'],
-            message:
-              'The React Compiler memoizes components and hooks: drop useMemo, useCallback and memo, and write the plain value or function.',
+            message: 'The React Compiler memoizes: drop useMemo, useCallback and memo.',
           },
         ],
         patterns: [
