@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';
-import app from '@locales/en/app.json';
+import { I18nProvider } from '@/app/I18nProvider.tsx';
 
 function Title() {
   const { t } = useTranslation('app');
@@ -16,6 +15,6 @@ describe('I18nProvider', () => {
         <Title />
       </I18nProvider>,
     );
-    await expect.element(screen.getByText(app.title)).toBeVisible();
+    await expect.element(screen.getByText('Todos')).toBeVisible();
   });
 });

@@ -6,10 +6,7 @@ import { defineConfig, mergeConfig } from 'vitest/config';
 const appConfig = defineConfig({
   plugins: [react()],
   resolve: {
-    alias: [
-      { find: /^@\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) },
-      { find: /^@locales\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) },
-    ],
+    alias: [{ find: /^@\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }],
   },
 });
 

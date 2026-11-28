@@ -8,7 +8,7 @@ Everything below runs locally, in the pre-commit hook and in CI. `npm run check`
 
 `next build` checks the types again with `tsconfig.app.json`, which `next.config.ts` points it to.
 
-Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of `locales/en/` into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
+Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of the `locales/en/` folders into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
 
 ## Lint
 
@@ -29,7 +29,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - a function takes 4 parameters at most, and declares 5 local variables at most, each name of a destructuring counted. Tests have no variable limit
 - a file declares 5 top-level functions at most, exported or not: the helpers move into files of their own
-- no visible text in JSX, in `aria-label`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `locales/en/` and through `t()`. The message only says "disallow literal string"
+- no visible text in JSX, in `aria-label`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in the `locales/en/` folder of its feature and through `t()`. The message only says "disallow literal string"
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, typed mocks (`vi.fn<() => void>()`)
 
 ## Next.js
