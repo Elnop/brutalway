@@ -10,7 +10,7 @@ Run `npm run check`: `brutal-check` runs every check that `docs/reference/verifi
 
 - `src/app/` composes the features, `src/features/` holds one folder per feature, `src/shared/` one folder per shared feature, for the code several features use. Each layer only imports the layers below it, and a feature never imports another feature.
 - A component is either an orchestrator (`XContainer`, `XLayout`, `XPage`), which composes presenters and is the only kind that may read state through hooks, or a presenter that only gets props. `src/app/` imports the orchestrators of a feature, never its presenters.
-- Every visible string goes through `t()`, with its English text in `locales/en/`.
+- Every visible string goes through `t()`, with its English text in the `locales/en/` folder of its feature.
 - Styles go in one stylesheet per feature, and a color is a `var()` of a token of `src/app/globals.css`.
 - A unit test sits in `test/unit/`, at the path of its source under `src/`, and imports from `src/` only that source and `xConfig.ts` or `xTypes.ts` files. A helper that several tests share goes in `test/support/` and is imported through `@test-support/`: code in `src/` that only a test uses fails `knip --production`.
 - No comments, no relative imports (`@/` instead), no `index.ts`.

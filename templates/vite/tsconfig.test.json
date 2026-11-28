@@ -4,7 +4,6 @@
     "types": ["vite/client", "node", "@vitest/browser-playwright"],
     "paths": {
       "@/*": ["./src/*"],
-      "@locales/*": ["./locales/*"],
       "@test-e2e/*": ["./test/e2e/*"],
       "@test-support/*": ["./test/support/*"]
     }

@@ -2,8 +2,7 @@
   "extends": "@brutalway/tsconfig/react-vite.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@locales/*": ["./locales/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "node_modules/.cache/i18next"]

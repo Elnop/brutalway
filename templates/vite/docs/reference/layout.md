@@ -13,7 +13,7 @@ test/
 
 Each layer only imports the layers below it. A feature and a shared feature never have the same name.
 
-The messages are data, so they live outside `src/`, in `locales/` at the root of the project. `src/features/i18n/createI18n.ts` imports them through the `@locales/*` alias.
+The messages are data, so they live in a `locales/<language>/` folder inside the feature that owns them, and in `src/app/locales/` for the text of the app. `locales/` is never at the root of `src/` and never a single child. `src/app/createI18n.ts` imports them: it sits in the layer above the features, since a feature never imports another feature.
 
 `src/shared/` holds one folder per shared feature, named after its concept, and no file at its root. Each file of a shared feature has two consumers at least, features or entry points, or is imported by a file of its shared feature that has them. The files of a shared feature import each other into one group: two groups that never import each other make two shared features. A shared feature never imports another shared feature.
 

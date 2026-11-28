@@ -1,9 +1,10 @@
 import { i18nextConfig } from '@brutalway/oxlint-config-i18next';
 import { reactViteConfig } from '@brutalway/oxlint-config-react-vite';
+import { lineWidthConfig } from '@brutalway/oxlint-config-typescript/line-width';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
-  extends: [reactViteConfig, i18nextConfig],
+  extends: [reactViteConfig, i18nextConfig, lineWidthConfig],
   ignorePatterns: ['dist'],
   overrides: [{ files: ['*.config.ts'], rules: { 'no-restricted-imports': 'off' } }],
   rules: {
@@ -13,8 +14,7 @@ export default defineConfig({
         patterns: [
           {
             regex: '^\\.\\.?/',
-            message:
-              'Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/, @test-e2e/ in test/e2e/).',
+            message: 'No relative imports: use an alias (@/, @test-support/ or @test-e2e/).',
           },
         ],
       },
