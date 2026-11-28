@@ -322,8 +322,8 @@ export const viteStack: Stack = {
           },
         ],
         addDevDependencies: {
-          '@babel/core': '8.1.0',
-          '@rolldown/plugin-babel': '0.3.0',
+          '@babel/core': '8.1.3',
+          '@rolldown/plugin-babel': '0.3.1',
           'babel-plugin-react-compiler': '1.0.0',
         },
       },
