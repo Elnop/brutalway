@@ -36,16 +36,19 @@ const EXPORT_PLACEMENT = [
 export const typescriptConfig: OxlintConfig = defineConfig({
   plugins: ['typescript', 'import', 'oxc', 'unicorn'],
   jsPlugins: [
-    { name: 'export-placement', specifier: siblingModule('plugin') },
-    { name: 'type-definitions', specifier: siblingModule('typeDefinitionsPlugin') },
+    { name: 'export-placement', specifier: siblingModule('plugin', import.meta.url) },
+    {
+      name: 'type-definitions',
+      specifier: siblingModule('typeDefinitionsPlugin', import.meta.url),
+    },
     {
       name: 'file-named-after-export',
       specifier: resolveFromHere('@brutalway/eslint-plugin-file-named-after-export'),
     },
     { name: 'no-comments', specifier: resolveFromHere('eslint-plugin-no-comments') },
     { name: 'check-file', specifier: resolveFromHere('eslint-plugin-check-file') },
-    { name: 'sonarjs', specifier: siblingModule('cognitiveComplexityPlugin') },
-    { name: 'function-size', specifier: siblingModule('functionSizePlugin') },
+    { name: 'sonarjs', specifier: siblingModule('cognitiveComplexityPlugin', import.meta.url) },
+    { name: 'function-size', specifier: siblingModule('functionSizePlugin', import.meta.url) },
   ],
   categories: { correctness: 'error', suspicious: 'error' },
   env: { es2024: true },

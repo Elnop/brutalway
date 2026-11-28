@@ -24,7 +24,7 @@ const SPLIT_SELECTORS = [
 ];
 
 export const lineWidthConfig: OxlintConfig = defineConfig({
-  jsPlugins: [{ name: 'line-width', specifier: siblingModule('lineWidthPlugin') }],
+  jsPlugins: [{ name: 'line-width', specifier: siblingModule('lineWidthPlugin', import.meta.url) }],
   rules: {
     'line-width/max-len': ['error', { code: MAX_WIDTH }],
     'line-width/no-restricted-syntax': ['error', ...SPLIT_SELECTORS],
