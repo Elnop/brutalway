@@ -42,7 +42,7 @@
     "unused": "knip"
   },
   "dependencies": {
-    "@brutalway/oxlint-config-typescript": "^0.9.0",
+    "@brutalway/oxlint-config-typescript": "^0.10.0",
     "oxlint-plugin-eslint": "^1.91.0"
   },
   "peerDependencies": {
