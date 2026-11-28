@@ -29,15 +29,27 @@ The message of the plugin only says "disallow literal string". The fix is always
 
 ### `i18next/no-literal-string`
 
-Reported, in JSX only:
+Reported in JSX:
 
 - text between tags: `<p>Hello</p>`
-- the attributes a user reads or hears: `aria-label`, `aria-description`, `placeholder`, `title` and `alt`, and on React Native `accessibilityLabel` and `accessibilityHint`
+- the attributes a user reads or hears: `aria-label`, `aria-description`, `aria-placeholder`, `aria-roledescription`, `aria-valuetext`, `placeholder`, `title` and `alt`, and on React Native `accessibilityLabel` and `accessibilityHint`
+- the `value` of an `<input type="submit">`, `button` or `reset`: it is the text of the button. The `value` of any other input is data and is left alone
 - template literals in JSX: `` aria-label={`Remove ${name}`} ``
 
-Test files (`*.test.tsx`) are left alone, since they pass literal props to the components they render. A string without any letter is left alone (`{count} · 42%`, `×`, an emoji), and so is an all-caps word like `OK`.
+### `i18next-attributes/no-restricted-syntax`
 
-On a native tag, `<div aria-description="Pet details" />` comes out as `i18next-attributes(no-restricted-syntax)`. On a component (`<Card aria-description="..." />`), the plugin reports it.
+Reported outside JSX, with selectors that name the call:
+
+- a literal or a template literal handed to `toast(...)`, `toast.<method>(...)`, `alert(...)`, `confirm(...)`, `prompt(...)`, or `window.` and `globalThis.` followed by `alert`, `confirm` or `prompt`
+- a literal or a template literal assigned to `document.title`
+
+On a native tag, `<div aria-description="Pet details" />` and the three other aria attributes come out here too, since the plugin only checks its own list of attributes there. On a component (`<Card aria-description="..." />`), `i18next/no-literal-string` reports them.
+
+### What no rule can tell
+
+A lint rule does not know whether a string is shown. These stay unreported: the message of a Zod schema (`.min(1, 'blankTitle')` holds a key that `t()` translates later, which looks the same as a text), a string given to `setError(...)` or `useState(...)`, a `const title = '...'`, and a `throw new Error('...')`, which is read by a developer. A prop of a component named `label`, `content` or `text` is not reported either: a name list would also report identifiers.
+
+Test files (`*.test.ts` and `*.test.tsx`) are left alone, since they pass literal props to the components they render. A string without any letter is left alone (`{count} · 42%`, `×`, an emoji), and so is an all-caps word like `OK`.
 
 ## Why
 
