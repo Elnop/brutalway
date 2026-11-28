@@ -80,7 +80,7 @@ Function declarations, `type` over `interface`, `for...of` over `forEach`, impor
 Checked by Oxlint, with [`@brutalway/oxlint-config-typescript`](../../packages/configs/oxlint-config-typescript) and the config of each stack.
 
 ```
-error eslint(no-restricted-imports): '../../shared/todos/useTodos.ts' import is restricted from being used by a pattern. help: Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/, @test-e2e/ in test/e2e/).
+error eslint(no-restricted-imports): '../../shared/todos/useTodos.ts' import is restricted from being used by a pattern. help: No relative imports: use an alias (@/, @test-support/ or @test-e2e/).
 error no-comments(disallowComments): Comments are forbidden
 ```
 
@@ -112,7 +112,7 @@ src/shared holds 2 lib files (normalizeTitle.ts, percent.ts): move them into lib
 
 ## Visible text
 
-On vite, next and react-native, no text the user can read is written in JSX, nor in `aria-label`, `placeholder`, `title` or `alt`, nor on React Native in `accessibilityLabel` or `accessibilityHint`. It goes in `locales/en/` and through `t()`.
+On vite, next and react-native, no text the user can read is written in JSX, nor in `aria-label`, `placeholder`, `title` or `alt`, nor on React Native in `accessibilityLabel` or `accessibilityHint`. It goes in the `locales/en/` folder of its feature and through `t()`.
 
 Checked by [`@brutalway/oxlint-config-i18next`](../../packages/configs/oxlint-config-i18next), then by `i18next-cli`, which fails on a missing or an unused key.
 
