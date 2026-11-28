@@ -1,4 +1,6 @@
 import { basename, dirname } from 'node:path';
+import { LOCALES_FOLDER } from '#src/features/tree-violations/features/layout/LayoutConfig.ts';
+import { localesChildLayer } from '#src/features/tree-violations/features/layout/lib/localesChildLayer.ts';
 import type {
   ChildLayer,
   Layer,
@@ -46,6 +48,7 @@ function sourceChild(path: string): ChildLayer {
 function featureChild(path: string, categories: ReadonlySet<string>): ChildLayer {
   const layer = FEATURE_LAYERS.get(basename(path));
   if (layer !== undefined) return { layer, violations: [] };
+  if (basename(path) === LOCALES_FOLDER) return { layer: 'locales', violations: [] };
   return kindFolder(
     path,
     categories,
@@ -64,6 +67,7 @@ export function childLayer(
   }
   if (layer === 'feature') return featureChild(path, categories);
   if (layer === 'router') return { layer: 'router', violations: [] };
+  if (layer === 'locales' || layer === 'language') return localesChildLayer(layer, path);
   if (layer === 'kind') {
     return kindFolder(path, categories, `${dirname(path)}/ holds its files and kind folders only`);
   }

@@ -475,4 +475,85 @@ describe('treeViolations', () => {
     ]);
     assert.deepEqual(treeViolations(root, undefined, { platforms: ['tv'] }), []);
   });
+
+  it('a locales/ folder of a feature or a shared feature holds one folder per language, with .json files', () => {
+    const root = tree([
+      'features/todo-list/locales/en/todoList.json',
+      'features/todo-list/locales/fr-CA/todoList.json',
+      'features/todo-list/TodoList.tsx',
+      'shared/dates/locales/en/dates.json',
+      'shared/dates/lib/a.ts',
+      'shared/dates/lib/b.ts',
+    ]);
+    assert.deepEqual(treeViolations(root), []);
+  });
+
+  it('a locales/ folder with a single language holds a single child without being reported', () => {
+    assert.deepEqual(
+      treeViolations(
+        tree(['features/todo-list/locales/en/todoList.json', 'features/todo-list/TodoList.tsx']),
+      ),
+      [],
+    );
+  });
+
+  it('a locales/ folder at the root of src, or inside a kind folder, is reported', () => {
+    assert.deepEqual(treeViolations(tree(['locales/en/app.json'])), [
+      'src/locales is not a layer: src/ holds app/, features/ and shared/ next to its entry points, move it into one of them',
+    ]);
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'features/a/components/locales/en/a.json',
+          'features/a/components/presenters/A.tsx',
+          'features/a/components/presenters/B.tsx',
+        ]),
+      ),
+      [
+        'src/features/a/components/locales is not a kind folder: src/features/a/components/ holds its files and kind folders only',
+      ],
+    );
+  });
+
+  it('a locales/ folder inside the router layer is left alone', () => {
+    assert.deepEqual(
+      treeViolations(tree(['app/App.tsx', 'app/locales/en/app.json', 'app/globals.css'])),
+      [],
+    );
+  });
+
+  it('a file next to the language folders, or a folder that is not a language, is reported', () => {
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'features/a/locales/todoList.json',
+          'features/a/locales/en/a.json',
+          'features/a/locales/english/a.json',
+        ]),
+      ),
+      [
+        'src/features/a/locales holds todoList.json: locales/ holds one folder per language, move it into one',
+        'src/features/a/locales/english is not a language folder: locales/ holds one folder per language, named like en or fr-CA',
+      ],
+    );
+  });
+
+  it('a language folder holds .json files only, and is not empty', () => {
+    assert.deepEqual(
+      treeViolations(
+        tree([
+          'features/a/locales/en/a.json',
+          'features/a/locales/en/a.ts',
+          'features/a/locales/en/deep/b.json',
+        ]),
+      ),
+      [
+        'src/features/a/locales/en/a.ts is not a .json file: a language folder holds .json files only',
+        'src/features/a/locales/en/deep is inside a language folder: a language folder holds .json files only',
+      ],
+    );
+    assert.deepEqual(treeViolations(tree(['features/a/A.tsx'], ['features/a/locales/en'])), [
+      'src/features/a/locales/en is empty: delete it',
+    ]);
+  });
 });

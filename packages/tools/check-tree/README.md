@@ -83,7 +83,7 @@ After a fix, `--shrink-known-violations` updates the file: it deletes the entrie
 npx check-tree src --shrink-known-violations
 ```
 
-The rules are `empty-folder`, `single-child`, `not-a-layer`, `not-a-kind-folder`, `kind-folder` (files to move into a kind folder, the path being that folder), `shared-root-files`, `single-consumer`, `shared-feature-groups`, `test-in-source`, `orphan-test`, `orphan-test-folder`, `not-a-test` and `not-a-test-folder`. Up to 0.12, the file held the printed messages: check-tree now refuses that format, and `--write-known-violations` rewrites it.
+The rules are `empty-folder`, `single-child`, `not-a-layer`, `not-a-kind-folder`, `kind-folder` (files to move into a kind folder, the path being that folder), `locales-file`, `not-a-language-folder`, `not-a-locale-file`, `shared-root-files`, `single-consumer`, `shared-feature-groups`, `test-in-source`, `orphan-test`, `orphan-test-folder`, `not-a-test` and `not-a-test-folder`. Up to 0.12, the file held the printed messages: check-tree now refuses that format, and `--write-known-violations` rewrites it.
 
 ### Run the check from code
 
@@ -108,7 +108,8 @@ const violations = await sharedViolations('src');
 - a folder has a name the layout gives it:
   - `src/` holds `app/`, `features/` and `shared/`, next to its entry points. `app/` belongs to the router, so its folders are not checked and its files stay where they are, whatever their kind
   - a `shared/`, at any depth, holds one folder per shared feature, named after its concept (`shared/todos/`, `shared/errors/`), and no file
-  - a feature (`features/<x>/`) or a shared feature (`shared/<x>/`), at any depth, holds kind folders, `features/` for its sub-features and `shared/` for the shared features they have in common
+  - a feature (`features/<x>/`) or a shared feature (`shared/<x>/`), at any depth, holds kind folders, `features/` for its sub-features and `shared/` for the shared features they have in common, and `locales/` for its texts
+  - `locales/` holds one folder per language, named like `en` or `fr-CA`, and nothing else; a language folder holds `.json` files only. It is the one folder that keeps a single child, since a project may have a single language. `src/` and the kind folders hold none
   - a kind folder holds kind folders only, like `presenters/` inside `components/`
 - no empty folder
 - a kind folder (`components`, `hooks`, `stores`…) does not hold a single child: move the child up and delete the folder

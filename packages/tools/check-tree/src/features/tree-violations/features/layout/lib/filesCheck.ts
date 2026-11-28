@@ -5,5 +5,7 @@ import type {
 
 export function filesCheck(layer: Layer, holdsEntries: boolean): FilesCheck {
   if (layer === 'sharedFeatures') return 'sharedFeatures';
+  if (layer === 'locales') return 'locales';
+  if (layer === 'language') return 'language';
   return layer === 'router' || holdsEntries ? 'none' : 'groups';
 }
