@@ -6,7 +6,7 @@ Everything below runs locally, in the pre-commit hook and in CI. `npm run check`
 
 `tsc` runs twice: on the production code (`tsconfig.app.json`) and on tests and configs (`tsconfig.test.json`). Both extend `@brutalway/tsconfig/base.json`, which turns on `strict` plus `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `exactOptionalPropertyTypes`, and add what React Native needs: the `react-native` export condition and the `@/` alias. The root `tsconfig.json` repeats the alias, because Metro, the bundler of Expo, reads it from there, and extends `expo/tsconfig.base`, which Expo CLI would otherwise add itself on each start.
 
-Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of `locales/en/` into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
+Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types of the messages of the `locales/en/` folders into `node_modules/.cache/i18next/`: an unknown key, or a `{{name}}` the call to `t()` leaves out, is a tsc error.
 
 ## Lint
 
@@ -27,7 +27,7 @@ Before tsc, `npm run typecheck` runs `i18next-cli types`, which writes the types
 - a function holds 25 lines at most, blank lines not counted, with blocks and callbacks nested 3 levels deep at most. Tests have no length limit
 - a function takes 4 parameters at most, and declares 5 local variables at most, each name of a destructuring counted. Tests have no variable limit
 - a file declares 5 top-level functions at most, exported or not: the helpers move into files of their own
-- no visible text in JSX, in `aria-label`, `accessibilityLabel`, `accessibilityHint`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in `locales/en/` and through `t()`. The message only says "disallow literal string"
+- no visible text in JSX, in `aria-label`, `accessibilityLabel`, `accessibilityHint`, `placeholder`, `title` or `alt`, nor in a template literal: it goes in the `locales/en/` folder of its feature and through `t()`. The message only says "disallow literal string"
 - in tests, `it()` inside a `describe`, `toStrictEqual` over `toEqual`, `toBe` for primitives
 
 ## Styles

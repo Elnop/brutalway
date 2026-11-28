@@ -28,7 +28,7 @@ function findPhone(): string {
   throw new Error(
     unauthorized
       ? 'The phone did not allow USB debugging yet: unlock it and accept "Allow USB debugging".'
-      : `${ADB} sees no phone: plug it in over USB with USB debugging on. On WSL2, set ADB to the adb.exe of Windows.`,
+      : `${ADB} sees no phone: plug it in over USB with USB debugging on (WSL2: set ADB).`,
   );
 }
 

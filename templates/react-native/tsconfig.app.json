@@ -9,8 +9,7 @@
     "resolveJsonModule": true,
     "types": ["expo/types"],
     "paths": {
-      "@/*": ["./src/*"],
-      "@locales/*": ["./locales/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "node_modules/.cache/i18next"]

@@ -4,7 +4,6 @@
     "types": ["expo/types", "node", "jest"],
     "paths": {
       "@/*": ["./src/*"],
-      "@locales/*": ["./locales/*"],
       "@test-support/*": ["./test/support/*"]
     }
   },

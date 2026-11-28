@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { createI18n } from '@/features/i18n/createI18n.ts';
+import { createI18n } from '@/createI18n.ts';
 
 const i18n = createI18n();
 

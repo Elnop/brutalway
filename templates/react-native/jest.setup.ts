@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { setI18n } from 'react-i18next';
-import { createI18n } from '@/features/i18n/createI18n.ts';
+import { createI18n } from '@/createI18n.ts';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock'),

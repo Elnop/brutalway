@@ -2,8 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
 import { render, screen } from '@testing-library/react-native';
-import { I18nProvider } from '@/features/i18n/I18nProvider.tsx';
-import app from '@locales/en/app.json';
+import { I18nProvider } from '@/I18nProvider.tsx';
 
 function Title() {
   const { t } = useTranslation('app');
@@ -17,6 +16,6 @@ describe('I18nProvider', () => {
         <Title />
       </I18nProvider>,
     );
-    expect(screen.getByText(app.title)).toBeOnTheScreen();
+    expect(screen.getByText('Todos')).toBeOnTheScreen();
   });
 });

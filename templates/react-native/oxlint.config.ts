@@ -1,9 +1,10 @@
 import { i18nextConfig } from '@brutalway/oxlint-config-i18next';
 import { reactNativeConfig } from '@brutalway/oxlint-config-react-native';
+import { lineWidthConfig } from '@brutalway/oxlint-config-typescript/line-width';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
-  extends: [reactNativeConfig, i18nextConfig],
+  extends: [reactNativeConfig, i18nextConfig, lineWidthConfig],
   rules: {
     'no-restricted-imports': [
       'error',
@@ -11,8 +12,7 @@ export default defineConfig({
         patterns: [
           {
             regex: '^\\.\\.?/',
-            message:
-              'Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/).',
+            message: 'No relative imports: use an alias (@/ or @test-support/).',
           },
         ],
       },
