@@ -1,6 +1,6 @@
 {
   "name": "@brutalway/oxlint-config-zustand",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Oxlint config for zustand stores: xStore.ts only exports xStore and xActions.",
   "keywords": [
     "oxlint",

@@ -1,5 +1,11 @@
 # @brutalway/oxlint-config-node
 
+## 0.3.2
+
+### Patch Changes
+
+- 8efcf1b: Depends on `@brutalway/oxlint-config-typescript` ^0.10.0. A project that adds the `line-width` config of that package next to this one needs both on the same version: with two copies, oxlint fails with "Plugin name 'sonarjs' is already registered". Update this package with the others, nothing else to do.
+
 ## 0.3.1
 
 ### Patch Changes
