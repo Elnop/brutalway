@@ -27,7 +27,10 @@
   "imports": {
     "#src/*": "./src/*"
   },
-  "exports": "./dist/TypescriptConfig.js",
+  "exports": {
+    ".": "./dist/TypescriptConfig.js",
+    "./line-width": "./dist/LineWidthConfig.js"
+  },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p .",

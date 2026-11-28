@@ -27,6 +27,28 @@ Two plugins it loads (`eslint-plugin-check-file`, `eslint-plugin-no-comments`) d
 
 ## Usage
 
+### Make the line width strict
+
+`lineWidthConfig` is a config of its own, left out of `typescriptConfig`. Add it to `extends`:
+
+```ts
+import { typescriptConfig } from '@brutalway/oxlint-config-typescript';
+import { lineWidthConfig } from '@brutalway/oxlint-config-typescript/line-width';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [typescriptConfig, lineWidthConfig],
+});
+```
+
+It fails on any line of more than 100 columns, with no exception: an import, a string, a template literal, a URL and a regular expression count like the rest. A long text cannot be cut to fit, so these are reported too:
+
+- a string cut with a backslash (`no-multi-str`), and a template literal that ends a line with a backslash
+- two literals joined with `+`, on one line (`no-useless-concat`) or over several (a `no-restricted-syntax` selector, since `no-useless-concat` allows the multiline case)
+- `+` between a string and a value (`prefer-template`)
+
+A text that does not fit is shortened, or moves out of the code, into a `.json` file for messages or a `.md` file for prose.
+
 ### Run the type-aware rules
 
 The `typescript/no-floating-promises` family of rules needs `oxlint --type-aware` and the `oxlint-tsgolint` package. The rules marked "needs `--type-aware`" below only run with it.

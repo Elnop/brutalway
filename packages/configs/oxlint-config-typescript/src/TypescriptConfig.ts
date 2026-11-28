@@ -1,11 +1,7 @@
-import { extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'oxlint';
 import type { OxlintConfig } from 'oxlint';
-
-function siblingModule(name: string) {
-  return fileURLToPath(new URL(`./${name}${extname(import.meta.url)}`, import.meta.url));
-}
+import { siblingModule } from '#src/shared/plugin-path/siblingModule.ts';
 
 function resolveFromHere(specifier: string) {
   return fileURLToPath(import.meta.resolve(specifier));
