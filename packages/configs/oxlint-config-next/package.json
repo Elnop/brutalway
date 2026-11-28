@@ -55,10 +55,10 @@
     "oxlint": "^1.91.0"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.10.0",
-    "@brutalway/dependency-cruiser-config": "0.10.0",
+    "@brutalway/check-tree": "0.16.0",
+    "@brutalway/dependency-cruiser-config": "0.14.0",
     "@brutalway/lint-utils": "0.2.0",
-    "@brutalway/oxlint-config-node": "0.3.0",
+    "@brutalway/oxlint-config-node": "0.3.2",
     "@brutalway/oxlint-config-node-test": "0.1.0",
     "@brutalway/prettier-config": "0.3.0",
     "@brutalway/tsconfig": "0.4.0",

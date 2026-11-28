@@ -39,9 +39,9 @@
     "unused": "knip"
   },
   "devDependencies": {
-    "@brutalway/check-tree": "0.12.0",
-    "@brutalway/dependency-cruiser-config": "0.12.1",
-    "@brutalway/oxlint-config-node": "0.2.1",
+    "@brutalway/check-tree": "0.16.0",
+    "@brutalway/dependency-cruiser-config": "0.14.0",
+    "@brutalway/oxlint-config-node": "0.3.2",
     "@brutalway/oxlint-config-node-test": "0.1.0",
     "@brutalway/prettier-config": "0.3.0",
     "@brutalway/tsconfig": "0.4.0",
