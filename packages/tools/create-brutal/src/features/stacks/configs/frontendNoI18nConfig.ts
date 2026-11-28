@@ -1,17 +1,13 @@
 import type { StackChange } from '#src/shared/stack/StackTypes.ts';
 
-const SRC_ALIAS =
-  "{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }";
-
-const LOCALES_ALIAS =
-  "{ find: /^@locales\\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) }";
+const I18N_SETUP = 'src/{,app/}{createI18n.ts,I18nProvider.tsx}';
 
 export const FRONTEND_NO_I18N_LINT: StackChange[] = [
   {
     when: { i18n: 'none' },
     edits: [
       { file: 'oxlint.config.ts', dropLines: '@brutalway/oxlint-config-i18next' },
-      { file: 'oxlint.config.ts', replace: ', i18nextConfig]', with: ']' },
+      { file: 'oxlint.config.ts', replace: ', i18nextConfig,', with: ',' },
     ],
     removeDependencies: ['@brutalway/oxlint-config-i18next'],
   },
@@ -56,23 +52,20 @@ export const FRONTEND_NO_I18N_FORMS: StackChange[] = [
 export const FRONTEND_NO_I18N: StackChange[] = [
   {
     when: { i18n: 'none' },
-    remove: ['i18next.config.ts', 'locales', 'src/features/i18n', 'docs/guides/translations.md'],
+    remove: ['i18next.config.ts', 'src/app/locales', I18N_SETUP, 'docs/guides/translations.md'],
     removeScripts: ['messages'],
     removeDependencies: ['i18next', 'react-i18next', 'i18next-cli'],
     keep: ['src/features'],
     edits: [
       { file: 'package.json', replace: 'i18next-cli types --quiet && ', with: '', all: true },
       { file: 'package.json', replace: ' i18next.config.ts', with: '', all: true },
-      { file: '.alint.yml', replace: "'locales/', ", with: '' },
-      { file: 'tsconfig.app.json', replace: ',\n      "@locales/*": ["./locales/*"]', with: '' },
       { file: 'tsconfig.app.json', replace: ', "node_modules/.cache/i18next"', with: '' },
-      { file: 'tsconfig.test.json', replace: '      "@locales/*": ["./locales/*"],\n', with: '' },
       { file: 'tsconfig.test.json', dropLines: '"node_modules/.cache/i18next"' },
       { file: 'tsconfig.test.json', replace: ',\n    "i18next.config.ts"', with: '' },
       {
         file: 'AGENTS.md',
         replace:
-          '- Every visible string goes through `t()`, with its English text in `locales/en/`.',
+          '- Every visible string goes through `t()`, with its English text in the `locales/en/` folder of its feature.',
         with: '- Visible text is written in English, in the components.',
       },
       { file: 'README.md', dropLines: '(docs/guides/translations.md)' },
@@ -86,11 +79,12 @@ export const FRONTEND_NO_I18N: StackChange[] = [
   },
   {
     when: { i18n: 'none', example: true },
+    remove: ['src/features/*/locales'],
     edits: [
       {
         file: 'docs/guides/start-your-own-app.md',
         replace:
-          ', the `todoList` and `todoStats` namespaces (their JSON in `locales/en/` and their lines in `src/features/i18n/createI18n.ts`)',
+          ', the `todoList` and `todoStats` namespaces (their JSON goes with their folders, and their lines in `src/app/createI18n.ts`)',
         with: '',
       },
     ],
@@ -104,21 +98,11 @@ export const WEB_NO_I18N: StackChange[] = [
   },
   {
     when: { i18n: 'none', ui: 'none' },
-    edits: [
-      { file: 'knip.json', replace: '  "entry": ["i18next.config.ts"],\n', with: '' },
-      {
-        file: '{{aliasFile}}',
-        replace: `    alias: [\n      ${SRC_ALIAS},\n      ${LOCALES_ALIAS},\n    ],`,
-        with: `    alias: [${SRC_ALIAS}],`,
-      },
-    ],
+    edits: [{ file: 'knip.json', replace: '  "entry": ["i18next.config.ts"],\n', with: '' }],
   },
   {
     when: { i18n: 'none', ui: 'shadcn' },
-    edits: [
-      { file: 'knip.json', replace: '"i18next.config.ts", ', with: '' },
-      { file: '{{aliasFile}}', replace: `      ${LOCALES_ALIAS},\n`, with: '' },
-    ],
+    edits: [{ file: 'knip.json', replace: '"i18next.config.ts", ', with: '' }],
   },
   {
     when: { i18n: 'none' },

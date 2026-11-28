@@ -1,5 +1,6 @@
-import type { FileEdit, StackChange, StackOption } from '#src/shared/stack/StackTypes.ts';
+import type { StackChange, StackOption } from '#src/shared/stack/StackTypes.ts';
 import { SHADCN_DEPENDENCIES, SHADCN_VERSION } from '#src/features/stacks/configs/shadcnConfig.ts';
+import { frontendI18nLocales } from '#src/features/stacks/lib/frontendI18nLocales.ts';
 import { TEMPLATE_ONLY_DOCS } from '#src/features/stacks/configs/templateDocsConfig.ts';
 
 const CHROMIUM_LINE = '      - run: npx playwright install --with-deps --only-shell chromium\n';
@@ -267,23 +268,12 @@ Enforced by \`@brutalway/oxlint-config-tanstack-query\` (keys, cache windows), \
 
 `;
 
-export const I18N_LOCALE_EDITS: FileEdit[] = [
-  {
-    file: 'locales/en/app.json',
-    after: '{\n',
-    insert: '  "language": "Language",\n  "languages": { "en": "English", "fr": "Français" },\n',
-  },
-  {
-    file: 'src/features/i18n/createI18n.ts',
-    replace: '      en: {',
-    with: '      fr: FRENCH,\n      en: {',
-  },
-  {
-    file: 'i18next.config.ts',
-    replace: "locales: ['en'],",
-    with: "locales: ['en', 'fr'],",
-  },
-];
+const SRC_ALIAS =
+  "{ find: /^@\\//u, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }";
+
+export const WEB_CREATE_I18N = 'src/app/createI18n.ts';
+
+export const NATIVE_CREATE_I18N = 'src/createI18n.ts';
 
 export const FRONTEND_LOOK_OPTIONS: StackOption[] = [
   {
@@ -384,13 +374,7 @@ export const FRONTEND_BASE: StackChange[] = [
 export const FRONTEND_SKELETON: StackChange[] = [
   {
     when: { example: false },
-    remove: [
-      'src/features/todo-list',
-      'src/features/todo-stats',
-      'src/shared/todos',
-      'locales/en/todoList.json',
-      'locales/en/todoStats.json',
-    ],
+    remove: ['src/features/todo-list', 'src/features/todo-stats', 'src/shared/todos'],
     edits: [
       {
         file: 'README.md',
@@ -531,9 +515,8 @@ export const FRONTEND_UI_AND_STYLING: StackChange[] = [
       },
       {
         file: '{{aliasFile}}',
-        replace:
-          "      { find: /^@locales\\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) },\n    ],",
-        with: "      { find: /^@locales\\//u, replacement: fileURLToPath(new URL('./locales/', import.meta.url)) },\n      {\n        find: /^@third-party\\//u,\n        replacement: fileURLToPath(new URL('./third-party/', import.meta.url)),\n      },\n    ],",
+        replace: `alias: [${SRC_ALIAS}],`,
+        with: `alias: [\n      ${SRC_ALIAS},\n      {\n        find: /^@third-party\\//u,\n        replacement: fileURLToPath(new URL('./third-party/', import.meta.url)),\n      },\n    ],`,
       },
       {
         file: 'tsconfig.json',
@@ -778,45 +761,9 @@ export const FRONTEND_FORMS_EXAMPLE: StackChange[] = [
         insert: "\nexport const TITLE_ERRORS = ['blankTitle', 'longTitle'] as const;\n",
       },
       {
-        file: 'locales/en/todoList.json',
+        file: 'src/features/todo-list/locales/en/todoList.json',
         replace: '"blankTitle": "The title is blank"',
         with: '"blankTitle": "The title is blank",\n    "longTitle": "The title is 200 characters at most"',
-      },
-    ],
-  },
-];
-
-export const FRONTEND_I18N_LOCALES: StackChange[] = [
-  {
-    when: { i18n: 'en-fr', example: true },
-    overlay: 'i18n-example',
-    edits: [
-      {
-        file: 'src/features/i18n/createI18n.ts',
-        after: "import todoStats from '@locales/en/todoStats.json';\n",
-        insert:
-          "import frApp from '@locales/fr/app.json';\nimport frTodoList from '@locales/fr/todoList.json';\nimport frTodoStats from '@locales/fr/todoStats.json';\n",
-      },
-      {
-        file: 'src/features/i18n/createI18n.ts',
-        replace: 'fr: FRENCH,',
-        with: 'fr: { app: frApp, todoList: frTodoList, todoStats: frTodoStats },',
-      },
-    ],
-  },
-  {
-    when: { i18n: 'en-fr', example: false },
-    overlay: 'i18n-skeleton',
-    edits: [
-      {
-        file: 'src/features/i18n/createI18n.ts',
-        after: "import app from '@locales/en/app.json';\n",
-        insert: "import frApp from '@locales/fr/app.json';\n",
-      },
-      {
-        file: 'src/features/i18n/createI18n.ts',
-        replace: 'fr: FRENCH,',
-        with: 'fr: { app: frApp },',
       },
     ],
   },
@@ -844,7 +791,7 @@ export const FRONTEND_I18N_FORMS: StackChange[] = [
     when: { i18n: 'en-fr', example: true, forms: true },
     edits: [
       {
-        file: 'locales/fr/todoList.json',
+        file: 'src/features/todo-list/locales/fr/todoList.json',
         replace: '"blankTitle": "Le titre est vide"',
         with: '"blankTitle": "Le titre est vide",\n    "longTitle": "Le titre fait au plus 200 caractères"',
       },
@@ -941,7 +888,7 @@ const FRONTEND_SKELETON_COMPONENT_TESTS: StackChange[] = [
 ];
 
 export const FRONTEND_I18N_AND_TESTS: StackChange[] = [
-  ...FRONTEND_I18N_LOCALES,
+  ...frontendI18nLocales(WEB_CREATE_I18N),
   ...FRONTEND_I18N_STYLING,
   ...FRONTEND_I18N_FORMS,
   ...FRONTEND_I18N_E2E_AND_COVERAGE,
@@ -1022,9 +969,8 @@ export const FRONTEND_TEST_SWITCHES: StackChange[] = [
       },
       {
         file: 'oxlint.config.ts',
-        replace:
-          "'Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/, @test-e2e/ in test/e2e/).',",
-        with: "'Relative imports are not allowed: import through an alias (@/ in src/, @test-support/ in test/support/).',",
+        replace: "'No relative imports: use an alias (@/, @test-support/ or @test-e2e/).',",
+        with: "'No relative imports: use an alias (@/ or @test-support/).',",
       },
       { file: 'docs/reference/commands.md', dropLines: '| `npm run e2e` |' },
       {

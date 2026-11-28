@@ -11,7 +11,7 @@ export const NATIVE_NO_I18N_LAYOUT: StackChange[] = [
   {
     when: { i18n: 'none' },
     edits: [
-      { file: LAYOUT, dropLines: '@/features/i18n/I18nProvider.tsx' },
+      { file: LAYOUT, dropLines: '@/I18nProvider.tsx' },
       { file: LAYOUT, replace: `  return (\n${PLAIN_LAYOUT}\n  );`, with: PLAIN_STACK },
     ],
   },
@@ -55,13 +55,7 @@ export const NATIVE_NO_I18N: StackChange[] = [
     when: { i18n: 'none' },
     edits: [
       { file: 'package.json', replace: ' && i18next-cli types --quiet"', with: '"' },
-      {
-        file: 'package.json',
-        replace: '      "^@locales/(.*)$": "<rootDir>/locales/$1",\n',
-        with: '',
-      },
       { file: 'knip.json', replace: '"i18next.config.ts", ', with: '' },
-      { file: 'tsconfig.json', replace: ',\n      "@locales/*": ["./locales/*"]', with: '' },
       {
         file: 'docs/reference/layout.md',
         replace: '`_layout.tsx` loads the fonts and wraps every screen in the i18n provider,',
@@ -70,8 +64,8 @@ export const NATIVE_NO_I18N: StackChange[] = [
       {
         file: 'docs/reference/layout.md',
         replace:
-          ', so it holds nothing else: the i18n setup is the `src/features/i18n/` feature, and the messages are data, in `locales/` at the root of the project, imported through the `@locales/*` alias.',
-        with: ', so it holds nothing else.',
+          ', so it holds no other code: the i18n setup (`src/createI18n.ts`, `src/I18nProvider.tsx`) sits at the root of `src/`. The messages are data, in a `locales/<language>/` folder inside the feature that owns them, and in `src/app/locales/` for the text of the app (a JSON file is not a route).',
+        with: ', so it holds no other code.',
       },
       {
         file: 'docs/reference/verifications.md',
@@ -86,7 +80,7 @@ export const NATIVE_NO_I18N: StackChange[] = [
       {
         file: 'jest.setup.ts',
         replace:
-          "import { setI18n } from 'react-i18next';\nimport { createI18n } from '@/features/i18n/createI18n.ts';\n",
+          "import { setI18n } from 'react-i18next';\nimport { createI18n } from '@/createI18n.ts';\n",
         with: '',
       },
       { file: 'jest.setup.ts', replace: ');\n\nsetI18n(createI18n());\n', with: ');\n' },

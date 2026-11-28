@@ -356,7 +356,7 @@ describe('create-brutal', () => {
       'components.json',
       'devApi.ts',
       'devApiRoutes.ts',
-      'locales/fr/app.json',
+      'src/app/locales/fr/app.json',
       'src/shared/analytics/analyticsTracker.ts',
       'tsconfig.third-party.json',
     ]) {
@@ -388,7 +388,7 @@ describe('create-brutal', () => {
     for (const file of [
       'src/app/page.tsx',
       'src/app/page.module.css',
-      'locales/fr/app.json',
+      'src/app/locales/fr/app.json',
       'src/features/language-switch/lib/requestLanguage.ts',
       'src/features/language-switch/components/LanguageSwitch.module.css',
       'src/shared/analytics/analyticsTracker.ts',
@@ -418,7 +418,12 @@ describe('create-brutal', () => {
     ]);
     assert.deepEqual(outcome(result), { status: 0, stdout: CREATED_WITHOUT_GIT, stderr: '' });
     const project = join(result.cwd, 'app');
-    for (const file of ['i18next.config.ts', 'locales', 'src/features/i18n', 'vitest.setup.ts']) {
+    for (const file of [
+      'i18next.config.ts',
+      'src/app/locales',
+      'src/app/createI18n.ts',
+      'vitest.setup.ts',
+    ]) {
       assert.equal(existsSync(join(project, file)), false, file);
     }
     const manifest = readFileSync(join(project, 'package.json'), 'utf8');
@@ -439,7 +444,7 @@ describe('create-brutal', () => {
     const project = join(result.cwd, 'my-app');
     for (const file of [
       'src/features/query-client/QueryProvider.tsx',
-      'locales/fr/app.json',
+      'src/app/locales/fr/app.json',
       'src/features/language-switch/components/LanguageSwitchContainer.tsx',
       'src/features/todo-stats/useTodoStatsQuery.ts',
       'src/shared/analytics/analyticsTracker.ts',

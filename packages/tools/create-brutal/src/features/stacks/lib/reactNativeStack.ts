@@ -12,6 +12,8 @@ import {
   NATIVE_NO_I18N_SERVER_STATE,
 } from '#src/features/stacks/configs/nativeNoI18nConfig.ts';
 import { sharedFolderDocs } from '#src/features/stacks/lib/sharedFolderDocs.ts';
+import { frontendI18nLocales } from '#src/features/stacks/lib/frontendI18nLocales.ts';
+import { i18nLocaleEdits } from '#src/features/stacks/lib/i18nLocaleEdits.ts';
 import type { FileEdit, Stack, StackChange, StackOption } from '#src/shared/stack/StackTypes.ts';
 import { normalizeTitleChanges } from '#src/features/stacks/lib/normalizeTitleChanges.ts';
 import { fillAnchors } from '#src/features/stacks/lib/fillAnchors.ts';
@@ -28,14 +30,13 @@ import {
   FRONTEND_FORMS_EXAMPLE,
   FRONTEND_FORMS_SERVER_STATE,
   FRONTEND_I18N_FORMS,
-  FRONTEND_I18N_LOCALES,
+  NATIVE_CREATE_I18N,
   FRONTEND_LOOK_OPTIONS,
   FRONTEND_NO_ZUSTAND,
   FRONTEND_SERVER_STATE,
   FRONTEND_SERVER_STATE_AGENTS,
   FRONTEND_SKELETON,
   FRONTEND_SKELETON_ZUSTAND,
-  I18N_LOCALE_EDITS,
   PRESENTER_TEST_EXAMPLE,
 } from '#src/features/stacks/configs/frontendChangesConfig.ts';
 import {
@@ -131,39 +132,6 @@ function sharedOption(id: string): StackOption {
 
 const COMPONENT_TESTS_COMMAND =
   'Jest with the `jest-expo` preset: unit tests and component tests, all in Node';
-
-const CREATE_I18N = 'src/features/i18n/createI18n.ts';
-const CREATE_I18N_LIB = 'src/features/i18n/lib/createI18n.ts';
-
-const I18N_LIB_CHANGES: StackChange[] = [
-  {
-    when: { i18n: 'en-fr' },
-    move: { [CREATE_I18N]: CREATE_I18N_LIB },
-    edits: [
-      {
-        file: 'docs/guides/translations.md',
-        replace: `\`${CREATE_I18N}\``,
-        with: `\`${CREATE_I18N_LIB}\``,
-        all: true,
-      },
-      {
-        file: 'jest.setup.ts',
-        replace: "'@/features/i18n/createI18n.ts'",
-        with: "'@/features/i18n/lib/createI18n.ts'",
-      },
-    ],
-  },
-  {
-    when: { i18n: 'en-fr', example: true },
-    edits: [
-      {
-        file: 'docs/guides/start-your-own-app.md',
-        replace: `\`${CREATE_I18N}\``,
-        with: `\`${CREATE_I18N_LIB}\``,
-      },
-    ],
-  },
-];
 
 const THEME_CONFIG = 'src/shared/theme/ThemeConfig.ts';
 const PAGE_LAYOUT_CONFIGS = 'src/features/page-layout/configs';
@@ -466,7 +434,7 @@ export const reactNativeStack: Stack = {
         when: { i18n: 'en-fr' },
         overlay: 'i18n',
         edits: [
-          ...I18N_LOCALE_EDITS,
+          ...i18nLocaleEdits(NATIVE_CREATE_I18N),
           {
             file: 'src/app/index.tsx',
             before: "import { PageLayout } from '@/features/page-layout/PageLayout.tsx';\n",
@@ -481,13 +449,13 @@ export const reactNativeStack: Stack = {
           {
             file: 'docs/guides/translations.md',
             replace:
-              '## Add a language\n\nTo add a language, add its folder next to `locales/en/`, import its files in `src/features/i18n/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+              '## Add a language\n\nTo add a language, add a `locales/<language>/` folder next to each `locales/en/`, import its files in `src/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
             with: I18N_README,
           },
         ],
         addDependencies: { 'expo-localization': '58.0.5' },
       },
-      ...FRONTEND_I18N_LOCALES,
+      ...frontendI18nLocales(NATIVE_CREATE_I18N),
       ...FRONTEND_I18N_FORMS,
       {
         when: { i18n: 'en-fr', 'component-tests': true },
@@ -675,7 +643,6 @@ export const reactNativeStack: Stack = {
         when: { analytics: 'posthog', example: false },
         edits: [analyticsTrackerPath('AGENTS.md')],
       },
-      ...I18N_LIB_CHANGES,
       ...THEME_SKELETON_CHANGES,
       ...FRONTEND_NO_I18N,
       ...NATIVE_NO_I18N,

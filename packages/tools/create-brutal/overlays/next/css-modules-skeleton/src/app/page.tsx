@@ -1,4 +1,4 @@
-import { createI18n } from '@/features/i18n/createI18n.ts';
+import { createI18n } from '@/app/createI18n.ts';
 import styles from '@/app/page.module.css';
 
 export default function Home() {

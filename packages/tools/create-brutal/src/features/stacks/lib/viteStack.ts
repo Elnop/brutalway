@@ -26,7 +26,7 @@ import {
   FRONTEND_FORMS_SERVER_STATE,
   FRONTEND_SERVER_STATE,
   FRONTEND_SERVER_STATE_AGENTS,
-  I18N_LOCALE_EDITS,
+  WEB_CREATE_I18N,
 } from '#src/features/stacks/configs/frontendChangesConfig.ts';
 import {
   FRONTEND_NO_I18N,
@@ -35,6 +35,7 @@ import {
   FRONTEND_NO_I18N_LOOKS,
   WEB_NO_I18N,
 } from '#src/features/stacks/configs/frontendNoI18nConfig.ts';
+import { i18nLocaleEdits } from '#src/features/stacks/lib/i18nLocaleEdits.ts';
 import { serverStateExtends } from '#src/features/stacks/lib/serverStateExtends.ts';
 
 const SERVER_STATE_README = `## API
@@ -49,7 +50,7 @@ const I18N_README = `The example comes in English and French. The buttons in the
 
 ## Add a language
 
-To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add its folder next to \`locales/en/\`, import its files in \`src/features/i18n/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
+To add a language, add it to \`src/features/language-switch/LanguagesConfig.ts\`, add a \`locales/<language>/\` folder next to each \`locales/en/\`, import its files in \`src/app/createI18n.ts\` and list it under \`locales\` in \`i18next.config.ts\`.`;
 
 const REACT_COMPILER_PLUGINS = `const reactCompiler =
   process.env['VITEST'] === undefined ? [babel({ presets: [reactCompilerPreset()] })] : [];
@@ -75,7 +76,7 @@ const APP_OPENED_IMPORTS: StackChange[] = [
     edits: [
       {
         file: 'src/main.tsx',
-        after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
+        after: "import { createI18n } from '@/app/createI18n.ts';\n",
         insert: ANALYTICS_IMPORT,
       },
     ],
@@ -219,10 +220,10 @@ export const viteStack: Stack = {
         when: { i18n: 'en-fr' },
         overlay: 'i18n',
         edits: [
-          ...I18N_LOCALE_EDITS,
+          ...i18nLocaleEdits(WEB_CREATE_I18N),
           {
             file: 'src/main.tsx',
-            after: "import { createI18n } from '@/features/i18n/createI18n.ts';\n",
+            after: "import { createI18n } from '@/app/createI18n.ts';\n",
             insert:
               "import { followLanguage, preferredLanguage } from '@/features/language-switch/languageStorage.ts';\n",
           },
@@ -245,7 +246,7 @@ export const viteStack: Stack = {
           {
             file: 'docs/guides/translations.md',
             replace:
-              '## Add a language\n\nTo add a language, add its folder next to `locales/en/`, import its files in `src/features/i18n/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
+              '## Add a language\n\nTo add a language, add a `locales/<language>/` folder next to each `locales/en/`, import its files in `src/app/createI18n.ts` and list it under `locales` in `i18next.config.ts`.',
             with: I18N_README,
           },
         ],

@@ -10,8 +10,8 @@ const LOOKS = [
 ];
 
 const LANGUAGES = [
-  { when: { i18n: ['en', 'en-fr'] }, configs: ['i18nextConfig'] },
-  { when: { i18n: 'none' }, configs: [] },
+  { when: { i18n: ['en', 'en-fr'] }, configs: ['i18nextConfig', 'lineWidthConfig'] },
+  { when: { i18n: 'none' }, configs: ['lineWidthConfig'] },
 ];
 
 type Variant = { when: StackChange['when']; configs: string[] };
